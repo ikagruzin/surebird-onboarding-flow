@@ -1,0 +1,33 @@
+import { LucideIcon } from "lucide-react";
+
+export interface InsuranceType {
+  id: string;
+  label: string;
+  icon: string; // lucide icon name mapped in component
+  savings: number;
+}
+
+export interface WizardState {
+  currentStep: number;
+  selectedInsurances: string[];
+  preferences: Record<string, Record<string, string>>;
+  email: string;
+  emailSubmitted: boolean;
+}
+
+export const INSURANCE_TYPES: InsuranceType[] = [
+  { id: "travel", label: "Travel", icon: "Plane", savings: 35 },
+  { id: "living", label: "Living", icon: "Home", savings: 45 },
+  { id: "liability", label: "Liability", icon: "Umbrella", savings: 40 },
+  { id: "car", label: "Car", icon: "Car", savings: 50 },
+  { id: "legal", label: "Legal assistance", icon: "Scale", savings: 40 },
+  { id: "accidents", label: "Accidents", icon: "Zap", savings: 10 },
+  { id: "caravan", label: "Caravan", icon: "Caravan", savings: 15 },
+];
+
+export const STEP_LABELS = [
+  "Choose your insurances",
+  "Specify your preferences",
+  "View your package",
+  "Request your package",
+];
