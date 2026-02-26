@@ -110,7 +110,7 @@ const Index = () => {
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar currentStep={sidebarStep} />
-      <main className="flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 max-w-3xl">
+      <main className="flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 max-w-3xl mx-auto">
         {renderStep()}
         <Footer />
       </main>
