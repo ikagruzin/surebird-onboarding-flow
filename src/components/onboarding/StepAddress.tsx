@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -8,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronRight, CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 
 interface AddressResult {
   street: string;
@@ -112,47 +111,34 @@ const StepAddress = ({
     (hasAdditions ? addition !== "" : true);
 
   return (
-    <div className="animate-fade-in max-w-md">
-      <h1 className="text-2xl font-bold text-foreground mb-2">
-        Nice to meet you, {firstName}! We need your address information to select
-        the right and most suitable insurance for you.
-      </h1>
+    <div className="animate-fade-in">
+      <div className="bg-card rounded-xl border border-border p-6 max-w-xl">
+        <h2 className="text-xl font-semibold text-foreground mb-4">
+          Nice to meet you, {firstName}! We need your address information to select
+          the right and most suitable insurance for you.
+        </h2>
 
-      <div className="space-y-4 mt-8">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
-              Postcode
-            </label>
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
             <Input
               value={postcode}
               onChange={(e) => onUpdate("postcode", e.target.value.toUpperCase())}
-              placeholder="1053TM"
-              className="h-11"
+              placeholder="Postcode"
+              className="h-12 rounded-lg"
               maxLength={7}
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
-              House number
-            </label>
             <Input
               value={houseNumber}
               onChange={(e) => onUpdate("houseNumber", e.target.value)}
-              placeholder="8"
-              className="h-11"
+              placeholder="House number"
+              className="h-12 rounded-lg"
               maxLength={10}
             />
           </div>
-        </div>
 
-        {hasAdditions && (
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
-              Addition
-            </label>
+          {hasAdditions && (
             <Select value={addition} onValueChange={(v) => onUpdate("addition", v)}>
-              <SelectTrigger className="h-11">
+              <SelectTrigger className="h-12 rounded-lg">
                 <SelectValue placeholder="Select addition" />
               </SelectTrigger>
               <SelectContent>
@@ -165,38 +151,28 @@ const StepAddress = ({
                   ))}
               </SelectContent>
             </Select>
-          </div>
-        )}
+          )}
 
-        {loading && (
-          <div className="flex items-center gap-2 text-muted-foreground text-sm py-2">
-            <Loader2 className="w-4 h-4 animate-spin" />
-            Looking up address…
-          </div>
-        )}
+          {loading && (
+            <div className="flex items-center gap-2 text-muted-foreground text-sm py-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Looking up address…
+            </div>
+          )}
 
-        {!loading && looked && addressResult && resolvedAddress && (
-          <div className="flex items-center gap-2 bg-success/10 text-success rounded-lg px-4 py-3 text-sm font-medium">
-            <CheckCircle2 className="w-5 h-5 shrink-0" />
-            {resolvedAddress}
-          </div>
-        )}
+          {!loading && looked && addressResult && resolvedAddress && (
+            <div className="flex items-center gap-2 bg-success/10 text-success rounded-lg px-4 py-3 text-sm font-medium">
+              <CheckCircle2 className="w-5 h-5 shrink-0" />
+              {resolvedAddress}
+            </div>
+          )}
 
-        {!loading && looked && !addressResult && (
-          <p className="text-sm text-destructive">
-            Address not found. Please check your postcode and house number.
-          </p>
-        )}
-      </div>
-
-      <div className="flex justify-between mt-10">
-        <Button variant="ghost" onClick={onBack}>
-          Back
-        </Button>
-        <Button onClick={onNext} disabled={!canProceed}>
-          Next
-          <ChevronRight className="w-4 h-4 ml-1" />
-        </Button>
+          {!loading && looked && !addressResult && (
+            <p className="text-sm text-destructive">
+              Address not found. Please check your postcode and house number.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

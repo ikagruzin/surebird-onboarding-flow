@@ -1,7 +1,4 @@
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
 
 interface StepNameProps {
   firstName: string;
@@ -15,49 +12,27 @@ const StepName = ({ firstName, lastName, onUpdate, onNext, onBack }: StepNamePro
   const canProceed = firstName.trim().length > 0 && lastName.trim().length > 0;
 
   return (
-    <div className="animate-fade-in max-w-md">
-      <h1 className="text-2xl font-bold text-foreground mb-2">
-        Welcome to Surebird! Let's start with your name.
-      </h1>
-      <p className="text-muted-foreground mb-8">
-        We'll use this to personalise your experience.
-      </p>
-
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
-            First name
-          </label>
+    <div className="animate-fade-in">
+      <div className="bg-card rounded-xl border border-border p-6 max-w-xl">
+        <h2 className="text-xl font-semibold text-foreground mb-4">
+          Welcome to Surebird! Let's start with your name.
+        </h2>
+        <div className="grid grid-cols-2 gap-4">
           <Input
             value={firstName}
             onChange={(e) => onUpdate("firstName", e.target.value)}
-            placeholder="Enter your first name"
-            className="h-11"
+            placeholder="Name"
+            className="h-12 rounded-lg"
             maxLength={100}
           />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
-            Last name
-          </label>
           <Input
             value={lastName}
             onChange={(e) => onUpdate("lastName", e.target.value)}
-            placeholder="Enter your last name"
-            className="h-11"
+            placeholder="Surname"
+            className="h-12 rounded-lg"
             maxLength={100}
           />
         </div>
-      </div>
-
-      <div className="flex justify-between mt-10">
-        <Button variant="ghost" onClick={onBack}>
-          Back
-        </Button>
-        <Button onClick={onNext} disabled={!canProceed}>
-          Next
-          <ChevronRight className="w-4 h-4 ml-1" />
-        </Button>
       </div>
     </div>
   );
