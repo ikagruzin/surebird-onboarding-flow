@@ -1,30 +1,36 @@
-import { Plane, Home, Umbrella, Car, Scale, Zap, Caravan } from "lucide-react";
+import { Plane } from "lucide-react";
 import { INSURANCE_TYPES } from "./types";
 import type { BundlePreset } from "./types";
 import logoSurebird from "@/assets/logo-surebird.svg";
-import bundleHomeFamily from "@/assets/bundle-home-family.jpg";
-import bundleBusinessTravel from "@/assets/bundle-business-travel.jpg";
-import bundlePopular from "@/assets/bundle-popular.jpg";
-import bundleMaximum from "@/assets/bundle-maximum.jpg";
+import bundleHomeFamily from "@/assets/bundle-home-family.png";
+import bundleBusinessTravel from "@/assets/bundle-business-travel.png";
+import bundlePopular from "@/assets/bundle-popular.png";
+import bundleMaximum from "@/assets/bundle-maximum.png";
+import iconLiability from "@/assets/icon-liability.svg";
+import iconHome from "@/assets/icon-home.svg";
+import iconCar from "@/assets/icon-car.svg";
+import iconLegal from "@/assets/icon-legal.svg";
+import iconAccidents from "@/assets/icon-accidents.svg";
+import iconCaravan from "@/assets/icon-caravan.svg";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Plane: <Plane className="w-5 h-5" />,
-  Home: <Home className="w-5 h-5" />,
-  Umbrella: <Umbrella className="w-5 h-5" />,
-  Car: <Car className="w-5 h-5" />,
-  Scale: <Scale className="w-5 h-5" />,
-  Zap: <Zap className="w-5 h-5" />,
-  Caravan: <Caravan className="w-5 h-5" />,
+  Home: <img src={iconHome} alt="Home" className="w-5 h-5" />,
+  Umbrella: <img src={iconLiability} alt="Liability" className="w-5 h-5" />,
+  Car: <img src={iconCar} alt="Car" className="w-5 h-5" />,
+  Scale: <img src={iconLegal} alt="Legal" className="w-5 h-5" />,
+  Zap: <img src={iconAccidents} alt="Accidents" className="w-5 h-5" />,
+  Caravan: <img src={iconCaravan} alt="Caravan" className="w-5 h-5" />,
 };
 
 const SMALL_ICON_MAP: Record<string, React.ReactNode> = {
   Plane: <Plane className="w-5 h-5" />,
-  Home: <Home className="w-5 h-5" />,
-  Umbrella: <Umbrella className="w-5 h-5" />,
-  Car: <Car className="w-5 h-5" />,
-  Scale: <Scale className="w-5 h-5" />,
-  Zap: <Zap className="w-5 h-5" />,
-  Caravan: <Caravan className="w-5 h-5" />,
+  Home: <img src={iconHome} alt="Home" className="w-5 h-5" />,
+  Umbrella: <img src={iconLiability} alt="Liability" className="w-5 h-5" />,
+  Car: <img src={iconCar} alt="Car" className="w-5 h-5" />,
+  Scale: <img src={iconLegal} alt="Legal" className="w-5 h-5" />,
+  Zap: <img src={iconAccidents} alt="Accidents" className="w-5 h-5" />,
+  Caravan: <img src={iconCaravan} alt="Caravan" className="w-5 h-5" />,
 };
 
 const BUNDLE_PRESETS: BundlePreset[] = [
@@ -98,19 +104,19 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
               onClick={() => onToggle(ins.id)}
               className={`flex items-center gap-3 px-5 py-4 rounded-lg border transition-all text-left ${
                 isSelected
-                  ? "border-primary bg-info-light shadow-sm"
-                  : "border-border bg-card hover:border-primary/40"
+                  ? "border-[#25B327] bg-[#EBFFEC]/45 shadow-sm"
+                  : "border-border bg-card hover:border-[#25B327]/40"
               }`}
             >
               <span className="text-foreground">{ICON_MAP[ins.icon]}</span>
               <span className="font-medium text-foreground flex-1">{ins.label}</span>
               <div
                 className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                  isSelected ? "border-primary bg-primary" : "border-border"
+                  isSelected ? "border-[#25B327] bg-[#25B327]" : "border-border"
                 }`}
               >
                 {isSelected && (
-                  <svg className="w-3 h-3 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 )}
@@ -138,7 +144,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                 onClick={() => onBundleSelect(preset.insuranceIds)}
                 className={`text-left rounded-xl border overflow-hidden transition-all hover:shadow-md ${
                   isActive
-                    ? "border-primary ring-2 ring-primary/20 shadow-md"
+                    ? "border-[#25B327] ring-2 ring-[#25B327]/20 shadow-md"
                     : "border-border bg-card"
                 }`}
               >
