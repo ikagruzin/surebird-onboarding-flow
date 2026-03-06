@@ -131,6 +131,7 @@ const Index = () => {
           onNext={() => setStep(2)}
           disabled={state.selectedInsurances.length === 0}
           buttonLabel="Next"
+          hasSidebar={true}
         />
       </>
     );
