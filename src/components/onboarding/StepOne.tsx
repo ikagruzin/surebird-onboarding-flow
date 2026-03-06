@@ -71,12 +71,89 @@ const BUNDLE_PRESETS: BundlePreset[] = [
   },
 ];
 
-const ADVANTAGES = [
-  "Save up to €300 per year",
-  "One clear overview of all insurances",
-  "Easily adjustable at any time",
-  "Personal advice from our experts",
-];
+const ADVANTAGES = {
+  en: [
+    "Lowest price for your coverage",
+    "Automatic annual comparison",
+    "Independent advice",
+  ],
+  nl: [
+    "Laagste prijs voor uw dekking",
+    "Automatische jaarlijkse vergelijking",
+    "Onafhankelijk advies",
+  ],
+};
+
+const TRANSLATIONS = {
+  en: {
+    heading: "Choose your insurances",
+    subtitle: "Save the most with our packages. Select the package which suits you best and benefit from the maximum savings.",
+    bundleHeading: "Save the most with our packages",
+    bundleSubtitle: "Our customers always save the most with our packages instead of single insurance. Select the package which suits you best and benefit from the maximum savings.",
+    individualHeading: "Or choose individual insurances",
+    individualSubtitle: "Smartly insured: save up to €300 a year on a package of 6 insurances!",
+    advantageTitle: "Your advantage with Surebird",
+    saveAnnually: "Save annually",
+    versionA: "Version A",
+    versionB: "Version B",
+    login: "Log in",
+    askTaco: "Ask Taco",
+    tacoReady: "I'm ready to assist you",
+    chatWhatsApp: "Chat via WhatsApp",
+    estimatedSavings: "Estimated savings:",
+    next: "Next",
+    // Insurance labels
+    labels: {
+      liability: "Liability",
+      living: "Living",
+      car: "Car",
+      legal: "Legal",
+      accidents: "Accidents",
+      caravan: "Caravan",
+      travel: "Travel",
+    },
+    // Bundle titles & descriptions
+    bundles: {
+      "home-family": { title: "Home & Family", description: "The essential foundation. Protect your home and your family against unexpected costs." },
+      "business-travel": { title: "Business & Travel", description: "The essential foundation. Protect your home and your family against unexpected costs." },
+      "popular": { title: "Popular choice", description: "Our bundle of the most popular products." },
+      "maximum": { title: "Maximum protection", description: "For all cases in life. Our maximum discount for total peace of mind." },
+    },
+  },
+  nl: {
+    heading: "Kies uw verzekeringen",
+    subtitle: "Bespaar het meest met onze pakketten. Selecteer het pakket dat het beste bij u past en profiteer van de maximale besparing.",
+    bundleHeading: "Bespaar het meest met onze pakketten",
+    bundleSubtitle: "Onze klanten besparen altijd het meest met onze pakketten in plaats van losse verzekeringen. Selecteer het pakket dat het beste bij u past en profiteer van de maximale besparing.",
+    individualHeading: "Of kies losse verzekeringen",
+    individualSubtitle: "Slim verzekerd: bespaar tot €300 per jaar op een pakket van 6 verzekeringen!",
+    advantageTitle: "Uw voordeel bij Surebird",
+    saveAnnually: "Jaarlijks besparen",
+    versionA: "Versie A",
+    versionB: "Versie B",
+    login: "Inloggen",
+    askTaco: "Vraag Taco",
+    tacoReady: "Ik sta klaar om u te helpen",
+    chatWhatsApp: "Chat via WhatsApp",
+    estimatedSavings: "Geschatte besparing:",
+    next: "Volgende",
+    labels: {
+      liability: "Aansprakelijkheid",
+      living: "Wonen",
+      car: "Auto",
+      legal: "Rechtsbijstand",
+      accidents: "Ongevallen",
+      caravan: "Caravan",
+      travel: "Reizen",
+    },
+    bundles: {
+      "home-family": { title: "Huis & Gezin", description: "De essentiële basis. Bescherm uw huis en gezin tegen onverwachte kosten." },
+      "business-travel": { title: "Zakelijk & Reizen", description: "De essentiële basis. Bescherm uw huis en gezin tegen onverwachte kosten." },
+      "popular": { title: "Populaire keuze", description: "Ons pakket van de meest populaire producten." },
+      "maximum": { title: "Maximale bescherming", description: "Voor alle gevallen in het leven. Onze maximale korting voor totale gemoedsrust." },
+    },
+  },
+};
 
 interface StepOneProps {
   selected: string[];
@@ -93,10 +170,13 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
     preset.insuranceIds.every((id) => selected.includes(id)) &&
     preset.insuranceIds.length === selected.length;
 
+  const t = TRANSLATIONS[language];
+
   const InsuranceGrid = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
       {INSURANCE_TYPES.map((ins) => {
         const isSelected = selected.includes(ins.id);
+        const label = t.labels[ins.id as keyof typeof t.labels] || ins.label;
         return (
           <button
             key={ins.id}
@@ -108,7 +188,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             }`}
           >
             <span className="text-foreground">{ICON_MAP[ins.icon]}</span>
-            <span className="font-medium text-foreground flex-1">{ins.label}</span>
+            <span className="font-medium text-foreground flex-1">{label}</span>
             <div
               className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                 isSelected ? "border-[#25B327] bg-[#25B327]" : "border-border"
@@ -126,18 +206,23 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
     </div>
   );
 
-  const BundlePresets = () => (
+  const BundlePresets = ({ showHeader = true }: { showHeader?: boolean }) => (
     <div>
-      <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-        Save the most with our packages
-      </h2>
-      <p className="text-muted-foreground mb-8">
-        Our customers always save the most with our packages instead of single insurance. Select the package which suits you best and benefit from the maximum savings.
-      </p>
+      {showHeader && (
+        <>
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+            {t.bundleHeading}
+          </h2>
+          <p className="text-muted-foreground mb-8">
+            {t.bundleSubtitle}
+          </p>
+        </>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {BUNDLE_PRESETS.map((preset) => {
           const isActive = isActiveBundle(preset);
+          const bundleT = t.bundles[preset.id as keyof typeof t.bundles];
           return (
             <button
               key={preset.id}
@@ -151,19 +236,19 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
               <div className="relative h-40 overflow-hidden bg-muted">
                 <img
                   src={preset.image}
-                  alt={preset.title}
+                  alt={bundleT?.title || preset.title}
                   className="w-full h-full object-cover"
                 />
                 <span className="absolute bottom-3 left-3 inline-flex items-center bg-success text-success-foreground text-xs font-semibold px-3 py-1.5 rounded-full">
-                  Save annually €{preset.annualSavings}
+                  {t.saveAnnually} €{preset.annualSavings}
                 </span>
               </div>
               <div className="p-5">
-                <h3 className="text-lg font-bold text-foreground mb-1">{preset.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{preset.description}</p>
+                <h3 className="text-lg font-bold text-foreground mb-1">{bundleT?.title || preset.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4">{bundleT?.description || preset.description}</p>
                 <div className="flex gap-3 text-muted-foreground">
                   {preset.insuranceIds.map((id) => {
-                    const ins = INSURANCE_TYPES.find((t) => t.id === id);
+                    const ins = INSURANCE_TYPES.find((it) => it.id === id);
                     return ins ? (
                       <span key={id}>{SMALL_ICON_MAP[ins.icon]}</span>
                     ) : null;
@@ -180,7 +265,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
   return (
     <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 min-h-screen border-r border-border p-6 justify-between shrink-0">
+      <aside className="hidden lg:flex flex-col w-64 min-h-screen p-6 justify-between shrink-0">
         <div>
           <div className="flex items-center gap-2 mb-10">
             <img src={logoSurebird} alt="Surebird" className="h-8" />
@@ -196,13 +281,13 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
               className="w-10 h-10 rounded-full object-cover"
             />
             <div>
-              <p className="text-sm font-semibold text-foreground">Ask Taco</p>
-              <p className="text-xs text-muted-foreground">I'm ready to assist you</p>
+              <p className="text-sm font-semibold text-foreground">{t.askTaco}</p>
+              <p className="text-xs text-muted-foreground">{t.tacoReady}</p>
             </div>
           </div>
           <button className="w-full flex items-center justify-center gap-2 border border-border rounded-lg py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors">
             <MessageCircle className="w-4 h-4 text-success" />
-            Chat via WhatsApp
+            {t.chatWhatsApp}
           </button>
         </div>
       </aside>
@@ -221,8 +306,8 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              Version A
+             <LayoutGrid className="w-3.5 h-3.5" />
+              {t.versionA}
             </button>
             <button
               onClick={() => setVersion("B")}
@@ -232,8 +317,8 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Layers className="w-3.5 h-3.5" />
-              Version B
+             <Layers className="w-3.5 h-3.5" />
+              {t.versionB}
             </button>
           </div>
 
@@ -265,7 +350,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
           {/* Login button */}
           <button className="flex items-center gap-2 border border-border rounded-lg px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors">
             <User className="w-4 h-4" />
-            Log in
+            {t.login}
           </button>
         </header>
 
@@ -273,10 +358,10 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
         <main className="flex-1 px-6 md:px-12 lg:px-16 py-8 max-w-3xl pb-32">
           <div className="animate-fade-in">
             <h1 className="text-[32px] leading-tight font-bold text-foreground mb-3">
-              Choose your insurances
+              {t.heading}
             </h1>
             <p className="text-muted-foreground mb-8">
-              Smartly insured: save up to €300 a year on a package of 6 insurances!
+              {t.subtitle}
             </p>
 
             {version === "A" ? (
@@ -288,32 +373,47 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
               </>
             ) : (
               <>
-                <BundlePresets />
+                <BundlePresets showHeader={false} />
                 <div className="mt-16">
                   <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-                    Or choose individual insurances
+                    {t.individualHeading}
                   </h2>
                   <p className="text-muted-foreground mb-8">
-                    Pick the insurances that suit your needs.
+                    {t.individualSubtitle}
                   </p>
                   <InsuranceGrid />
                 </div>
               </>
             )}
 
-            {/* Your advantages */}
-            <div className="mt-16 bg-muted/50 rounded-xl p-6 md:p-8">
-              <h2 className="text-xl font-bold text-foreground mb-4">Your advantages</h2>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {ADVANTAGES.map((adv, i) => (
-                  <li key={i} className="flex items-start gap-2.5">
-                    <svg className="w-5 h-5 text-success shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-sm text-foreground">{adv}</span>
-                  </li>
-                ))}
-              </ul>
+            {/* Your advantage with Surebird */}
+            <div className="mt-16 border-t border-border pt-8 pb-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                <div>
+                  <p className="font-semibold text-foreground mb-3">{t.advantageTitle}</p>
+                  <ul className="space-y-2">
+                    {ADVANTAGES[language].map((adv, i) => (
+                      <li key={i} className="flex items-center gap-2.5">
+                        <svg className="w-5 h-5 text-success shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-sm text-foreground">{adv}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="flex items-center gap-3 shrink-0">
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-5 h-5 text-[#00B67A]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <span className="text-sm font-semibold text-foreground">Trustpilot</span>
+                  </div>
+                  <div className="w-px h-8 bg-border" />
+                  <div className="text-center">
+                    <span className="text-2xl font-bold text-foreground">4.3</span>
+                    <p className="text-xs text-muted-foreground">Excellent</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </main>

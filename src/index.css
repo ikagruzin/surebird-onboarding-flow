@@ -99,29 +99,3 @@
   }
 }
 
-@keyframes sparkle-pulse {
-  0%, 100% { opacity: 0.4; transform: scale(0.85); }
-  50% { opacity: 1; transform: scale(1.15); }
-}
-
-@keyframes sparkle-pulse-delayed {
-  0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(15deg); }
-  50% { opacity: 1; transform: scale(1.2) rotate(-15deg); }
-}
-
-@keyframes savings-glow {
-  0%, 100% { text-shadow: 0 0 4px hsl(var(--success) / 0.2); }
-  50% { text-shadow: 0 0 12px hsl(var(--success) / 0.5); }
-}
-
-.animate-sparkle-pulse {
-  animation: sparkle-pulse 2s ease-in-out infinite;
-}
-
-.animate-sparkle-pulse-delayed {
-  animation: sparkle-pulse-delayed 2s ease-in-out 0.5s infinite;
-}
-
-.animate-savings-glow {
-  animation: savings-glow 2s ease-in-out infinite;
-}
