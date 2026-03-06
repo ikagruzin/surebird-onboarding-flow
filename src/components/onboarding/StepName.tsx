@@ -13,8 +13,8 @@ const StepName = ({ firstName, lastName, onUpdate, onNext, onBack }: StepNamePro
 
   return (
     <div className="animate-fade-in">
-      <div className="bg-card rounded-xl border border-border p-6 max-w-xl">
-        <h2 className="text-xl font-semibold text-foreground mb-4">
+      <div className="bg-card rounded-xl border border-border p-6">
+        <h2 className="text-base font-semibold text-foreground mb-4">
           Welcome to Surebird! Let's start with your name.
         </h2>
         <div className="grid grid-cols-2 gap-4">

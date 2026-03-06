@@ -10,8 +10,8 @@ interface StepFamilyProps {
 const StepFamily = ({ includeFamily, onUpdate }: StepFamilyProps) => {
   return (
     <div className="animate-fade-in">
-      <div className="bg-card rounded-xl border border-border p-6 max-w-xl">
-        <h2 className="text-xl font-semibold text-foreground mb-2">
+      <div className="bg-card rounded-xl border border-border p-6">
+        <h2 className="text-base font-semibold text-foreground mb-2">
           Do you want to insure your family?
         </h2>
 
