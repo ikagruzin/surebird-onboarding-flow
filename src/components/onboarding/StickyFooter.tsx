@@ -18,7 +18,7 @@ const StickyFooter = ({ savings, onNext, disabled = false, buttonLabel = "Next",
     <div className={`fixed bottom-0 right-0 z-50 bg-card border-t border-border ${hasSidebar ? 'left-0 lg:left-64' : 'left-0'}`}>
       <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-foreground">{buttonLabel === "Volgende" ? "Geschatte besparing:" : "Estimated savings:"}</span>
+          <span className="text-sm font-medium text-success">{buttonLabel === "Volgende" ? "Geschatte besparing:" : "Estimated savings:"}</span>
           <span className="inline-flex items-center gap-1 bg-success/10 border border-success/20 rounded-full px-3 py-1">
             <span className="text-lg font-bold text-success">{formattedSavings}</span>
           </span>
