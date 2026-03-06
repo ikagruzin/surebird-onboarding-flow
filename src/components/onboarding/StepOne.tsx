@@ -1,4 +1,3 @@
-import { Plane } from "lucide-react";
 import { INSURANCE_TYPES } from "./types";
 import type { BundlePreset } from "./types";
 import logoSurebird from "@/assets/logo-surebird.svg";
@@ -12,19 +11,20 @@ import iconCar from "@/assets/icon-car.svg";
 import iconLegal from "@/assets/icon-legal.svg";
 import iconAccidents from "@/assets/icon-accidents.svg";
 import iconCaravan from "@/assets/icon-caravan.svg";
+import iconTravel from "@/assets/icon-travel.svg";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
-  Plane: <Plane className="w-5 h-5" />,
-  Home: <img src={iconHome} alt="Home" className="w-5 h-5" />,
-  Umbrella: <img src={iconLiability} alt="Liability" className="w-5 h-5" />,
-  Car: <img src={iconCar} alt="Car" className="w-5 h-5" />,
-  Scale: <img src={iconLegal} alt="Legal" className="w-5 h-5" />,
-  Zap: <img src={iconAccidents} alt="Accidents" className="w-5 h-5" />,
-  Caravan: <img src={iconCaravan} alt="Caravan" className="w-5 h-5" />,
+  Plane: <img src={iconTravel} alt="Travel" className="w-[46px] h-[46px]" />,
+  Home: <img src={iconHome} alt="Home" className="w-[46px] h-[46px]" />,
+  Umbrella: <img src={iconLiability} alt="Liability" className="w-[46px] h-[46px]" />,
+  Car: <img src={iconCar} alt="Car" className="w-[46px] h-[46px]" />,
+  Scale: <img src={iconLegal} alt="Legal" className="w-[46px] h-[46px]" />,
+  Zap: <img src={iconAccidents} alt="Accidents" className="w-[46px] h-[46px]" />,
+  Caravan: <img src={iconCaravan} alt="Caravan" className="w-[46px] h-[46px]" />,
 };
 
 const SMALL_ICON_MAP: Record<string, React.ReactNode> = {
-  Plane: <Plane className="w-5 h-5" />,
+  Plane: <img src={iconTravel} alt="Travel" className="w-5 h-5" />,
   Home: <img src={iconHome} alt="Home" className="w-5 h-5" />,
   Umbrella: <img src={iconLiability} alt="Liability" className="w-5 h-5" />,
   Car: <img src={iconCar} alt="Car" className="w-5 h-5" />,
@@ -39,7 +39,7 @@ const BUNDLE_PRESETS: BundlePreset[] = [
     title: "Home & Family",
     description: "The essential foundation. Protect your home and your family against unexpected costs.",
     insuranceIds: ["living", "liability"],
-    annualSavings: 200,
+    annualSavings: 80,
     image: bundleHomeFamily,
   },
   {
@@ -47,7 +47,7 @@ const BUNDLE_PRESETS: BundlePreset[] = [
     title: "Business & Travel",
     description: "The essential foundation. Protect your home and your family against unexpected costs.",
     insuranceIds: ["legal", "travel", "car"],
-    annualSavings: 160,
+    annualSavings: 120,
     image: bundleBusinessTravel,
   },
   {
@@ -55,7 +55,7 @@ const BUNDLE_PRESETS: BundlePreset[] = [
     title: "Popular choice",
     description: "Our bundle of the most popular products.",
     insuranceIds: ["living", "liability", "car"],
-    annualSavings: 240,
+    annualSavings: 120,
     image: bundlePopular,
   },
   {
@@ -63,7 +63,7 @@ const BUNDLE_PRESETS: BundlePreset[] = [
     title: "Maximum protection",
     description: "For all cases in life. Our maximum discount for total peace of mind.",
     insuranceIds: ["liability", "living", "travel", "car", "legal", "accidents"],
-    annualSavings: 300,
+    annualSavings: 240,
     image: bundleMaximum,
   },
 ];
@@ -83,15 +83,15 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
   return (
     <div className="animate-fade-in pb-24">
       {/* Logo header */}
-      <div className="mb-8">
+      <div className="mb-8 -ml-0">
         <img src={logoSurebird} alt="Surebird" className="h-8" />
       </div>
 
-      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+      <h1 className="text-[48px] leading-tight font-bold text-foreground mb-3">
         Choose your insurances
       </h1>
       <p className="text-muted-foreground mb-8">
-        Smartly insured: save up to €280 a year on a package of 6 insurances!
+        Smartly insured: save up to €300 a year on a package of 6 insurances!
       </p>
 
       {/* Insurance grid */}
