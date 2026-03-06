@@ -10,6 +10,7 @@ import StepPackage from "@/components/onboarding/StepPackage";
 import Footer from "@/components/onboarding/Footer";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
+import { Progress } from "@/components/ui/progress";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
 import type { WizardState } from "@/components/onboarding/types";
 
@@ -65,6 +66,26 @@ const Index = () => {
   ).reduce((sum, t) => sum + t.savings, 0);
 
   const isStep1 = state.currentStep === 1;
+  const isAboutYou = state.currentStep >= 2 && state.currentStep <= 4;
+
+  // "About you" sub-step progress: steps 2,3,4 → sub-steps 1,2,3
+  const aboutYouSubStep = state.currentStep - 1; // 1, 2, or 3
+  const aboutYouProgress = (aboutYouSubStep / 3) * 100;
+
+  const canProceedAboutYou = () => {
+    switch (state.currentStep) {
+      case 2:
+        return state.firstName.trim().length > 0 && state.lastName.trim().length > 0;
+      case 3: {
+        const pc = state.postcode.replace(/\s/g, "");
+        return pc.length >= 6 && state.houseNumber.trim().length > 0;
+      }
+      case 4:
+        return !!state.includeFamily;
+      default:
+        return true;
+    }
+  };
 
   const renderStep = () => {
     switch (state.currentStep) {
@@ -192,21 +213,37 @@ const Index = () => {
     );
   }
 
+  const getNextStep = () => {
+    setStep(state.currentStep + 1);
+  };
+
+  const getPrevStep = () => {
+    setStep(state.currentStep - 1);
+  };
+
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar currentStep={sidebarStep} visible={true} />
 
-      <main className="flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 max-w-3xl mx-auto">
+      <main className="flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 max-w-3xl mx-auto pb-28">
+        {isAboutYou && (
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-foreground mb-4">About you</h1>
+            <Progress value={aboutYouProgress} className="h-2" />
+          </div>
+        )}
         {renderStep()}
         <Footer />
       </main>
 
       <StickyFooter
         savings={totalSavings}
-        onNext={() => {}}
-        disabled={state.selectedInsurances.length === 0}
+        onNext={getNextStep}
+        onBack={getPrevStep}
+        disabled={isAboutYou ? !canProceedAboutYou() : state.selectedInsurances.length === 0}
         buttonLabel="Next"
         hasSidebar={true}
+        showSavings={!isAboutYou}
       />
     </div>
   );
