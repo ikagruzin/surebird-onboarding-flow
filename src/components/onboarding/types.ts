@@ -23,7 +23,7 @@ export interface WizardState {
 
 export const INSURANCE_TYPES: InsuranceType[] = [
   { id: "liability", label: "Liability", icon: "Umbrella", savings: 45 },
-  { id: "living", label: "Home", icon: "Home", savings: 45 },
+  { id: "home", label: "Home", icon: "Home", savings: 45 },
   { id: "travel", label: "Travel", icon: "Plane", savings: 45 },
   { id: "car", label: "Car", icon: "Car", savings: 45 },
   { id: "legal", label: "Legal expenses", icon: "Scale", savings: 45 },
