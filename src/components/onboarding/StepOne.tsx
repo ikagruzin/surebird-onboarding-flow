@@ -293,9 +293,9 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col items-center">
         {/* Header */}
-        <header className="flex items-center justify-end gap-3 px-6 md:px-12 lg:px-16 py-4">
+        <header className="w-full max-w-3xl flex items-center justify-end gap-3 px-6 py-4">
           {/* Version switcher */}
           <div className="flex items-center bg-muted rounded-lg p-0.5 mr-auto">
             <button
@@ -355,7 +355,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
         </header>
 
         {/* Content */}
-        <main className="flex-1 px-6 md:px-12 lg:px-16 py-8 max-w-3xl pb-32">
+        <main className="w-full max-w-3xl px-6 py-8 pb-32">
           <div className="animate-fade-in">
             <h1 className="text-[32px] leading-tight font-bold text-foreground mb-3">
               {t.heading}
