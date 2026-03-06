@@ -20,7 +20,7 @@ interface PreferenceQuestion {
 }
 
 const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
-  living: [
+  home: [
     {
       id: "own_risk",
       label: "Your own risk?",
