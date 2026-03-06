@@ -151,6 +151,7 @@ const Index = () => {
         onNext={() => {}}
         disabled={state.selectedInsurances.length === 0}
         buttonLabel="Next"
+        hasSidebar={true}
       />
     </div>
   );

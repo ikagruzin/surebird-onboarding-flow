@@ -12,25 +12,25 @@ const Sidebar = ({ currentStep, visible = true }: SidebarProps) => {
   if (!visible) return null;
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 min-h-screen border-r border-border p-6 justify-between shrink-0">
+    <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 border-r border-border p-6 pb-20 shrink-0">
       <div>
         <div className="flex items-center gap-2 mb-10">
           <img src={logoSurebird} alt="Surebird" className="h-8" />
         </div>
 
         {/* Steps with dot + vertical line design */}
-        <nav className="relative ml-3">
+        <nav className="relative ml-2">
           {/* Vertical line */}
-          <div className="absolute left-[7px] top-4 bottom-4 w-[2px] bg-border" />
+          <div className="absolute left-[5px] top-3 bottom-3 w-[2px] bg-border" />
 
           {STEP_LABELS.map((label, i) => {
             const stepNum = i + 1;
             const isCompleted = currentStep > stepNum;
             const isCurrent = currentStep === stepNum;
             return (
-              <div key={i} className="flex items-center gap-4 py-5 relative z-10">
+              <div key={i} className="flex items-center gap-3 py-3 relative z-10">
                 <div
-                  className={`w-4 h-4 rounded-full border-[3px] shrink-0 ${
+                  className={`w-3 h-3 rounded-full border-[2.5px] shrink-0 ${
                     isCurrent
                       ? "border-primary bg-primary"
                       : isCompleted
@@ -43,7 +43,7 @@ const Sidebar = ({ currentStep, visible = true }: SidebarProps) => {
                   )}
                 </div>
                 <span
-                  className={`text-base font-medium ${
+                  className={`text-sm font-medium ${
                     isCurrent
                       ? "text-foreground"
                       : isCompleted
