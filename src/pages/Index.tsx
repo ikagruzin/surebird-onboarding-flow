@@ -229,11 +229,11 @@ const Index = () => {
         {isAboutYou && (
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-foreground mb-4">About you</h1>
-            <Progress value={aboutYouProgress} className="h-2" />
+            <Progress value={aboutYouProgress} className="h-2 [&>div]:bg-success" />
           </div>
         )}
         {renderStep()}
-        <Footer />
+        {!isAboutYou && <Footer />}
       </main>
 
       <StickyFooter

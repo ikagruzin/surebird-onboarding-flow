@@ -112,8 +112,8 @@ const StepAddress = ({
 
   return (
     <div className="animate-fade-in">
-      <div className="bg-card rounded-xl border border-border p-6 max-w-xl">
-        <h2 className="text-xl font-semibold text-foreground mb-4">
+      <div className="bg-card rounded-xl border border-border p-6">
+        <h2 className="text-base font-semibold text-foreground mb-4">
           Nice to meet you, {firstName}! We need your address information to select
           the right and most suitable insurance for you.
         </h2>
