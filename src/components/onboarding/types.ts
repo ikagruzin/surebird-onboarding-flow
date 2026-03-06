@@ -16,13 +16,13 @@ export interface WizardState {
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [
-  { id: "liability", label: "Liability", icon: "Umbrella", savings: 40 },
-  { id: "living", label: "Home", icon: "Home", savings: 40 },
-  { id: "travel", label: "Travel", icon: "Plane", savings: 40 },
-  { id: "car", label: "Car", icon: "Car", savings: 40 },
-  { id: "legal", label: "Legal expenses", icon: "Scale", savings: 40 },
-  { id: "accidents", label: "Accidents", icon: "Zap", savings: 40 },
-  { id: "caravan", label: "Caravan", icon: "Caravan", savings: 20 },
+  { id: "liability", label: "Liability", icon: "Umbrella", savings: 45 },
+  { id: "living", label: "Home", icon: "Home", savings: 45 },
+  { id: "travel", label: "Travel", icon: "Plane", savings: 45 },
+  { id: "car", label: "Car", icon: "Car", savings: 45 },
+  { id: "legal", label: "Legal expenses", icon: "Scale", savings: 45 },
+  { id: "accidents", label: "Accidents", icon: "Zap", savings: 45 },
+  { id: "caravan", label: "Caravan", icon: "Caravan", savings: 30 },
 ];
 
 export const STEP_LABELS = [
