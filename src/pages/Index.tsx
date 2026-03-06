@@ -5,6 +5,9 @@ import StepPreferences from "@/components/onboarding/StepPreferences";
 import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepPackage from "@/components/onboarding/StepPackage";
 import Footer from "@/components/onboarding/Footer";
+import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
+import StickyFooter from "@/components/onboarding/StickyFooter";
+import { INSURANCE_TYPES } from "@/components/onboarding/types";
 import type { WizardState } from "@/components/onboarding/types";
 
 const Index = () => {
@@ -28,6 +31,10 @@ const Index = () => {
     }));
   }, []);
 
+  const selectBundle = useCallback((ids: string[]) => {
+    setState((s) => ({ ...s, selectedInsurances: [...ids] }));
+  }, []);
+
   const updatePreference = useCallback(
     (insuranceId: string, questionId: string, value: string) => {
       setState((s) => ({
@@ -44,6 +51,12 @@ const Index = () => {
     []
   );
 
+  const totalSavings = INSURANCE_TYPES.filter((t) =>
+    state.selectedInsurances.includes(t.id)
+  ).reduce((sum, t) => sum + t.savings, 0);
+
+  const isStep1 = state.currentStep === 1;
+
   const renderStep = () => {
     switch (state.currentStep) {
       case 1:
@@ -51,6 +64,7 @@ const Index = () => {
           <StepOne
             selected={state.selectedInsurances}
             onToggle={toggleInsurance}
+            onBundleSelect={selectBundle}
             onNext={() => setStep(2)}
           />
         );
@@ -109,11 +123,27 @@ const Index = () => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar currentStep={sidebarStep} />
+      {/* Sidebar hidden on step 1 */}
+      <Sidebar currentStep={sidebarStep} visible={!isStep1} />
+
+      {/* Floating Ask Taco on step 1 */}
+      {isStep1 && <AskTacoFloat />}
+
       <main className="flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 max-w-3xl mx-auto">
         {renderStep()}
-        <Footer />
+        {!isStep1 && <Footer />}
       </main>
+
+      {/* Sticky footer */}
+      <StickyFooter
+        savings={totalSavings}
+        onNext={() => {
+          if (state.currentStep === 1) setStep(2);
+          // Other steps handle their own next
+        }}
+        disabled={state.selectedInsurances.length === 0}
+        buttonLabel="Next"
+      />
     </div>
   );
 };
