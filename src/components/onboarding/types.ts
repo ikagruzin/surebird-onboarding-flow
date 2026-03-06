@@ -13,6 +13,12 @@ export interface WizardState {
   preferences: Record<string, Record<string, string>>;
   email: string;
   emailSubmitted: boolean;
+  firstName: string;
+  lastName: string;
+  postcode: string;
+  houseNumber: string;
+  addition: string;
+  includeFamily: string;
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [
