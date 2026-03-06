@@ -14,23 +14,23 @@ import iconCaravan from "@/assets/icon-caravan.svg";
 import iconTravel from "@/assets/icon-travel.svg";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
-  Plane: <img src={iconTravel} alt="Travel" className="w-[46px] h-[46px]" />,
-  Home: <img src={iconHome} alt="Home" className="w-[46px] h-[46px]" />,
-  Umbrella: <img src={iconLiability} alt="Liability" className="w-[46px] h-[46px]" />,
-  Car: <img src={iconCar} alt="Car" className="w-[46px] h-[46px]" />,
-  Scale: <img src={iconLegal} alt="Legal" className="w-[46px] h-[46px]" />,
-  Zap: <img src={iconAccidents} alt="Accidents" className="w-[46px] h-[46px]" />,
-  Caravan: <img src={iconCaravan} alt="Caravan" className="w-[46px] h-[46px]" />,
+  Plane: <img src={iconTravel} alt="Travel" className="w-10 h-10" />,
+  Home: <img src={iconHome} alt="Home" className="w-10 h-10" />,
+  Umbrella: <img src={iconLiability} alt="Liability" className="w-10 h-10" />,
+  Car: <img src={iconCar} alt="Car" className="w-10 h-10" />,
+  Scale: <img src={iconLegal} alt="Legal" className="w-10 h-10" />,
+  Zap: <img src={iconAccidents} alt="Accidents" className="w-10 h-10" />,
+  Caravan: <img src={iconCaravan} alt="Caravan" className="w-10 h-10" />,
 };
 
 const SMALL_ICON_MAP: Record<string, React.ReactNode> = {
-  Plane: <img src={iconTravel} alt="Travel" className="w-5 h-5" />,
-  Home: <img src={iconHome} alt="Home" className="w-5 h-5" />,
-  Umbrella: <img src={iconLiability} alt="Liability" className="w-5 h-5" />,
-  Car: <img src={iconCar} alt="Car" className="w-5 h-5" />,
-  Scale: <img src={iconLegal} alt="Legal" className="w-5 h-5" />,
-  Zap: <img src={iconAccidents} alt="Accidents" className="w-5 h-5" />,
-  Caravan: <img src={iconCaravan} alt="Caravan" className="w-5 h-5" />,
+  Plane: <img src={iconTravel} alt="Travel" className="w-7 h-7" />,
+  Home: <img src={iconHome} alt="Home" className="w-7 h-7" />,
+  Umbrella: <img src={iconLiability} alt="Liability" className="w-7 h-7" />,
+  Car: <img src={iconCar} alt="Car" className="w-7 h-7" />,
+  Scale: <img src={iconLegal} alt="Legal" className="w-7 h-7" />,
+  Zap: <img src={iconAccidents} alt="Accidents" className="w-7 h-7" />,
+  Caravan: <img src={iconCaravan} alt="Caravan" className="w-7 h-7" />,
 };
 
 const BUNDLE_PRESETS: BundlePreset[] = [
@@ -87,7 +87,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
         <img src={logoSurebird} alt="Surebird" className="h-8" />
       </div>
 
-      <h1 className="text-[48px] leading-tight font-bold text-foreground mb-3">
+      <h1 className="text-[36px] leading-tight font-bold text-foreground mb-3">
         Choose your insurances
       </h1>
       <p className="text-muted-foreground mb-8">
