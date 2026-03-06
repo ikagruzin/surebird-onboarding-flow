@@ -1,44 +1,51 @@
-import { Check, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { STEP_LABELS } from "./types";
+import logoSurebird from "@/assets/logo-surebird.svg";
+import tacoAvatar from "@/assets/taco-avatar.jpg";
 
 interface SidebarProps {
   currentStep: number;
+  visible?: boolean;
 }
 
-const Sidebar = ({ currentStep }: SidebarProps) => {
+const Sidebar = ({ currentStep, visible = true }: SidebarProps) => {
+  if (!visible) return null;
+
   return (
-    <aside className="hidden lg:flex flex-col w-64 min-h-screen bg-card border-r border-border p-6 justify-between shrink-0">
+    <aside className="hidden lg:flex flex-col w-64 min-h-screen border-r border-border p-6 justify-between shrink-0">
       <div>
         <div className="flex items-center gap-2 mb-10">
-          <span className="text-2xl">🐦</span>
-          <span className="text-xl font-bold text-primary">Surebird</span>
+          <img src={logoSurebird} alt="Surebird" className="h-8" />
         </div>
-        <nav className="space-y-1">
+
+        {/* Steps with dot + vertical line design */}
+        <nav className="relative ml-3">
+          {/* Vertical line */}
+          <div className="absolute left-[7px] top-4 bottom-4 w-[2px] bg-border" />
+
           {STEP_LABELS.map((label, i) => {
             const stepNum = i + 1;
             const isCompleted = currentStep > stepNum;
             const isCurrent = currentStep === stepNum;
             return (
-              <div key={i} className="flex items-center gap-3 py-3">
-                {isCompleted ? (
-                  <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center shrink-0">
-                    <Check className="w-4 h-4 text-primary-foreground" />
-                  </div>
-                ) : (
-                  <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 ${
-                      isCurrent
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {stepNum}
-                  </div>
-                )}
-                <span
-                  className={`text-sm font-medium ${
+              <div key={i} className="flex items-center gap-4 py-5 relative z-10">
+                <div
+                  className={`w-4 h-4 rounded-full border-[3px] shrink-0 ${
                     isCurrent
-                      ? "text-primary"
+                      ? "border-primary bg-primary"
+                      : isCompleted
+                      ? "border-primary bg-primary"
+                      : "border-muted-foreground/40 bg-background"
+                  }`}
+                >
+                  {isCurrent && (
+                    <div className="w-full h-full rounded-full ring-2 ring-primary ring-offset-2 ring-offset-background" />
+                  )}
+                </div>
+                <span
+                  className={`text-base font-medium ${
+                    isCurrent
+                      ? "text-foreground"
                       : isCompleted
                       ? "text-foreground"
                       : "text-muted-foreground"
@@ -51,11 +58,15 @@ const Sidebar = ({ currentStep }: SidebarProps) => {
           })}
         </nav>
       </div>
-      <div className="border border-border rounded-lg p-4">
+
+      {/* Ask Taco */}
+      <div className="border border-border rounded-xl p-4">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg">
-            🌮
-          </div>
+          <img
+            src={tacoAvatar}
+            alt="Taco"
+            className="w-10 h-10 rounded-full object-cover"
+          />
           <div>
             <p className="text-sm font-semibold text-foreground">Ask Taco</p>
             <p className="text-xs text-muted-foreground">I'm ready to assist you</p>
