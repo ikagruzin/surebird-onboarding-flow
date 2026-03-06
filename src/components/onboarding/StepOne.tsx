@@ -265,7 +265,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
   return (
     <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 p-6 pb-20 shrink-0 border-r border-border">
+      <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 p-6 pb-20 justify-between shrink-0 border-r border-border">
         <div>
           <div className="flex items-center gap-2 mb-10">
             <img src={logoSurebird} alt="Surebird" className="h-8" />
