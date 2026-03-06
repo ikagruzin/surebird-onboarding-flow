@@ -1,4 +1,4 @@
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Sparkles } from "lucide-react";
 
 interface StickyFooterProps {
   savings: number;
@@ -18,7 +18,11 @@ const StickyFooter = ({ savings, onNext, disabled = false, buttonLabel = "Next" 
       <div className="max-w-3xl mx-auto px-6 md:px-12 lg:px-16 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-foreground">Estimated savings:</span>
-          <span className="text-lg font-bold text-success">{formattedSavings}</span>
+          <span className="relative inline-flex items-center gap-1.5">
+            <Sparkles className="w-4 h-4 text-success animate-sparkle-pulse" />
+            <span className="text-lg font-bold text-success animate-savings-glow">{formattedSavings}</span>
+            <Sparkles className="w-3.5 h-3.5 text-success animate-sparkle-pulse-delayed" />
+          </span>
         </div>
         <button
           onClick={onNext}

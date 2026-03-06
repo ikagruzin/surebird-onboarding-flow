@@ -121,26 +121,33 @@ const Index = () => {
   const sidebarStep =
     state.currentStep <= 1 ? 1 : state.currentStep <= 3 ? 2 : state.currentStep === 4 ? 3 : 4;
 
+  // Step 1 has its own full layout with sidebar
+  if (isStep1) {
+    return (
+      <>
+        {renderStep()}
+        <StickyFooter
+          savings={totalSavings}
+          onNext={() => setStep(2)}
+          disabled={state.selectedInsurances.length === 0}
+          buttonLabel="Next"
+        />
+      </>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Sidebar hidden on step 1 */}
-      <Sidebar currentStep={sidebarStep} visible={!isStep1} />
-
-      {/* Floating Ask Taco on step 1 */}
-      {isStep1 && <AskTacoFloat />}
+      <Sidebar currentStep={sidebarStep} visible={true} />
 
       <main className="flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 max-w-3xl mx-auto">
         {renderStep()}
-        {!isStep1 && <Footer />}
+        <Footer />
       </main>
 
-      {/* Sticky footer */}
       <StickyFooter
         savings={totalSavings}
-        onNext={() => {
-          if (state.currentStep === 1) setStep(2);
-          // Other steps handle their own next
-        }}
+        onNext={() => {}}
         disabled={state.selectedInsurances.length === 0}
         buttonLabel="Next"
       />
