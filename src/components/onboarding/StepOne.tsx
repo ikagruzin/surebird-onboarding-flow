@@ -42,7 +42,7 @@ const BUNDLE_PRESETS: BundlePreset[] = [
     title: "Home & Family",
     description: "The essential foundation. Protect your home and your family against unexpected costs.",
     insuranceIds: ["living", "liability"],
-    annualSavings: 80,
+    annualSavings: 90,
     image: bundleHomeFamily,
   },
   {
@@ -50,7 +50,7 @@ const BUNDLE_PRESETS: BundlePreset[] = [
     title: "Business & Travel",
     description: "The essential foundation. Protect your home and your family against unexpected costs.",
     insuranceIds: ["legal", "travel", "car"],
-    annualSavings: 120,
+    annualSavings: 135,
     image: bundleBusinessTravel,
   },
   {
@@ -58,7 +58,7 @@ const BUNDLE_PRESETS: BundlePreset[] = [
     title: "Popular choice",
     description: "Our bundle of the most popular products.",
     insuranceIds: ["living", "liability", "car"],
-    annualSavings: 120,
+    annualSavings: 135,
     image: bundlePopular,
   },
   {
@@ -66,7 +66,7 @@ const BUNDLE_PRESETS: BundlePreset[] = [
     title: "Maximum protection",
     description: "For all cases in life. Our maximum discount for total peace of mind.",
     insuranceIds: ["liability", "living", "travel", "car", "legal", "accidents"],
-    annualSavings: 240,
+    annualSavings: 270,
     image: bundleMaximum,
   },
 ];
@@ -265,7 +265,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
   return (
     <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 min-h-screen p-6 justify-between shrink-0">
+      <aside className="hidden lg:flex flex-col w-64 min-h-screen p-6 pb-24 justify-between shrink-0">
         <div>
           <div className="flex items-center gap-2 mb-10">
             <img src={logoSurebird} alt="Surebird" className="h-8" />
