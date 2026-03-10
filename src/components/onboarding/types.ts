@@ -23,6 +23,7 @@ export interface WizardState {
   insurePartner: string;
   childrenCount: number;
   includeFamily: string;
+  phone: string;
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [
