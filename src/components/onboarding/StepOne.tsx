@@ -132,6 +132,7 @@ const TRANSLATIONS = {
     saveAnnually: "Jaarlijks besparen",
     versionA: "Versie A",
     versionB: "Versie B",
+    versionC: "Versie C",
     login: "Inloggen",
     askTaco: "Vraag Taco",
     tacoReady: "Ik sta klaar om u te helpen",
