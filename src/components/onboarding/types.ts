@@ -18,6 +18,7 @@ export interface WizardState {
   postcode: string;
   houseNumber: string;
   addition: string;
+  birthdate: string;
   includeFamily: string;
 }
 

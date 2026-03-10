@@ -3,6 +3,7 @@ import Sidebar from "@/components/onboarding/Sidebar";
 import StepOne from "@/components/onboarding/StepOne";
 import StepName from "@/components/onboarding/StepName";
 import StepAddress from "@/components/onboarding/StepAddress";
+import StepBirthdate from "@/components/onboarding/StepBirthdate";
 import StepFamily from "@/components/onboarding/StepFamily";
 import StepPreferences from "@/components/onboarding/StepPreferences";
 import StepUpsell from "@/components/onboarding/StepUpsell";
@@ -26,6 +27,7 @@ const Index = () => {
     postcode: "",
     houseNumber: "",
     addition: "",
+    birthdate: "",
     includeFamily: "",
   });
 
@@ -66,11 +68,11 @@ const Index = () => {
   ).reduce((sum, t) => sum + t.savings, 0);
 
   const isStep1 = state.currentStep === 1;
-  const isAboutYou = state.currentStep >= 2 && state.currentStep <= 4;
+  const isAboutYou = state.currentStep >= 2 && state.currentStep <= 5;
 
-  // "About you" sub-step progress: steps 2,3,4 → sub-steps 1,2,3
-  const aboutYouSubStep = state.currentStep - 1; // 1, 2, or 3
-  const aboutYouProgress = (aboutYouSubStep / 3) * 100;
+  // "About you" sub-step progress: steps 2,3,4,5 → sub-steps 1,2,3,4
+  const aboutYouSubStep = state.currentStep - 1; // 1, 2, 3, or 4
+  const aboutYouProgress = (aboutYouSubStep / 4) * 100;
 
   const canProceedAboutYou = () => {
     switch (state.currentStep) {
@@ -81,6 +83,8 @@ const Index = () => {
         return pc.length >= 6 && state.houseNumber.trim().length > 0;
       }
       case 4:
+        return state.birthdate.trim().length > 0;
+      case 5:
         return !!state.includeFamily;
       default:
         return true;
@@ -126,10 +130,10 @@ const Index = () => {
         );
       case 4:
         return (
-          <StepFamily
-            includeFamily={state.includeFamily}
+          <StepBirthdate
+            birthdate={state.birthdate}
             onUpdate={(value) =>
-              setState((s) => ({ ...s, includeFamily: value }))
+              setState((s) => ({ ...s, birthdate: value }))
             }
             onNext={() => setStep(5)}
             onBack={() => setStep(3)}
@@ -137,24 +141,35 @@ const Index = () => {
         );
       case 5:
         return (
-          <StepPreferences
-            selectedInsurances={state.selectedInsurances}
-            preferences={state.preferences}
-            onUpdatePreference={updatePreference}
+          <StepFamily
+            includeFamily={state.includeFamily}
+            onUpdate={(value) =>
+              setState((s) => ({ ...s, includeFamily: value }))
+            }
             onNext={() => setStep(6)}
             onBack={() => setStep(4)}
           />
         );
       case 6:
         return (
-          <StepUpsell
+          <StepPreferences
             selectedInsurances={state.selectedInsurances}
-            onToggle={toggleInsurance}
+            preferences={state.preferences}
+            onUpdatePreference={updatePreference}
             onNext={() => setStep(7)}
             onBack={() => setStep(5)}
           />
         );
       case 7:
+        return (
+          <StepUpsell
+            selectedInsurances={state.selectedInsurances}
+            onToggle={toggleInsurance}
+            onNext={() => setStep(8)}
+            onBack={() => setStep(6)}
+          />
+        );
+      case 8:
         return (
           <StepPackage
             selectedInsurances={state.selectedInsurances}
@@ -166,8 +181,8 @@ const Index = () => {
             onEmailSubmit={() =>
               setState((s) => ({ ...s, emailSubmitted: true }))
             }
-            onNext={() => setStep(8)}
-            onBack={() => setStep(6)}
+            onNext={() => setStep(9)}
+            onBack={() => setStep(7)}
           />
         );
       default:
@@ -185,15 +200,15 @@ const Index = () => {
   };
 
   // Map wizard steps to sidebar steps:
-  // 1 = product selection (no sidebar), 2-4 = About you, 5-6 = Your preferences, 7 = Your offer, 8+ = Finalise
+  // 1 = product selection, 2-5 = About you, 6-7 = Your preferences, 8 = Your offer, 9+ = Finalise
   const sidebarStep =
     state.currentStep <= 1
       ? 1
-      : state.currentStep <= 4
+      : state.currentStep <= 5
       ? 1
-      : state.currentStep <= 6
+      : state.currentStep <= 7
       ? 2
-      : state.currentStep === 7
+      : state.currentStep === 8
       ? 3
       : 4;
 
