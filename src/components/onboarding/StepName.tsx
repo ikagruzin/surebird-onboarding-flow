@@ -19,8 +19,8 @@ const StepName = ({ firstName, lastName, onUpdate, onNext, onBack }: StepNamePro
             alt="Tako"
             className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
           />
-          <p className="text-base text-foreground">
-            <span className="font-semibold">Welcome to Surebird</span>✌️
+          <p className="text-base font-semibold text-foreground">
+            Welcome to Surebird✌️
             <br />
             I'm Tako - your personal assistance. I'm here to help you to find the best insurance deal based on your needs.
             <br />

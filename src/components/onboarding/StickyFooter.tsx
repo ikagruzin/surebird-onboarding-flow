@@ -38,7 +38,7 @@ const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel =
         <button
           onClick={onNext}
           disabled={disabled}
-          className="inline-flex items-center gap-2 bg-success text-success-foreground px-7 py-3 rounded-lg font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 bg-success text-success-foreground px-7 py-3 rounded-full font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
         >
           {buttonLabel}
           <ChevronRight className="w-5 h-5" />
