@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { INSURANCE_TYPES } from "./types";
 import type { BundlePreset } from "./types";
 import bundleHomeFamily from "@/assets/bundle-home-family.png";
