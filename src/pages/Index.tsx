@@ -8,6 +8,7 @@ import StepFamily from "@/components/onboarding/StepFamily";
 import StepFamilyDetails from "@/components/onboarding/StepFamilyDetails";
 import StepPreferences from "@/components/onboarding/StepPreferences";
 import StepReady from "@/components/onboarding/StepReady";
+import StepLoading from "@/components/onboarding/StepLoading";
 import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepPackage from "@/components/onboarding/StepPackage";
 import Footer from "@/components/onboarding/Footer";
@@ -34,6 +35,7 @@ const Index = () => {
     insurePartner: "",
     childrenCount: 0,
     includeFamily: "",
+    phone: "+31",
   });
 
   const setStep = (step: number) =>
@@ -192,18 +194,18 @@ const Index = () => {
           <StepPreferences
             selectedInsurances={state.selectedInsurances}
             preferences={state.preferences}
+            firstName={state.firstName}
+            phone={state.phone}
             onUpdatePreference={updatePreference}
+            onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
             onNext={() => setStep(9)}
             onBack={() => setStep(7)}
           />
         );
       case 9:
         return (
-          <StepUpsell
-            selectedInsurances={state.selectedInsurances}
-            onToggle={toggleInsurance}
-            onNext={() => setStep(10)}
-            onBack={() => setStep(8)}
+          <StepLoading
+            onComplete={() => setStep(10)}
           />
         );
       case 10:
@@ -237,8 +239,10 @@ const Index = () => {
   };
 
   // Map wizard steps to sidebar steps:
-  // 1 = product selection, 2-6 = About you, 7 = ready, 8-9 = Your preferences, 10 = Your offer, 11+ = Finalise
+  // 1 = product selection, 2-7 = About you, 8-9 = Set preferences, 10 = Your offer, 11+ = Finalise
   const isFamilySelectStep = state.currentStep === 5;
+  const isLoadingStep = state.currentStep === 9;
+  const isPreferencesStep = state.currentStep === 8;
   const sidebarStep =
     state.currentStep <= 1
       ? 1
@@ -286,18 +290,20 @@ const Index = () => {
           </div>
         )}
         {renderStep()}
-        {!isAboutYou && <Footer />}
+        {!isAboutYou && !isLoadingStep && !isPreferencesStep && <Footer />}
       </main>
 
-      <StickyFooter
-        savings={totalSavings}
-        onNext={getNextStep}
-        onBack={getPrevStep}
-        disabled={isAboutYou ? !canProceedAboutYou() : state.selectedInsurances.length === 0}
-        buttonLabel={isReadyStep ? "Set preferences" : "Next"}
-        hasSidebar={true}
-        showSavings={!isAboutYou && !isReadyStep}
-      />
+      {!isLoadingStep && !isPreferencesStep && (
+        <StickyFooter
+          savings={totalSavings}
+          onNext={getNextStep}
+          onBack={getPrevStep}
+          disabled={isAboutYou ? !canProceedAboutYou() : state.selectedInsurances.length === 0}
+          buttonLabel={isReadyStep ? "Set preferences" : "Next"}
+          hasSidebar={true}
+          showSavings={!isAboutYou && !isReadyStep}
+        />
+      )}
     </div>
   );
 };

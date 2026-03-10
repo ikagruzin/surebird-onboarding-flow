@@ -1,59 +1,80 @@
-import { ChevronLeft, ChevronRight, Check, Plus, Home, Umbrella, Plane, Car, Scale, Zap, Caravan } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Check, Plus, Info } from "lucide-react";
 import { INSURANCE_TYPES } from "./types";
-import { useState } from "react";
+import { Progress } from "@/components/ui/progress";
+import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import tacoAvatar from "@/assets/taco-avatar.jpg";
+import iconLiability from "@/assets/icon-liability.svg";
+import iconHome from "@/assets/icon-home.svg";
+import iconCar from "@/assets/icon-car.svg";
+import iconLegal from "@/assets/icon-legal.svg";
+import iconAccidents from "@/assets/icon-accidents.svg";
+import iconCaravan from "@/assets/icon-caravan.svg";
+import iconTravel from "@/assets/icon-travel.svg";
 
-const ICON_MAP: Record<string, React.ReactNode> = {
-  Plane: <Plane className="w-4 h-4" />,
-  Home: <Home className="w-4 h-4" />,
-  Umbrella: <Umbrella className="w-4 h-4" />,
-  Car: <Car className="w-4 h-4" />,
-  Scale: <Scale className="w-4 h-4" />,
-  Zap: <Zap className="w-4 h-4" />,
-  Caravan: <Caravan className="w-4 h-4" />,
+const ICON_MAP: Record<string, string> = {
+  Umbrella: iconLiability,
+  Home: iconHome,
+  Plane: iconTravel,
+  Car: iconCar,
+  Scale: iconLegal,
+  Zap: iconAccidents,
+  Caravan: iconCaravan,
 };
 
 interface PreferenceQuestion {
   id: string;
   label: string;
   description?: string;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; badge?: string }[];
+  infoText?: string;
+  autoAdvance?: boolean;
 }
 
 const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
   home: [
     {
-      id: "own_risk",
-      label: "Your own risk?",
-      description: "This is what you have to pay if you file a claim. We recommend choosing an amount that wouldn't cause you much stress if you suddenly lost it.",
+      id: "owner_type",
+      label: "Are you a homeowner or tenant?",
       options: [
-        { value: "100", label: "€100" },
-        { value: "250", label: "€250" },
-        { value: "500", label: "€500" },
-        { value: "none", label: "No excess" },
+        { value: "homeowner", label: "Homeowner" },
+        { value: "tenant", label: "Tenant" },
       ],
+      autoAdvance: true,
     },
     {
-      id: "owner",
-      label: "Are you the owner of the house?",
+      id: "house_info",
+      label: "Is this information correct?",
+      description: "My house has:\n• stone/concrete exterior walls\n• a sloping or mainly sloping roof without thatch\n• a kitchen or bathroom less than 10 years old\n• outbuildings of up to 100 m2",
       options: [
         { value: "yes", label: "Yes" },
         { value: "no", label: "No" },
       ],
+      autoAdvance: true,
+    },
+    {
+      id: "insure_type",
+      label: "What do you want to insure?",
+      options: [
+        { value: "household", label: "Household goods", badge: "My advice" },
+        { value: "building", label: "Building" },
+        { value: "both", label: "Household goods + Building" },
+      ],
+      infoText: "As you own an apartment, household goods insurance is sufficient. The homeowners' association (VvE) often already has building insurance.",
     },
   ],
   liability: [
     {
       id: "dog",
-      label: "Do you want to co-insure your dog?",
+      label: "Do you want to insure your dog?",
       options: [
-        { value: "yes", label: "Yes" },
         { value: "no", label: "No" },
+        { value: "yes", label: "Yes" },
       ],
     },
     {
       id: "damage_limit",
       label: "Choose preferred damage limit",
-      description: "Damages above €1.25 million are quite rare, but the difference in premiums is very small. That's why we recommend €2.5 million, for that extra bit of certainty.",
       options: [
         { value: "1250000", label: "€1,250,000" },
         { value: "2250000", label: "€2,250,000" },
@@ -62,7 +83,6 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
     {
       id: "own_risk",
       label: "What do you want to be your own risk?",
-      description: "This is what you have to pay yourself when you file a claim. We recommend choosing an amount that would not cause much stress if you suddenly lost it.",
       options: [
         { value: "100", label: "€100" },
         { value: "none", label: "No excess" },
@@ -77,6 +97,7 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
         { value: "europe", label: "Europe" },
         { value: "worldwide", label: "Worldwide" },
       ],
+      autoAdvance: true,
     },
   ],
   car: [
@@ -98,6 +119,7 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
         { value: "basic", label: "Basic" },
         { value: "extended", label: "Extended" },
       ],
+      autoAdvance: true,
     },
   ],
   accidents: [
@@ -108,6 +130,7 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
         { value: "self", label: "Just me" },
         { value: "family", label: "My family" },
       ],
+      autoAdvance: true,
     },
   ],
   caravan: [
@@ -118,6 +141,7 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
         { value: "touring", label: "Touring caravan" },
         { value: "static", label: "Static caravan" },
       ],
+      autoAdvance: true,
     },
   ],
 };
@@ -125,7 +149,10 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
 interface StepPreferencesProps {
   selectedInsurances: string[];
   preferences: Record<string, Record<string, string>>;
+  firstName: string;
+  phone: string;
   onUpdatePreference: (insuranceId: string, questionId: string, value: string) => void;
+  onUpdatePhone: (value: string) => void;
   onNext: () => void;
   onBack: () => void;
 }
@@ -133,55 +160,151 @@ interface StepPreferencesProps {
 const StepPreferences = ({
   selectedInsurances,
   preferences,
+  firstName,
+  phone,
   onUpdatePreference,
+  onUpdatePhone,
   onNext,
   onBack,
 }: StepPreferencesProps) => {
   const [activeTab, setActiveTab] = useState(selectedInsurances[0]);
   const [completedTabs, setCompletedTabs] = useState<string[]>([]);
+  const [questionStep, setQuestionStep] = useState(0);
+  const [showPhoneStep, setShowPhoneStep] = useState(false);
 
-  const activeInsurance = INSURANCE_TYPES.find((t) => t.id === activeTab);
   const questions = QUESTIONS_BY_TYPE[activeTab] || [];
   const currentPrefs = preferences[activeTab] || {};
+  const currentQuestion = questions[questionStep];
 
+  // Check if all questions for current tab's current step are answered
+  const isMultiQuestionPage = !currentQuestion?.autoAdvance && questionStep === 0 && questions.length > 1 && !questions[0]?.autoAdvance;
+  
+  // For products like liability, show all questions at once
+  const showAllQuestions = questions.every(q => !q.autoAdvance);
   const allQuestionsAnswered = questions.every((q) => currentPrefs[q.id]);
 
-  const handleNext = () => {
-    if (!completedTabs.includes(activeTab) && allQuestionsAnswered) {
-      setCompletedTabs((prev) => [...prev, activeTab]);
-    }
+  // Total progress across all products
+  const totalQuestions = selectedInsurances.reduce((sum, id) => sum + (QUESTIONS_BY_TYPE[id]?.length || 0), 0);
+  const answeredQuestions = selectedInsurances.reduce((sum, id) => {
+    const qs = QUESTIONS_BY_TYPE[id] || [];
+    return sum + qs.filter(q => (preferences[id] || {})[q.id]).length;
+  }, 0);
+  const progressPercent = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
 
-    const currentIndex = selectedInsurances.indexOf(activeTab);
-    if (currentIndex < selectedInsurances.length - 1) {
-      setActiveTab(selectedInsurances[currentIndex + 1]);
-    } else {
-      onNext();
+  const handleSelectOption = (questionId: string, value: string) => {
+    onUpdatePreference(activeTab, questionId, value);
+
+    if (currentQuestion?.autoAdvance) {
+      // Move to next question or next tab
+      setTimeout(() => {
+        if (questionStep < questions.length - 1) {
+          setQuestionStep(questionStep + 1);
+        } else {
+          completeCurrentTab();
+        }
+      }, 300);
     }
   };
 
-  const allDone = selectedInsurances.every(
-    (id) =>
-      (QUESTIONS_BY_TYPE[id] || []).every(
-        (q) => (preferences[id] || {})[q.id]
-      )
-  );
+  const completeCurrentTab = () => {
+    if (!completedTabs.includes(activeTab)) {
+      setCompletedTabs((prev) => [...prev, activeTab]);
+    }
+    const currentIndex = selectedInsurances.indexOf(activeTab);
+    if (currentIndex < selectedInsurances.length - 1) {
+      const nextTab = selectedInsurances[currentIndex + 1];
+      setActiveTab(nextTab);
+      setQuestionStep(0);
+    } else {
+      // All products done, show phone step
+      setShowPhoneStep(true);
+    }
+  };
+
+  const handleNextStep = () => {
+    if (showAllQuestions && allQuestionsAnswered) {
+      completeCurrentTab();
+    } else if (questionStep < questions.length - 1) {
+      setQuestionStep(questionStep + 1);
+    } else {
+      completeCurrentTab();
+    }
+  };
+
+  // Phone collection step
+  if (showPhoneStep) {
+    const allProductsDone = selectedInsurances.every(id => completedTabs.includes(id) || id === activeTab);
+    return (
+      <div className="animate-fade-in">
+        <h1 className="text-3xl font-bold text-foreground mb-6">Set your preferences</h1>
+
+        <div className="flex flex-wrap gap-2 mb-6">
+          {selectedInsurances.map((id) => {
+            const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
+            return (
+              <div
+                key={id}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium bg-card border border-border text-foreground"
+              >
+                <Check className="w-4 h-4 text-success" />
+                {ins.label}
+              </div>
+            );
+          })}
+          <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground">
+            <Plus className="w-4 h-4" />
+          </div>
+        </div>
+
+        <div className="bg-card rounded-xl border border-border p-6">
+          <div className="flex items-start gap-3 mb-6">
+            <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
+            <p className="text-base font-semibold text-foreground">
+              We are almost there, {firstName} 🙌
+              <br />
+              Just a few more details and you'll get your personal offer!
+            </p>
+          </div>
+
+          <div className="max-w-lg">
+            <FloatingLabelInput
+              label="+31"
+              value={phone}
+              onChange={(e) => onUpdatePhone(e.target.value)}
+              maxLength={15}
+              inputMode="tel"
+            />
+          </div>
+
+          <div className="flex items-start gap-2 mt-6 text-muted-foreground">
+            <Info className="w-4 h-4 shrink-0 mt-0.5" />
+            <p className="text-sm">
+              Enter your email address below to save your personal offer. This way you always have it at hand when you need it. No spam, no obligations: just store your overview safely!
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Get intro message for current product
+  const getIntroMessage = () => {
+    const ins = INSURANCE_TYPES.find(t => t.id === activeTab);
+    if (!ins) return null;
+    if (showAllQuestions) {
+      return `${firstName}, now I have a few questions about the ${ins.label.toLowerCase()} insurance.`;
+    }
+    return null;
+  };
+
+  const introMessage = getIntroMessage();
 
   return (
     <div className="animate-fade-in">
-      <button
-        onClick={onBack}
-        className="inline-flex items-center gap-1 text-sm font-medium text-foreground border border-border rounded-lg px-4 py-2 mb-6 hover:bg-muted transition-colors"
-      >
-        <ChevronLeft className="w-4 h-4" />
-        Previous
-      </button>
+      <h1 className="text-3xl font-bold text-foreground mb-6">Set your preferences</h1>
 
-      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-        Specify your preferences
-      </h1>
-
-      {/* Pill tabs */}
-      <div className="flex flex-wrap gap-2 mb-8">
+      {/* Product tabs */}
+      <div className="flex flex-wrap gap-2 mb-4">
         {selectedInsurances.map((id) => {
           const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
           const isActive = activeTab === id;
@@ -189,17 +312,22 @@ const StepPreferences = ({
           return (
             <button
               key={id}
-              onClick={() => setActiveTab(id)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
+              onClick={() => {
+                if (isComplete || isActive) {
+                  setActiveTab(id);
+                  setQuestionStep(0);
+                }
+              }}
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
                 isActive
                   ? "bg-foreground text-background"
-                  : "bg-card border border-border text-foreground hover:bg-muted"
+                  : "bg-card border border-border text-foreground"
               }`}
             >
               {isComplete ? (
                 <Check className="w-4 h-4 text-success" />
               ) : (
-                ICON_MAP[ins.icon]
+                <img src={ICON_MAP[ins.icon]} alt={ins.label} className="w-5 h-5" />
               )}
               {ins.label}
             </button>
@@ -210,57 +338,121 @@ const StepPreferences = ({
         </div>
       </div>
 
-      {/* Questions */}
-      <div className="bg-card rounded-xl border border-border p-6 max-w-xl">
-        <h2 className="text-xl font-semibold text-foreground mb-6">General information</h2>
-        <div className="space-y-8">
-          {questions.map((q) => (
-            <div key={q.id}>
-              <h3 className="font-semibold text-foreground mb-1">{q.label}</h3>
-              {q.description && (
-                <p className="text-sm text-muted-foreground mb-3">{q.description}</p>
-              )}
-              <div className="grid grid-cols-2 gap-3">
-                {q.options.map((opt) => {
-                  const isSelected = currentPrefs[q.id] === opt.value;
-                  return (
-                    <button
-                      key={opt.value}
-                      onClick={() => onUpdatePreference(activeTab, q.id, opt.value)}
-                      className={`flex items-center gap-3 px-4 py-3.5 rounded-lg border transition-all text-left ${
-                        isSelected
-                          ? "border-primary bg-info-light"
-                          : "border-border bg-card hover:border-primary/40"
-                      }`}
-                    >
+      {/* Progress bar */}
+      <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
+
+      {/* Questions card */}
+      <div className="bg-card rounded-xl border border-border p-6">
+        {/* Intro message or question with avatar */}
+        {showAllQuestions ? (
+          <>
+            <div className="flex items-start gap-3 mb-6">
+              <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
+              <p className="text-base font-semibold text-foreground">
+                {introMessage}
+              </p>
+            </div>
+
+            {/* All questions for this product */}
+            <div className="space-y-6">
+              {questions.map((q) => (
+                <div key={q.id}>
+                  <div className="flex items-center gap-2 mb-3">
+                    <p className="text-sm font-semibold text-foreground">{q.label}</p>
+                    {q.infoText && <Info className="w-4 h-4 text-muted-foreground" />}
+                  </div>
+                  <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+                    {q.options.map((opt) => {
+                      const isSelected = currentPrefs[q.id] === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          onClick={() => handleSelectOption(q.id, opt.value)}
+                          className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 transition-all text-left ${
+                            isSelected
+                              ? "border-primary bg-primary/5"
+                              : "border-border hover:border-muted-foreground/30"
+                          }`}
+                        >
+                          <div
+                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                              isSelected ? "border-primary" : "border-muted-foreground/40"
+                            }`}
+                          >
+                            {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                          </div>
+                          <span className="text-sm font-medium text-foreground">{opt.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Single question with avatar */}
+            <div className="flex items-start gap-3 mb-8">
+              <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
+              <p className="text-base font-semibold text-foreground">
+                {currentQuestion?.label}
+              </p>
+            </div>
+
+            {currentQuestion?.description && (
+              <div className="mb-6">
+                <p className="text-sm text-foreground whitespace-pre-line">{currentQuestion.description}</p>
+              </div>
+            )}
+
+            <div className={`grid gap-3 ${currentQuestion?.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+              {currentQuestion?.options.map((opt) => {
+                const isSelected = currentPrefs[currentQuestion.id] === opt.value;
+                return (
+                  <button
+                    key={opt.value}
+                    onClick={() => handleSelectOption(currentQuestion.id, opt.value)}
+                    className={`flex items-center justify-between px-4 py-3.5 rounded-xl border-2 transition-all text-left ${
+                      isSelected
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-muted-foreground/30"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
                       <div
                         className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                          isSelected ? "border-primary" : "border-border"
+                          isSelected ? "border-primary" : "border-muted-foreground/40"
                         }`}
                       >
-                        {isSelected && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-primary" />
-                        )}
+                        {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                       </div>
-                      <span className="font-medium text-foreground">{opt.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+                      <span className="text-sm font-medium text-foreground">{opt.label}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {opt.badge && (
+                        <span className="text-xs font-medium bg-success/10 text-success px-2 py-1 rounded-full flex items-center gap-1">
+                          <Check className="w-3 h-3" />
+                          {opt.badge}
+                        </span>
+                      )}
+                      {currentQuestion.options.length > 2 && (
+                        <Info className="w-4 h-4 text-muted-foreground" />
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
-          ))}
-        </div>
-      </div>
 
-      <div className="flex justify-end mt-8">
-        <button
-          onClick={handleNext}
-          disabled={!allQuestionsAnswered}
-          className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-7 py-3 rounded-full font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
-        >
-          Next step
-          <ChevronRight className="w-5 h-5" />
-        </button>
+            {currentQuestion?.infoText && (
+              <div className="flex items-start gap-2 mt-6 text-muted-foreground">
+                <Info className="w-4 h-4 shrink-0 mt-0.5" />
+                <p className="text-sm">{currentQuestion.infoText}</p>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
