@@ -467,7 +467,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                   <BundlePresets />
                 </div>
               </>
-            ) : (
+            ) : version === "B" ? (
               <>
                 <BundlePresets showHeader={false} />
                 <div className="mt-16">
@@ -478,6 +478,13 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                     {t.individualSubtitle}
                   </p>
                   <InsuranceGrid />
+                </div>
+              </>
+            ) : (
+              <>
+                <InsuranceGrid />
+                <div className="mt-16">
+                  <BundleSlider />
                 </div>
               </>
             )}
