@@ -289,25 +289,24 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
           </p>
         </>
       )}
-      <div className="flex items-center gap-2 justify-end mb-4">
+      <div className="relative">
         <button
           onClick={() => scrollSlider("left")}
-          className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
+          className="absolute -left-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors shadow-md"
         >
           <ChevronLeft className="w-5 h-5 text-foreground" />
         </button>
         <button
           onClick={() => scrollSlider("right")}
-          className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
+          className="absolute -right-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors shadow-md"
         >
           <ChevronRight className="w-5 h-5 text-foreground" />
         </button>
-      </div>
-      <div
-        ref={sliderRef}
-        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
-      >
+        <div
+          ref={sliderRef}
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
+        >
         <style>{`div::-webkit-scrollbar { display: none; }`}</style>
         {BUNDLE_PRESETS.map((preset) => {
           const isActive = isActiveBundle(preset);
