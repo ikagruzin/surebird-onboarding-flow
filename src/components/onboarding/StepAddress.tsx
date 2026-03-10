@@ -184,7 +184,14 @@ const StepAddress = ({
           )}
         </div>
       </div>
-    </div>
+        </div>
+
+        <div className="flex items-start gap-2 mt-8 text-muted-foreground">
+          <Info className="w-4 h-4 shrink-0 mt-0.5" />
+          <p className="text-sm">
+            We need this information because your address is used by insurers when calculating the amount of your premium.
+          </p>
+        </div>
   );
 };
 
