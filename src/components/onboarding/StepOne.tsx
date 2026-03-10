@@ -265,6 +265,88 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
     </div>
   );
 
+  const scrollSlider = (direction: "left" | "right") => {
+    if (!sliderRef.current) return;
+    const scrollAmount = sliderRef.current.offsetWidth * 0.6;
+    sliderRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  const BundleSlider = ({ showHeader = true }: { showHeader?: boolean }) => (
+    <div>
+      {showHeader && (
+        <>
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+            {t.bundleHeading}
+          </h2>
+          <p className="text-muted-foreground mb-4">
+            {t.bundleSubtitle}
+          </p>
+        </>
+      )}
+      <div className="flex items-center gap-2 justify-end mb-4">
+        <button
+          onClick={() => scrollSlider("left")}
+          className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
+        >
+          <ChevronLeft className="w-5 h-5 text-foreground" />
+        </button>
+        <button
+          onClick={() => scrollSlider("right")}
+          className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
+        >
+          <ChevronRight className="w-5 h-5 text-foreground" />
+        </button>
+      </div>
+      <div
+        ref={sliderRef}
+        className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {BUNDLE_PRESETS.map((preset) => {
+          const isActive = isActiveBundle(preset);
+          const bundleT = t.bundles[preset.id as keyof typeof t.bundles];
+          return (
+            <button
+              key={preset.id}
+              onClick={() => onBundleSelect(preset.insuranceIds)}
+              className={`text-left rounded-xl border overflow-hidden transition-all hover:shadow-md snap-start shrink-0 w-[calc(50%-8px)] min-w-[260px] ${
+                isActive
+                  ? "border-[#0177E5] bg-[#0385FF]/10 ring-2 ring-[#0177E5]/20 shadow-md"
+                  : "border-border bg-card"
+              }`}
+            >
+              <div className="relative h-40 overflow-hidden bg-muted">
+                <img
+                  src={preset.image}
+                  alt={bundleT?.title || preset.title}
+                  className="w-full h-full object-cover"
+                />
+                <span className="absolute bottom-3 left-3 inline-flex items-center bg-card text-success text-xs font-semibold px-3 py-1.5 rounded-full border border-[#EEEEEE]">
+                  {t.saveAnnually} €{preset.annualSavings}
+                </span>
+              </div>
+              <div className="p-5">
+                <h3 className="text-lg font-bold text-foreground mb-1">{bundleT?.title || preset.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4">{bundleT?.description || preset.description}</p>
+                <div className="flex gap-3 text-muted-foreground">
+                  {preset.insuranceIds.map((id) => {
+                    const ins = INSURANCE_TYPES.find((it) => it.id === id);
+                    return ins ? (
+                      <span key={id}>{SMALL_ICON_MAP[ins.icon]}</span>
+                    ) : null;
+                  })}
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
