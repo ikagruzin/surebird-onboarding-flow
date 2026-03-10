@@ -208,13 +208,6 @@ const Index = () => {
           <StepLoading
             onComplete={() => setStep(10)}
           />
-        return (
-          <StepUpsell
-            selectedInsurances={state.selectedInsurances}
-            onToggle={toggleInsurance}
-            onNext={() => setStep(10)}
-            onBack={() => setStep(8)}
-          />
         );
       case 10:
         return (
