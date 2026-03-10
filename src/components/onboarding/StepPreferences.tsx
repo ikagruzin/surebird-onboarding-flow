@@ -451,7 +451,7 @@ const StepPreferences = ({
           <>
             <div className="flex items-start gap-3 mb-6">
               <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-              <p className="text-[20px] font-semibold text-foreground">
+              <p className="text-base font-semibold text-foreground">
                 {introMessage}
               </p>
             </div>
