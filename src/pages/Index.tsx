@@ -154,8 +154,8 @@ const Index = () => {
             onSelect={(value) => {
               setState((s) => ({ ...s, familyStatus: value }));
               if (value === "single") {
-                // Skip family details, go to preferences
                 setStep(7);
+              } else {
               } else {
                 setStep(6);
               }
