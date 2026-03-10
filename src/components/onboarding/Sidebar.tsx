@@ -7,9 +7,10 @@ interface SidebarProps {
   currentStep?: number;
   showProgress?: boolean;
   visible?: boolean;
+  showAvatar?: boolean;
 }
 
-const Sidebar = ({ currentStep = 1, showProgress = true, visible = true }: SidebarProps) => {
+const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, showAvatar = false }: SidebarProps) => {
   if (!visible) return null;
 
   return (
@@ -62,17 +63,22 @@ const Sidebar = ({ currentStep = 1, showProgress = true, visible = true }: Sideb
 
       {/* Ask Taco */}
       <div className="p-4">
-        <div className="flex items-center gap-3 mb-3">
-          <img
-            src={tacoAvatar}
-            alt="Taco"
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <div>
-            <p className="text-sm font-semibold text-foreground">Ask Taco</p>
-            <p className="text-xs text-muted-foreground">I'm ready to assist you</p>
+        {showAvatar && (
+          <div className="flex items-center gap-3 mb-3">
+            <img
+              src={tacoAvatar}
+              alt="Taco"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+            <div>
+              <p className="text-sm font-semibold text-foreground">Ask Taco</p>
+              <p className="text-xs text-muted-foreground">I'm ready to assist you</p>
+            </div>
           </div>
-        </div>
+        )}
+        {!showAvatar && (
+          <p className="text-sm font-semibold text-foreground mb-3">Ask Taco</p>
+        )}
         <button className="w-full flex items-center justify-center gap-2 border border-border rounded-full py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors">
           <MessageCircle className="w-4 h-4 text-success" />
           Chat via WhatsApp
