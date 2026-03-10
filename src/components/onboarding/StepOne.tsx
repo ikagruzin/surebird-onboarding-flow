@@ -87,7 +87,7 @@ const ADVANTAGES = {
 const TRANSLATIONS = {
   en: {
     heading: "Choose your insurances",
-    subtitle: "Save the most with our packages. Select the package which suits you best and benefit from the maximum savings.",
+    subtitle: "Smartly insured: save up to €300 a year on a package of 6 insurances!",
     bundleHeading: "Save the most with our packages",
     bundleSubtitle: "Our customers always save the most with our packages instead of single insurance. Select the package which suits you best and benefit from the maximum savings.",
     individualHeading: "Or choose individual insurances",
