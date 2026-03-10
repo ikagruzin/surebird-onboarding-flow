@@ -29,7 +29,7 @@ const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel =
         ) : (
           <button
             onClick={onBack}
-            className="inline-flex items-center gap-2 text-foreground px-4 py-3 rounded-lg font-medium text-base hover:bg-muted transition-colors"
+            className="inline-flex items-center gap-2 text-foreground px-4 py-3 rounded-full font-medium text-base hover:bg-muted transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
             Back
