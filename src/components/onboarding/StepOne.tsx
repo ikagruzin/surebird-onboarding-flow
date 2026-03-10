@@ -183,15 +183,15 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             onClick={() => onToggle(ins.id)}
             className={`flex items-center gap-3 px-5 py-4 rounded-lg border transition-all text-left ${
               isSelected
-                ? "border-[#25B327] bg-[#EBFFEC]/45 shadow-sm"
-                : "border-border bg-card hover:border-[#25B327]/40"
+                ? "border-[#0177E5] bg-[#0385FF]/10 shadow-sm"
+                : "border-border bg-card hover:border-[#0177E5]/40"
             }`}
           >
             <span className="text-foreground">{ICON_MAP[ins.icon]}</span>
             <span className="font-medium text-foreground flex-1">{label}</span>
             <div
               className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                isSelected ? "border-[#25B327] bg-[#25B327]" : "border-border"
+                isSelected ? "border-[#0177E5] bg-[#0177E5]" : "border-border"
               }`}
             >
               {isSelected && (
@@ -229,7 +229,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
               onClick={() => onBundleSelect(preset.insuranceIds)}
               className={`text-left rounded-xl border overflow-hidden transition-all hover:shadow-md ${
                 isActive
-                  ? "border-[#25B327] ring-2 ring-[#25B327]/20 shadow-md"
+                  ? "border-[#0177E5] ring-2 ring-[#0177E5]/20 shadow-md"
                   : "border-border bg-card"
               }`}
             >
