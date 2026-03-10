@@ -183,7 +183,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
           <button
             key={ins.id}
             onClick={() => onToggle(ins.id)}
-            className={`flex items-center gap-3 px-5 py-4 rounded-lg border-2 transition-all text-left hover:shadow-md ${
+            className={`flex items-center gap-3 px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
               isSelected
                 ? "border-[#0177E5] bg-[#0385FF]/10 shadow-md"
                 : "border-border bg-card hover:border-[#0177E5]/40"
