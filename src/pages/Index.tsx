@@ -8,6 +8,8 @@ import StepFamily from "@/components/onboarding/StepFamily";
 import StepFamilyDetails from "@/components/onboarding/StepFamilyDetails";
 import StepPreferences from "@/components/onboarding/StepPreferences";
 import StepReady from "@/components/onboarding/StepReady";
+import StepLoading from "@/components/onboarding/StepLoading";
+import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepPackage from "@/components/onboarding/StepPackage";
 import Footer from "@/components/onboarding/Footer";
