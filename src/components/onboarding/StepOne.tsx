@@ -352,33 +352,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
 
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 p-6 pb-6 justify-between shrink-0">
-        <div>
-          <div className="flex items-center gap-2 mb-10">
-            <img src={logoSurebird} alt="Surebird" className="h-8" />
-          </div>
-        </div>
-
-        {/* Ask Taco */}
-        <div className="p-4">
-          <div className="flex items-center gap-3 mb-3">
-            <img
-              src={tacoAvatar}
-              alt="Taco"
-              className="w-10 h-10 rounded-full object-cover"
-            />
-            <div>
-              <p className="text-sm font-semibold text-foreground">{t.askTaco}</p>
-              <p className="text-xs text-muted-foreground">{t.tacoReady}</p>
-            </div>
-          </div>
-          <button className="w-full flex items-center justify-center gap-2 border border-border rounded-lg py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors">
-            <MessageCircle className="w-4 h-4 text-success" />
-            {t.chatWhatsApp}
-          </button>
-        </div>
-      </aside>
+      <Sidebar showProgress={false} />
 
       {/* Main content */}
       <div className="flex-1 flex flex-col items-center">
