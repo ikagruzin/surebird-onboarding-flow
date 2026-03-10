@@ -165,7 +165,8 @@ interface StepOneProps {
 }
 
 const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) => {
-  const [version, setVersion] = useState<"A" | "B">("A");
+  const [version, setVersion] = useState<"A" | "B" | "C">("A");
+  const sliderRef = useRef<HTMLDivElement>(null);
   const [language, setLanguage] = useState<"en" | "nl">("en");
 
   const isActiveBundle = (preset: BundlePreset) =>
