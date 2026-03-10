@@ -239,8 +239,10 @@ const Index = () => {
   };
 
   // Map wizard steps to sidebar steps:
-  // 1 = product selection, 2-6 = About you, 7 = ready, 8-9 = Your preferences, 10 = Your offer, 11+ = Finalise
+  // 1 = product selection, 2-7 = About you, 8-9 = Set preferences, 10 = Your offer, 11+ = Finalise
   const isFamilySelectStep = state.currentStep === 5;
+  const isLoadingStep = state.currentStep === 9;
+  const isPreferencesStep = state.currentStep === 8;
   const sidebarStep =
     state.currentStep <= 1
       ? 1
