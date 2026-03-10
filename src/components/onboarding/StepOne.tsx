@@ -267,8 +267,11 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
 
   const scrollSlider = (direction: "left" | "right") => {
     if (!sliderRef.current) return;
-    const scrollAmount = sliderRef.current.offsetWidth * 0.6;
-    sliderRef.current.scrollBy({
+    const container = sliderRef.current;
+    const cardWidth = container.querySelector("button")?.offsetWidth || 300;
+    const gap = 16;
+    const scrollAmount = cardWidth + gap;
+    container.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
     });
@@ -302,9 +305,10 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
       </div>
       <div
         ref={sliderRef}
-        className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
       >
+        <style>{`div::-webkit-scrollbar { display: none; }`}</style>
         {BUNDLE_PRESETS.map((preset) => {
           const isActive = isActiveBundle(preset);
           const bundleT = t.bundles[preset.id as keyof typeof t.bundles];
