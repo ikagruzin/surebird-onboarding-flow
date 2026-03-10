@@ -290,10 +290,10 @@ const StepPreferences = ({
           <button
             key={id}
             onClick={() => handleTabClick(id)}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all shadow-sm ${
               isActive
                 ? "bg-foreground text-background"
-                : "bg-card border border-border text-foreground"
+                : "bg-white border-2 border-border text-foreground"
             }`}
           >
             {isComplete ? (
