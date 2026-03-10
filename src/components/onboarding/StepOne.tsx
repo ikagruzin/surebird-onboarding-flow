@@ -14,7 +14,7 @@ import iconCaravan from "@/assets/icon-caravan.svg";
 import iconTravel from "@/assets/icon-travel.svg";
 import logoSurebird from "@/assets/logo-surebird.svg";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
-import { MessageCircle, Globe, User, LayoutGrid, Layers } from "lucide-react";
+import { MessageCircle, Globe, User, LayoutGrid, Layers, GalleryHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Plane: <img src={iconTravel} alt="Travel" className="w-10 h-10" />,
