@@ -446,7 +446,7 @@ const StepPreferences = ({
       <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
       {/* Questions card */}
-      <div className="bg-card rounded-xl border border-border p-6">
+      <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
         {showAllQuestions ? (
           <>
             <div className="flex items-start gap-3 mb-6">
