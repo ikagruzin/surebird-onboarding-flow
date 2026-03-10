@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import tacoAvatar from "@/assets/taco-avatar.jpg";
+import { Info } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -113,10 +115,20 @@ const StepAddress = ({
   return (
     <div className="animate-fade-in">
       <div className="bg-card rounded-xl border border-border p-6">
-        <h2 className="text-base font-semibold text-foreground mb-4">
-          Nice to meet you, {firstName}! We need your address information to select
-          the right and most suitable insurance for you.
-        </h2>
+        <div className="flex items-start gap-3 mb-12">
+          <img
+            src={tacoAvatar}
+            alt="Tako"
+            className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
+          />
+          <p className="text-base text-foreground">
+            <span className="font-semibold">Hey {firstName}</span> 👋 Nice to meet you!
+            <br />
+            I have some questions to you to find the best deal for you.
+            <br />
+            What is your address?
+          </p>
+        </div>
 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -170,6 +182,13 @@ const StepAddress = ({
               Address not found. Please check your postcode and house number.
             </p>
           )}
+        </div>
+
+        <div className="flex items-start gap-2 mt-8 text-muted-foreground">
+          <Info className="w-4 h-4 shrink-0 mt-0.5" />
+          <p className="text-sm">
+            We need this information because your address is used by insurers when calculating the amount of your premium.
+          </p>
         </div>
       </div>
     </div>
