@@ -78,7 +78,7 @@ const Index = () => {
   // "About you" sub-step progress: steps 2-6 → sub-steps 1-5
   const aboutYouSubStep = state.currentStep - 1;
   const aboutYouTotalSubs = state.familyStatus === "single" ? 4 : 5;
-  const aboutYouProgress = (Math.min(aboutYouSubStep, aboutYouTotalSubs) / aboutYouTotalSubs) * 100;
+  const aboutYouProgress = isReadyStep ? 100 : (Math.min(aboutYouSubStep, aboutYouTotalSubs) / aboutYouTotalSubs) * 100;
 
   const canProceedAboutYou = () => {
     switch (state.currentStep) {
