@@ -96,6 +96,7 @@ const TRANSLATIONS = {
     saveAnnually: "Save annually",
     versionA: "Version A",
     versionB: "Version B",
+    versionC: "Version C",
     login: "Log in",
     askTaco: "Ask Taco",
     tacoReady: "I'm ready to assist you",
