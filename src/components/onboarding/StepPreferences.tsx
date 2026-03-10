@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Check, Plus, Info } from "lucide-react";
+import { Check, Plus, Info, X } from "lucide-react";
 import { INSURANCE_TYPES } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
@@ -146,6 +146,14 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
   ],
 };
 
+const DEFAULT_PREFERENCES: Record<string, Record<string, string>> = {
+  liability: {
+    dog: "no",
+    damage_limit: "2250000",
+    own_risk: "100",
+  },
+};
+
 interface StepPreferencesProps {
   selectedInsurances: string[];
   preferences: Record<string, Record<string, string>>;
@@ -153,6 +161,7 @@ interface StepPreferencesProps {
   phone: string;
   onUpdatePreference: (insuranceId: string, questionId: string, value: string) => void;
   onUpdatePhone: (value: string) => void;
+  onAddInsurances: (ids: string[]) => void;
   onNext: () => void;
   onBack: () => void;
 }
@@ -164,6 +173,7 @@ const StepPreferences = ({
   phone,
   onUpdatePreference,
   onUpdatePhone,
+  onAddInsurances,
   onNext,
   onBack,
 }: StepPreferencesProps) => {
@@ -171,15 +181,27 @@ const StepPreferences = ({
   const [completedTabs, setCompletedTabs] = useState<string[]>([]);
   const [questionStep, setQuestionStep] = useState(0);
   const [showPhoneStep, setShowPhoneStep] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addModalSelection, setAddModalSelection] = useState<string[]>([]);
+
+  // Apply default preferences on mount
+  useEffect(() => {
+    selectedInsurances.forEach((id) => {
+      const defaults = DEFAULT_PREFERENCES[id];
+      if (defaults) {
+        Object.entries(defaults).forEach(([qId, val]) => {
+          if (!(preferences[id] || {})[qId]) {
+            onUpdatePreference(id, qId, val);
+          }
+        });
+      }
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const questions = QUESTIONS_BY_TYPE[activeTab] || [];
   const currentPrefs = preferences[activeTab] || {};
   const currentQuestion = questions[questionStep];
 
-  // Check if all questions for current tab's current step are answered
-  const isMultiQuestionPage = !currentQuestion?.autoAdvance && questionStep === 0 && questions.length > 1 && !questions[0]?.autoAdvance;
-  
-  // For products like liability, show all questions at once
   const showAllQuestions = questions.every(q => !q.autoAdvance);
   const allQuestionsAnswered = questions.every((q) => currentPrefs[q.id]);
 
@@ -195,7 +217,6 @@ const StepPreferences = ({
     onUpdatePreference(activeTab, questionId, value);
 
     if (currentQuestion?.autoAdvance) {
-      // Move to next question or next tab
       setTimeout(() => {
         if (questionStep < questions.length - 1) {
           setQuestionStep(questionStep + 1);
@@ -216,7 +237,6 @@ const StepPreferences = ({
       setActiveTab(nextTab);
       setQuestionStep(0);
     } else {
-      // All products done, show phone step
       setShowPhoneStep(true);
     }
   };
@@ -231,35 +251,150 @@ const StepPreferences = ({
     }
   };
 
-  // Phone collection step
-  if (showPhoneStep) {
-    const allProductsDone = selectedInsurances.every(id => completedTabs.includes(id) || id === activeTab);
-    return (
-      <div className="animate-fade-in">
-        <h1 className="text-3xl font-bold text-foreground mb-6">Set your preferences</h1>
+  // Handle switching tabs freely
+  const handleTabClick = (id: string) => {
+    setActiveTab(id);
+    setQuestionStep(0);
+    setShowPhoneStep(false);
+  };
 
-        <div className="flex flex-wrap gap-2 mb-6">
-          {selectedInsurances.map((id) => {
-            const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
-            return (
-              <div
-                key={id}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium bg-card border border-border text-foreground"
-              >
-                <Check className="w-4 h-4 text-success" />
-                {ins.label}
-              </div>
-            );
-          })}
-          <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground">
-            <Plus className="w-4 h-4" />
+  // Add products modal
+  const nonSelectedProducts = INSURANCE_TYPES.filter(t => !selectedInsurances.includes(t.id));
+
+  const handleOpenAddModal = () => {
+    setAddModalSelection([]);
+    setShowAddModal(true);
+  };
+
+  const handleToggleAddProduct = (id: string) => {
+    setAddModalSelection(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
+  };
+
+  const handleSaveAddModal = () => {
+    if (addModalSelection.length > 0) {
+      onAddInsurances(addModalSelection);
+    }
+    setShowAddModal(false);
+  };
+
+  // Shared product tabs renderer
+  const renderProductTabs = () => (
+    <div className="flex flex-wrap gap-2 mb-4">
+      {selectedInsurances.map((id) => {
+        const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
+        const isActive = activeTab === id && !showPhoneStep;
+        const isComplete = completedTabs.includes(id);
+        return (
+          <button
+            key={id}
+            onClick={() => handleTabClick(id)}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
+              isActive
+                ? "bg-foreground text-background"
+                : "bg-card border border-border text-foreground"
+            }`}
+          >
+            {isComplete ? (
+              <Check className="w-4 h-4 text-success" />
+            ) : (
+              <img
+                src={ICON_MAP[ins.icon]}
+                alt={ins.label}
+                className={`w-7 h-7 ${isActive ? "brightness-0 invert" : ""}`}
+              />
+            )}
+            {ins.label}
+          </button>
+        );
+      })}
+      <button
+        onClick={handleOpenAddModal}
+        className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
+      >
+        <Plus className="w-4 h-4" />
+      </button>
+    </div>
+  );
+
+  // Add modal
+  const renderAddModal = () => {
+    if (!showAddModal) return null;
+    return (
+      <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40">
+        <div className="bg-card rounded-2xl border border-border shadow-xl w-full max-w-md mx-4 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-foreground">Add products</h2>
+            <button onClick={() => setShowAddModal(false)} className="text-muted-foreground hover:text-foreground">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {nonSelectedProducts.length === 0 ? (
+            <p className="text-sm text-muted-foreground">All products have been added.</p>
+          ) : (
+            <div className="space-y-3 mb-6">
+              {nonSelectedProducts.map((ins) => {
+                const isChecked = addModalSelection.includes(ins.id);
+                return (
+                  <button
+                    key={ins.id}
+                    onClick={() => handleToggleAddProduct(ins.id)}
+                    className={`flex items-center gap-3 w-full px-4 py-3.5 rounded-xl border-2 transition-all text-left ${
+                      isChecked
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-muted-foreground/30"
+                    }`}
+                  >
+                    <div
+                      className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 ${
+                        isChecked ? "border-primary bg-primary" : "border-muted-foreground/40"
+                      }`}
+                    >
+                      {isChecked && <Check className="w-3 h-3 text-white" />}
+                    </div>
+                    <img src={ICON_MAP[ins.icon]} alt={ins.label} className="w-7 h-7" />
+                    <span className="text-sm font-medium text-foreground">{ins.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowAddModal(false)}
+              className="flex-1 px-4 py-3 rounded-full border border-border text-foreground font-medium hover:bg-muted transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSaveAddModal}
+              disabled={addModalSelection.length === 0}
+              className="flex-1 px-4 py-3 rounded-full bg-success text-success-foreground font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
+            >
+              Save
+            </button>
           </div>
         </div>
+      </div>
+    );
+  };
+
+  // Phone collection step
+  if (showPhoneStep) {
+    return (
+      <div className="animate-fade-in">
+        <h1 className="text-[32px] font-bold text-foreground mb-6">Set your preferences</h1>
+
+        {renderProductTabs()}
+        <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
         <div className="bg-card rounded-xl border border-border p-6">
           <div className="flex items-start gap-3 mb-6">
             <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-            <p className="text-base font-semibold text-foreground">
+            <p className="text-[20px] font-semibold text-foreground">
               We are almost there, {firstName} 🙌
               <br />
               Just a few more details and you'll get your personal offer!
@@ -283,6 +418,7 @@ const StepPreferences = ({
             </p>
           </div>
         </div>
+        {renderAddModal()}
       </div>
     );
   }
@@ -301,64 +437,30 @@ const StepPreferences = ({
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-3xl font-bold text-foreground mb-6">Set your preferences</h1>
+      <h1 className="text-[32px] font-bold text-foreground mb-6">Set your preferences</h1>
 
       {/* Product tabs */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {selectedInsurances.map((id) => {
-          const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
-          const isActive = activeTab === id;
-          const isComplete = completedTabs.includes(id);
-          return (
-            <button
-              key={id}
-              onClick={() => {
-                if (isComplete || isActive) {
-                  setActiveTab(id);
-                  setQuestionStep(0);
-                }
-              }}
-              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
-                isActive
-                  ? "bg-foreground text-background"
-                  : "bg-card border border-border text-foreground"
-              }`}
-            >
-              {isComplete ? (
-                <Check className="w-4 h-4 text-success" />
-              ) : (
-                <img src={ICON_MAP[ins.icon]} alt={ins.label} className="w-5 h-5" />
-              )}
-              {ins.label}
-            </button>
-          );
-        })}
-        <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground">
-          <Plus className="w-4 h-4" />
-        </div>
-      </div>
+      {renderProductTabs()}
 
       {/* Progress bar */}
       <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
       {/* Questions card */}
       <div className="bg-card rounded-xl border border-border p-6">
-        {/* Intro message or question with avatar */}
         {showAllQuestions ? (
           <>
             <div className="flex items-start gap-3 mb-6">
               <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-              <p className="text-base font-semibold text-foreground">
+              <p className="text-[20px] font-semibold text-foreground">
                 {introMessage}
               </p>
             </div>
 
-            {/* All questions for this product */}
             <div className="space-y-6">
               {questions.map((q) => (
                 <div key={q.id}>
                   <div className="flex items-center gap-2 mb-3">
-                    <p className="text-sm font-semibold text-foreground">{q.label}</p>
+                    <p className="text-[20px] font-semibold text-foreground">{q.label}</p>
                     {q.infoText && <Info className="w-4 h-4 text-muted-foreground" />}
                   </div>
                   <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
@@ -392,10 +494,9 @@ const StepPreferences = ({
           </>
         ) : (
           <>
-            {/* Single question with avatar */}
             <div className="flex items-start gap-3 mb-8">
               <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-              <p className="text-base font-semibold text-foreground">
+              <p className="text-[20px] font-semibold text-foreground">
                 {currentQuestion?.label}
               </p>
             </div>
@@ -454,6 +555,7 @@ const StepPreferences = ({
           </>
         )}
       </div>
+      {renderAddModal()}
     </div>
   );
 };
