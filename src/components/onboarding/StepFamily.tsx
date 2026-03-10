@@ -1,75 +1,58 @@
-import { Users, User, Gift } from "lucide-react";
+import tacoAvatar from "@/assets/taco-avatar.jpg";
+import familySingle from "@/assets/family-single.png";
+import familyPartner from "@/assets/family-partner.png";
+import familySingleChildren from "@/assets/family-single-children.png";
+import familyPartnerChildren from "@/assets/family-partner-children.png";
 
 interface StepFamilyProps {
-  includeFamily: string;
-  onUpdate: (value: string) => void;
-  onNext: () => void;
+  familyStatus: string;
+  onSelect: (value: string) => void;
   onBack: () => void;
 }
 
-const StepFamily = ({ includeFamily, onUpdate }: StepFamilyProps) => {
+const OPTIONS = [
+  { id: "single", label: "Single", image: familySingle },
+  { id: "partner", label: "Partner", image: familyPartner },
+  { id: "single-children", label: "Single &\nChildren", image: familySingleChildren },
+  { id: "partner-children", label: "Partner &\nChildren", image: familyPartnerChildren },
+];
+
+const StepFamily = ({ familyStatus, onSelect }: StepFamilyProps) => {
   return (
     <div className="animate-fade-in">
       <div className="bg-card rounded-xl border border-border p-6">
-        <h2 className="text-base font-semibold text-foreground mb-2">
-          Do you want to insure your family?
-        </h2>
-
-        <div className="inline-flex items-center gap-1.5 bg-success/10 text-success rounded-full px-3 py-1.5 text-sm font-medium mb-4">
-          <Gift className="w-4 h-4" />
-          Get up to 5% family discount
+        <div className="flex items-start gap-3 mb-8">
+          <img
+            src={tacoAvatar}
+            alt="Tako"
+            className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
+          />
+          <p className="text-base font-semibold text-foreground">
+            What is your family status?
+          </p>
         </div>
 
-        <div className="space-y-3">
-          <button
-            onClick={() => onUpdate("yes")}
-            className={`w-full flex items-center gap-4 rounded-xl border-2 p-4 text-left transition-all ${
-              includeFamily === "yes"
-                ? "border-primary bg-primary/5"
-                : "border-border hover:border-muted-foreground/30"
-            }`}
-          >
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                includeFamily === "yes"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground"
+        <div className="grid grid-cols-4 gap-3">
+          {OPTIONS.map((option) => (
+            <button
+              key={option.id}
+              onClick={() => onSelect(option.id)}
+              className={`flex flex-col items-center gap-3 rounded-xl border-2 p-4 pt-6 pb-5 transition-all ${
+                familyStatus === option.id
+                  ? "border-primary bg-primary/5"
+                  : "border-border hover:border-muted-foreground/30"
               }`}
             >
-              <Users className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="font-semibold text-foreground">Yes, include my family</p>
-              <p className="text-sm text-muted-foreground">
-                Cover your partner and children under one policy
-              </p>
-            </div>
-          </button>
-
-          <button
-            onClick={() => onUpdate("no")}
-            className={`w-full flex items-center gap-4 rounded-xl border-2 p-4 text-left transition-all ${
-              includeFamily === "no"
-                ? "border-primary bg-primary/5"
-                : "border-border hover:border-muted-foreground/30"
-            }`}
-          >
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                includeFamily === "no"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground"
-              }`}
-            >
-              <User className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="font-semibold text-foreground">No, just me</p>
-              <p className="text-sm text-muted-foreground">
-                Individual coverage only
-              </p>
-            </div>
-          </button>
+              <img
+                src={option.image}
+                alt={option.label}
+                className="w-12 h-12 object-contain"
+              />
+              <span className="text-sm font-semibold text-foreground text-center whitespace-pre-line">
+                {option.label}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
     </div>

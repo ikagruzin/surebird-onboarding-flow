@@ -19,6 +19,9 @@ export interface WizardState {
   houseNumber: string;
   addition: string;
   birthdate: string;
+  familyStatus: string;
+  insurePartner: string;
+  childrenCount: number;
   includeFamily: string;
 }
 
