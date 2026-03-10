@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Input } from "@/components/ui/input";
+import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import {
   Select,
   SelectContent,
@@ -120,18 +120,16 @@ const StepAddress = ({
 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <Input
+            <FloatingLabelInput
+              label="Postcode"
               value={postcode}
               onChange={(e) => onUpdate("postcode", e.target.value.toUpperCase())}
-              placeholder="Postcode"
-              className="h-12 rounded-lg"
               maxLength={7}
             />
-            <Input
+            <FloatingLabelInput
+              label="House number"
               value={houseNumber}
               onChange={(e) => onUpdate("houseNumber", e.target.value)}
-              placeholder="House number"
-              className="h-12 rounded-lg"
               maxLength={10}
             />
           </div>
