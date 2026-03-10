@@ -346,6 +346,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             </button>
           );
         })}
+        </div>
       </div>
     </div>
   );
