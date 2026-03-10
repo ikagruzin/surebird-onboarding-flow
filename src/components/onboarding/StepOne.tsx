@@ -148,7 +148,7 @@ const TRANSLATIONS = {
     },
     bundles: {
       "home-family": { title: "Huis & Gezin", description: "De essentiële basis. Bescherm uw huis en gezin tegen onverwachte kosten." },
-      "business-travel": { title: "Zakelijk & Reizen", description: "De essentiële basis. Bescherm uw huis en gezin tegen onverwachte kosten." },
+      "business-travel": { title: "Zakelijk & Reizen", description: "Voor onderweg. Wereldwijde dekking voor uw reizen en uw voertuig in één klik." },
       "popular": { title: "Populaire keuze", description: "Ons pakket van de meest populaire producten." },
       "maximum": { title: "Maximale bescherming", description: "Voor alle gevallen in het leven. Onze maximale korting voor totale gemoedsrust." },
     },
