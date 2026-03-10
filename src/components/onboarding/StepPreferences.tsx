@@ -460,7 +460,7 @@ const StepPreferences = ({
               {questions.map((q) => (
                 <div key={q.id}>
                   <div className="flex items-center gap-2 mb-3">
-                    <p className="text-[20px] font-semibold text-foreground">{q.label}</p>
+                    <p className="text-base font-semibold text-foreground">{q.label}</p>
                     {q.infoText && <Info className="w-4 h-4 text-muted-foreground" />}
                   </div>
                   <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
