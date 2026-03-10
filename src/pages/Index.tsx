@@ -304,7 +304,7 @@ const Index = () => {
     <div className="flex min-h-screen bg-background">
       <Sidebar currentStep={sidebarStep} visible={true} />
 
-      <main className="flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 max-w-3xl mx-auto pb-28">
+      <main className={`flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 pb-28 ${isOfferStep ? '' : 'max-w-3xl mx-auto'}`}>
         {isAboutYou && (
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-foreground mb-4">About you</h1>
