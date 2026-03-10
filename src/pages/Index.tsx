@@ -198,6 +198,7 @@ const Index = () => {
             phone={state.phone}
             onUpdatePreference={updatePreference}
             onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
+            onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
             onNext={() => setStep(9)}
             onBack={() => setStep(7)}
           />
