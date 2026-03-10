@@ -183,8 +183,8 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             onClick={() => onToggle(ins.id)}
             className={`flex items-center gap-3 px-5 py-4 rounded-lg border transition-all text-left ${
               isSelected
-                ? "border-[#25B327] bg-[#EBFFEC]/45 shadow-sm"
-                : "border-border bg-card hover:border-[#25B327]/40"
+                ? "border-[#0177E5] bg-[#0385FF]/10 shadow-sm"
+                : "border-border bg-card hover:border-[#0177E5]/40"
             }`}
           >
             <span className="text-foreground">{ICON_MAP[ins.icon]}</span>
