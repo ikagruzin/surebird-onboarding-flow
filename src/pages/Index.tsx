@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import Sidebar from "@/components/onboarding/Sidebar";
 import StepOne from "@/components/onboarding/StepOne";
 import StepName from "@/components/onboarding/StepName";
@@ -7,6 +7,7 @@ import StepBirthdate from "@/components/onboarding/StepBirthdate";
 import StepFamily from "@/components/onboarding/StepFamily";
 import StepFamilyDetails from "@/components/onboarding/StepFamilyDetails";
 import StepPreferences from "@/components/onboarding/StepPreferences";
+import type { StepPreferencesHandle } from "@/components/onboarding/StepPreferences";
 import StepReady from "@/components/onboarding/StepReady";
 import StepLoading from "@/components/onboarding/StepLoading";
 import StepUpsell from "@/components/onboarding/StepUpsell";
@@ -34,9 +35,12 @@ const Index = () => {
     familyStatus: "",
     insurePartner: "",
     childrenCount: 0,
+    childrenAges: [],
     includeFamily: "",
     phone: "+31",
   });
+
+  const prefsRef = useRef<StepPreferencesHandle>(null);
 
   const setStep = (step: number) =>
     setState((s) => ({ ...s, currentStep: step }));
@@ -78,7 +82,7 @@ const Index = () => {
   const isReadyStep = state.currentStep === 7;
   const isAboutYou = state.currentStep >= 2 && state.currentStep <= 7;
 
-  // "About you" sub-step progress: steps 2-6 → sub-steps 1-5
+  // "About you" sub-step progress
   const aboutYouSubStep = state.currentStep - 1;
   const aboutYouTotalSubs = state.familyStatus === "single" ? 4 : 5;
   const aboutYouProgress = isReadyStep ? 100 : (Math.min(aboutYouSubStep, aboutYouTotalSubs) / aboutYouTotalSubs) * 100;
@@ -96,10 +100,27 @@ const Index = () => {
       case 5:
         return !!state.familyStatus;
       case 6:
-        return true; // family details - always can proceed
+        return true;
       default:
         return true;
     }
+  };
+
+  const handleBack = () => {
+    if (state.currentStep === 8) {
+      // In preferences, try internal back first
+      if (prefsRef.current) {
+        const handled = prefsRef.current.handleBack();
+        if (handled) return;
+      }
+      setStep(7);
+      return;
+    }
+    if (state.currentStep === 7) {
+      setStep(state.familyStatus === "single" ? 5 : 6);
+      return;
+    }
+    setStep(state.currentStep - 1);
   };
 
   const renderStep = () => {
@@ -171,12 +192,26 @@ const Index = () => {
             familyStatus={state.familyStatus}
             insurePartner={state.insurePartner}
             childrenCount={state.childrenCount}
+            childrenAges={state.childrenAges}
             onUpdatePartner={(value) =>
               setState((s) => ({ ...s, insurePartner: value }))
             }
-            onUpdateChildren={(value) =>
-              setState((s) => ({ ...s, childrenCount: value }))
-            }
+            onUpdateChildren={(value) => {
+              setState((s) => {
+                const newAges = [...s.childrenAges];
+                // Adjust ages array length
+                while (newAges.length < value) newAges.push(0);
+                while (newAges.length > value) newAges.pop();
+                return { ...s, childrenCount: value, childrenAges: newAges };
+              });
+            }}
+            onUpdateChildAge={(index, age) => {
+              setState((s) => {
+                const newAges = [...s.childrenAges];
+                newAges[index] = age;
+                return { ...s, childrenAges: newAges };
+              });
+            }}
             onNext={() => setStep(7)}
             onBack={() => setStep(5)}
           />
@@ -192,10 +227,12 @@ const Index = () => {
       case 8:
         return (
           <StepPreferences
+            ref={prefsRef}
             selectedInsurances={state.selectedInsurances}
             preferences={state.preferences}
             firstName={state.firstName}
             phone={state.phone}
+            savings={totalSavings}
             onUpdatePreference={updatePreference}
             onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
             onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
@@ -239,9 +276,6 @@ const Index = () => {
     }
   };
 
-  // Map wizard steps to sidebar steps:
-  // 1 = product selection, 2-7 = About you, 8-9 = Set preferences, 10 = Your offer, 11+ = Finalise
-  const isFamilySelectStep = state.currentStep === 5;
   const isLoadingStep = state.currentStep === 9;
   const isPreferencesStep = state.currentStep === 8;
   const sidebarStep =
@@ -271,14 +305,6 @@ const Index = () => {
     );
   }
 
-  const getNextStep = () => {
-    setStep(state.currentStep + 1);
-  };
-
-  const getPrevStep = () => {
-    setStep(state.currentStep - 1);
-  };
-
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar currentStep={sidebarStep} visible={true} />
@@ -294,15 +320,22 @@ const Index = () => {
         {!isAboutYou && !isLoadingStep && !isPreferencesStep && <Footer />}
       </main>
 
-      {!isLoadingStep && !isFamilySelectStep && (
+      {!isLoadingStep && (
         <StickyFooter
           savings={totalSavings}
-          onNext={getNextStep}
-          onBack={getPrevStep}
+          onNext={() => {
+            if (state.currentStep === 5 && state.familyStatus) {
+              // Already auto-advanced
+              return;
+            }
+            setStep(state.currentStep + 1);
+          }}
+          onBack={handleBack}
           disabled={isAboutYou ? !canProceedAboutYou() : state.selectedInsurances.length === 0}
           buttonLabel={isReadyStep ? "Set preferences" : "Next"}
           hasSidebar={true}
           showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep}
+          showNextButton={state.currentStep !== 5}
         />
       )}
     </div>

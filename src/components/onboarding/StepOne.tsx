@@ -215,9 +215,9 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
             {t.bundleHeading}
           </h2>
-          <p className="text-muted-foreground mb-8">
-            {t.bundleSubtitle}
-          </p>
+          <p className="text-subtitle mb-8">
+                    {t.bundleSubtitle}
+                  </p>
         </>
       )}
 
@@ -229,7 +229,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             <button
               key={preset.id}
               onClick={() => onBundleSelect(preset.insuranceIds)}
-              className={`text-left rounded-xl border overflow-hidden transition-all hover:shadow-md ${
+              className={`text-left rounded-xl border-2 overflow-hidden transition-all hover:shadow-md ${
                 isActive
                   ? "border-[#0177E5] bg-[#0385FF]/10 ring-2 ring-[#0177E5]/20 shadow-md"
                   : "border-border bg-card"
@@ -283,7 +283,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
             {t.bundleHeading}
           </h2>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-subtitle mb-4">
             {t.bundleSubtitle}
           </p>
         </>
@@ -314,7 +314,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             <button
               key={preset.id}
               onClick={() => onBundleSelect(preset.insuranceIds)}
-              className={`text-left rounded-xl border overflow-hidden transition-all hover:shadow-md snap-start shrink-0 w-[calc(50%-8px)] min-w-[260px] ${
+              className={`text-left rounded-xl border-2 overflow-hidden transition-all hover:shadow-md snap-start shrink-0 w-[calc(50%-8px)] min-w-[260px] ${
                 isActive
                   ? "border-[#0177E5] bg-[#0385FF]/10 ring-2 ring-[#0177E5]/20 shadow-md"
                   : "border-border bg-card"
@@ -433,7 +433,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             <h1 className="text-[32px] leading-tight font-bold text-foreground mb-3">
               {version === "A" ? t.heading : t.bundleHeading}
             </h1>
-            <p className="mb-8" style={{ color: '#313131' }}>
+            <p className="mb-8 text-subtitle">
               {version === "A" ? t.subtitle : t.bundleSubtitle}
             </p>
 
@@ -451,7 +451,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                   <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                     {t.individualHeading}
                   </h2>
-                  <p className="text-muted-foreground mb-8">
+                   <p className="text-subtitle mb-8">
                     {t.individualSubtitle}
                   </p>
                   <InsuranceGrid />
@@ -464,7 +464,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                   <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                     {t.individualHeading}
                   </h2>
-                  <p className="text-muted-foreground mb-8">
+                   <p className="text-subtitle mb-8">
                     {t.individualSubtitle}
                   </p>
                   <InsuranceGrid />

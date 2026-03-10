@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface StickyFooterProps {
@@ -8,13 +9,26 @@ interface StickyFooterProps {
   buttonLabel?: string;
   hasSidebar?: boolean;
   showSavings?: boolean;
+  showNextButton?: boolean;
 }
 
-const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel = "Next", hasSidebar = false, showSavings = true }: StickyFooterProps) => {
+const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel = "Next", hasSidebar = false, showSavings = true, showNextButton = true }: StickyFooterProps) => {
   const formattedSavings = savings.toLocaleString("nl-NL", {
     style: "currency",
     currency: "EUR",
   });
+
+  const [animateSavings, setAnimateSavings] = useState(false);
+  const prevSavingsRef = useRef(savings);
+
+  useEffect(() => {
+    if (savings > prevSavingsRef.current) {
+      setAnimateSavings(true);
+      const timer = setTimeout(() => setAnimateSavings(false), 400);
+      return () => clearTimeout(timer);
+    }
+    prevSavingsRef.current = savings;
+  }, [savings]);
 
   return (
     <div className={`fixed bottom-4 z-50 ${hasSidebar ? 'left-0 lg:left-64 right-0' : 'left-0 right-0'}`}>
@@ -22,7 +36,7 @@ const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel =
         {showSavings ? (
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-foreground">Estimated savings:</span>
-            <span className="inline-flex items-center gap-1 bg-success/10 border border-success/20 rounded-full px-3 py-1">
+            <span className={`inline-flex items-center gap-1 bg-success/10 border border-success/20 rounded-full px-3 py-1 ${animateSavings ? 'animate-savings-pop' : ''}`}>
               <span className="text-lg font-bold text-success">{formattedSavings}</span>
             </span>
           </div>
@@ -35,14 +49,20 @@ const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel =
             Back
           </button>
         )}
-        <button
-          onClick={onNext}
-          disabled={disabled}
-          className="inline-flex items-center gap-2 bg-success text-success-foreground px-7 py-3 rounded-full font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
-        >
-          {buttonLabel}
-          <ChevronRight className="w-5 h-5" />
-        </button>
+        {showNextButton && (
+          <button
+            onClick={onNext}
+            disabled={disabled}
+            className="inline-flex items-center gap-2 text-success-foreground px-7 py-3 rounded-full font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            style={{
+              background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
+              boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
+            }}
+          >
+            {buttonLabel}
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        )}
       </div>
     </div>
   );

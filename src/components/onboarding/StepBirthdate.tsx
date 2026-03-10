@@ -1,7 +1,7 @@
 import { Info } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ChangeEvent } from "react";
 
 interface StepBirthdateProps {
   birthdate: string;
@@ -11,9 +11,7 @@ interface StepBirthdateProps {
 }
 
 function formatDateInput(raw: string, prevValue: string): string {
-  // Strip non-digits
   const digits = raw.replace(/\D/g, "").slice(0, 8);
-
   let result = "";
   for (let i = 0; i < digits.length; i++) {
     if (i === 2 || i === 4) result += "-";
@@ -30,12 +28,12 @@ const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack }: StepBirthdatePro
 
   return (
     <div className="animate-fade-in">
-      <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
-        <div className="flex items-start gap-3 mb-12">
+      <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
+        <div className="flex items-center gap-3 mb-12">
           <img
             src={tacoAvatar}
             alt="Tako"
-            className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
+            className="w-10 h-10 rounded-full object-cover shrink-0"
           />
           <p className="text-base font-semibold text-foreground">
             How old are you? 🎂
@@ -49,7 +47,7 @@ const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack }: StepBirthdatePro
             onChange={handleChange}
             maxLength={10}
             inputMode="numeric"
-            autoFocus
+            autoFocus={!birthdate}
           />
         </div>
 
