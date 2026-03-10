@@ -191,7 +191,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             <span className="font-medium text-foreground flex-1">{label}</span>
             <div
               className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                isSelected ? "border-[#25B327] bg-[#25B327]" : "border-border"
+                isSelected ? "border-[#0177E5] bg-[#0177E5]" : "border-border"
               }`}
             >
               {isSelected && (
