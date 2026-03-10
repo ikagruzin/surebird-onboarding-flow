@@ -183,7 +183,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
           <button
             key={ins.id}
             onClick={() => onToggle(ins.id)}
-            className={`flex items-center gap-3 px-5 py-4 rounded-lg border-2 transition-all text-left hover:shadow-md ${
+            className={`flex items-center gap-3 px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
               isSelected
                 ? "border-[#0177E5] bg-[#0385FF]/10 shadow-md"
                 : "border-border bg-card hover:border-[#0177E5]/40"
@@ -433,7 +433,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             <h1 className="text-[32px] leading-tight font-bold text-foreground mb-3">
               {version === "A" ? t.heading : t.bundleHeading}
             </h1>
-            <p className="text-muted-foreground mb-8">
+            <p className="mb-8" style={{ color: '#313131' }}>
               {version === "A" ? t.subtitle : t.bundleSubtitle}
             </p>
 
