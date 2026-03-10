@@ -5,6 +5,7 @@ import StepName from "@/components/onboarding/StepName";
 import StepAddress from "@/components/onboarding/StepAddress";
 import StepBirthdate from "@/components/onboarding/StepBirthdate";
 import StepFamily from "@/components/onboarding/StepFamily";
+import StepFamilyDetails from "@/components/onboarding/StepFamilyDetails";
 import StepPreferences from "@/components/onboarding/StepPreferences";
 import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepPackage from "@/components/onboarding/StepPackage";
