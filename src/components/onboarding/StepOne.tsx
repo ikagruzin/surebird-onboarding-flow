@@ -405,6 +405,17 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
              <Layers className="w-3.5 h-3.5" />
               {t.versionB}
             </button>
+            <button
+              onClick={() => setVersion("C")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                version === "C"
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+             <GalleryHorizontal className="w-3.5 h-3.5" />
+              {t.versionC}
+            </button>
           </div>
 
           {/* Language switcher */}
