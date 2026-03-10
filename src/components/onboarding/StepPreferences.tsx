@@ -302,7 +302,7 @@ const StepPreferences = ({
               <img
                 src={ICON_MAP[ins.icon]}
                 alt={ins.label}
-                className={`w-7 h-7 ${isActive ? "brightness-0 invert" : ""}`}
+                className={`w-8 h-8 ${isActive ? "brightness-0 invert" : ""}`}
               />
             )}
             {ins.label}
