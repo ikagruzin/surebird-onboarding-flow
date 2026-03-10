@@ -34,6 +34,7 @@ const Index = () => {
     insurePartner: "",
     childrenCount: 0,
     includeFamily: "",
+    phone: "+31",
   });
 
   const setStep = (step: number) =>
