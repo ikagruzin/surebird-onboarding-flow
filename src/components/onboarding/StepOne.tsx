@@ -239,7 +239,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                   alt={bundleT?.title || preset.title}
                   className="w-full h-full object-cover"
                 />
-                <span className="absolute bottom-3 left-3 inline-flex items-center bg-success text-success-foreground text-xs font-semibold px-3 py-1.5 rounded-full">
+                <span className="absolute bottom-3 left-3 inline-flex items-center bg-card text-success text-xs font-semibold px-3 py-1.5 rounded-full">
                   {t.saveAnnually} €{preset.annualSavings}
                 </span>
               </div>

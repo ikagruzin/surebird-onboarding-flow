@@ -60,7 +60,7 @@ const Sidebar = ({ currentStep, visible = true }: SidebarProps) => {
       </div>
 
       {/* Ask Taco */}
-      <div className="border border-border rounded-xl p-4">
+      <div className="p-4">
         <div className="flex items-center gap-3 mb-3">
           <img
             src={tacoAvatar}
