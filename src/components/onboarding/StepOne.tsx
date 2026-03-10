@@ -458,10 +458,10 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
         <main className="w-full max-w-3xl px-6 py-8 pb-32">
           <div className="animate-fade-in">
             <h1 className="text-[32px] leading-tight font-bold text-foreground mb-3">
-              {t.heading}
+              {version === "A" ? t.heading : t.bundleHeading}
             </h1>
             <p className="text-muted-foreground mb-8">
-              {t.subtitle}
+              {version === "A" ? t.subtitle : t.bundleSubtitle}
             </p>
 
             {version === "A" ? (
