@@ -256,7 +256,7 @@ const StepPreferences = ({
         <button
           onClick={handleNext}
           disabled={!allQuestionsAnswered}
-          className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-7 py-3 rounded-lg font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-7 py-3 rounded-full font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
         >
           Next step
           <ChevronRight className="w-5 h-5" />

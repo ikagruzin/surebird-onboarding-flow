@@ -85,7 +85,7 @@ const StepPackage = ({
             <button
               onClick={onEmailSubmit}
               disabled={!email.includes("@")}
-              className="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold text-sm disabled:opacity-40 hover:opacity-90 transition-opacity"
+              className="bg-primary text-primary-foreground px-6 py-3 rounded-full font-semibold text-sm disabled:opacity-40 hover:opacity-90 transition-opacity"
             >
               View
             </button>
@@ -219,14 +219,14 @@ const StepPackage = ({
 
       {/* Actions */}
       <div className="flex items-center justify-center gap-3 mt-8">
-        <button className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-medium text-sm text-foreground hover:bg-muted transition-colors">
+        <button className="inline-flex items-center gap-2 border border-border rounded-full px-6 py-3 font-medium text-sm text-foreground hover:bg-muted transition-colors">
           <Heart className="w-4 h-4" />
           Save my package
         </button>
         <button
           onClick={onNext}
           disabled={!emailSubmitted}
-          className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-7 py-3 rounded-lg font-semibold text-base disabled:opacity-40 hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-7 py-3 rounded-full font-semibold text-base disabled:opacity-40 hover:opacity-90 transition-opacity"
         >
           Continue
           <ChevronRight className="w-5 h-5" />

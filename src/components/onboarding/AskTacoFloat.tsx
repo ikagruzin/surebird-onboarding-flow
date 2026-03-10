@@ -15,7 +15,7 @@ const AskTacoFloat = () => (
           <p className="text-xs text-muted-foreground">I'm ready to assist you</p>
         </div>
       </div>
-      <button className="w-full flex items-center justify-center gap-2 border border-border rounded-lg py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors">
+      <button className="w-full flex items-center justify-center gap-2 border border-border rounded-full py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors">
         <MessageCircle className="w-4 h-4 text-success" />
         Chat via WhatsApp
       </button>

@@ -29,7 +29,7 @@ const StepUpsell = ({ selectedInsurances, onToggle, onNext, onBack }: StepUpsell
     <div className="animate-fade-in">
       <button
         onClick={onBack}
-        className="inline-flex items-center gap-1 text-sm font-medium text-foreground border border-border rounded-lg px-4 py-2 mb-6 hover:bg-muted transition-colors"
+        className="inline-flex items-center gap-1 text-sm font-medium text-foreground border border-border rounded-full px-4 py-2 mb-6 hover:bg-muted transition-colors"
       >
         <ChevronLeft className="w-4 h-4" />
         Previous
@@ -80,7 +80,7 @@ const StepUpsell = ({ selectedInsurances, onToggle, onNext, onBack }: StepUpsell
       <div className="flex justify-end mt-8">
         <button
           onClick={onNext}
-          className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-7 py-3 rounded-lg font-semibold text-base hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-7 py-3 rounded-full font-semibold text-base hover:opacity-90 transition-opacity"
         >
           Next step
           <ChevronRight className="w-5 h-5" />
