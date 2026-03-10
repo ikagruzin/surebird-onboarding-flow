@@ -48,7 +48,7 @@ const BUNDLE_PRESETS: BundlePreset[] = [
   {
     id: "business-travel",
     title: "Business & Travel",
-    description: "The essential foundation. Protect your home and your family against unexpected costs.",
+    description: "For those on the move. Global coverage for your trips and your vehicle in one click.",
     insuranceIds: ["legal", "travel", "car"],
     annualSavings: 135,
     image: bundleBusinessTravel,
