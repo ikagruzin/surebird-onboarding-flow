@@ -229,7 +229,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
               onClick={() => onBundleSelect(preset.insuranceIds)}
               className={`text-left rounded-xl border overflow-hidden transition-all hover:shadow-md ${
                 isActive
-                  ? "border-[#0177E5] ring-2 ring-[#0177E5]/20 shadow-md"
+                  ? "border-[#0177E5] bg-[#0385FF]/10 ring-2 ring-[#0177E5]/20 shadow-md"
                   : "border-border bg-card"
               }`}
             >
