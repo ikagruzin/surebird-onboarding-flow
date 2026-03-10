@@ -73,6 +73,7 @@ const Index = () => {
   ).reduce((sum, t) => sum + t.savings, 0);
 
   const isStep1 = state.currentStep === 1;
+  const isReadyStep = state.currentStep === 7;
   const isAboutYou = state.currentStep >= 2 && state.currentStep <= 7;
 
   // "About you" sub-step progress: steps 2-6 → sub-steps 1-5
