@@ -7,6 +7,7 @@ import StepBirthdate from "@/components/onboarding/StepBirthdate";
 import StepFamily from "@/components/onboarding/StepFamily";
 import StepFamilyDetails from "@/components/onboarding/StepFamilyDetails";
 import StepPreferences from "@/components/onboarding/StepPreferences";
+import StepReady from "@/components/onboarding/StepReady";
 import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepPackage from "@/components/onboarding/StepPackage";
 import Footer from "@/components/onboarding/Footer";
@@ -153,7 +154,6 @@ const Index = () => {
             onSelect={(value) => {
               setState((s) => ({ ...s, familyStatus: value }));
               if (value === "single") {
-                // Skip family details, go to preferences
                 setStep(7);
               } else {
                 setStep(6);
@@ -180,24 +180,32 @@ const Index = () => {
         );
       case 7:
         return (
-          <StepPreferences
+          <StepReady
             selectedInsurances={state.selectedInsurances}
-            preferences={state.preferences}
-            onUpdatePreference={updatePreference}
             onNext={() => setStep(8)}
             onBack={() => setStep(state.familyStatus === "single" ? 5 : 6)}
           />
         );
       case 8:
         return (
-          <StepUpsell
+          <StepPreferences
             selectedInsurances={state.selectedInsurances}
-            onToggle={toggleInsurance}
+            preferences={state.preferences}
+            onUpdatePreference={updatePreference}
             onNext={() => setStep(9)}
             onBack={() => setStep(7)}
           />
         );
       case 9:
+        return (
+          <StepUpsell
+            selectedInsurances={state.selectedInsurances}
+            onToggle={toggleInsurance}
+            onNext={() => setStep(10)}
+            onBack={() => setStep(8)}
+          />
+        );
+      case 10:
         return (
           <StepPackage
             selectedInsurances={state.selectedInsurances}
@@ -209,8 +217,8 @@ const Index = () => {
             onEmailSubmit={() =>
               setState((s) => ({ ...s, emailSubmitted: true }))
             }
-            onNext={() => setStep(10)}
-            onBack={() => setStep(8)}
+            onNext={() => setStep(11)}
+            onBack={() => setStep(9)}
           />
         );
       default:
@@ -228,15 +236,17 @@ const Index = () => {
   };
 
   // Map wizard steps to sidebar steps:
-  // 1 = product selection, 2-6 = About you, 7-8 = Your preferences, 9 = Your offer, 10+ = Finalise
+  // 1 = product selection, 2-6 = About you, 7 = ready, 8-9 = Your preferences, 10 = Your offer, 11+ = Finalise
+  const isFamilySelectStep = state.currentStep === 5;
+  const isReadyStep = state.currentStep === 7;
   const sidebarStep =
     state.currentStep <= 1
       ? 1
-      : state.currentStep <= 6
+      : state.currentStep <= 7
       ? 1
-      : state.currentStep <= 8
+      : state.currentStep <= 9
       ? 2
-      : state.currentStep === 9
+      : state.currentStep === 10
       ? 3
       : 4;
 
@@ -284,9 +294,9 @@ const Index = () => {
         onNext={getNextStep}
         onBack={getPrevStep}
         disabled={isAboutYou ? !canProceedAboutYou() : state.selectedInsurances.length === 0}
-        buttonLabel="Next"
+        buttonLabel={isReadyStep ? "Set preferences" : "Next"}
         hasSidebar={true}
-        showSavings={!isAboutYou}
+        showSavings={!isAboutYou && !isReadyStep}
       />
     </div>
   );
