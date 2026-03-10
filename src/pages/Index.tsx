@@ -295,9 +295,9 @@ const Index = () => {
         onNext={getNextStep}
         onBack={getPrevStep}
         disabled={isAboutYou ? !canProceedAboutYou() : state.selectedInsurances.length === 0}
-        buttonLabel="Next"
+        buttonLabel={isReadyStep ? "Set preferences" : "Next"}
         hasSidebar={true}
-        showSavings={!isAboutYou}
+        showSavings={!isAboutYou && !isReadyStep}
       />
     </div>
   );
