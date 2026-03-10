@@ -482,9 +482,15 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
               </>
             ) : (
               <>
-                <InsuranceGrid />
+                <BundleSlider showHeader={false} />
                 <div className="mt-16">
-                  <BundleSlider />
+                  <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+                    {t.individualHeading}
+                  </h2>
+                  <p className="text-muted-foreground mb-8">
+                    {t.individualSubtitle}
+                  </p>
+                  <InsuranceGrid />
                 </div>
               </>
             )}
