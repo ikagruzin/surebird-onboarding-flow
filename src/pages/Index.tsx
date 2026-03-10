@@ -5,6 +5,7 @@ import StepName from "@/components/onboarding/StepName";
 import StepAddress from "@/components/onboarding/StepAddress";
 import StepBirthdate from "@/components/onboarding/StepBirthdate";
 import StepFamily from "@/components/onboarding/StepFamily";
+import StepFamilyDetails from "@/components/onboarding/StepFamilyDetails";
 import StepPreferences from "@/components/onboarding/StepPreferences";
 import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepPackage from "@/components/onboarding/StepPackage";
@@ -28,6 +29,9 @@ const Index = () => {
     houseNumber: "",
     addition: "",
     birthdate: "",
+    familyStatus: "",
+    insurePartner: "",
+    childrenCount: 0,
     includeFamily: "",
   });
 
@@ -68,11 +72,12 @@ const Index = () => {
   ).reduce((sum, t) => sum + t.savings, 0);
 
   const isStep1 = state.currentStep === 1;
-  const isAboutYou = state.currentStep >= 2 && state.currentStep <= 5;
+  const isAboutYou = state.currentStep >= 2 && state.currentStep <= 6;
 
-  // "About you" sub-step progress: steps 2,3,4,5 → sub-steps 1,2,3,4
-  const aboutYouSubStep = state.currentStep - 1; // 1, 2, 3, or 4
-  const aboutYouProgress = (aboutYouSubStep / 4) * 100;
+  // "About you" sub-step progress: steps 2-6 → sub-steps 1-5
+  const aboutYouSubStep = state.currentStep - 1;
+  const aboutYouTotalSubs = state.familyStatus === "single" ? 4 : 5;
+  const aboutYouProgress = (Math.min(aboutYouSubStep, aboutYouTotalSubs) / aboutYouTotalSubs) * 100;
 
   const canProceedAboutYou = () => {
     switch (state.currentStep) {
@@ -85,7 +90,9 @@ const Index = () => {
       case 4:
         return state.birthdate.trim().length > 0;
       case 5:
-        return !!state.includeFamily;
+        return !!state.familyStatus;
+      case 6:
+        return true; // family details - always can proceed
       default:
         return true;
     }
@@ -142,34 +149,55 @@ const Index = () => {
       case 5:
         return (
           <StepFamily
-            includeFamily={state.includeFamily}
-            onUpdate={(value) =>
-              setState((s) => ({ ...s, includeFamily: value }))
-            }
-            onNext={() => setStep(6)}
+            familyStatus={state.familyStatus}
+            onSelect={(value) => {
+              setState((s) => ({ ...s, familyStatus: value }));
+              if (value === "single") {
+                // Skip family details, go to preferences
+                setStep(7);
+              } else {
+                setStep(6);
+              }
+            }}
             onBack={() => setStep(4)}
           />
         );
       case 6:
         return (
-          <StepPreferences
-            selectedInsurances={state.selectedInsurances}
-            preferences={state.preferences}
-            onUpdatePreference={updatePreference}
+          <StepFamilyDetails
+            familyStatus={state.familyStatus}
+            insurePartner={state.insurePartner}
+            childrenCount={state.childrenCount}
+            onUpdatePartner={(value) =>
+              setState((s) => ({ ...s, insurePartner: value }))
+            }
+            onUpdateChildren={(value) =>
+              setState((s) => ({ ...s, childrenCount: value }))
+            }
             onNext={() => setStep(7)}
             onBack={() => setStep(5)}
           />
         );
       case 7:
         return (
-          <StepUpsell
+          <StepPreferences
             selectedInsurances={state.selectedInsurances}
-            onToggle={toggleInsurance}
+            preferences={state.preferences}
+            onUpdatePreference={updatePreference}
             onNext={() => setStep(8)}
-            onBack={() => setStep(6)}
+            onBack={() => setStep(state.familyStatus === "single" ? 5 : 6)}
           />
         );
       case 8:
+        return (
+          <StepUpsell
+            selectedInsurances={state.selectedInsurances}
+            onToggle={toggleInsurance}
+            onNext={() => setStep(9)}
+            onBack={() => setStep(7)}
+          />
+        );
+      case 9:
         return (
           <StepPackage
             selectedInsurances={state.selectedInsurances}
@@ -181,8 +209,8 @@ const Index = () => {
             onEmailSubmit={() =>
               setState((s) => ({ ...s, emailSubmitted: true }))
             }
-            onNext={() => setStep(9)}
-            onBack={() => setStep(7)}
+            onNext={() => setStep(10)}
+            onBack={() => setStep(8)}
           />
         );
       default:
@@ -200,15 +228,15 @@ const Index = () => {
   };
 
   // Map wizard steps to sidebar steps:
-  // 1 = product selection, 2-5 = About you, 6-7 = Your preferences, 8 = Your offer, 9+ = Finalise
+  // 1 = product selection, 2-6 = About you, 7-8 = Your preferences, 9 = Your offer, 10+ = Finalise
   const sidebarStep =
     state.currentStep <= 1
       ? 1
-      : state.currentStep <= 5
+      : state.currentStep <= 6
       ? 1
-      : state.currentStep <= 7
+      : state.currentStep <= 8
       ? 2
-      : state.currentStep === 8
+      : state.currentStep === 9
       ? 3
       : 4;
 
