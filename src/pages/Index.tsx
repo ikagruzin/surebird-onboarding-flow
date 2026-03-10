@@ -68,11 +68,11 @@ const Index = () => {
   ).reduce((sum, t) => sum + t.savings, 0);
 
   const isStep1 = state.currentStep === 1;
-  const isAboutYou = state.currentStep >= 2 && state.currentStep <= 4;
+  const isAboutYou = state.currentStep >= 2 && state.currentStep <= 5;
 
-  // "About you" sub-step progress: steps 2,3,4 → sub-steps 1,2,3
-  const aboutYouSubStep = state.currentStep - 1; // 1, 2, or 3
-  const aboutYouProgress = (aboutYouSubStep / 3) * 100;
+  // "About you" sub-step progress: steps 2,3,4,5 → sub-steps 1,2,3,4
+  const aboutYouSubStep = state.currentStep - 1; // 1, 2, 3, or 4
+  const aboutYouProgress = (aboutYouSubStep / 4) * 100;
 
   const canProceedAboutYou = () => {
     switch (state.currentStep) {
