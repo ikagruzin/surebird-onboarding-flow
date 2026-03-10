@@ -7,6 +7,7 @@ interface SidebarProps {
   currentStep?: number;
   showProgress?: boolean;
   visible?: boolean;
+  showAvatar?: boolean;
 }
 
 const Sidebar = ({ currentStep = 1, showProgress = true, visible = true }: SidebarProps) => {
