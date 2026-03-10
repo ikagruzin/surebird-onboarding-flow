@@ -294,15 +294,15 @@ const Index = () => {
         {!isAboutYou && !isLoadingStep && !isPreferencesStep && <Footer />}
       </main>
 
-      {!isLoadingStep && !isPreferencesStep && (
+      {!isLoadingStep && (
         <StickyFooter
           savings={totalSavings}
           onNext={getNextStep}
           onBack={getPrevStep}
           disabled={isAboutYou ? !canProceedAboutYou() : state.selectedInsurances.length === 0}
-          buttonLabel={isReadyStep ? "Set preferences" : "Next"}
+          buttonLabel={isReadyStep ? "Set preferences" : isPreferencesStep ? "Next" : "Next"}
           hasSidebar={true}
-          showSavings={!isAboutYou && !isReadyStep}
+          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep}
         />
       )}
     </div>
