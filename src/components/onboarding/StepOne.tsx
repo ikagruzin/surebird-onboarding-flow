@@ -215,9 +215,9 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
             {t.bundleHeading}
           </h2>
-          <p className="text-muted-foreground mb-8">
-            {t.bundleSubtitle}
-          </p>
+          <p className="text-subtitle mb-8">
+                    {t.bundleSubtitle}
+                  </p>
         </>
       )}
 
