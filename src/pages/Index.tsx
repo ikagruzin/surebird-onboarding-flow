@@ -29,6 +29,9 @@ const Index = () => {
     houseNumber: "",
     addition: "",
     birthdate: "",
+    familyStatus: "",
+    insurePartner: "",
+    childrenCount: 0,
     includeFamily: "",
   });
 
