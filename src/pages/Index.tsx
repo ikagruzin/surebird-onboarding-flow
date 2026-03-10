@@ -290,18 +290,20 @@ const Index = () => {
           </div>
         )}
         {renderStep()}
-        {!isAboutYou && <Footer />}
+        {!isAboutYou && !isLoadingStep && !isPreferencesStep && <Footer />}
       </main>
 
-      <StickyFooter
-        savings={totalSavings}
-        onNext={getNextStep}
-        onBack={getPrevStep}
-        disabled={isAboutYou ? !canProceedAboutYou() : state.selectedInsurances.length === 0}
-        buttonLabel={isReadyStep ? "Set preferences" : "Next"}
-        hasSidebar={true}
-        showSavings={!isAboutYou && !isReadyStep}
-      />
+      {!isLoadingStep && !isPreferencesStep && (
+        <StickyFooter
+          savings={totalSavings}
+          onNext={getNextStep}
+          onBack={getPrevStep}
+          disabled={isAboutYou ? !canProceedAboutYou() : state.selectedInsurances.length === 0}
+          buttonLabel={isReadyStep ? "Set preferences" : "Next"}
+          hasSidebar={true}
+          showSavings={!isAboutYou && !isReadyStep}
+        />
+      )}
     </div>
   );
 };
