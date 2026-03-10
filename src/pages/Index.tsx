@@ -248,16 +248,11 @@ const Index = () => {
         );
       case 10:
         return (
-          <StepPackage
+          <StepOffer
             selectedInsurances={state.selectedInsurances}
-            email={state.email}
-            emailSubmitted={state.emailSubmitted}
-            onEmailChange={(email) =>
-              setState((s) => ({ ...s, email, emailSubmitted: false }))
-            }
-            onEmailSubmit={() =>
-              setState((s) => ({ ...s, emailSubmitted: true }))
-            }
+            preferences={state.preferences}
+            firstName={state.firstName}
+            onUpdatePreference={updatePreference}
             onNext={() => setStep(11)}
             onBack={() => setStep(9)}
           />
