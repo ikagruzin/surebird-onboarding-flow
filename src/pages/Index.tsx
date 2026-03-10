@@ -156,7 +156,6 @@ const Index = () => {
               if (value === "single") {
                 setStep(7);
               } else {
-              } else {
                 setStep(6);
               }
             }}
