@@ -11,7 +11,7 @@ import type { StepPreferencesHandle } from "@/components/onboarding/StepPreferen
 import StepReady from "@/components/onboarding/StepReady";
 import StepLoading from "@/components/onboarding/StepLoading";
 import StepUpsell from "@/components/onboarding/StepUpsell";
-import StepPackage from "@/components/onboarding/StepPackage";
+import StepOffer from "@/components/onboarding/StepOffer";
 import Footer from "@/components/onboarding/Footer";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
@@ -248,16 +248,11 @@ const Index = () => {
         );
       case 10:
         return (
-          <StepPackage
+          <StepOffer
             selectedInsurances={state.selectedInsurances}
-            email={state.email}
-            emailSubmitted={state.emailSubmitted}
-            onEmailChange={(email) =>
-              setState((s) => ({ ...s, email, emailSubmitted: false }))
-            }
-            onEmailSubmit={() =>
-              setState((s) => ({ ...s, emailSubmitted: true }))
-            }
+            preferences={state.preferences}
+            firstName={state.firstName}
+            onUpdatePreference={updatePreference}
             onNext={() => setStep(11)}
             onBack={() => setStep(9)}
           />
@@ -276,6 +271,7 @@ const Index = () => {
     }
   };
 
+  const isOfferStep = state.currentStep === 10;
   const isLoadingStep = state.currentStep === 9;
   const isPreferencesStep = state.currentStep === 8;
   const sidebarStep =
@@ -309,7 +305,7 @@ const Index = () => {
     <div className="flex min-h-screen bg-background">
       <Sidebar currentStep={sidebarStep} visible={true} />
 
-      <main className="flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 max-w-3xl mx-auto pb-28">
+      <main className={`flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 pb-28 ${isOfferStep ? '' : 'max-w-3xl mx-auto'}`}>
         {isAboutYou && (
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-foreground mb-4">About you</h1>
@@ -320,7 +316,7 @@ const Index = () => {
         {!isAboutYou && !isLoadingStep && !isPreferencesStep && <Footer />}
       </main>
 
-      {!isLoadingStep && (
+      {!isLoadingStep && !isOfferStep && (
         <StickyFooter
           savings={totalSavings}
           onNext={() => {
