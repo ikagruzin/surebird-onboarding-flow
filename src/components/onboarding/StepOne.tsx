@@ -239,7 +239,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                   alt={bundleT?.title || preset.title}
                   className="w-full h-full object-cover"
                 />
-                <span className="absolute bottom-3 left-3 inline-flex items-center bg-card text-success text-xs font-semibold px-3 py-1.5 rounded-full">
+                <span className="absolute bottom-3 left-3 inline-flex items-center bg-card text-success text-xs font-semibold px-3 py-1.5 rounded-full border border-success/30">
                   {t.saveAnnually} €{preset.annualSavings}
                 </span>
               </div>
@@ -265,7 +265,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
   return (
     <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 p-6 pb-20 justify-between shrink-0">
+      <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 p-6 pb-28 justify-between shrink-0">
         <div>
           <div className="flex items-center gap-2 mb-10">
             <img src={logoSurebird} alt="Surebird" className="h-8" />
