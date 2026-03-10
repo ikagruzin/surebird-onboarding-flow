@@ -1,6 +1,7 @@
 import { Info } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 
 interface StepBirthdateProps {
   birthdate: string;
@@ -9,7 +10,24 @@ interface StepBirthdateProps {
   onBack: () => void;
 }
 
+function formatDateInput(raw: string, prevValue: string): string {
+  // Strip non-digits
+  const digits = raw.replace(/\D/g, "").slice(0, 8);
+
+  let result = "";
+  for (let i = 0; i < digits.length; i++) {
+    if (i === 2 || i === 4) result += "-";
+    result += digits[i];
+  }
+  return result;
+}
+
 const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack }: StepBirthdateProps) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatDateInput(e.target.value, birthdate);
+    onUpdate(formatted);
+  };
+
   return (
     <div className="animate-fade-in">
       <div className="bg-card rounded-xl border border-border p-6">
@@ -26,10 +44,11 @@ const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack }: StepBirthdatePro
 
         <div className="max-w-xs">
           <FloatingLabelInput
-            label="dd-mm-yy"
+            label="dd-mm-yyyy"
             value={birthdate}
-            onChange={(e) => onUpdate(e.target.value)}
-            maxLength={8}
+            onChange={handleChange}
+            maxLength={10}
+            inputMode="numeric"
           />
         </div>
 
