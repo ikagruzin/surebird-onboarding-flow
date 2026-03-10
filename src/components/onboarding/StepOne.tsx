@@ -314,7 +314,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             <button
               key={preset.id}
               onClick={() => onBundleSelect(preset.insuranceIds)}
-              className={`text-left rounded-xl border overflow-hidden transition-all hover:shadow-md snap-start shrink-0 w-[calc(50%-8px)] min-w-[260px] ${
+              className={`text-left rounded-xl border-2 overflow-hidden transition-all hover:shadow-md snap-start shrink-0 w-[calc(50%-8px)] min-w-[260px] ${
                 isActive
                   ? "border-[#0177E5] bg-[#0385FF]/10 ring-2 ring-[#0177E5]/20 shadow-md"
                   : "border-border bg-card"
