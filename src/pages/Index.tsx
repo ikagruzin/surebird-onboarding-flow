@@ -181,24 +181,32 @@ const Index = () => {
         );
       case 7:
         return (
-          <StepPreferences
+          <StepReady
             selectedInsurances={state.selectedInsurances}
-            preferences={state.preferences}
-            onUpdatePreference={updatePreference}
             onNext={() => setStep(8)}
             onBack={() => setStep(state.familyStatus === "single" ? 5 : 6)}
           />
         );
       case 8:
         return (
-          <StepUpsell
+          <StepPreferences
             selectedInsurances={state.selectedInsurances}
-            onToggle={toggleInsurance}
+            preferences={state.preferences}
+            onUpdatePreference={updatePreference}
             onNext={() => setStep(9)}
             onBack={() => setStep(7)}
           />
         );
       case 9:
+        return (
+          <StepUpsell
+            selectedInsurances={state.selectedInsurances}
+            onToggle={toggleInsurance}
+            onNext={() => setStep(10)}
+            onBack={() => setStep(8)}
+          />
+        );
+      case 10:
         return (
           <StepPackage
             selectedInsurances={state.selectedInsurances}
@@ -210,8 +218,8 @@ const Index = () => {
             onEmailSubmit={() =>
               setState((s) => ({ ...s, emailSubmitted: true }))
             }
-            onNext={() => setStep(10)}
-            onBack={() => setStep(8)}
+            onNext={() => setStep(11)}
+            onBack={() => setStep(9)}
           />
         );
       default:
