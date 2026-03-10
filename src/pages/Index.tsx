@@ -315,7 +315,7 @@ const Index = () => {
         {!isAboutYou && !isLoadingStep && !isPreferencesStep && <Footer />}
       </main>
 
-      {!isLoadingStep && (
+      {!isLoadingStep && !isOfferStep && (
         <StickyFooter
           savings={totalSavings}
           onNext={() => {
