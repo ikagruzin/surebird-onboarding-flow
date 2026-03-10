@@ -11,7 +11,7 @@ import type { StepPreferencesHandle } from "@/components/onboarding/StepPreferen
 import StepReady from "@/components/onboarding/StepReady";
 import StepLoading from "@/components/onboarding/StepLoading";
 import StepUpsell from "@/components/onboarding/StepUpsell";
-import StepPackage from "@/components/onboarding/StepPackage";
+import StepOffer from "@/components/onboarding/StepOffer";
 import Footer from "@/components/onboarding/Footer";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
