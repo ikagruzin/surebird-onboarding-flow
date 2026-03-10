@@ -38,9 +38,9 @@ export const INSURANCE_TYPES: InsuranceType[] = [
 
 export const STEP_LABELS = [
   "About you",
-  "Your preferences",
-  "Your offer",
-  "Finalise",
+  "Set preferences",
+  "Offer",
+  "Finalize",
 ];
 
 export interface BundlePreset {
