@@ -130,10 +130,10 @@ const Index = () => {
         );
       case 4:
         return (
-          <StepFamily
-            includeFamily={state.includeFamily}
+          <StepBirthdate
+            birthdate={state.birthdate}
             onUpdate={(value) =>
-              setState((s) => ({ ...s, includeFamily: value }))
+              setState((s) => ({ ...s, birthdate: value }))
             }
             onNext={() => setStep(5)}
             onBack={() => setStep(3)}
@@ -141,24 +141,35 @@ const Index = () => {
         );
       case 5:
         return (
-          <StepPreferences
-            selectedInsurances={state.selectedInsurances}
-            preferences={state.preferences}
-            onUpdatePreference={updatePreference}
+          <StepFamily
+            includeFamily={state.includeFamily}
+            onUpdate={(value) =>
+              setState((s) => ({ ...s, includeFamily: value }))
+            }
             onNext={() => setStep(6)}
             onBack={() => setStep(4)}
           />
         );
       case 6:
         return (
-          <StepUpsell
+          <StepPreferences
             selectedInsurances={state.selectedInsurances}
-            onToggle={toggleInsurance}
+            preferences={state.preferences}
+            onUpdatePreference={updatePreference}
             onNext={() => setStep(7)}
             onBack={() => setStep(5)}
           />
         );
       case 7:
+        return (
+          <StepUpsell
+            selectedInsurances={state.selectedInsurances}
+            onToggle={toggleInsurance}
+            onNext={() => setStep(8)}
+            onBack={() => setStep(6)}
+          />
+        );
+      case 8:
         return (
           <StepPackage
             selectedInsurances={state.selectedInsurances}
@@ -170,8 +181,8 @@ const Index = () => {
             onEmailSubmit={() =>
               setState((s) => ({ ...s, emailSubmitted: true }))
             }
-            onNext={() => setStep(8)}
-            onBack={() => setStep(6)}
+            onNext={() => setStep(9)}
+            onBack={() => setStep(7)}
           />
         );
       default:
