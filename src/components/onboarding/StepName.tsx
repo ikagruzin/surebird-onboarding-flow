@@ -33,6 +33,7 @@ const StepName = ({ firstName, lastName, onUpdate, onNext, onBack }: StepNamePro
             value={firstName}
             onChange={(e) => onUpdate("firstName", e.target.value)}
             maxLength={100}
+            autoFocus
           />
           <FloatingLabelInput
             label="Last name"

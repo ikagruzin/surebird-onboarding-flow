@@ -49,6 +49,7 @@ const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack }: StepBirthdatePro
             onChange={handleChange}
             maxLength={10}
             inputMode="numeric"
+            autoFocus
           />
         </div>
 

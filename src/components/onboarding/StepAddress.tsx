@@ -137,6 +137,7 @@ const StepAddress = ({
               value={postcode}
               onChange={(e) => onUpdate("postcode", e.target.value.toUpperCase())}
               maxLength={7}
+              autoFocus
             />
             <FloatingLabelInput
               label="House number"
