@@ -27,6 +27,7 @@ const Index = () => {
     postcode: "",
     houseNumber: "",
     addition: "",
+    birthdate: "",
     includeFamily: "",
   });
 
