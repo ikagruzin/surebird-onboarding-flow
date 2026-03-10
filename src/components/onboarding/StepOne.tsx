@@ -229,7 +229,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
               onClick={() => onBundleSelect(preset.insuranceIds)}
               className={`text-left rounded-xl border overflow-hidden transition-all hover:shadow-md ${
                 isActive
-                  ? "border-[#0177E5] ring-2 ring-[#0177E5]/20 shadow-md"
+                  ? "border-[#0177E5] bg-[#0385FF]/10 ring-2 ring-[#0177E5]/20 shadow-md"
                   : "border-border bg-card"
               }`}
             >
@@ -239,7 +239,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                   alt={bundleT?.title || preset.title}
                   className="w-full h-full object-cover"
                 />
-                <span className="absolute bottom-3 left-3 inline-flex items-center bg-card text-success text-xs font-semibold px-3 py-1.5 rounded-full border border-success/30">
+                <span className="absolute bottom-3 left-3 inline-flex items-center bg-card text-success text-xs font-semibold px-3 py-1.5 rounded-full border border-[#EEEEEE]">
                   {t.saveAnnually} €{preset.annualSavings}
                 </span>
               </div>
