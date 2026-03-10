@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { INSURANCE_TYPES } from "./types";
 import type { BundlePreset } from "./types";
 import bundleHomeFamily from "@/assets/bundle-home-family.png";
@@ -14,7 +14,7 @@ import iconCaravan from "@/assets/icon-caravan.svg";
 import iconTravel from "@/assets/icon-travel.svg";
 import logoSurebird from "@/assets/logo-surebird.svg";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
-import { MessageCircle, Globe, User, LayoutGrid, Layers } from "lucide-react";
+import { MessageCircle, Globe, User, LayoutGrid, Layers, GalleryHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Plane: <img src={iconTravel} alt="Travel" className="w-10 h-10" />,
@@ -96,6 +96,7 @@ const TRANSLATIONS = {
     saveAnnually: "Save annually",
     versionA: "Version A",
     versionB: "Version B",
+    versionC: "Version C",
     login: "Log in",
     askTaco: "Ask Taco",
     tacoReady: "I'm ready to assist you",
@@ -131,6 +132,7 @@ const TRANSLATIONS = {
     saveAnnually: "Jaarlijks besparen",
     versionA: "Versie A",
     versionB: "Versie B",
+    versionC: "Versie C",
     login: "Inloggen",
     askTaco: "Vraag Taco",
     tacoReady: "Ik sta klaar om u te helpen",
@@ -163,7 +165,8 @@ interface StepOneProps {
 }
 
 const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) => {
-  const [version, setVersion] = useState<"A" | "B">("A");
+  const [version, setVersion] = useState<"A" | "B" | "C">("A");
+  const sliderRef = useRef<HTMLDivElement>(null);
   const [language, setLanguage] = useState<"en" | "nl">("en");
 
   const isActiveBundle = (preset: BundlePreset) =>
@@ -262,6 +265,88 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
     </div>
   );
 
+  const scrollSlider = (direction: "left" | "right") => {
+    if (!sliderRef.current) return;
+    const scrollAmount = sliderRef.current.offsetWidth * 0.6;
+    sliderRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  const BundleSlider = ({ showHeader = true }: { showHeader?: boolean }) => (
+    <div>
+      {showHeader && (
+        <>
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+            {t.bundleHeading}
+          </h2>
+          <p className="text-muted-foreground mb-4">
+            {t.bundleSubtitle}
+          </p>
+        </>
+      )}
+      <div className="flex items-center gap-2 justify-end mb-4">
+        <button
+          onClick={() => scrollSlider("left")}
+          className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
+        >
+          <ChevronLeft className="w-5 h-5 text-foreground" />
+        </button>
+        <button
+          onClick={() => scrollSlider("right")}
+          className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
+        >
+          <ChevronRight className="w-5 h-5 text-foreground" />
+        </button>
+      </div>
+      <div
+        ref={sliderRef}
+        className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {BUNDLE_PRESETS.map((preset) => {
+          const isActive = isActiveBundle(preset);
+          const bundleT = t.bundles[preset.id as keyof typeof t.bundles];
+          return (
+            <button
+              key={preset.id}
+              onClick={() => onBundleSelect(preset.insuranceIds)}
+              className={`text-left rounded-xl border overflow-hidden transition-all hover:shadow-md snap-start shrink-0 w-[calc(50%-8px)] min-w-[260px] ${
+                isActive
+                  ? "border-[#0177E5] bg-[#0385FF]/10 ring-2 ring-[#0177E5]/20 shadow-md"
+                  : "border-border bg-card"
+              }`}
+            >
+              <div className="relative h-40 overflow-hidden bg-muted">
+                <img
+                  src={preset.image}
+                  alt={bundleT?.title || preset.title}
+                  className="w-full h-full object-cover"
+                />
+                <span className="absolute bottom-3 left-3 inline-flex items-center bg-card text-success text-xs font-semibold px-3 py-1.5 rounded-full border border-[#EEEEEE]">
+                  {t.saveAnnually} €{preset.annualSavings}
+                </span>
+              </div>
+              <div className="p-5">
+                <h3 className="text-lg font-bold text-foreground mb-1">{bundleT?.title || preset.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4">{bundleT?.description || preset.description}</p>
+                <div className="flex gap-3 text-muted-foreground">
+                  {preset.insuranceIds.map((id) => {
+                    const ins = INSURANCE_TYPES.find((it) => it.id === id);
+                    return ins ? (
+                      <span key={id}>{SMALL_ICON_MAP[ins.icon]}</span>
+                    ) : null;
+                  })}
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
@@ -320,6 +405,17 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
              <Layers className="w-3.5 h-3.5" />
               {t.versionB}
             </button>
+            <button
+              onClick={() => setVersion("C")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                version === "C"
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+             <GalleryHorizontal className="w-3.5 h-3.5" />
+              {t.versionC}
+            </button>
           </div>
 
           {/* Language switcher */}
@@ -371,7 +467,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                   <BundlePresets />
                 </div>
               </>
-            ) : (
+            ) : version === "B" ? (
               <>
                 <BundlePresets showHeader={false} />
                 <div className="mt-16">
@@ -382,6 +478,13 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
                     {t.individualSubtitle}
                   </p>
                   <InsuranceGrid />
+                </div>
+              </>
+            ) : (
+              <>
+                <InsuranceGrid />
+                <div className="mt-16">
+                  <BundleSlider />
                 </div>
               </>
             )}
