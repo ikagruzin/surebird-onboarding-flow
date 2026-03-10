@@ -83,6 +83,8 @@ const Index = () => {
         return pc.length >= 6 && state.houseNumber.trim().length > 0;
       }
       case 4:
+        return state.birthdate.trim().length > 0;
+      case 5:
         return !!state.includeFamily;
       default:
         return true;
