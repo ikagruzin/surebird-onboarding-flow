@@ -73,12 +73,13 @@ const Index = () => {
   ).reduce((sum, t) => sum + t.savings, 0);
 
   const isStep1 = state.currentStep === 1;
-  const isAboutYou = state.currentStep >= 2 && state.currentStep <= 6;
+  const isReadyStep = state.currentStep === 7;
+  const isAboutYou = state.currentStep >= 2 && state.currentStep <= 7;
 
   // "About you" sub-step progress: steps 2-6 → sub-steps 1-5
   const aboutYouSubStep = state.currentStep - 1;
   const aboutYouTotalSubs = state.familyStatus === "single" ? 4 : 5;
-  const aboutYouProgress = (Math.min(aboutYouSubStep, aboutYouTotalSubs) / aboutYouTotalSubs) * 100;
+  const aboutYouProgress = isReadyStep ? 100 : (Math.min(aboutYouSubStep, aboutYouTotalSubs) / aboutYouTotalSubs) * 100;
 
   const canProceedAboutYou = () => {
     switch (state.currentStep) {
@@ -238,7 +239,6 @@ const Index = () => {
   // Map wizard steps to sidebar steps:
   // 1 = product selection, 2-6 = About you, 7 = ready, 8-9 = Your preferences, 10 = Your offer, 11+ = Finalise
   const isFamilySelectStep = state.currentStep === 5;
-  const isReadyStep = state.currentStep === 7;
   const sidebarStep =
     state.currentStep <= 1
       ? 1
