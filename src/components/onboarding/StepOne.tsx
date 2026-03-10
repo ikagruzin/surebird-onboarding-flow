@@ -433,7 +433,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             <h1 className="text-[32px] leading-tight font-bold text-foreground mb-3">
               {version === "A" ? t.heading : t.bundleHeading}
             </h1>
-            <p className="mb-8" style={{ color: '#313131' }}>
+            <p className="mb-8 text-subtitle">
               {version === "A" ? t.subtitle : t.bundleSubtitle}
             </p>
 
