@@ -123,7 +123,7 @@ const TRANSLATIONS = {
   },
   nl: {
     heading: "Kies uw verzekeringen",
-    subtitle: "Bespaar het meest met onze pakketten. Selecteer het pakket dat het beste bij u past en profiteer van de maximale besparing.",
+    subtitle: "Slim verzekerd: bespaar tot €300 per jaar op een pakket van 6 verzekeringen!",
     bundleHeading: "Bespaar het meest met onze pakketten",
     bundleSubtitle: "Onze klanten besparen altijd het meest met onze pakketten in plaats van losse verzekeringen. Selecteer het pakket dat het beste bij u past en profiteer van de maximale besparing.",
     individualHeading: "Of kies losse verzekeringen",
