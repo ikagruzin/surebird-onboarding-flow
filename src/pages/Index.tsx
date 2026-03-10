@@ -149,12 +149,33 @@ const Index = () => {
       case 5:
         return (
           <StepFamily
-            includeFamily={state.includeFamily}
-            onUpdate={(value) =>
-              setState((s) => ({ ...s, includeFamily: value }))
-            }
-            onNext={() => setStep(6)}
+            familyStatus={state.familyStatus}
+            onSelect={(value) => {
+              setState((s) => ({ ...s, familyStatus: value }));
+              if (value === "single") {
+                // Skip family details, go to preferences
+                setStep(7);
+              } else {
+                setStep(6);
+              }
+            }}
             onBack={() => setStep(4)}
+          />
+        );
+      case 6:
+        return (
+          <StepFamilyDetails
+            familyStatus={state.familyStatus}
+            insurePartner={state.insurePartner}
+            childrenCount={state.childrenCount}
+            onUpdatePartner={(value) =>
+              setState((s) => ({ ...s, insurePartner: value }))
+            }
+            onUpdateChildren={(value) =>
+              setState((s) => ({ ...s, childrenCount: value }))
+            }
+            onNext={() => setStep(7)}
+            onBack={() => setStep(5)}
           />
         );
       case 6:
