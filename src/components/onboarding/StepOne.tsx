@@ -87,7 +87,7 @@ const ADVANTAGES = {
 const TRANSLATIONS = {
   en: {
     heading: "Choose your insurances",
-    subtitle: "Save the most with our packages. Select the package which suits you best and benefit from the maximum savings.",
+    subtitle: "Smartly insured: save up to €300 a year on a package of 6 insurances!",
     bundleHeading: "Save the most with our packages",
     bundleSubtitle: "Our customers always save the most with our packages instead of single insurance. Select the package which suits you best and benefit from the maximum savings.",
     individualHeading: "Or choose individual insurances",
@@ -123,7 +123,7 @@ const TRANSLATIONS = {
   },
   nl: {
     heading: "Kies uw verzekeringen",
-    subtitle: "Bespaar het meest met onze pakketten. Selecteer het pakket dat het beste bij u past en profiteer van de maximale besparing.",
+    subtitle: "Slim verzekerd: bespaar tot €300 per jaar op een pakket van 6 verzekeringen!",
     bundleHeading: "Bespaar het meest met onze pakketten",
     bundleSubtitle: "Onze klanten besparen altijd het meest met onze pakketten in plaats van losse verzekeringen. Selecteer het pakket dat het beste bij u past en profiteer van de maximale besparing.",
     individualHeading: "Of kies losse verzekeringen",
@@ -267,8 +267,11 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
 
   const scrollSlider = (direction: "left" | "right") => {
     if (!sliderRef.current) return;
-    const scrollAmount = sliderRef.current.offsetWidth * 0.6;
-    sliderRef.current.scrollBy({
+    const container = sliderRef.current;
+    const cardWidth = container.querySelector("button")?.offsetWidth || 300;
+    const gap = 16;
+    const scrollAmount = cardWidth + gap;
+    container.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
     });
@@ -302,9 +305,10 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
       </div>
       <div
         ref={sliderRef}
-        className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
       >
+        <style>{`div::-webkit-scrollbar { display: none; }`}</style>
         {BUNDLE_PRESETS.map((preset) => {
           const isActive = isActiveBundle(preset);
           const bundleT = t.bundles[preset.id as keyof typeof t.bundles];
@@ -482,9 +486,15 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
               </>
             ) : (
               <>
-                <InsuranceGrid />
+                <BundleSlider showHeader={false} />
                 <div className="mt-16">
-                  <BundleSlider />
+                  <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+                    {t.individualHeading}
+                  </h2>
+                  <p className="text-muted-foreground mb-8">
+                    {t.individualSubtitle}
+                  </p>
+                  <InsuranceGrid />
                 </div>
               </>
             )}
