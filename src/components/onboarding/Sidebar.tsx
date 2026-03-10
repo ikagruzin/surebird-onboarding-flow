@@ -12,7 +12,7 @@ const Sidebar = ({ currentStep, visible = true }: SidebarProps) => {
   if (!visible) return null;
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 border-r border-border p-6 pb-20 justify-between shrink-0">
+    <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 p-6 pb-20 justify-between shrink-0">
       <div>
         <div className="flex items-center gap-2 mb-10">
           <img src={logoSurebird} alt="Surebird" className="h-8" />
@@ -60,7 +60,7 @@ const Sidebar = ({ currentStep, visible = true }: SidebarProps) => {
       </div>
 
       {/* Ask Taco */}
-      <div className="border border-border rounded-xl p-4">
+      <div className="p-4">
         <div className="flex items-center gap-3 mb-3">
           <img
             src={tacoAvatar}
