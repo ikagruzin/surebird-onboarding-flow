@@ -514,7 +514,7 @@ const StepPreferences = ({
                   <button
                     key={opt.value}
                     onClick={() => handleSelectOption(currentQuestion.id, opt.value)}
-                    className={`flex items-center justify-between px-4 py-3.5 rounded-xl border-2 transition-all text-left ${
+                    className={`flex items-center justify-between px-4 py-3.5 rounded-xl border-2 transition-all text-left shadow-sm ${
                       isSelected
                         ? "border-primary bg-primary/5"
                         : "border-border hover:border-muted-foreground/30"
