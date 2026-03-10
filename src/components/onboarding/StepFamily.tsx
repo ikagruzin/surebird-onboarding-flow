@@ -20,7 +20,7 @@ const OPTIONS = [
 const StepFamily = ({ familyStatus, onSelect }: StepFamilyProps) => {
   return (
     <div className="animate-fade-in">
-      <div className="bg-card rounded-xl border border-border p-6">
+      <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
         <div className="flex items-start gap-3 mb-8">
           <img
             src={tacoAvatar}

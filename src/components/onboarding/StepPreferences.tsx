@@ -290,10 +290,10 @@ const StepPreferences = ({
           <button
             key={id}
             onClick={() => handleTabClick(id)}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all shadow-sm ${
               isActive
                 ? "bg-foreground text-background"
-                : "bg-card border border-border text-foreground"
+                : "bg-white border-2 border-border text-foreground"
             }`}
           >
             {isComplete ? (
@@ -302,7 +302,7 @@ const StepPreferences = ({
               <img
                 src={ICON_MAP[ins.icon]}
                 alt={ins.label}
-                className={`w-7 h-7 ${isActive ? "brightness-0 invert" : ""}`}
+                className={`w-8 h-8 ${isActive ? "brightness-0 invert" : ""}`}
               />
             )}
             {ins.label}
@@ -311,7 +311,7 @@ const StepPreferences = ({
       })}
       <button
         onClick={handleOpenAddModal}
-        className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
+        className="w-11 h-11 rounded-full border-2 border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors shadow-sm"
       >
         <Plus className="w-4 h-4" />
       </button>
@@ -391,10 +391,10 @@ const StepPreferences = ({
         {renderProductTabs()}
         <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
-        <div className="bg-card rounded-xl border border-border p-6">
+        <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
           <div className="flex items-start gap-3 mb-6">
             <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-            <p className="text-[20px] font-semibold text-foreground">
+            <p className="text-base font-semibold text-foreground">
               We are almost there, {firstName} 🙌
               <br />
               Just a few more details and you'll get your personal offer!
@@ -446,12 +446,12 @@ const StepPreferences = ({
       <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
       {/* Questions card */}
-      <div className="bg-card rounded-xl border border-border p-6">
+      <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
         {showAllQuestions ? (
           <>
             <div className="flex items-start gap-3 mb-6">
               <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-              <p className="text-[20px] font-semibold text-foreground">
+              <p className="text-base font-semibold text-foreground">
                 {introMessage}
               </p>
             </div>
@@ -460,7 +460,7 @@ const StepPreferences = ({
               {questions.map((q) => (
                 <div key={q.id}>
                   <div className="flex items-center gap-2 mb-3">
-                    <p className="text-[20px] font-semibold text-foreground">{q.label}</p>
+                    <p className="text-base font-semibold text-foreground">{q.label}</p>
                     {q.infoText && <Info className="w-4 h-4 text-muted-foreground" />}
                   </div>
                   <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
@@ -470,7 +470,7 @@ const StepPreferences = ({
                         <button
                           key={opt.value}
                           onClick={() => handleSelectOption(q.id, opt.value)}
-                          className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 transition-all text-left ${
+                          className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 transition-all text-left shadow-sm ${
                             isSelected
                               ? "border-primary bg-primary/5"
                               : "border-border hover:border-muted-foreground/30"
@@ -496,7 +496,7 @@ const StepPreferences = ({
           <>
             <div className="flex items-start gap-3 mb-8">
               <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-              <p className="text-[20px] font-semibold text-foreground">
+              <p className="text-base font-semibold text-foreground">
                 {currentQuestion?.label}
               </p>
             </div>
@@ -514,7 +514,7 @@ const StepPreferences = ({
                   <button
                     key={opt.value}
                     onClick={() => handleSelectOption(currentQuestion.id, opt.value)}
-                    className={`flex items-center justify-between px-4 py-3.5 rounded-xl border-2 transition-all text-left ${
+                    className={`flex items-center justify-between px-4 py-3.5 rounded-xl border-2 transition-all text-left shadow-sm ${
                       isSelected
                         ? "border-primary bg-primary/5"
                         : "border-border hover:border-muted-foreground/30"
