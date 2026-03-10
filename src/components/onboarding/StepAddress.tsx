@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Input } from "@/components/ui/input";
+import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import {
   Select,
   SelectContent,
