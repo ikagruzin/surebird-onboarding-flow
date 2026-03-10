@@ -195,12 +195,19 @@ const Index = () => {
           <StepPreferences
             selectedInsurances={state.selectedInsurances}
             preferences={state.preferences}
+            firstName={state.firstName}
+            phone={state.phone}
             onUpdatePreference={updatePreference}
+            onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
             onNext={() => setStep(9)}
             onBack={() => setStep(7)}
           />
         );
       case 9:
+        return (
+          <StepLoading
+            onComplete={() => setStep(10)}
+          />
         return (
           <StepUpsell
             selectedInsurances={state.selectedInsurances}
