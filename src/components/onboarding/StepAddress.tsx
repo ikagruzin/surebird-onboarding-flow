@@ -28,17 +28,13 @@ interface StepAddressProps {
   onBack: () => void;
 }
 
-// Mock address lookup — in production, replace with a real Dutch postcode API
+// Mock address lookup
 async function lookupAddress(
   postcode: string,
   houseNumber: string
 ): Promise<AddressResult | null> {
-  // Simulate API delay
   await new Promise((r) => setTimeout(r, 600));
-
   const pc = postcode.replace(/\s/g, "").toUpperCase();
-
-  // Mock data for demo
   const DB: Record<string, Record<string, AddressResult>> = {
     "1053TM": {
       "8": {
@@ -57,7 +53,6 @@ async function lookupAddress(
       },
     },
   };
-
   return DB[pc]?.[houseNumber] ?? null;
 }
 
@@ -106,15 +101,9 @@ const StepAddress = ({
   const hasAdditions =
     addressResult && addressResult.additions.filter((a) => a !== "").length > 0;
 
-  const canProceed =
-    addressResult != null &&
-    postcode.trim().length >= 6 &&
-    houseNumber.trim().length > 0 &&
-    (hasAdditions ? addition !== "" : true);
-
   return (
     <div className="animate-fade-in">
-      <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+      <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="flex items-start gap-3 mb-12">
           <img
             src={tacoAvatar}
@@ -137,7 +126,7 @@ const StepAddress = ({
               value={postcode}
               onChange={(e) => onUpdate("postcode", e.target.value.toUpperCase())}
               maxLength={7}
-              autoFocus
+              autoFocus={!postcode}
             />
             <FloatingLabelInput
               label="House number"

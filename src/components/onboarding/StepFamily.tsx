@@ -20,12 +20,12 @@ const OPTIONS = [
 const StepFamily = ({ familyStatus, onSelect }: StepFamilyProps) => {
   return (
     <div className="animate-fade-in">
-      <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
-        <div className="flex items-start gap-3 mb-8">
+      <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
+        <div className="flex items-center gap-3 mb-8">
           <img
             src={tacoAvatar}
             alt="Tako"
-            className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
+            className="w-10 h-10 rounded-full object-cover shrink-0"
           />
           <p className="text-base font-semibold text-foreground">
             What is your family status?

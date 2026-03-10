@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from "react";
 import { Check, Plus, Info, X } from "lucide-react";
 import { INSURANCE_TYPES } from "./types";
 import { Progress } from "@/components/ui/progress";
@@ -154,11 +154,16 @@ const DEFAULT_PREFERENCES: Record<string, Record<string, string>> = {
   },
 };
 
+export interface StepPreferencesHandle {
+  handleBack: () => boolean; // returns true if handled internally
+}
+
 interface StepPreferencesProps {
   selectedInsurances: string[];
   preferences: Record<string, Record<string, string>>;
   firstName: string;
   phone: string;
+  savings: number;
   onUpdatePreference: (insuranceId: string, questionId: string, value: string) => void;
   onUpdatePhone: (value: string) => void;
   onAddInsurances: (ids: string[]) => void;
@@ -166,17 +171,18 @@ interface StepPreferencesProps {
   onBack: () => void;
 }
 
-const StepPreferences = ({
+const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(({
   selectedInsurances,
   preferences,
   firstName,
   phone,
+  savings,
   onUpdatePreference,
   onUpdatePhone,
   onAddInsurances,
   onNext,
   onBack,
-}: StepPreferencesProps) => {
+}, ref) => {
   const [activeTab, setActiveTab] = useState(selectedInsurances[0]);
   const [completedTabs, setCompletedTabs] = useState<string[]>([]);
   const [questionStep, setQuestionStep] = useState(0);
@@ -205,6 +211,12 @@ const StepPreferences = ({
   const showAllQuestions = questions.every(q => !q.autoAdvance);
   const allQuestionsAnswered = questions.every((q) => currentPrefs[q.id]);
 
+  // Check if a tab is fully completed
+  const isTabComplete = (id: string) => {
+    const qs = QUESTIONS_BY_TYPE[id] || [];
+    return qs.length > 0 && qs.every(q => (preferences[id] || {})[q.id]);
+  };
+
   // Total progress across all products
   const totalQuestions = selectedInsurances.reduce((sum, id) => sum + (QUESTIONS_BY_TYPE[id]?.length || 0), 0);
   const answeredQuestions = selectedInsurances.reduce((sum, id) => {
@@ -212,6 +224,29 @@ const StepPreferences = ({
     return sum + qs.filter(q => (preferences[id] || {})[q.id]).length;
   }, 0);
   const progressPercent = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
+
+  // Expose back handler to parent
+  useImperativeHandle(ref, () => ({
+    handleBack: () => {
+      if (showPhoneStep) {
+        setShowPhoneStep(false);
+        return true;
+      }
+      if (questionStep > 0) {
+        setQuestionStep(questionStep - 1);
+        return true;
+      }
+      const currentIndex = selectedInsurances.indexOf(activeTab);
+      if (currentIndex > 0) {
+        const prevTab = selectedInsurances[currentIndex - 1];
+        setActiveTab(prevTab);
+        const prevQuestions = QUESTIONS_BY_TYPE[prevTab] || [];
+        setQuestionStep(Math.max(0, prevQuestions.length - 1));
+        return true;
+      }
+      return false; // parent should handle
+    },
+  }), [showPhoneStep, questionStep, activeTab, selectedInsurances]);
 
   const handleSelectOption = (questionId: string, value: string) => {
     onUpdatePreference(activeTab, questionId, value);
@@ -251,7 +286,6 @@ const StepPreferences = ({
     }
   };
 
-  // Handle switching tabs freely
   const handleTabClick = (id: string) => {
     setActiveTab(id);
     setQuestionStep(0);
@@ -279,25 +313,35 @@ const StepPreferences = ({
     setShowAddModal(false);
   };
 
-  // Shared product tabs renderer
+  const formattedSavings = savings.toLocaleString("nl-NL", {
+    style: "currency",
+    currency: "EUR",
+  });
+
+  // Extra savings from adding more products
+  const extraSavings = nonSelectedProducts.reduce((sum, t) => sum + t.savings, 0);
+
+  // Product tabs
   const renderProductTabs = () => (
-    <div className="flex flex-wrap gap-2 mb-4">
+    <div className="flex flex-wrap items-center gap-2 mb-4">
       {selectedInsurances.map((id) => {
         const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
         const isActive = activeTab === id && !showPhoneStep;
-        const isComplete = completedTabs.includes(id);
+        const isComplete = isTabComplete(id) || completedTabs.includes(id);
         return (
           <button
             key={id}
             onClick={() => handleTabClick(id)}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all shadow-sm ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border ${
               isActive
-                ? "bg-foreground text-background"
-                : "bg-white border-2 border-border text-foreground"
+                ? "bg-foreground text-background border-foreground"
+                : "bg-white border-tab-border text-foreground"
             }`}
           >
             {isComplete ? (
-              <Check className="w-4 h-4 text-success" />
+              <span className="w-6 h-6 rounded-full bg-success flex items-center justify-center">
+                <Check className="w-3.5 h-3.5 text-white" />
+              </span>
             ) : (
               <img
                 src={ICON_MAP[ins.icon]}
@@ -311,7 +355,7 @@ const StepPreferences = ({
       })}
       <button
         onClick={handleOpenAddModal}
-        className="w-11 h-11 rounded-full border-2 border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors shadow-sm"
+        className="h-[44px] px-4 rounded-full border border-tab-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
       >
         <Plus className="w-4 h-4" />
       </button>
@@ -322,7 +366,12 @@ const StepPreferences = ({
   const renderAddModal = () => {
     if (!showAddModal) return null;
     return (
-      <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40">
+      <div
+        className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setShowAddModal(false);
+        }}
+      >
         <div className="bg-card rounded-2xl border border-border shadow-xl w-full max-w-md mx-4 p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-foreground">Add products</h2>
@@ -341,38 +390,46 @@ const StepPreferences = ({
                   <button
                     key={ins.id}
                     onClick={() => handleToggleAddProduct(ins.id)}
-                    className={`flex items-center gap-3 w-full px-4 py-3.5 rounded-xl border-2 transition-all text-left ${
+                    className={`flex items-center gap-3 w-full px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
                       isChecked
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-muted-foreground/30"
+                        ? "border-primary bg-primary/5 shadow-md"
+                        : "border-border hover:border-primary/40"
                     }`}
                   >
+                    <img src={ICON_MAP[ins.icon]} alt={ins.label} className="w-10 h-10" />
+                    <span className="text-sm font-medium text-foreground flex-1">{ins.label}</span>
                     <div
                       className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 ${
-                        isChecked ? "border-primary bg-primary" : "border-muted-foreground/40"
+                        isChecked ? "border-primary bg-primary" : "border-border"
                       }`}
                     >
-                      {isChecked && <Check className="w-3 h-3 text-white" />}
+                      {isChecked && (
+                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
                     </div>
-                    <img src={ICON_MAP[ins.icon]} alt={ins.label} className="w-7 h-7" />
-                    <span className="text-sm font-medium text-foreground">{ins.label}</span>
                   </button>
                 );
               })}
             </div>
           )}
 
-          <div className="flex gap-3">
-            <button
-              onClick={() => setShowAddModal(false)}
-              className="flex-1 px-4 py-3 rounded-full border border-border text-foreground font-medium hover:bg-muted transition-colors"
-            >
-              Cancel
-            </button>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-foreground">Estimated savings:</span>
+              <span className="inline-flex items-center gap-1 bg-success/10 border border-success/20 rounded-full px-3 py-1">
+                <span className="text-base font-bold text-success">{formattedSavings}</span>
+              </span>
+            </div>
             <button
               onClick={handleSaveAddModal}
               disabled={addModalSelection.length === 0}
-              className="flex-1 px-4 py-3 rounded-full bg-success text-success-foreground font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
+              className="px-6 py-3 rounded-full text-success-foreground font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              style={{
+                background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
+                boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
+              }}
             >
               Save
             </button>
@@ -391,7 +448,7 @@ const StepPreferences = ({
         {renderProductTabs()}
         <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
-        <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+        <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
           <div className="flex items-start gap-3 mb-6">
             <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
             <p className="text-base font-semibold text-foreground">
@@ -446,7 +503,7 @@ const StepPreferences = ({
       <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
       {/* Questions card */}
-      <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+      <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         {showAllQuestions ? (
           <>
             <div className="flex items-start gap-3 mb-6">
@@ -494,8 +551,8 @@ const StepPreferences = ({
           </>
         ) : (
           <>
-            <div className="flex items-start gap-3 mb-8">
-              <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
+            <div className="flex items-center gap-3 mb-8">
+              <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0" />
               <p className="text-base font-semibold text-foreground">
                 {currentQuestion?.label}
               </p>
@@ -558,6 +615,8 @@ const StepPreferences = ({
       {renderAddModal()}
     </div>
   );
-};
+});
+
+StepPreferences.displayName = "StepPreferences";
 
 export default StepPreferences;

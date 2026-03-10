@@ -12,7 +12,7 @@ interface StepNameProps {
 const StepName = ({ firstName, lastName, onUpdate, onNext, onBack }: StepNameProps) => {
   return (
     <div className="animate-fade-in">
-      <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+      <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="flex items-start gap-3 mb-12">
           <img
             src={tacoAvatar}
@@ -33,7 +33,7 @@ const StepName = ({ firstName, lastName, onUpdate, onNext, onBack }: StepNamePro
             value={firstName}
             onChange={(e) => onUpdate("firstName", e.target.value)}
             maxLength={100}
-            autoFocus
+            autoFocus={!firstName}
           />
           <FloatingLabelInput
             label="Last name"
