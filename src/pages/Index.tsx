@@ -228,15 +228,15 @@ const Index = () => {
   };
 
   // Map wizard steps to sidebar steps:
-  // 1 = product selection, 2-5 = About you, 6-7 = Your preferences, 8 = Your offer, 9+ = Finalise
+  // 1 = product selection, 2-6 = About you, 7-8 = Your preferences, 9 = Your offer, 10+ = Finalise
   const sidebarStep =
     state.currentStep <= 1
       ? 1
-      : state.currentStep <= 5
+      : state.currentStep <= 6
       ? 1
-      : state.currentStep <= 7
+      : state.currentStep <= 8
       ? 2
-      : state.currentStep === 8
+      : state.currentStep === 9
       ? 3
       : 4;
 
