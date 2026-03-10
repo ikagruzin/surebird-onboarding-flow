@@ -85,7 +85,7 @@ const StepPackage = ({
             <button
               onClick={onEmailSubmit}
               disabled={!email.includes("@")}
-              className="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold text-sm disabled:opacity-40 hover:opacity-90 transition-opacity"
+              className="bg-primary text-primary-foreground px-6 py-3 rounded-full font-semibold text-sm disabled:opacity-40 hover:opacity-90 transition-opacity"
             >
               View
             </button>
