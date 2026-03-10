@@ -226,7 +226,7 @@ const StepPackage = ({
         <button
           onClick={onNext}
           disabled={!emailSubmitted}
-          className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-7 py-3 rounded-lg font-semibold text-base disabled:opacity-40 hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-7 py-3 rounded-full font-semibold text-base disabled:opacity-40 hover:opacity-90 transition-opacity"
         >
           Continue
           <ChevronRight className="w-5 h-5" />

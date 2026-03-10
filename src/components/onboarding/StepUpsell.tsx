@@ -80,7 +80,7 @@ const StepUpsell = ({ selectedInsurances, onToggle, onNext, onBack }: StepUpsell
       <div className="flex justify-end mt-8">
         <button
           onClick={onNext}
-          className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-7 py-3 rounded-lg font-semibold text-base hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-7 py-3 rounded-full font-semibold text-base hover:opacity-90 transition-opacity"
         >
           Next step
           <ChevronRight className="w-5 h-5" />
