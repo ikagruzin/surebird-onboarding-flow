@@ -90,7 +90,9 @@ const Index = () => {
       case 4:
         return state.birthdate.trim().length > 0;
       case 5:
-        return !!state.includeFamily;
+        return !!state.familyStatus;
+      case 6:
+        return true; // family details - always can proceed
       default:
         return true;
     }
