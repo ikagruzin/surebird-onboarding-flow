@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { INSURANCE_TYPES } from "./types";
 import type { BundlePreset } from "./types";
+import Sidebar from "./Sidebar";
 import bundleHomeFamily from "@/assets/bundle-home-family.png";
 import bundleBusinessTravel from "@/assets/bundle-business-travel.png";
 import bundlePopular from "@/assets/bundle-popular.png";
@@ -12,9 +13,7 @@ import iconLegal from "@/assets/icon-legal.svg";
 import iconAccidents from "@/assets/icon-accidents.svg";
 import iconCaravan from "@/assets/icon-caravan.svg";
 import iconTravel from "@/assets/icon-travel.svg";
-import logoSurebird from "@/assets/logo-surebird.svg";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
-import { MessageCircle, Globe, User, LayoutGrid, Layers, GalleryHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
+import { Globe, User, LayoutGrid, Layers, GalleryHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Plane: <img src={iconTravel} alt="Travel" className="w-10 h-10" />,
