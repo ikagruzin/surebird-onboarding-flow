@@ -28,6 +28,7 @@ export interface WizardState {
   phone: string;
   startDates: Record<string, string>;
   iban: string;
+  acceptanceAnswers: Record<string, string>;
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [

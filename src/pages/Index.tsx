@@ -423,6 +423,7 @@ const Index = () => {
             isStartDateStep ? !canProceedStartDate() :
             isConfirmStep ? !(state.firstName && state.lastName && state.email.includes("@")) :
             isIdinStep ? !canProceedIdin() :
+            isAcceptanceStep ? false :
             state.selectedInsurances.length === 0
           }
           buttonLabel={
@@ -430,6 +431,7 @@ const Index = () => {
             isStartDateStep ? "Go further" :
             isConfirmStep ? "Next" :
             isIdinStep ? "Confirm & continue" :
+            isAcceptanceStep ? "Continue" :
             "Next"
           }
           hasSidebar={true}
