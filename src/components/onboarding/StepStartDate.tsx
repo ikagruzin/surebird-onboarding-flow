@@ -193,7 +193,7 @@ const StepStartDate = ({
           <div className="pt-2">
             <DateInput
               value={unifiedDate}
-              onChange={(v) => handleUnifiedDateChange(v)}
+              onChange={(v, prev) => handleUnifiedDateChange(v, prev)}
               onToday={handleUnifiedToday}
             />
           </div>
