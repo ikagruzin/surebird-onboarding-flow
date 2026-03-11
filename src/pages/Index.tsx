@@ -406,7 +406,7 @@ const Index = () => {
   // Step 1 has its own full layout with sidebar
   if (isStep1) {
     return (
-      <>
+      <div className="pb-28">
         {renderStep()}
         <StickyFooter
           savings={totalSavings}
