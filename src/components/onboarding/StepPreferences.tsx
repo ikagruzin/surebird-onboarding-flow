@@ -727,7 +727,12 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
                           >
                             {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                           </div>
-                          <span className="text-base font-bold text-foreground">{opt.label}</span>
+                          <span className="text-base font-bold text-foreground flex-1">{opt.label}</span>
+                          {opt.badge && (
+                            <span className="text-xs font-medium bg-success/10 text-success px-2.5 py-1 rounded-full">
+                              {opt.badge}
+                            </span>
+                          )}
                         </div>
                         {opt.subText && (
                           <p className="text-sm text-muted-foreground mb-2 ml-8">{opt.subText}</p>

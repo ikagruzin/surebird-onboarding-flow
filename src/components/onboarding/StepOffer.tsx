@@ -105,6 +105,20 @@ const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { 
   home: [
     { id: "own_risk", label: "Own risk", options: [{ value: "0", label: "€0" }, { value: "100", label: "€100" }, { value: "250", label: "€250" }, { value: "500", label: "€500" }] },
   ],
+  travel: [
+    { id: "own_risk", label: "Own risk", options: [{ value: "0", label: "€0" }, { value: "250", label: "€250" }, { value: "500", label: "€500" }] },
+    { id: "sports", label: "Do you play sports on vacation?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
+    { id: "extraordinary_costs", label: "Cover extraordinary costs?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
+    { id: "insure_cash", label: "Insure cash?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
+    { id: "insure_accidents", label: "Insure accidents?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
+    { id: "insure_medical", label: "Insure medical expenses?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
+    { id: "legal_assistance", label: "Cover legal assistance?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
+    { id: "business_travel", label: "Are you going on a business trip?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
+    { id: "luggage", label: "Do you want to insure your luggage?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
+    { id: "cancellation", label: "Do you want cancellation coverage?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
+    { id: "roadside_assistance", label: "Add roadside assistance?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
+    { id: "bike_coverage", label: "Extra coverage for your bike?", options: [{ value: "0", label: "€0" }, { value: "250", label: "€250" }, { value: "500", label: "€500" }] },
+  ],
 };
 
 interface StepOfferProps {
