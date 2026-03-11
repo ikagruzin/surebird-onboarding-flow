@@ -256,31 +256,38 @@ const StepOffer = ({
                 <p className="text-base font-semibold text-foreground">{q.label}</p>
                 <Info className="w-4 h-4 text-muted-foreground" />
               </div>
-              <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : q.options.length <= 4 ? "grid-cols-2" : "grid-cols-1"}`}>
-                {q.options.map((opt) => {
-                  const isSelected = currentPrefs[q.id] === opt.value;
-                  return (
-                    <button
-                      key={opt.value}
-                      onClick={() => onUpdatePreference(id, q.id, opt.value)}
-                      className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl border-2 transition-all text-left ${
-                        isSelected
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-muted-foreground/30"
-                      }`}
-                    >
-                      <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                          isSelected ? "border-primary" : "border-muted-foreground/40"
+              {q.customComponent === "legal_coverage" ? (
+                <LegalCoverageSelector
+                  selected={(currentPrefs[q.id] || "consumer").split(",")}
+                  onChange={(sel) => onUpdatePreference(id, q.id, sel.join(","))}
+                />
+              ) : (
+                <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : q.options.length <= 4 ? "grid-cols-2" : "grid-cols-1"}`}>
+                  {q.options.map((opt) => {
+                    const isSelected = currentPrefs[q.id] === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        onClick={() => onUpdatePreference(id, q.id, opt.value)}
+                        className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl border-2 transition-all text-left ${
+                          isSelected
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:border-muted-foreground/30"
                         }`}
                       >
-                        {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
-                      </div>
-                      <span className="text-sm font-medium text-foreground">{opt.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                            isSelected ? "border-primary" : "border-muted-foreground/40"
+                          }`}
+                        >
+                          {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                        </div>
+                        <span className="text-sm font-medium text-foreground">{opt.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           ))}
         </div>
