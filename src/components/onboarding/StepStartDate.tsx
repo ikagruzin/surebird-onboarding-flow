@@ -70,10 +70,9 @@ const StepStartDate = ({
   // For "yes" mode, use a unified key
   const unifiedDate = startDates["__unified"] || "";
 
-  const handleUnifiedDateChange = (val: string) => {
-    const formatted = formatDateInput(val);
+  const handleUnifiedDateChange = (val: string, prev: string) => {
+    const formatted = val.length >= prev.length ? formatDateInput(val) : val;
     onUpdateStartDate("__unified", formatted);
-    // Propagate to all products
     products.forEach((p) => onUpdateStartDate(p.id, formatted));
   };
 
@@ -83,8 +82,9 @@ const StepStartDate = ({
     products.forEach((p) => onUpdateStartDate(p.id, today));
   };
 
-  const handleIndividualDateChange = (id: string, val: string) => {
-    onUpdateStartDate(id, formatDateInput(val));
+  const handleIndividualDateChange = (id: string, val: string, prev: string) => {
+    const formatted = val.length >= prev.length ? formatDateInput(val) : val;
+    onUpdateStartDate(id, formatted);
   };
 
   const handleIndividualToday = (id: string) => {
@@ -98,7 +98,7 @@ const StepStartDate = ({
     return products.every((p) => isValidDate(startDates[p.id] || ""));
   };
 
-  const DateInput = ({ value, onChange, onToday, label }: { value: string; onChange: (v: string) => void; onToday: () => void; label?: string }) => (
+  const DateInput = ({ value, onChange, onToday, label }: { value: string; onChange: (v: string, prev: string) => void; onToday: () => void; label?: string }) => (
     <div className="space-y-3">
       {label && <p className="text-sm font-medium text-foreground">{label}</p>}
       <div className="flex gap-3">
@@ -106,14 +106,11 @@ const StepStartDate = ({
           <input
             type="text"
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => onChange(e.target.value, value)}
             placeholder="dd-mm-yyyy"
             maxLength={10}
-            className="flex h-14 w-full rounded-xl border-2 border-input bg-white px-4 pr-12 pt-5 pb-1 text-base text-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="flex h-14 w-full rounded-xl border-2 border-input bg-white px-4 pr-12 text-base text-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           />
-          <label className={`pointer-events-none absolute left-4 text-muted-foreground transition-all duration-200 ${value ? "top-2 text-xs" : "top-1/2 -translate-y-1/2 text-base"}`}>
-            Start date
-          </label>
           <CalendarDays className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         </div>
         <button
@@ -150,7 +147,7 @@ const StepStartDate = ({
           </div>
           <DateInput
             value={startDates[product.id] || ""}
-            onChange={(v) => handleIndividualDateChange(product.id, v)}
+            onChange={(v, prev) => handleIndividualDateChange(product.id, v, prev)}
             onToday={() => handleIndividualToday(product.id)}
           />
         </div>
@@ -196,7 +193,7 @@ const StepStartDate = ({
           <div className="pt-2">
             <DateInput
               value={unifiedDate}
-              onChange={(v) => handleUnifiedDateChange(v)}
+              onChange={(v, prev) => handleUnifiedDateChange(v, prev)}
               onToday={handleUnifiedToday}
             />
           </div>
@@ -217,7 +214,7 @@ const StepStartDate = ({
                 </div>
                 <DateInput
                   value={startDates[product.id] || ""}
-                  onChange={(v) => handleIndividualDateChange(product.id, v)}
+                  onChange={(v, prev) => handleIndividualDateChange(product.id, v, prev)}
                   onToday={() => handleIndividualToday(product.id)}
                 />
               </div>
