@@ -13,6 +13,7 @@ import StepLoading from "@/components/onboarding/StepLoading";
 import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepOffer from "@/components/onboarding/StepOffer";
 import StepStartDate from "@/components/onboarding/StepStartDate";
+import StepConfirmDetails from "@/components/onboarding/StepConfirmDetails";
 import Footer from "@/components/onboarding/Footer";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
@@ -284,6 +285,20 @@ const Index = () => {
             onBack={() => setStep(10)}
           />
         );
+      case 12:
+        return (
+          <StepConfirmDetails
+            firstName={state.firstName}
+            lastName={state.lastName}
+            phone={state.phone}
+            email={state.email}
+            onUpdateField={(field, value) =>
+              setState((s) => ({ ...s, [field]: value }))
+            }
+            onNext={() => setStep(13)}
+            onBack={() => setStep(11)}
+          />
+        );
       default:
         return (
           <div className="animate-fade-in text-center py-20">
@@ -312,6 +327,7 @@ const Index = () => {
       ? 3
       : 4;
   const isStartDateStep = state.currentStep === 11;
+  const isConfirmStep = state.currentStep === 12;
 
   // Step 1 has its own full layout with sidebar
   if (isStep1) {
@@ -341,7 +357,7 @@ const Index = () => {
           </div>
         )}
         {renderStep()}
-        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && <Footer />}
+        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && <Footer />}
       </main>
 
       {!isLoadingStep && !isOfferStep && (
@@ -349,16 +365,15 @@ const Index = () => {
           savings={totalSavings}
           onNext={() => {
             if (state.currentStep === 5 && state.familyStatus) {
-              // Already auto-advanced
               return;
             }
             setStep(state.currentStep + 1);
           }}
           onBack={handleBack}
-          disabled={isAboutYou ? !canProceedAboutYou() : isStartDateStep ? !canProceedStartDate() : state.selectedInsurances.length === 0}
-          buttonLabel={isReadyStep ? "Set preferences" : isStartDateStep ? "Go further" : "Next"}
+          disabled={isAboutYou ? !canProceedAboutYou() : isStartDateStep ? !canProceedStartDate() : isConfirmStep ? !(state.firstName && state.lastName && state.email.includes("@")) : state.selectedInsurances.length === 0}
+          buttonLabel={isReadyStep ? "Set preferences" : isStartDateStep ? "Go further" : isConfirmStep ? "Confirm & continue" : "Next"}
           hasSidebar={true}
-          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep && !isStartDateStep}
+          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep}
           showNextButton={state.currentStep !== 5}
         />
       )}
