@@ -83,8 +83,9 @@ const StepStartDate = ({
     products.forEach((p) => onUpdateStartDate(p.id, today));
   };
 
-  const handleIndividualDateChange = (id: string, val: string) => {
-    onUpdateStartDate(id, formatDateInput(val));
+  const handleIndividualDateChange = (id: string, val: string, prev: string) => {
+    const formatted = val.length >= prev.length ? formatDateInput(val) : val;
+    onUpdateStartDate(id, formatted);
   };
 
   const handleIndividualToday = (id: string) => {
