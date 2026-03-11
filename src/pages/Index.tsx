@@ -48,6 +48,8 @@ const Index = () => {
     startDates: {},
     iban: "",
     acceptanceAnswers: {},
+    agreeTerms: false,
+    agreeDebit: false,
   });
 
   const prefsRef = useRef<StepPreferencesHandle>(null);
