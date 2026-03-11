@@ -97,7 +97,7 @@ const INSURER_DATA: Record<string, { name: string; logo: string; badge: string; 
 };
 
 // Preference questions shown on offer page (per product)
-const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { value: string; label: string }[] }[]> = {
+const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { value: string; label: string }[]; customComponent?: string }[]> = {
   liability: [
     { id: "dog", label: "Do you want to insure your dog?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
     { id: "damage_limit", label: "Choose preferred damage limit", options: [{ value: "1250000", label: "€1,250,000" }, { value: "2250000", label: "€2,250,000" }] },
@@ -119,6 +119,9 @@ const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { 
     { id: "cancellation", label: "Do you want cancellation coverage?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
     { id: "roadside_assistance", label: "Add roadside assistance?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
     { id: "bike_coverage", label: "Extra coverage for your bike?", options: [{ value: "0", label: "€0" }, { value: "250", label: "€250" }, { value: "500", label: "€500" }] },
+  ],
+  legal: [
+    { id: "coverage_modules", label: "Coverage areas", options: [], customComponent: "legal_coverage" },
   ],
 };
 
