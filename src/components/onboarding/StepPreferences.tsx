@@ -26,9 +26,10 @@ interface PreferenceQuestion {
   id: string;
   label: string;
   description?: string;
-  options: { value: string; label: string; badge?: string }[];
+  options: { value: string; label: string; badge?: string; subText?: string; bullets?: string[]; hasViewDetails?: boolean }[];
   infoText?: string;
   autoAdvance?: boolean;
+  cardLayout?: boolean; // render as rich cards instead of radio buttons
 }
 
 const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
