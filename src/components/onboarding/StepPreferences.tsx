@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from "react";
-import { Check, Plus, Info, X, Mail, Phone } from "lucide-react";
+import { Check, Plus, Info, X, Mail, Phone, ChevronRight } from "lucide-react";
 import { INSURANCE_TYPES } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
@@ -26,9 +26,10 @@ interface PreferenceQuestion {
   id: string;
   label: string;
   description?: string;
-  options: { value: string; label: string; badge?: string }[];
+  options: { value: string; label: string; badge?: string; subText?: string; bullets?: string[]; hasViewDetails?: boolean }[];
   infoText?: string;
   autoAdvance?: boolean;
+  cardLayout?: boolean; // render as rich cards instead of radio buttons
 }
 
 const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
@@ -91,8 +92,37 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
   ],
   travel: [
     {
-      id: "coverage",
-      label: "What type of coverage do you need?",
+      id: "trip_type",
+      label: "What type of travel insurance fits you best?",
+      cardLayout: true,
+      options: [
+        {
+          value: "continuous",
+          label: "Continuous",
+          subText: "Choose this one if you:",
+          bullets: [
+            "Travels more than 2 weeks per year.",
+            "Or travels more than once a year.",
+            "Wants to be well insured at all times.",
+          ],
+          hasViewDetails: true,
+        },
+        {
+          value: "short_term",
+          label: "Short-term",
+          subText: "Choose this one if you:",
+          bullets: [
+            "Travels less than 2 weeks a year.",
+            "Travels a maximum of 1x per year.",
+          ],
+          hasViewDetails: true,
+        },
+      ],
+      autoAdvance: true,
+    },
+    {
+      id: "coverage_area",
+      label: "Where do you travel to?",
       options: [
         { value: "europe", label: "Europe" },
         { value: "worldwide", label: "Worldwide" },
@@ -660,44 +690,92 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
                 </div>
               )}
 
-              <div className={`grid gap-3 ${currentQuestion?.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
-                {currentQuestion?.options.map((opt) => {
-                  const isSelected = currentPrefs[currentQuestion.id] === opt.value;
-                  return (
-                    <button
-                      key={opt.value}
-                      onClick={() => handleSelectOption(currentQuestion.id, opt.value)}
-                      className={`flex items-center justify-between px-4 py-3.5 rounded-xl border-2 transition-all text-left shadow-sm ${
-                        isSelected
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-muted-foreground/30"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                            isSelected ? "border-primary" : "border-muted-foreground/40"
-                          }`}
-                        >
-                          {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+              {currentQuestion?.cardLayout ? (
+                <div className={`grid gap-4 ${currentQuestion.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+                  {currentQuestion.options.map((opt) => {
+                    const isSelected = currentPrefs[currentQuestion.id] === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        onClick={() => handleSelectOption(currentQuestion.id, opt.value)}
+                        className={`flex flex-col items-start p-5 rounded-2xl border-2 transition-all text-left shadow-sm ${
+                          isSelected
+                            ? "border-primary bg-primary/5 shadow-md"
+                            : "border-border hover:border-muted-foreground/30"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 mb-3 w-full">
+                          <div
+                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                              isSelected ? "border-primary" : "border-muted-foreground/40"
+                            }`}
+                          >
+                            {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                          </div>
+                          <span className="text-base font-bold text-foreground">{opt.label}</span>
                         </div>
-                        <span className="text-sm font-medium text-foreground">{opt.label}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {opt.badge && (
-                          <span className="text-xs font-medium bg-success/10 text-success px-2 py-1 rounded-full flex items-center gap-1">
-                            <Check className="w-3 h-3" />
-                            {opt.badge}
+                        {opt.subText && (
+                          <p className="text-sm text-muted-foreground mb-2 ml-8">{opt.subText}</p>
+                        )}
+                        {opt.bullets && (
+                          <ul className="space-y-1.5 ml-8 mb-3">
+                            {opt.bullets.map((bullet, i) => (
+                              <li key={i} className="flex items-start gap-2 text-sm text-foreground">
+                                <Check className="w-4 h-4 text-success shrink-0 mt-0.5" />
+                                <span>{bullet}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                        {opt.hasViewDetails && (
+                          <span className="inline-flex items-center gap-1 text-sm font-medium text-primary ml-8 mt-1">
+                            View details <ChevronRight className="w-4 h-4" />
                           </span>
                         )}
-                        {currentQuestion.options.length > 2 && (
-                          <Info className="w-4 h-4 text-muted-foreground" />
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className={`grid gap-3 ${currentQuestion?.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+                  {currentQuestion?.options.map((opt) => {
+                    const isSelected = currentPrefs[currentQuestion.id] === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        onClick={() => handleSelectOption(currentQuestion.id, opt.value)}
+                        className={`flex items-center justify-between px-4 py-3.5 rounded-xl border-2 transition-all text-left shadow-sm ${
+                          isSelected
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:border-muted-foreground/30"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                              isSelected ? "border-primary" : "border-muted-foreground/40"
+                            }`}
+                          >
+                            {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                          </div>
+                          <span className="text-sm font-medium text-foreground">{opt.label}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {opt.badge && (
+                            <span className="text-xs font-medium bg-success/10 text-success px-2 py-1 rounded-full flex items-center gap-1">
+                              <Check className="w-3 h-3" />
+                              {opt.badge}
+                            </span>
+                          )}
+                          {currentQuestion.options.length > 2 && (
+                            <Info className="w-4 h-4 text-muted-foreground" />
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
 
               {currentQuestion?.infoText && (
                 <div className="flex items-start gap-2 mt-6 text-muted-foreground">
