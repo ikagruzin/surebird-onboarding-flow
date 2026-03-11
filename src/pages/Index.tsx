@@ -443,10 +443,11 @@ const Index = () => {
           </div>
         )}
         {renderStep()}
+        {shouldShowStickyFooter && <div aria-hidden className="h-36 md:h-40" />}
         {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isPhoneVerifyStep && !isIdinStep && !isAcceptanceStep && !isFinalPreviewStep && !isSuccessStep && <Footer />}
       </main>
 
-      {!isLoadingStep && !isOfferStep && !isSuccessStep && (
+      {shouldShowStickyFooter && (
         <StickyFooter
           savings={totalSavings}
           onNext={() => {

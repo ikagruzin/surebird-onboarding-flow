@@ -31,8 +31,8 @@ const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel =
   }, [savings]);
 
   return (
-    <div className={`fixed bottom-4 z-50 ${hasSidebar ? 'left-0 lg:left-64 right-0' : 'left-0 right-0'}`}>
-      <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between bg-card border border-border rounded-3xl shadow-lg">
+    <div className={`pointer-events-none fixed bottom-4 z-50 ${hasSidebar ? 'left-0 lg:left-64 right-0' : 'left-0 right-0'}`}>
+      <div className="pointer-events-auto max-w-3xl mx-auto px-6 py-4 flex items-center justify-between bg-card border border-border rounded-3xl shadow-lg">
         {showSavings ? (
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-foreground">Estimated savings:</span>
