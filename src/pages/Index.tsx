@@ -121,6 +121,7 @@ const Index = () => {
     return products.every((p) => isValidDate(state.startDates[p.id] || ""));
   };
 
+  const handleBack = () => {
     if (state.currentStep === 8) {
       // In preferences, try internal back first
       if (prefsRef.current) {
