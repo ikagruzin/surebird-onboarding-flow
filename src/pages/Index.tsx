@@ -30,6 +30,7 @@ const Index = () => {
     email: "",
     emailSubmitted: false,
     firstName: "",
+    infix: "",
     lastName: "",
     postcode: "",
     houseNumber: "",
@@ -42,6 +43,7 @@ const Index = () => {
     includeFamily: "",
     phone: "+31",
     startDates: {},
+    iban: "",
   });
 
   const prefsRef = useRef<StepPreferencesHandle>(null);
