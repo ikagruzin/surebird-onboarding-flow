@@ -92,8 +92,37 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
   ],
   travel: [
     {
-      id: "coverage",
-      label: "What type of coverage do you need?",
+      id: "trip_type",
+      label: "What type of travel insurance fits you best?",
+      cardLayout: true,
+      options: [
+        {
+          value: "continuous",
+          label: "Continuous",
+          subText: "Choose this one if you:",
+          bullets: [
+            "Travels more than 2 weeks per year.",
+            "Or travels more than once a year.",
+            "Wants to be well insured at all times.",
+          ],
+          hasViewDetails: true,
+        },
+        {
+          value: "short_term",
+          label: "Short-term",
+          subText: "Choose this one if you:",
+          bullets: [
+            "Travels less than 2 weeks a year.",
+            "Travels a maximum of 1x per year.",
+          ],
+          hasViewDetails: true,
+        },
+      ],
+      autoAdvance: true,
+    },
+    {
+      id: "coverage_area",
+      label: "Where do you travel to?",
       options: [
         { value: "europe", label: "Europe" },
         { value: "worldwide", label: "Worldwide" },
