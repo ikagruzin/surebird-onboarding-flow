@@ -29,6 +29,8 @@ export interface WizardState {
   startDates: Record<string, string>;
   iban: string;
   acceptanceAnswers: Record<string, string>;
+  agreeTerms: boolean;
+  agreeDebit: boolean;
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [
