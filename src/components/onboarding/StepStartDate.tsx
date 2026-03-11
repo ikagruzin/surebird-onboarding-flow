@@ -109,11 +109,8 @@ const StepStartDate = ({
             onChange={(e) => onChange(e.target.value)}
             placeholder="dd-mm-yyyy"
             maxLength={10}
-            className="flex h-14 w-full rounded-xl border-2 border-input bg-white px-4 pr-12 pt-5 pb-1 text-base text-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="flex h-14 w-full rounded-xl border-2 border-input bg-white px-4 pr-12 text-base text-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           />
-          <label className={`pointer-events-none absolute left-4 text-muted-foreground transition-all duration-200 ${value ? "top-2 text-xs" : "top-1/2 -translate-y-1/2 text-base"}`}>
-            Start date
-          </label>
           <CalendarDays className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         </div>
         <button
