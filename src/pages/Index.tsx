@@ -379,6 +379,7 @@ const Index = () => {
   const isOfferStep = state.currentStep === 10;
   const isLoadingStep = state.currentStep === 9;
   const isPreferencesStep = state.currentStep === 8;
+  const shouldShowStickyFooter = !isLoadingStep && !isOfferStep && !isSuccessStep;
   const sidebarStep =
     state.currentStep <= 1
       ? 1
