@@ -314,6 +314,20 @@ const Index = () => {
             onBack={() => setStep(12)}
           />
         );
+      case 14:
+        return (
+          <StepAcceptanceQuestions
+            answers={state.acceptanceAnswers}
+            onUpdateAnswer={(qId, val) =>
+              setState((s) => ({
+                ...s,
+                acceptanceAnswers: { ...s.acceptanceAnswers, [qId]: val },
+              }))
+            }
+            onNext={() => setStep(15)}
+            onBack={() => setStep(13)}
+          />
+        );
       default:
         return (
           <div className="animate-fade-in text-center py-20">
