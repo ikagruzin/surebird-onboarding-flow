@@ -342,10 +342,10 @@ const Index = () => {
             setStep(state.currentStep + 1);
           }}
           onBack={handleBack}
-          disabled={isAboutYou ? !canProceedAboutYou() : state.selectedInsurances.length === 0}
-          buttonLabel={isReadyStep ? "Set preferences" : "Next"}
+          disabled={isAboutYou ? !canProceedAboutYou() : isStartDateStep ? !canProceedStartDate() : state.selectedInsurances.length === 0}
+          buttonLabel={isReadyStep ? "Set preferences" : isStartDateStep ? "Go further" : "Next"}
           hasSidebar={true}
-          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep}
+          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep && !isStartDateStep}
           showNextButton={state.currentStep !== 5}
         />
       )}
