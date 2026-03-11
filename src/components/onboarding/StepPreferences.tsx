@@ -183,6 +183,20 @@ const DEFAULT_PREFERENCES: Record<string, Record<string, string>> = {
     damage_limit: "2250000",
     own_risk: "100",
   },
+  travel: {
+    own_risk: "500",
+    sports: "no",
+    extraordinary_costs: "no",
+    insure_cash: "no",
+    insure_accidents: "no",
+    insure_medical: "yes",
+    legal_assistance: "no",
+    business_travel: "no",
+    luggage: "no",
+    cancellation: "no",
+    roadside_assistance: "no",
+    bike_coverage: "0",
+  },
 };
 
 export interface StepPreferencesHandle {
