@@ -45,6 +45,7 @@ const Index = () => {
     phone: "+31",
     startDates: {},
     iban: "",
+    acceptanceAnswers: {},
   });
 
   const prefsRef = useRef<StepPreferencesHandle>(null);
