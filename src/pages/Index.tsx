@@ -14,6 +14,7 @@ import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepOffer from "@/components/onboarding/StepOffer";
 import StepStartDate from "@/components/onboarding/StepStartDate";
 import StepConfirmDetails from "@/components/onboarding/StepConfirmDetails";
+import StepIdinVerification from "@/components/onboarding/StepIdinVerification";
 import Footer from "@/components/onboarding/Footer";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
@@ -29,6 +30,7 @@ const Index = () => {
     email: "",
     emailSubmitted: false,
     firstName: "",
+    infix: "",
     lastName: "",
     postcode: "",
     houseNumber: "",
@@ -41,6 +43,7 @@ const Index = () => {
     includeFamily: "",
     phone: "+31",
     startDates: {},
+    iban: "",
   });
 
   const prefsRef = useRef<StepPreferencesHandle>(null);
@@ -289,6 +292,7 @@ const Index = () => {
         return (
           <StepConfirmDetails
             firstName={state.firstName}
+            infix={state.infix}
             lastName={state.lastName}
             phone={state.phone}
             email={state.email}
@@ -297,6 +301,15 @@ const Index = () => {
             }
             onNext={() => setStep(13)}
             onBack={() => setStep(11)}
+          />
+        );
+      case 13:
+        return (
+          <StepIdinVerification
+            iban={state.iban}
+            onUpdateIban={(value) => setState((s) => ({ ...s, iban: value }))}
+            onNext={() => setStep(14)}
+            onBack={() => setStep(12)}
           />
         );
       default:
@@ -328,6 +341,13 @@ const Index = () => {
       : 4;
   const isStartDateStep = state.currentStep === 11;
   const isConfirmStep = state.currentStep === 12;
+  const isIdinStep = state.currentStep === 13;
+  const isFinalise = state.currentStep >= 11 && state.currentStep <= 13;
+
+  // Finalise sub-step progress (steps 11, 12, 13 → 3 sub-steps)
+  const finaliseSubStep = state.currentStep - 10;
+  const finaliseTotalSubs = 3;
+  const finaliseProgress = (finaliseSubStep / finaliseTotalSubs) * 100;
 
   // Step 1 has its own full layout with sidebar
   if (isStep1) {
@@ -345,19 +365,30 @@ const Index = () => {
     );
   }
 
+  const canProceedIdin = (): boolean => {
+    // Either verified via iDIN or manual IBAN entered
+    return state.iban.length >= 5;
+  };
+
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar currentStep={sidebarStep} visible={true} />
 
-      <main className={`flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 pb-28 ${isOfferStep ? '' : 'max-w-3xl mx-auto'}`}>
+      <main className={`flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 pb-32 ${isOfferStep ? '' : 'max-w-3xl mx-auto'}`}>
         {isAboutYou && (
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-foreground mb-4">About you</h1>
             <Progress value={aboutYouProgress} className="h-2 [&>div]:bg-success" />
           </div>
         )}
+        {isFinalise && (
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-foreground mb-4">Finalise</h1>
+            <Progress value={finaliseProgress} className="h-2 [&>div]:bg-success" />
+          </div>
+        )}
         {renderStep()}
-        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && <Footer />}
+        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isIdinStep && <Footer />}
       </main>
 
       {!isLoadingStep && !isOfferStep && (
@@ -370,10 +401,22 @@ const Index = () => {
             setStep(state.currentStep + 1);
           }}
           onBack={handleBack}
-          disabled={isAboutYou ? !canProceedAboutYou() : isStartDateStep ? !canProceedStartDate() : isConfirmStep ? !(state.firstName && state.lastName && state.email.includes("@")) : state.selectedInsurances.length === 0}
-          buttonLabel={isReadyStep ? "Set preferences" : isStartDateStep ? "Go further" : isConfirmStep ? "Confirm & continue" : "Next"}
+          disabled={
+            isAboutYou ? !canProceedAboutYou() :
+            isStartDateStep ? !canProceedStartDate() :
+            isConfirmStep ? !(state.firstName && state.lastName && state.email.includes("@")) :
+            isIdinStep ? !canProceedIdin() :
+            state.selectedInsurances.length === 0
+          }
+          buttonLabel={
+            isReadyStep ? "Set preferences" :
+            isStartDateStep ? "Go further" :
+            isConfirmStep ? "Next" :
+            isIdinStep ? "Confirm & continue" :
+            "Next"
+          }
           hasSidebar={true}
-          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep}
+          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep && !isFinalise}
           showNextButton={state.currentStep !== 5}
         />
       )}

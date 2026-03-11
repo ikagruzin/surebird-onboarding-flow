@@ -14,6 +14,7 @@ export interface WizardState {
   email: string;
   emailSubmitted: boolean;
   firstName: string;
+  infix: string;
   lastName: string;
   postcode: string;
   houseNumber: string;
@@ -26,6 +27,7 @@ export interface WizardState {
   includeFamily: string;
   phone: string;
   startDates: Record<string, string>;
+  iban: string;
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [
