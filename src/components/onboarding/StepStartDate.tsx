@@ -106,7 +106,7 @@ const StepStartDate = ({
           <input
             type="text"
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => onChange(e.target.value, value)}
             placeholder="dd-mm-yyyy"
             maxLength={10}
             className="flex h-14 w-full rounded-xl border-2 border-input bg-white px-4 pr-12 text-base text-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
