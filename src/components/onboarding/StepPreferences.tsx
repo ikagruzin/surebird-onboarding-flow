@@ -99,6 +99,7 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
         {
           value: "continuous",
           label: "Continuous",
+          badge: "Most popular",
           subText: "Choose this one if you:",
           bullets: [
             "Travels more than 2 weeks per year.",
@@ -181,6 +182,20 @@ const DEFAULT_PREFERENCES: Record<string, Record<string, string>> = {
     dog: "no",
     damage_limit: "2250000",
     own_risk: "100",
+  },
+  travel: {
+    own_risk: "500",
+    sports: "no",
+    extraordinary_costs: "no",
+    insure_cash: "no",
+    insure_accidents: "no",
+    insure_medical: "yes",
+    legal_assistance: "no",
+    business_travel: "no",
+    luggage: "no",
+    cancellation: "no",
+    roadside_assistance: "no",
+    bike_coverage: "0",
   },
 };
 
@@ -691,7 +706,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
               )}
 
               {currentQuestion?.cardLayout ? (
-                <div className={`grid gap-4 ${currentQuestion.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+                <div className="grid gap-4 grid-cols-1">
                   {currentQuestion.options.map((opt) => {
                     const isSelected = currentPrefs[currentQuestion.id] === opt.value;
                     return (
@@ -712,7 +727,12 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
                           >
                             {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                           </div>
-                          <span className="text-base font-bold text-foreground">{opt.label}</span>
+                          <span className="text-base font-bold text-foreground flex-1">{opt.label}</span>
+                          {opt.badge && (
+                            <span className="text-xs font-medium bg-success/10 text-success px-2.5 py-1 rounded-full">
+                              {opt.badge}
+                            </span>
+                          )}
                         </div>
                         {opt.subText && (
                           <p className="text-sm text-muted-foreground mb-2 ml-8">{opt.subText}</p>
