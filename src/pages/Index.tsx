@@ -298,6 +298,7 @@ const Index = () => {
       : state.currentStep === 10
       ? 3
       : 4;
+  const isStartDateStep = state.currentStep === 11;
 
   // Step 1 has its own full layout with sidebar
   if (isStep1) {
