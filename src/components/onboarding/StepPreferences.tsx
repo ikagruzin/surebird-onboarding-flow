@@ -30,7 +30,8 @@ interface PreferenceQuestion {
   options: { value: string; label: string; badge?: string; subText?: string; bullets?: string[]; hasViewDetails?: boolean }[];
   infoText?: string;
   autoAdvance?: boolean;
-  cardLayout?: boolean; // render as rich cards instead of radio buttons
+  cardLayout?: boolean;
+  customComponent?: string;
 }
 
 const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
