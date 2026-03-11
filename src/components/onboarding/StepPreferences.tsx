@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from "react";
-import { Check, Plus, Info, X, Mail, Phone } from "lucide-react";
+import { Check, Plus, Info, X, Mail, Phone, ChevronRight } from "lucide-react";
 import { INSURANCE_TYPES } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
