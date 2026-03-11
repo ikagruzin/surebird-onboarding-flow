@@ -75,17 +75,13 @@ const StepAcceptanceQuestions = ({
         />
         <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
           <p className="text-base text-foreground">
-            Almost there! Just a few final checks 📋
+            Almost there! Just a few final checks 📋 We need to confirm a few standard legal details required by all Dutch insurers.
           </p>
         </div>
       </div>
 
-      {/* Intro text */}
+      {/* Why we ask card */}
       <div className="space-y-4">
-        <p className="text-base text-muted-foreground leading-relaxed">
-          Almost there! To officially lock in your new low rate, we need to
-          confirm a few standard legal details required by all Dutch insurers.
-        </p>
 
         {/* Why we ask card */}
         <div className="rounded-2xl border-2 border-input bg-primary/5 p-5 flex gap-3">

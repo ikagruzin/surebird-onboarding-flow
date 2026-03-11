@@ -16,6 +16,8 @@ import StepStartDate from "@/components/onboarding/StepStartDate";
 import StepConfirmDetails from "@/components/onboarding/StepConfirmDetails";
 import StepIdinVerification from "@/components/onboarding/StepIdinVerification";
 import StepAcceptanceQuestions from "@/components/onboarding/StepAcceptanceQuestions";
+import StepFinalPreview from "@/components/onboarding/StepFinalPreview";
+import StepSuccess from "@/components/onboarding/StepSuccess";
 import Footer from "@/components/onboarding/Footer";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
@@ -46,6 +48,8 @@ const Index = () => {
     startDates: {},
     iban: "",
     acceptanceAnswers: {},
+    agreeTerms: false,
+    agreeDebit: false,
   });
 
   const prefsRef = useRef<StepPreferencesHandle>(null);
@@ -328,17 +332,29 @@ const Index = () => {
             onBack={() => setStep(13)}
           />
         );
-      default:
+      case 15:
         return (
-          <div className="animate-fade-in text-center py-20">
-            <h1 className="text-3xl font-bold text-foreground mb-4">
-              🎉 Thank you!
-            </h1>
-            <p className="text-muted-foreground">
-              Your package request has been submitted. We'll be in touch soon!
-            </p>
-          </div>
+          <StepFinalPreview
+            selectedInsurances={state.selectedInsurances}
+            startDates={state.startDates}
+            firstName={state.firstName}
+            infix={state.infix}
+            lastName={state.lastName}
+            iban={state.iban}
+            email={state.email}
+            agreeTerms={state.agreeTerms}
+            agreeDebit={state.agreeDebit}
+            onUpdateAgree={(field, value) =>
+              setState((s) => ({ ...s, [field]: value }))
+            }
+            onNext={() => setStep(16)}
+            onBack={() => setStep(14)}
+          />
         );
+      case 16:
+        return <StepSuccess email={state.email} />;
+      default:
+        return <StepSuccess email={state.email} />;
     }
   };
 
@@ -359,11 +375,13 @@ const Index = () => {
   const isConfirmStep = state.currentStep === 12;
   const isIdinStep = state.currentStep === 13;
   const isAcceptanceStep = state.currentStep === 14;
-  const isFinalise = state.currentStep >= 11 && state.currentStep <= 14;
+  const isFinalPreviewStep = state.currentStep === 15;
+  const isSuccessStep = state.currentStep === 16;
+  const isFinalise = state.currentStep >= 11 && state.currentStep <= 15;
 
-  // Finalise sub-step progress (steps 11, 12, 13 → 3 sub-steps)
+  // Finalise sub-step progress (steps 11-15 → 5 sub-steps)
   const finaliseSubStep = state.currentStep - 10;
-  const finaliseTotalSubs = 4;
+  const finaliseTotalSubs = 5;
   const finaliseProgress = (finaliseSubStep / finaliseTotalSubs) * 100;
 
   // Step 1 has its own full layout with sidebar
@@ -405,10 +423,10 @@ const Index = () => {
           </div>
         )}
         {renderStep()}
-        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isIdinStep && !isAcceptanceStep && <Footer />}
+        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isIdinStep && !isAcceptanceStep && !isFinalPreviewStep && !isSuccessStep && <Footer />}
       </main>
 
-      {!isLoadingStep && !isOfferStep && (
+      {!isLoadingStep && !isOfferStep && !isSuccessStep && (
         <StickyFooter
           savings={totalSavings}
           onNext={() => {
@@ -424,6 +442,7 @@ const Index = () => {
             isConfirmStep ? !(state.firstName && state.lastName && state.email.includes("@")) :
             isIdinStep ? !canProceedIdin() :
             isAcceptanceStep ? false :
+            isFinalPreviewStep ? !(state.agreeTerms && state.agreeDebit) :
             state.selectedInsurances.length === 0
           }
           buttonLabel={
@@ -432,6 +451,7 @@ const Index = () => {
             isConfirmStep ? "Next" :
             isIdinStep ? "Confirm & continue" :
             isAcceptanceStep ? "Continue" :
+            isFinalPreviewStep ? "Confirm & Insure" :
             "Next"
           }
           hasSidebar={true}
