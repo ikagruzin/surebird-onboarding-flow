@@ -407,8 +407,9 @@ const Index = () => {
   // Step 1 has its own full layout with sidebar
   if (isStep1) {
     return (
-      <div className="pb-28">
+      <div className="pb-0">
         {renderStep()}
+        {shouldShowStickyFooter && <div aria-hidden className="h-36 md:h-40" />}
         <StickyFooter
           savings={totalSavings}
           onNext={() => setStep(2)}
