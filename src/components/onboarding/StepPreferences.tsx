@@ -227,7 +227,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   }, 0);
   const progressPercent = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
 
-  // Expose back handler to parent
+  // Expose back/next handlers to parent
   useImperativeHandle(ref, () => ({
     handleBack: () => {
       if (showPhoneStep) {
@@ -246,9 +246,17 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
         setQuestionStep(Math.max(0, prevQuestions.length - 1));
         return true;
       }
-      return false; // parent should handle
+      return false;
     },
-  }), [showPhoneStep, questionStep, activeTab, selectedInsurances]);
+    handleNext: () => {
+      if (showPhoneStep) {
+        // Phone/email step done → proceed to next wizard step
+        return false;
+      }
+      handleNextStep();
+      return true; // handled internally
+    },
+  }), [showPhoneStep, questionStep, activeTab, selectedInsurances, preferences]);
 
   const animateTabSwitch = (newTab: string, direction: "left" | "right" = "left") => {
     setTransitionDirection(direction);
