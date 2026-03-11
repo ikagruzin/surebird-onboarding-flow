@@ -156,6 +156,7 @@ const DEFAULT_PREFERENCES: Record<string, Record<string, string>> = {
 
 export interface StepPreferencesHandle {
   handleBack: () => boolean; // returns true if handled internally
+  handleNext: () => boolean; // returns true if handled internally
 }
 
 interface StepPreferencesProps {
