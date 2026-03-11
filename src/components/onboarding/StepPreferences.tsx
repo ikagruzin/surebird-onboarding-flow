@@ -691,7 +691,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
               )}
 
               {currentQuestion?.cardLayout ? (
-                <div className={`grid gap-4 ${currentQuestion.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+                <div className="grid gap-4 grid-cols-1">
                   {currentQuestion.options.map((opt) => {
                     const isSelected = currentPrefs[currentQuestion.id] === opt.value;
                     return (
