@@ -15,6 +15,7 @@ import StepOffer from "@/components/onboarding/StepOffer";
 import StepStartDate from "@/components/onboarding/StepStartDate";
 import StepConfirmDetails from "@/components/onboarding/StepConfirmDetails";
 import StepIdinVerification from "@/components/onboarding/StepIdinVerification";
+import StepAcceptanceQuestions from "@/components/onboarding/StepAcceptanceQuestions";
 import Footer from "@/components/onboarding/Footer";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
@@ -44,6 +45,7 @@ const Index = () => {
     phone: "+31",
     startDates: {},
     iban: "",
+    acceptanceAnswers: {},
   });
 
   const prefsRef = useRef<StepPreferencesHandle>(null);
@@ -312,6 +314,20 @@ const Index = () => {
             onBack={() => setStep(12)}
           />
         );
+      case 14:
+        return (
+          <StepAcceptanceQuestions
+            answers={state.acceptanceAnswers}
+            onUpdateAnswer={(qId, val) =>
+              setState((s) => ({
+                ...s,
+                acceptanceAnswers: { ...s.acceptanceAnswers, [qId]: val },
+              }))
+            }
+            onNext={() => setStep(15)}
+            onBack={() => setStep(13)}
+          />
+        );
       default:
         return (
           <div className="animate-fade-in text-center py-20">
@@ -342,11 +358,12 @@ const Index = () => {
   const isStartDateStep = state.currentStep === 11;
   const isConfirmStep = state.currentStep === 12;
   const isIdinStep = state.currentStep === 13;
-  const isFinalise = state.currentStep >= 11 && state.currentStep <= 13;
+  const isAcceptanceStep = state.currentStep === 14;
+  const isFinalise = state.currentStep >= 11 && state.currentStep <= 14;
 
   // Finalise sub-step progress (steps 11, 12, 13 → 3 sub-steps)
   const finaliseSubStep = state.currentStep - 10;
-  const finaliseTotalSubs = 3;
+  const finaliseTotalSubs = 4;
   const finaliseProgress = (finaliseSubStep / finaliseTotalSubs) * 100;
 
   // Step 1 has its own full layout with sidebar
@@ -388,7 +405,7 @@ const Index = () => {
           </div>
         )}
         {renderStep()}
-        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isIdinStep && <Footer />}
+        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isIdinStep && !isAcceptanceStep && <Footer />}
       </main>
 
       {!isLoadingStep && !isOfferStep && (
@@ -406,6 +423,7 @@ const Index = () => {
             isStartDateStep ? !canProceedStartDate() :
             isConfirmStep ? !(state.firstName && state.lastName && state.email.includes("@")) :
             isIdinStep ? !canProceedIdin() :
+            isAcceptanceStep ? false :
             state.selectedInsurances.length === 0
           }
           buttonLabel={
@@ -413,6 +431,7 @@ const Index = () => {
             isStartDateStep ? "Go further" :
             isConfirmStep ? "Next" :
             isIdinStep ? "Confirm & continue" :
+            isAcceptanceStep ? "Continue" :
             "Next"
           }
           hasSidebar={true}
