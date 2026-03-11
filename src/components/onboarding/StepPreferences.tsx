@@ -99,6 +99,7 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
         {
           value: "continuous",
           label: "Continuous",
+          badge: "Most popular",
           subText: "Choose this one if you:",
           bullets: [
             "Travels more than 2 weeks per year.",
