@@ -396,6 +396,7 @@ const Index = () => {
   const isAcceptanceStep = state.currentStep === 15;
   const isFinalPreviewStep = state.currentStep === 16;
   const isSuccessStep = state.currentStep === 17;
+  const shouldShowStickyFooter = !isLoadingStep && !isOfferStep && !isSuccessStep;
   const isFinalise = state.currentStep >= 11 && state.currentStep <= 16;
 
   // Finalise sub-step progress (steps 11-16 → 6 sub-steps)
