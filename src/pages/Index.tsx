@@ -292,6 +292,7 @@ const Index = () => {
         return (
           <StepConfirmDetails
             firstName={state.firstName}
+            infix={state.infix}
             lastName={state.lastName}
             phone={state.phone}
             email={state.email}
@@ -300,6 +301,15 @@ const Index = () => {
             }
             onNext={() => setStep(13)}
             onBack={() => setStep(11)}
+          />
+        );
+      case 13:
+        return (
+          <StepIdinVerification
+            iban={state.iban}
+            onUpdateIban={(value) => setState((s) => ({ ...s, iban: value }))}
+            onNext={() => setStep(14)}
+            onBack={() => setStep(12)}
           />
         );
       default:
