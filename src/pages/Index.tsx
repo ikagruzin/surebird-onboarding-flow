@@ -108,7 +108,19 @@ const Index = () => {
     }
   };
 
-  const handleBack = () => {
+  const isValidDate = (val: string): boolean => {
+    if (val.length !== 10) return false;
+    const [dd, mm, yyyy] = val.split("-").map(Number);
+    if (!dd || !mm || !yyyy) return false;
+    const date = new Date(yyyy, mm - 1, dd);
+    return date.getFullYear() === yyyy && date.getMonth() === mm - 1 && date.getDate() === dd;
+  };
+
+  const canProceedStartDate = (): boolean => {
+    const products = INSURANCE_TYPES.filter((t) => state.selectedInsurances.includes(t.id));
+    return products.every((p) => isValidDate(state.startDates[p.id] || ""));
+  };
+
     if (state.currentStep === 8) {
       // In preferences, try internal back first
       if (prefsRef.current) {
