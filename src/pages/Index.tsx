@@ -332,17 +332,29 @@ const Index = () => {
             onBack={() => setStep(13)}
           />
         );
-      default:
+      case 15:
         return (
-          <div className="animate-fade-in text-center py-20">
-            <h1 className="text-3xl font-bold text-foreground mb-4">
-              🎉 Thank you!
-            </h1>
-            <p className="text-muted-foreground">
-              Your package request has been submitted. We'll be in touch soon!
-            </p>
-          </div>
+          <StepFinalPreview
+            selectedInsurances={state.selectedInsurances}
+            startDates={state.startDates}
+            firstName={state.firstName}
+            infix={state.infix}
+            lastName={state.lastName}
+            iban={state.iban}
+            email={state.email}
+            agreeTerms={state.agreeTerms}
+            agreeDebit={state.agreeDebit}
+            onUpdateAgree={(field, value) =>
+              setState((s) => ({ ...s, [field]: value }))
+            }
+            onNext={() => setStep(16)}
+            onBack={() => setStep(14)}
+          />
         );
+      case 16:
+        return <StepSuccess email={state.email} />;
+      default:
+        return <StepSuccess email={state.email} />;
     }
   };
 
