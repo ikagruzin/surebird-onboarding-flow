@@ -396,6 +396,7 @@ const Index = () => {
   const isAcceptanceStep = state.currentStep === 15;
   const isFinalPreviewStep = state.currentStep === 16;
   const isSuccessStep = state.currentStep === 17;
+  const shouldShowStickyFooter = !isLoadingStep && !isOfferStep && !isSuccessStep;
   const isFinalise = state.currentStep >= 11 && state.currentStep <= 16;
 
   // Finalise sub-step progress (steps 11-16 → 6 sub-steps)
@@ -406,8 +407,9 @@ const Index = () => {
   // Step 1 has its own full layout with sidebar
   if (isStep1) {
     return (
-      <div className="pb-28">
+      <div className="pb-0">
         {renderStep()}
+        {shouldShowStickyFooter && <div aria-hidden className="h-36 md:h-40" />}
         <StickyFooter
           savings={totalSavings}
           onNext={() => setStep(2)}
@@ -427,7 +429,7 @@ const Index = () => {
     <div className="flex min-h-screen bg-background">
       <Sidebar currentStep={sidebarStep} visible={true} />
 
-      <main className={`flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 pb-32 ${isOfferStep ? '' : 'max-w-3xl mx-auto'}`}>
+      <main className={`flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 ${isOfferStep ? '' : 'max-w-3xl mx-auto'}`}>
         {isAboutYou && (
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-foreground mb-4">About you</h1>
@@ -441,10 +443,11 @@ const Index = () => {
           </div>
         )}
         {renderStep()}
+        {shouldShowStickyFooter && <div aria-hidden className="h-36 md:h-40" />}
         {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isPhoneVerifyStep && !isIdinStep && !isAcceptanceStep && !isFinalPreviewStep && !isSuccessStep && <Footer />}
       </main>
 
-      {!isLoadingStep && !isOfferStep && !isSuccessStep && (
+      {shouldShowStickyFooter && (
         <StickyFooter
           savings={totalSavings}
           onNext={() => {
