@@ -375,11 +375,13 @@ const Index = () => {
   const isConfirmStep = state.currentStep === 12;
   const isIdinStep = state.currentStep === 13;
   const isAcceptanceStep = state.currentStep === 14;
-  const isFinalise = state.currentStep >= 11 && state.currentStep <= 14;
+  const isFinalPreviewStep = state.currentStep === 15;
+  const isSuccessStep = state.currentStep === 16;
+  const isFinalise = state.currentStep >= 11 && state.currentStep <= 15;
 
-  // Finalise sub-step progress (steps 11, 12, 13 → 3 sub-steps)
+  // Finalise sub-step progress (steps 11-15 → 5 sub-steps)
   const finaliseSubStep = state.currentStep - 10;
-  const finaliseTotalSubs = 4;
+  const finaliseTotalSubs = 5;
   const finaliseProgress = (finaliseSubStep / finaliseTotalSubs) * 100;
 
   // Step 1 has its own full layout with sidebar
