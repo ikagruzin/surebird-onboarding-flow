@@ -363,7 +363,7 @@ const Index = () => {
 
   // Finalise sub-step progress (steps 11, 12, 13 → 3 sub-steps)
   const finaliseSubStep = state.currentStep - 10;
-  const finaliseTotalSubs = 3;
+  const finaliseTotalSubs = 4;
   const finaliseProgress = (finaliseSubStep / finaliseTotalSubs) * 100;
 
   // Step 1 has its own full layout with sidebar
