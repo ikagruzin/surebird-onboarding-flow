@@ -98,7 +98,7 @@ const StepStartDate = ({
     return products.every((p) => isValidDate(startDates[p.id] || ""));
   };
 
-  const DateInput = ({ value, onChange, onToday, label }: { value: string; onChange: (v: string) => void; onToday: () => void; label?: string }) => (
+  const DateInput = ({ value, onChange, onToday, label }: { value: string; onChange: (v: string, prev: string) => void; onToday: () => void; label?: string }) => (
     <div className="space-y-3">
       {label && <p className="text-sm font-medium text-foreground">{label}</p>}
       <div className="flex gap-3">
