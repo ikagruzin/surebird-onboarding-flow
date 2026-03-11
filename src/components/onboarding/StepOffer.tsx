@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Check, ChevronLeft, ChevronRight, Plus, X, Info, MessageCircle, Lock, Calendar, Shield } from "lucide-react";
+import LegalCoverageSelector from "./LegalCoverageSelector";
 import { INSURANCE_TYPES } from "./types";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import iconLiability from "@/assets/icon-liability.svg";
@@ -96,7 +97,7 @@ const INSURER_DATA: Record<string, { name: string; logo: string; badge: string; 
 };
 
 // Preference questions shown on offer page (per product)
-const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { value: string; label: string }[] }[]> = {
+const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { value: string; label: string }[]; customComponent?: string }[]> = {
   liability: [
     { id: "dog", label: "Do you want to insure your dog?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
     { id: "damage_limit", label: "Choose preferred damage limit", options: [{ value: "1250000", label: "€1,250,000" }, { value: "2250000", label: "€2,250,000" }] },
@@ -118,6 +119,9 @@ const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { 
     { id: "cancellation", label: "Do you want cancellation coverage?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
     { id: "roadside_assistance", label: "Add roadside assistance?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
     { id: "bike_coverage", label: "Extra coverage for your bike?", options: [{ value: "0", label: "€0" }, { value: "250", label: "€250" }, { value: "500", label: "€500" }] },
+  ],
+  legal: [
+    { id: "coverage_modules", label: "Coverage areas", options: [], customComponent: "legal_coverage" },
   ],
 };
 
@@ -252,31 +256,38 @@ const StepOffer = ({
                 <p className="text-base font-semibold text-foreground">{q.label}</p>
                 <Info className="w-4 h-4 text-muted-foreground" />
               </div>
-              <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : q.options.length <= 4 ? "grid-cols-2" : "grid-cols-1"}`}>
-                {q.options.map((opt) => {
-                  const isSelected = currentPrefs[q.id] === opt.value;
-                  return (
-                    <button
-                      key={opt.value}
-                      onClick={() => onUpdatePreference(id, q.id, opt.value)}
-                      className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl border-2 transition-all text-left ${
-                        isSelected
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-muted-foreground/30"
-                      }`}
-                    >
-                      <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                          isSelected ? "border-primary" : "border-muted-foreground/40"
+              {q.customComponent === "legal_coverage" ? (
+                <LegalCoverageSelector
+                  selected={(currentPrefs[q.id] || "consumer").split(",")}
+                  onChange={(sel) => onUpdatePreference(id, q.id, sel.join(","))}
+                />
+              ) : (
+                <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : q.options.length <= 4 ? "grid-cols-2" : "grid-cols-1"}`}>
+                  {q.options.map((opt) => {
+                    const isSelected = currentPrefs[q.id] === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        onClick={() => onUpdatePreference(id, q.id, opt.value)}
+                        className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl border-2 transition-all text-left ${
+                          isSelected
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:border-muted-foreground/30"
                         }`}
                       >
-                        {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
-                      </div>
-                      <span className="text-sm font-medium text-foreground">{opt.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                            isSelected ? "border-primary" : "border-muted-foreground/40"
+                          }`}
+                        >
+                          {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                        </div>
+                        <span className="text-sm font-medium text-foreground">{opt.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           ))}
         </div>
