@@ -13,6 +13,7 @@ import StepLoading from "@/components/onboarding/StepLoading";
 import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepOffer from "@/components/onboarding/StepOffer";
 import StepStartDate from "@/components/onboarding/StepStartDate";
+import StepConfirmDetails from "@/components/onboarding/StepConfirmDetails";
 import Footer from "@/components/onboarding/Footer";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
