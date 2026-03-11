@@ -25,6 +25,7 @@ export interface WizardState {
   childrenAges: number[];
   includeFamily: string;
   phone: string;
+  startDates: Record<string, string>;
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [

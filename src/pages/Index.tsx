@@ -39,6 +39,7 @@ const Index = () => {
     childrenAges: [],
     includeFamily: "",
     phone: "+31",
+    startDates: {},
   });
 
   const prefsRef = useRef<StepPreferencesHandle>(null);
