@@ -196,6 +196,9 @@ const DEFAULT_PREFERENCES: Record<string, Record<string, string>> = {
     roadside_assistance: "no",
     bike_coverage: "0",
   },
+  legal: {
+    coverage_modules: "consumer",
+  },
 };
 
 export interface StepPreferencesHandle {
