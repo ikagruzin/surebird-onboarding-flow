@@ -12,6 +12,7 @@ import StepReady from "@/components/onboarding/StepReady";
 import StepLoading from "@/components/onboarding/StepLoading";
 import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepOffer from "@/components/onboarding/StepOffer";
+import StepStartDate from "@/components/onboarding/StepStartDate";
 import Footer from "@/components/onboarding/Footer";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
@@ -38,6 +39,7 @@ const Index = () => {
     childrenAges: [],
     includeFamily: "",
     phone: "+31",
+    startDates: {},
   });
 
   const prefsRef = useRef<StepPreferencesHandle>(null);
@@ -104,6 +106,19 @@ const Index = () => {
       default:
         return true;
     }
+  };
+
+  const isValidDate = (val: string): boolean => {
+    if (val.length !== 10) return false;
+    const [dd, mm, yyyy] = val.split("-").map(Number);
+    if (!dd || !mm || !yyyy) return false;
+    const date = new Date(yyyy, mm - 1, dd);
+    return date.getFullYear() === yyyy && date.getMonth() === mm - 1 && date.getDate() === dd;
+  };
+
+  const canProceedStartDate = (): boolean => {
+    const products = INSURANCE_TYPES.filter((t) => state.selectedInsurances.includes(t.id));
+    return products.every((p) => isValidDate(state.startDates[p.id] || ""));
   };
 
   const handleBack = () => {
@@ -257,6 +272,18 @@ const Index = () => {
             onBack={() => setStep(9)}
           />
         );
+      case 11:
+        return (
+          <StepStartDate
+            selectedInsurances={state.selectedInsurances}
+            startDates={state.startDates}
+            onUpdateStartDate={(id, date) =>
+              setState((s) => ({ ...s, startDates: { ...s.startDates, [id]: date } }))
+            }
+            onNext={() => setStep(12)}
+            onBack={() => setStep(10)}
+          />
+        );
       default:
         return (
           <div className="animate-fade-in text-center py-20">
@@ -284,6 +311,7 @@ const Index = () => {
       : state.currentStep === 10
       ? 3
       : 4;
+  const isStartDateStep = state.currentStep === 11;
 
   // Step 1 has its own full layout with sidebar
   if (isStep1) {
@@ -313,7 +341,7 @@ const Index = () => {
           </div>
         )}
         {renderStep()}
-        {!isAboutYou && !isLoadingStep && !isPreferencesStep && <Footer />}
+        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && <Footer />}
       </main>
 
       {!isLoadingStep && !isOfferStep && (
@@ -327,10 +355,10 @@ const Index = () => {
             setStep(state.currentStep + 1);
           }}
           onBack={handleBack}
-          disabled={isAboutYou ? !canProceedAboutYou() : state.selectedInsurances.length === 0}
-          buttonLabel={isReadyStep ? "Set preferences" : "Next"}
+          disabled={isAboutYou ? !canProceedAboutYou() : isStartDateStep ? !canProceedStartDate() : state.selectedInsurances.length === 0}
+          buttonLabel={isReadyStep ? "Set preferences" : isStartDateStep ? "Go further" : "Next"}
           hasSidebar={true}
-          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep}
+          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep && !isStartDateStep}
           showNextButton={state.currentStep !== 5}
         />
       )}
