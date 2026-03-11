@@ -145,13 +145,11 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
   ],
   legal: [
     {
-      id: "type",
-      label: "What legal assistance do you need?",
-      options: [
-        { value: "basic", label: "Basic" },
-        { value: "extended", label: "Extended" },
-      ],
-      autoAdvance: true,
+      id: "coverage_modules",
+      label: "What legal coverage do you need?",
+      description: "Select the coverage areas that are relevant to you. Consumer coverage is always included.",
+      options: [],
+      customComponent: "legal_coverage",
     },
   ],
   accidents: [
