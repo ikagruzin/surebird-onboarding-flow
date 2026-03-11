@@ -259,6 +259,18 @@ const Index = () => {
             onBack={() => setStep(9)}
           />
         );
+      case 11:
+        return (
+          <StepStartDate
+            selectedInsurances={state.selectedInsurances}
+            startDates={state.startDates}
+            onUpdateStartDate={(id, date) =>
+              setState((s) => ({ ...s, startDates: { ...s.startDates, [id]: date } }))
+            }
+            onNext={() => setStep(12)}
+            onBack={() => setStep(10)}
+          />
+        );
       default:
         return (
           <div className="animate-fade-in text-center py-20">
