@@ -415,7 +415,7 @@ const Index = () => {
           buttonLabel="Next"
           hasSidebar={true}
         />
-      </>
+      </div>
     );
   }
 
