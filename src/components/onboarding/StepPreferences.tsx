@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from "react";
-import { Check, Plus, Info, X } from "lucide-react";
+import { Check, Plus, Info, X, Mail, Phone } from "lucide-react";
 import { INSURANCE_TYPES } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
@@ -163,9 +163,11 @@ interface StepPreferencesProps {
   preferences: Record<string, Record<string, string>>;
   firstName: string;
   phone: string;
+  email: string;
   savings: number;
   onUpdatePreference: (insuranceId: string, questionId: string, value: string) => void;
   onUpdatePhone: (value: string) => void;
+  onUpdateEmail: (value: string) => void;
   onAddInsurances: (ids: string[]) => void;
   onNext: () => void;
   onBack: () => void;
@@ -176,9 +178,11 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   preferences,
   firstName,
   phone,
+  email,
   savings,
   onUpdatePreference,
   onUpdatePhone,
+  onUpdateEmail,
   onAddInsurances,
   onNext,
   onBack,
@@ -189,6 +193,9 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   const [showPhoneStep, setShowPhoneStep] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [addModalSelection, setAddModalSelection] = useState<string[]>([]);
+  const [contactMethod, setContactMethod] = useState<"phone" | "email">("phone");
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionDirection, setTransitionDirection] = useState<"left" | "right">("left");
 
   // Apply default preferences on mount
   useEffect(() => {
@@ -210,12 +217,6 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
 
   const showAllQuestions = questions.every(q => !q.autoAdvance);
   const allQuestionsAnswered = questions.every((q) => currentPrefs[q.id]);
-
-  // Check if a tab is fully completed
-  const isTabComplete = (id: string) => {
-    const qs = QUESTIONS_BY_TYPE[id] || [];
-    return qs.length > 0 && qs.every(q => (preferences[id] || {})[q.id]);
-  };
 
   // Total progress across all products
   const totalQuestions = selectedInsurances.reduce((sum, id) => sum + (QUESTIONS_BY_TYPE[id]?.length || 0), 0);
@@ -239,7 +240,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       const currentIndex = selectedInsurances.indexOf(activeTab);
       if (currentIndex > 0) {
         const prevTab = selectedInsurances[currentIndex - 1];
-        setActiveTab(prevTab);
+        animateTabSwitch(prevTab, "right");
         const prevQuestions = QUESTIONS_BY_TYPE[prevTab] || [];
         setQuestionStep(Math.max(0, prevQuestions.length - 1));
         return true;
@@ -248,6 +249,15 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
     },
   }), [showPhoneStep, questionStep, activeTab, selectedInsurances]);
 
+  const animateTabSwitch = (newTab: string, direction: "left" | "right" = "left") => {
+    setTransitionDirection(direction);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setActiveTab(newTab);
+      setIsTransitioning(false);
+    }, 200);
+  };
+
   const handleSelectOption = (questionId: string, value: string) => {
     onUpdatePreference(activeTab, questionId, value);
 
@@ -255,9 +265,8 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       setTimeout(() => {
         if (questionStep < questions.length - 1) {
           setQuestionStep(questionStep + 1);
-        } else {
-          completeCurrentTab();
         }
+        // Don't auto-complete tab - user must click Next
       }, 300);
     }
   };
@@ -269,7 +278,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
     const currentIndex = selectedInsurances.indexOf(activeTab);
     if (currentIndex < selectedInsurances.length - 1) {
       const nextTab = selectedInsurances[currentIndex + 1];
-      setActiveTab(nextTab);
+      animateTabSwitch(nextTab);
       setQuestionStep(0);
     } else {
       setShowPhoneStep(true);
@@ -277,7 +286,14 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   };
 
   const handleNextStep = () => {
-    if (showAllQuestions && allQuestionsAnswered) {
+    // Check if all questions for current tab are answered
+    const tabQuestions = QUESTIONS_BY_TYPE[activeTab] || [];
+    const tabPrefs = preferences[activeTab] || {};
+    const allAnswered = tabQuestions.every(q => tabPrefs[q.id]);
+    
+    if (!allAnswered) return; // Can't proceed without answering all
+
+    if (showAllQuestions) {
       completeCurrentTab();
     } else if (questionStep < questions.length - 1) {
       setQuestionStep(questionStep + 1);
@@ -287,9 +303,31 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   };
 
   const handleTabClick = (id: string) => {
-    setActiveTab(id);
+    if (id === activeTab) return;
+    const currentIndex = selectedInsurances.indexOf(activeTab);
+    const newIndex = selectedInsurances.indexOf(id);
+    animateTabSwitch(id, newIndex > currentIndex ? "left" : "right");
     setQuestionStep(0);
     setShowPhoneStep(false);
+  };
+
+  // Can proceed on current tab?
+  const canProceedCurrentTab = () => {
+    if (showPhoneStep) {
+      return contactMethod === "phone" 
+        ? phone.replace(/\s/g, "").length > 4
+        : email.includes("@");
+    }
+    const tabQuestions = QUESTIONS_BY_TYPE[activeTab] || [];
+    const tabPrefs = preferences[activeTab] || {};
+    if (showAllQuestions) {
+      return tabQuestions.every(q => tabPrefs[q.id]);
+    }
+    // For auto-advance, check if last question or current question is answered
+    if (questionStep >= tabQuestions.length - 1) {
+      return tabQuestions.every(q => tabPrefs[q.id]);
+    }
+    return !!tabPrefs[tabQuestions[questionStep]?.id];
   };
 
   // Add products modal
@@ -321,32 +359,40 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   // Extra savings from adding more products
   const extraSavings = nonSelectedProducts.reduce((sum, t) => sum + t.savings, 0);
 
+  // Transition classes
+  const getTransitionClass = () => {
+    if (isTransitioning) {
+      return transitionDirection === "left" 
+        ? "opacity-0 translate-x-4 transition-all duration-200" 
+        : "opacity-0 -translate-x-4 transition-all duration-200";
+    }
+    return "opacity-100 translate-x-0 transition-all duration-200";
+  };
+
   // Product tabs
   const renderProductTabs = () => (
     <div className="flex flex-wrap items-center gap-2 mb-4">
       {selectedInsurances.map((id) => {
         const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
         const isActive = activeTab === id && !showPhoneStep;
-        const isComplete = isTabComplete(id) || completedTabs.includes(id);
+        const isComplete = completedTabs.includes(id);
         return (
           <button
             key={id}
             onClick={() => handleTabClick(id)}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border h-[48px] ${
               isActive
                 ? "bg-foreground text-background border-foreground"
                 : "bg-white border-tab-border text-foreground"
             }`}
           >
             {isComplete ? (
-              <span className="w-6 h-6 rounded-full bg-success flex items-center justify-center">
-                <Check className="w-3.5 h-3.5 text-white" />
-              </span>
+              <Check className={`w-6 h-6 ${isActive ? "text-background" : "text-success"}`} />
             ) : (
               <img
                 src={ICON_MAP[ins.icon]}
                 alt={ins.label}
-                className={`w-8 h-8 ${isActive ? "brightness-0 invert" : ""}`}
+                className={`w-6 h-6 ${isActive ? "brightness-0 invert" : ""}`}
               />
             )}
             {ins.label}
@@ -355,7 +401,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       })}
       <button
         onClick={handleOpenAddModal}
-        className="h-[44px] px-4 rounded-full border border-tab-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
+        className="h-[48px] px-4 rounded-full border border-tab-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
       >
         <Plus className="w-4 h-4" />
       </button>
@@ -439,7 +485,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
     );
   };
 
-  // Phone collection step
+  // Phone/email collection step
   if (showPhoneStep) {
     return (
       <div className="animate-fade-in">
@@ -454,24 +500,64 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
             <p className="text-base font-semibold text-foreground">
               We are almost there, {firstName} 🙌
               <br />
-              Just a few more details and you'll get your personal offer!
+              <span className="font-normal text-muted-foreground">
+                Just one more detail so we can send you your personal offer!
+              </span>
             </p>
           </div>
 
+          {/* Contact method toggle */}
+          <div className="flex items-center gap-2 mb-5">
+            <button
+              onClick={() => setContactMethod("phone")}
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all border ${
+                contactMethod === "phone"
+                  ? "bg-foreground text-background border-foreground"
+                  : "bg-white border-border text-foreground hover:bg-muted"
+              }`}
+            >
+              <Phone className="w-4 h-4" />
+              Phone number
+            </button>
+            <button
+              onClick={() => setContactMethod("email")}
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all border ${
+                contactMethod === "email"
+                  ? "bg-foreground text-background border-foreground"
+                  : "bg-white border-border text-foreground hover:bg-muted"
+              }`}
+            >
+              <Mail className="w-4 h-4" />
+              Email address
+            </button>
+          </div>
+
           <div className="max-w-lg">
-            <FloatingLabelInput
-              label="+31"
-              value={phone}
-              onChange={(e) => onUpdatePhone(e.target.value)}
-              maxLength={15}
-              inputMode="tel"
-            />
+            {contactMethod === "phone" ? (
+              <FloatingLabelInput
+                label="Phone number (+31)"
+                value={phone}
+                onChange={(e) => onUpdatePhone(e.target.value)}
+                maxLength={15}
+                inputMode="tel"
+              />
+            ) : (
+              <FloatingLabelInput
+                label="Email address"
+                value={email}
+                onChange={(e) => onUpdateEmail(e.target.value)}
+                type="email"
+              />
+            )}
           </div>
 
           <div className="flex items-start gap-2 mt-6 text-muted-foreground">
             <Info className="w-4 h-4 shrink-0 mt-0.5" />
             <p className="text-sm">
-              Enter your email address below to save your personal offer. This way you always have it at hand when you need it. No spam, no obligations: just store your overview safely!
+              {contactMethod === "phone"
+                ? "We'll use your phone number to send you a verification code and keep you updated on your offer. No spam!"
+                : "We'll use your email to send your personal offer and keep it safe for you. No spam, no obligations!"
+              }
             </p>
           </div>
         </div>
@@ -502,115 +588,117 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       {/* Progress bar */}
       <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
-      {/* Questions card */}
-      <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
-        {showAllQuestions ? (
-          <>
-            <div className="flex items-start gap-3 mb-6">
-              <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-              <p className="text-base font-semibold text-foreground">
-                {introMessage}
-              </p>
-            </div>
+      {/* Questions card with transition */}
+      <div key={activeTab} className={getTransitionClass()}>
+        <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
+          {showAllQuestions ? (
+            <>
+              <div className="flex items-start gap-3 mb-6">
+                <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
+                <p className="text-base font-semibold text-foreground">
+                  {introMessage}
+                </p>
+              </div>
 
-            <div className="space-y-6">
-              {questions.map((q) => (
-                <div key={q.id}>
-                  <div className="flex items-center gap-2 mb-3">
-                    <p className="text-base font-semibold text-foreground">{q.label}</p>
-                    {q.infoText && <Info className="w-4 h-4 text-muted-foreground" />}
-                  </div>
-                  <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
-                    {q.options.map((opt) => {
-                      const isSelected = currentPrefs[q.id] === opt.value;
-                      return (
-                        <button
-                          key={opt.value}
-                          onClick={() => handleSelectOption(q.id, opt.value)}
-                          className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 transition-all text-left shadow-sm ${
-                            isSelected
-                              ? "border-primary bg-primary/5"
-                              : "border-border hover:border-muted-foreground/30"
-                          }`}
-                        >
-                          <div
-                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                              isSelected ? "border-primary" : "border-muted-foreground/40"
+              <div className="space-y-6">
+                {questions.map((q) => (
+                  <div key={q.id}>
+                    <div className="flex items-center gap-2 mb-3">
+                      <p className="text-base font-semibold text-foreground">{q.label}</p>
+                      {q.infoText && <Info className="w-4 h-4 text-muted-foreground" />}
+                    </div>
+                    <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+                      {q.options.map((opt) => {
+                        const isSelected = currentPrefs[q.id] === opt.value;
+                        return (
+                          <button
+                            key={opt.value}
+                            onClick={() => handleSelectOption(q.id, opt.value)}
+                            className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 transition-all text-left shadow-sm ${
+                              isSelected
+                                ? "border-primary bg-primary/5"
+                                : "border-border hover:border-muted-foreground/30"
                             }`}
                           >
-                            {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
-                          </div>
-                          <span className="text-sm font-medium text-foreground">{opt.label}</span>
-                        </button>
-                      );
-                    })}
+                            <div
+                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                                isSelected ? "border-primary" : "border-muted-foreground/40"
+                              }`}
+                            >
+                              {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                            </div>
+                            <span className="text-sm font-medium text-foreground">{opt.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-3 mb-8">
+                <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0" />
+                <p className="text-base font-semibold text-foreground">
+                  {currentQuestion?.label}
+                </p>
+              </div>
+
+              {currentQuestion?.description && (
+                <div className="mb-6">
+                  <p className="text-sm text-foreground whitespace-pre-line">{currentQuestion.description}</p>
                 </div>
-              ))}
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="flex items-center gap-3 mb-8">
-              <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0" />
-              <p className="text-base font-semibold text-foreground">
-                {currentQuestion?.label}
-              </p>
-            </div>
+              )}
 
-            {currentQuestion?.description && (
-              <div className="mb-6">
-                <p className="text-sm text-foreground whitespace-pre-line">{currentQuestion.description}</p>
-              </div>
-            )}
-
-            <div className={`grid gap-3 ${currentQuestion?.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
-              {currentQuestion?.options.map((opt) => {
-                const isSelected = currentPrefs[currentQuestion.id] === opt.value;
-                return (
-                  <button
-                    key={opt.value}
-                    onClick={() => handleSelectOption(currentQuestion.id, opt.value)}
-                    className={`flex items-center justify-between px-4 py-3.5 rounded-xl border-2 transition-all text-left shadow-sm ${
-                      isSelected
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-muted-foreground/30"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                          isSelected ? "border-primary" : "border-muted-foreground/40"
-                        }`}
-                      >
-                        {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+              <div className={`grid gap-3 ${currentQuestion?.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+                {currentQuestion?.options.map((opt) => {
+                  const isSelected = currentPrefs[currentQuestion.id] === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      onClick={() => handleSelectOption(currentQuestion.id, opt.value)}
+                      className={`flex items-center justify-between px-4 py-3.5 rounded-xl border-2 transition-all text-left shadow-sm ${
+                        isSelected
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                            isSelected ? "border-primary" : "border-muted-foreground/40"
+                          }`}
+                        >
+                          {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                        </div>
+                        <span className="text-sm font-medium text-foreground">{opt.label}</span>
                       </div>
-                      <span className="text-sm font-medium text-foreground">{opt.label}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {opt.badge && (
-                        <span className="text-xs font-medium bg-success/10 text-success px-2 py-1 rounded-full flex items-center gap-1">
-                          <Check className="w-3 h-3" />
-                          {opt.badge}
-                        </span>
-                      )}
-                      {currentQuestion.options.length > 2 && (
-                        <Info className="w-4 h-4 text-muted-foreground" />
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {currentQuestion?.infoText && (
-              <div className="flex items-start gap-2 mt-6 text-muted-foreground">
-                <Info className="w-4 h-4 shrink-0 mt-0.5" />
-                <p className="text-sm">{currentQuestion.infoText}</p>
+                      <div className="flex items-center gap-2">
+                        {opt.badge && (
+                          <span className="text-xs font-medium bg-success/10 text-success px-2 py-1 rounded-full flex items-center gap-1">
+                            <Check className="w-3 h-3" />
+                            {opt.badge}
+                          </span>
+                        )}
+                        {currentQuestion.options.length > 2 && (
+                          <Info className="w-4 h-4 text-muted-foreground" />
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
-            )}
-          </>
-        )}
+
+              {currentQuestion?.infoText && (
+                <div className="flex items-start gap-2 mt-6 text-muted-foreground">
+                  <Info className="w-4 h-4 shrink-0 mt-0.5" />
+                  <p className="text-sm">{currentQuestion.infoText}</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
       {renderAddModal()}
     </div>

@@ -14,6 +14,7 @@ import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepOffer from "@/components/onboarding/StepOffer";
 import StepStartDate from "@/components/onboarding/StepStartDate";
 import StepConfirmDetails from "@/components/onboarding/StepConfirmDetails";
+import StepPhoneVerification from "@/components/onboarding/StepPhoneVerification";
 import StepIdinVerification from "@/components/onboarding/StepIdinVerification";
 import StepAcceptanceQuestions from "@/components/onboarding/StepAcceptanceQuestions";
 import StepFinalPreview from "@/components/onboarding/StepFinalPreview";
@@ -148,6 +149,14 @@ const Index = () => {
     setStep(state.currentStep - 1);
   };
 
+  // Steps:
+  // 1: Product selection
+  // 2: Name, 3: Address, 4: Birthdate, 5: Family, 6: Family details, 7: Ready
+  // 8: Preferences
+  // 9: Loading, 10: Offer
+  // 11: Start date, 12: Confirm details, 13: Phone verification, 14: iDIN, 15: Acceptance, 16: Final preview
+  // 17: Success
+
   const renderStep = () => {
     switch (state.currentStep) {
       case 1:
@@ -224,7 +233,6 @@ const Index = () => {
             onUpdateChildren={(value) => {
               setState((s) => {
                 const newAges = [...s.childrenAges];
-                // Adjust ages array length
                 while (newAges.length < value) newAges.push(0);
                 while (newAges.length > value) newAges.pop();
                 return { ...s, childrenCount: value, childrenAges: newAges };
@@ -257,9 +265,11 @@ const Index = () => {
             preferences={state.preferences}
             firstName={state.firstName}
             phone={state.phone}
+            email={state.email}
             savings={totalSavings}
             onUpdatePreference={updatePreference}
             onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
+            onUpdateEmail={(value) => setState((s) => ({ ...s, email: value }))}
             onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
             onNext={() => setStep(9)}
             onBack={() => setStep(7)}
@@ -311,14 +321,22 @@ const Index = () => {
         );
       case 13:
         return (
-          <StepIdinVerification
-            iban={state.iban}
-            onUpdateIban={(value) => setState((s) => ({ ...s, iban: value }))}
-            onNext={() => setStep(14)}
+          <StepPhoneVerification
+            phone={state.phone}
+            onVerified={() => setStep(14)}
             onBack={() => setStep(12)}
           />
         );
       case 14:
+        return (
+          <StepIdinVerification
+            iban={state.iban}
+            onUpdateIban={(value) => setState((s) => ({ ...s, iban: value }))}
+            onNext={() => setStep(15)}
+            onBack={() => setStep(13)}
+          />
+        );
+      case 15:
         return (
           <StepAcceptanceQuestions
             answers={state.acceptanceAnswers}
@@ -328,11 +346,11 @@ const Index = () => {
                 acceptanceAnswers: { ...s.acceptanceAnswers, [qId]: val },
               }))
             }
-            onNext={() => setStep(15)}
-            onBack={() => setStep(13)}
+            onNext={() => setStep(16)}
+            onBack={() => setStep(14)}
           />
         );
-      case 15:
+      case 16:
         return (
           <StepFinalPreview
             selectedInsurances={state.selectedInsurances}
@@ -347,11 +365,11 @@ const Index = () => {
             onUpdateAgree={(field, value) =>
               setState((s) => ({ ...s, [field]: value }))
             }
-            onNext={() => setStep(16)}
-            onBack={() => setStep(14)}
+            onNext={() => setStep(17)}
+            onBack={() => setStep(15)}
           />
         );
-      case 16:
+      case 17:
         return <StepSuccess email={state.email} />;
       default:
         return <StepSuccess email={state.email} />;
@@ -373,15 +391,16 @@ const Index = () => {
       : 4;
   const isStartDateStep = state.currentStep === 11;
   const isConfirmStep = state.currentStep === 12;
-  const isIdinStep = state.currentStep === 13;
-  const isAcceptanceStep = state.currentStep === 14;
-  const isFinalPreviewStep = state.currentStep === 15;
-  const isSuccessStep = state.currentStep === 16;
-  const isFinalise = state.currentStep >= 11 && state.currentStep <= 15;
+  const isPhoneVerifyStep = state.currentStep === 13;
+  const isIdinStep = state.currentStep === 14;
+  const isAcceptanceStep = state.currentStep === 15;
+  const isFinalPreviewStep = state.currentStep === 16;
+  const isSuccessStep = state.currentStep === 17;
+  const isFinalise = state.currentStep >= 11 && state.currentStep <= 16;
 
-  // Finalise sub-step progress (steps 11-15 → 5 sub-steps)
+  // Finalise sub-step progress (steps 11-16 → 6 sub-steps)
   const finaliseSubStep = state.currentStep - 10;
-  const finaliseTotalSubs = 5;
+  const finaliseTotalSubs = 6;
   const finaliseProgress = (finaliseSubStep / finaliseTotalSubs) * 100;
 
   // Step 1 has its own full layout with sidebar
@@ -401,7 +420,6 @@ const Index = () => {
   }
 
   const canProceedIdin = (): boolean => {
-    // Either verified via iDIN or manual IBAN entered
     return state.iban.length >= 5;
   };
 
@@ -423,7 +441,7 @@ const Index = () => {
           </div>
         )}
         {renderStep()}
-        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isIdinStep && !isAcceptanceStep && !isFinalPreviewStep && !isSuccessStep && <Footer />}
+        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isPhoneVerifyStep && !isIdinStep && !isAcceptanceStep && !isFinalPreviewStep && !isSuccessStep && <Footer />}
       </main>
 
       {!isLoadingStep && !isOfferStep && !isSuccessStep && (
@@ -440,6 +458,7 @@ const Index = () => {
             isAboutYou ? !canProceedAboutYou() :
             isStartDateStep ? !canProceedStartDate() :
             isConfirmStep ? !(state.firstName && state.lastName && state.email.includes("@")) :
+            isPhoneVerifyStep ? true : // Disabled - OTP auto-submits
             isIdinStep ? !canProceedIdin() :
             isAcceptanceStep ? false :
             isFinalPreviewStep ? !(state.agreeTerms && state.agreeDebit) :
@@ -449,6 +468,7 @@ const Index = () => {
             isReadyStep ? "Set preferences" :
             isStartDateStep ? "Go further" :
             isConfirmStep ? "Next" :
+            isPhoneVerifyStep ? "Verifying..." :
             isIdinStep ? "Confirm & continue" :
             isAcceptanceStep ? "Continue" :
             isFinalPreviewStep ? "Confirm & Insure" :
@@ -456,7 +476,7 @@ const Index = () => {
           }
           hasSidebar={true}
           showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep && !isFinalise}
-          showNextButton={state.currentStep !== 5}
+          showNextButton={state.currentStep !== 5 && !isPhoneVerifyStep}
         />
       )}
     </div>
