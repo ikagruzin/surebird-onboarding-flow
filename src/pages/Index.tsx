@@ -451,6 +451,11 @@ const Index = () => {
             if (state.currentStep === 5 && state.familyStatus) {
               return;
             }
+            // For preferences step, delegate to internal handler
+            if (state.currentStep === 8 && prefsRef.current) {
+              const handled = prefsRef.current.handleNext();
+              if (handled) return;
+            }
             setStep(state.currentStep + 1);
           }}
           onBack={handleBack}
