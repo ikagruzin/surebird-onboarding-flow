@@ -16,6 +16,8 @@ import StepStartDate from "@/components/onboarding/StepStartDate";
 import StepConfirmDetails from "@/components/onboarding/StepConfirmDetails";
 import StepIdinVerification from "@/components/onboarding/StepIdinVerification";
 import StepAcceptanceQuestions from "@/components/onboarding/StepAcceptanceQuestions";
+import StepFinalPreview from "@/components/onboarding/StepFinalPreview";
+import StepSuccess from "@/components/onboarding/StepSuccess";
 import Footer from "@/components/onboarding/Footer";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
