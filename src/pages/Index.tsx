@@ -423,10 +423,10 @@ const Index = () => {
           </div>
         )}
         {renderStep()}
-        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isIdinStep && !isAcceptanceStep && <Footer />}
+        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isIdinStep && !isAcceptanceStep && !isFinalPreviewStep && !isSuccessStep && <Footer />}
       </main>
 
-      {!isLoadingStep && !isOfferStep && (
+      {!isLoadingStep && !isOfferStep && !isSuccessStep && (
         <StickyFooter
           savings={totalSavings}
           onNext={() => {
@@ -442,6 +442,7 @@ const Index = () => {
             isConfirmStep ? !(state.firstName && state.lastName && state.email.includes("@")) :
             isIdinStep ? !canProceedIdin() :
             isAcceptanceStep ? false :
+            isFinalPreviewStep ? !(state.agreeTerms && state.agreeDebit) :
             state.selectedInsurances.length === 0
           }
           buttonLabel={
@@ -450,6 +451,7 @@ const Index = () => {
             isConfirmStep ? "Next" :
             isIdinStep ? "Confirm & continue" :
             isAcceptanceStep ? "Continue" :
+            isFinalPreviewStep ? "Confirm & Insure" :
             "Next"
           }
           hasSidebar={true}
