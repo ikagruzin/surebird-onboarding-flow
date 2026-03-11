@@ -357,7 +357,7 @@ const Index = () => {
           </div>
         )}
         {renderStep()}
-        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && <Footer />}
+        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && <Footer />}
       </main>
 
       {!isLoadingStep && !isOfferStep && (
@@ -365,16 +365,15 @@ const Index = () => {
           savings={totalSavings}
           onNext={() => {
             if (state.currentStep === 5 && state.familyStatus) {
-              // Already auto-advanced
               return;
             }
             setStep(state.currentStep + 1);
           }}
           onBack={handleBack}
-          disabled={isAboutYou ? !canProceedAboutYou() : isStartDateStep ? !canProceedStartDate() : state.selectedInsurances.length === 0}
-          buttonLabel={isReadyStep ? "Set preferences" : isStartDateStep ? "Go further" : "Next"}
+          disabled={isAboutYou ? !canProceedAboutYou() : isStartDateStep ? !canProceedStartDate() : isConfirmStep ? !(state.firstName && state.lastName && state.email.includes("@")) : state.selectedInsurances.length === 0}
+          buttonLabel={isReadyStep ? "Set preferences" : isStartDateStep ? "Go further" : isConfirmStep ? "Confirm & continue" : "Next"}
           hasSidebar={true}
-          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep && !isStartDateStep}
+          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep}
           showNextButton={state.currentStep !== 5}
         />
       )}
