@@ -285,6 +285,20 @@ const Index = () => {
             onBack={() => setStep(10)}
           />
         );
+      case 12:
+        return (
+          <StepConfirmDetails
+            firstName={state.firstName}
+            lastName={state.lastName}
+            phone={state.phone}
+            email={state.email}
+            onUpdateField={(field, value) =>
+              setState((s) => ({ ...s, [field]: value }))
+            }
+            onNext={() => setStep(13)}
+            onBack={() => setStep(11)}
+          />
+        );
       default:
         return (
           <div className="animate-fade-in text-center py-20">
