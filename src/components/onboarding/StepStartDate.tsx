@@ -147,7 +147,7 @@ const StepStartDate = ({
           </div>
           <DateInput
             value={startDates[product.id] || ""}
-            onChange={(v) => handleIndividualDateChange(product.id, v)}
+            onChange={(v, prev) => handleIndividualDateChange(product.id, v, prev)}
             onToday={() => handleIndividualToday(product.id)}
           />
         </div>
