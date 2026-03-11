@@ -327,6 +327,7 @@ const Index = () => {
       ? 3
       : 4;
   const isStartDateStep = state.currentStep === 11;
+  const isConfirmStep = state.currentStep === 12;
 
   // Step 1 has its own full layout with sidebar
   if (isStep1) {
