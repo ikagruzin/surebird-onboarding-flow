@@ -70,10 +70,9 @@ const StepStartDate = ({
   // For "yes" mode, use a unified key
   const unifiedDate = startDates["__unified"] || "";
 
-  const handleUnifiedDateChange = (val: string) => {
-    const formatted = formatDateInput(val);
+  const handleUnifiedDateChange = (val: string, prev: string) => {
+    const formatted = val.length >= prev.length ? formatDateInput(val) : val;
     onUpdateStartDate("__unified", formatted);
-    // Propagate to all products
     products.forEach((p) => onUpdateStartDate(p.id, formatted));
   };
 
