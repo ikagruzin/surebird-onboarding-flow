@@ -358,7 +358,8 @@ const Index = () => {
   const isStartDateStep = state.currentStep === 11;
   const isConfirmStep = state.currentStep === 12;
   const isIdinStep = state.currentStep === 13;
-  const isFinalise = state.currentStep >= 11 && state.currentStep <= 13;
+  const isAcceptanceStep = state.currentStep === 14;
+  const isFinalise = state.currentStep >= 11 && state.currentStep <= 14;
 
   // Finalise sub-step progress (steps 11, 12, 13 → 3 sub-steps)
   const finaliseSubStep = state.currentStep - 10;
