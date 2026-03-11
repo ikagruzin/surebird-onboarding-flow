@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, ChangeEvent } from "react";
 import { INSURANCE_TYPES } from "./types";
-import { Calendar, CalendarDays } from "lucide-react";
+import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
@@ -28,15 +28,15 @@ interface StepStartDateProps {
   onBack: () => void;
 }
 
-const formatDateInput = (value: string): string => {
-  const digits = value.replace(/\D/g, "");
+function formatDateInput(raw: string): string {
+  const digits = raw.replace(/\D/g, "").slice(0, 8);
   let result = "";
-  for (let i = 0; i < Math.min(digits.length, 8); i++) {
+  for (let i = 0; i < digits.length; i++) {
     if (i === 2 || i === 4) result += "-";
     result += digits[i];
   }
   return result;
-};
+}
 
 const getTodayFormatted = (): string => {
   const d = new Date();
@@ -54,6 +54,35 @@ const isValidDate = (val: string): boolean => {
   return date.getFullYear() === yyyy && date.getMonth() === mm - 1 && date.getDate() === dd;
 };
 
+const DateInput = ({
+  value,
+  onChange,
+  onToday,
+}: {
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onToday: () => void;
+}) => (
+  <div className="flex gap-3">
+    <div className="flex-1">
+      <FloatingLabelInput
+        label="dd-mm-yyyy"
+        value={value}
+        onChange={onChange}
+        maxLength={10}
+        inputMode="numeric"
+      />
+    </div>
+    <button
+      type="button"
+      onClick={onToday}
+      className="h-14 px-5 rounded-xl border-2 border-input bg-white text-sm font-semibold text-foreground hover:bg-muted transition-colors whitespace-nowrap"
+    >
+      Today
+    </button>
+  </div>
+);
+
 const StepStartDate = ({
   selectedInsurances,
   startDates,
@@ -67,11 +96,15 @@ const StepStartDate = ({
   const products = INSURANCE_TYPES.filter((t) => selectedInsurances.includes(t.id));
   const singleProduct = products[0];
 
-  // For "yes" mode, use a unified key
   const unifiedDate = startDates["__unified"] || "";
 
-  const handleUnifiedDateChange = (val: string, prev: string) => {
-    const formatted = val.length >= prev.length ? formatDateInput(val) : val;
+  const handleChange = (id: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatDateInput(e.target.value);
+    onUpdateStartDate(id, formatted);
+  };
+
+  const handleUnifiedChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatDateInput(e.target.value);
     onUpdateStartDate("__unified", formatted);
     products.forEach((p) => onUpdateStartDate(p.id, formatted));
   };
@@ -82,47 +115,9 @@ const StepStartDate = ({
     products.forEach((p) => onUpdateStartDate(p.id, today));
   };
 
-  const handleIndividualDateChange = (id: string, val: string, prev: string) => {
-    const formatted = val.length >= prev.length ? formatDateInput(val) : val;
-    onUpdateStartDate(id, formatted);
-  };
-
   const handleIndividualToday = (id: string) => {
     onUpdateStartDate(id, getTodayFormatted());
   };
-
-  const canProceed = (): boolean => {
-    if (isSingle) return isValidDate(startDates[singleProduct.id] || "");
-    if (!sameDate) return false;
-    if (sameDate === "yes") return isValidDate(unifiedDate);
-    return products.every((p) => isValidDate(startDates[p.id] || ""));
-  };
-
-  const DateInput = ({ value, onChange, onToday, label }: { value: string; onChange: (v: string, prev: string) => void; onToday: () => void; label?: string }) => (
-    <div className="space-y-3">
-      {label && <p className="text-sm font-medium text-foreground">{label}</p>}
-      <div className="flex gap-3">
-        <div className="relative flex-1">
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => onChange(e.target.value, value)}
-            placeholder="dd-mm-yyyy"
-            maxLength={10}
-            className="flex h-14 w-full rounded-xl border-2 border-input bg-white px-4 pr-12 text-base text-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          />
-          <CalendarDays className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        </div>
-        <button
-          type="button"
-          onClick={onToday}
-          className="h-14 px-5 rounded-xl border-2 border-input bg-white text-sm font-semibold text-foreground hover:bg-muted transition-colors whitespace-nowrap"
-        >
-          Today
-        </button>
-      </div>
-    </div>
-  );
 
   // Single product scenario
   if (isSingle) {
@@ -132,7 +127,6 @@ const StepStartDate = ({
 
     return (
       <div className="animate-fade-in space-y-8">
-        {/* Taco message */}
         <div className="flex items-center gap-3">
           <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
           <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
@@ -147,7 +141,7 @@ const StepStartDate = ({
           </div>
           <DateInput
             value={startDates[product.id] || ""}
-            onChange={(v, prev) => handleIndividualDateChange(product.id, v, prev)}
+            onChange={handleChange(product.id)}
             onToday={() => handleIndividualToday(product.id)}
           />
         </div>
@@ -158,7 +152,6 @@ const StepStartDate = ({
   // Multi product scenario
   return (
     <div className="animate-fade-in space-y-8">
-      {/* Taco message */}
       <div className="flex items-center gap-3">
         <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
         <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
@@ -166,7 +159,6 @@ const StepStartDate = ({
         </div>
       </div>
 
-      {/* Same date toggle */}
       <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-5">
         <p className="text-base font-semibold text-foreground">
           Do you want to have the same start date for all your insurances?
@@ -188,19 +180,17 @@ const StepStartDate = ({
           ))}
         </div>
 
-        {/* Yes: unified date picker */}
         {sameDate === "yes" && (
           <div className="pt-2">
             <DateInput
               value={unifiedDate}
-              onChange={(v, prev) => handleUnifiedDateChange(v, prev)}
+              onChange={handleUnifiedChange}
               onToday={handleUnifiedToday}
             />
           </div>
         )}
       </div>
 
-      {/* No: individual date pickers */}
       {sameDate === "no" && (
         <div className="space-y-4">
           {products.map((product) => {
@@ -214,7 +204,7 @@ const StepStartDate = ({
                 </div>
                 <DateInput
                   value={startDates[product.id] || ""}
-                  onChange={(v, prev) => handleIndividualDateChange(product.id, v, prev)}
+                  onChange={handleChange(product.id)}
                   onToday={() => handleIndividualToday(product.id)}
                 />
               </div>
