@@ -664,31 +664,41 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
                       <p className="text-base font-semibold text-foreground">{q.label}</p>
                       {q.infoText && <Info className="w-4 h-4 text-muted-foreground" />}
                     </div>
-                    <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
-                      {q.options.map((opt) => {
-                        const isSelected = currentPrefs[q.id] === opt.value;
-                        return (
-                          <button
-                            key={opt.value}
-                            onClick={() => handleSelectOption(q.id, opt.value)}
-                            className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 transition-all text-left shadow-sm ${
-                              isSelected
-                                ? "border-primary bg-primary/5"
-                                : "border-border hover:border-muted-foreground/30"
-                            }`}
-                          >
-                            <div
-                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                                isSelected ? "border-primary" : "border-muted-foreground/40"
+                    {q.description && (
+                      <p className="text-sm text-muted-foreground mb-3">{q.description}</p>
+                    )}
+                    {q.customComponent === "legal_coverage" ? (
+                      <LegalCoverageSelector
+                        selected={(currentPrefs[q.id] || "consumer").split(",")}
+                        onChange={(sel) => onUpdatePreference(activeTab, q.id, sel.join(","))}
+                      />
+                    ) : (
+                      <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+                        {q.options.map((opt) => {
+                          const isSelected = currentPrefs[q.id] === opt.value;
+                          return (
+                            <button
+                              key={opt.value}
+                              onClick={() => handleSelectOption(q.id, opt.value)}
+                              className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 transition-all text-left shadow-sm ${
+                                isSelected
+                                  ? "border-primary bg-primary/5"
+                                  : "border-border hover:border-muted-foreground/30"
                               }`}
                             >
-                              {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
-                            </div>
-                            <span className="text-sm font-medium text-foreground">{opt.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
+                              <div
+                                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                                  isSelected ? "border-primary" : "border-muted-foreground/40"
+                                }`}
+                              >
+                                {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                              </div>
+                              <span className="text-sm font-medium text-foreground">{opt.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
