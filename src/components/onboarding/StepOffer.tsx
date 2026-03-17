@@ -662,7 +662,7 @@ const StepOffer = ({
         </button>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] items-start">
+      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px] items-start">
         {/* Main content */}
         <div className="min-w-0">
           {activeTab === "all" ? (
