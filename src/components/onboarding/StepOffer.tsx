@@ -159,8 +159,10 @@ const StepOffer = ({
 
   const scrollTestimonials = (dir: "left" | "right") => {
     if (!testimonialRef.current) return;
-    const amount = 280;
-    testimonialRef.current.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
+    const el = testimonialRef.current;
+    el.style.overflowX = "auto";
+    el.scrollBy({ left: dir === "left" ? -236 : 236, behavior: "smooth" });
+    setTimeout(() => { el.style.overflowX = "hidden"; }, 400);
   };
 
   const renderTestimonials = () => (
