@@ -1,11 +1,9 @@
 import type { FlowConfig } from "./flowTypes";
 
-// Flow B is currently a duplicate of Flow A.
-// Modify the steps array, reorder, add/remove steps, or change logic as needed.
 const flowB: FlowConfig = {
   id: "b",
-  name: "Flow B — Variant",
-  description: "Variant onboarding flow (currently identical to Flow A — customize as needed)",
+  name: "Flow B — Smart Audit",
+  description: "Fast-track: upload existing policy → skip to offer",
   phases: [
     { id: "about-you", label: "About you", sidebarStep: 1 },
     { id: "preferences", label: "Set preferences", sidebarStep: 2 },
@@ -19,6 +17,12 @@ const flowB: FlowConfig = {
       standalone: true,
       buttonLabel: "Next",
     },
+    {
+      id: "policy-upload",
+      phase: null,
+      hideFooter: true,
+    },
+    // About you steps still exist for the normal path
     {
       id: "name",
       phase: "about-you",

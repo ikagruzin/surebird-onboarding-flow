@@ -13,7 +13,7 @@ import iconLegal from "@/assets/icon-legal.svg";
 import iconAccidents from "@/assets/icon-accidents.svg";
 import iconCaravan from "@/assets/icon-caravan.svg";
 import iconTravel from "@/assets/icon-travel.svg";
-import { Globe, User, LayoutGrid, Layers, GalleryHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
+import { Globe, User, LayoutGrid, Layers, GalleryHorizontal, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Plane: <img src={iconTravel} alt="Travel" className="w-10 h-10" />,
@@ -161,9 +161,10 @@ interface StepOneProps {
   onToggle: (id: string) => void;
   onBundleSelect: (ids: string[]) => void;
   onNext: () => void;
+  onSmartAudit?: () => void;
 }
 
-const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) => {
+const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: StepOneProps) => {
   const [version, setVersion] = useState<"A" | "B" | "C">("A");
   const sliderRef = useRef<HTMLDivElement>(null);
   const [language, setLanguage] = useState<"en" | "nl">("en");
@@ -436,6 +437,16 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) =
             <p className="mb-8 text-subtitle">
               {version === "A" ? t.subtitle : t.bundleSubtitle}
             </p>
+
+            {onSmartAudit && (
+              <button
+                onClick={onSmartAudit}
+                className="mb-8 inline-flex items-center gap-2 text-primary font-semibold text-base hover:underline transition-colors bg-primary/5 border border-primary/20 rounded-full px-5 py-2.5"
+              >
+                <Sparkles className="w-4 h-4" />
+                Already insured? Let us do the work for you.
+              </button>
+            )}
 
             {version === "A" ? (
               <>
