@@ -186,7 +186,7 @@ const StepOffer = ({
       </div>
       <div
         ref={testimonialRef}
-        className="flex gap-4 overflow-x-auto pb-2"
+        className="flex gap-4 overflow-x-hidden pb-2 snap-x snap-mandatory scroll-smooth"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {TESTIMONIALS.map((t, i) => (
