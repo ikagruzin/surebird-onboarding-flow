@@ -555,7 +555,7 @@ const StepOffer = ({
 
   // Sidebar calculations
   const renderCalculations = () => (
-    <div className="sticky top-8 space-y-6">
+    <div className="space-y-6 lg:sticky lg:top-8">
       {/* Offer calculations */}
       <div className="border border-border rounded-3xl p-6 bg-card">
         <h3 className="text-lg font-bold text-foreground mb-1">Offer calculations</h3>
