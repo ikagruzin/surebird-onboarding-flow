@@ -584,6 +584,9 @@ const StepOffer = ({
 
           {/* Video testimonials carousel */}
           {renderTestimonials()}
+
+          {/* Trustpilot reviews carousel */}
+          {renderTrustpilotReviews()}
         </div>
         </div>
 
