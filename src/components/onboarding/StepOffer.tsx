@@ -193,7 +193,7 @@ const StepOffer = ({
           <button
             key={i}
             onClick={() => setVideoModal(t.videoId)}
-            className="relative shrink-0 w-[220px] h-[300px] rounded-2xl overflow-hidden group cursor-pointer"
+            className="relative shrink-0 w-[220px] h-[300px] rounded-2xl overflow-hidden group cursor-pointer snap-start"
           >
             <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
