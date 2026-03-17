@@ -686,9 +686,9 @@ const StepOffer = ({
         </button>
       </div>
 
-      <div className="flex gap-8">
+      <div className="flex flex-col xl:flex-row gap-8 items-start">
         {/* Main content */}
-        <div className="flex-1 min-w-0 overflow-hidden">
+        <div className="flex-1 min-w-0">
           {activeTab === "all" && (
             <>
               {/* Taco message */}
