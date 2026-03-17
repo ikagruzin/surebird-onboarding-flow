@@ -164,7 +164,7 @@ interface StepOneProps {
   onSmartAudit?: () => void;
 }
 
-const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) => {
+const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: StepOneProps) => {
   const [version, setVersion] = useState<"A" | "B" | "C">("A");
   const sliderRef = useRef<HTMLDivElement>(null);
   const [language, setLanguage] = useState<"en" | "nl">("en");
