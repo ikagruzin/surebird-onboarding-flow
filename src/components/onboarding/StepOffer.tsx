@@ -1,8 +1,11 @@
-import { useState } from "react";
-import { Check, CheckCircle2, ChevronLeft, ChevronRight, Plus, X, Info, MessageCircle, Lock, Calendar, Shield } from "lucide-react";
+import { useState, useRef } from "react";
+import { Check, CheckCircle2, ChevronLeft, ChevronRight, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play } from "lucide-react";
 import LegalCoverageSelector from "./LegalCoverageSelector";
 import { INSURANCE_TYPES } from "./types";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
+import person1 from "@/assets/person-1.png";
+import person2 from "@/assets/person-2.png";
+import person3 from "@/assets/person-3.png";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
 import iconCar from "@/assets/icon-car.svg";
@@ -143,6 +146,91 @@ const StepOffer = ({
   onBack,
 }: StepOfferProps) => {
   const [activeTab, setActiveTab] = useState("all");
+  const [videoModal, setVideoModal] = useState<string | null>(null);
+  const testimonialRef = useRef<HTMLDivElement>(null);
+
+  const TESTIMONIALS = [
+    { name: "Lars", topic: "the 'Loyalty Tax' savings", image: person1, videoId: "HYtrufZHVIM" },
+    { name: "Sanne", topic: "the 'All-in-1' overview", image: person2, videoId: "HYtrufZHVIM" },
+    { name: "Daan", topic: "the 'Switch Service' ease", image: person3, videoId: "HYtrufZHVIM" },
+  ];
+
+  const scrollTestimonials = (dir: "left" | "right") => {
+    if (!testimonialRef.current) return;
+    const amount = 280;
+    testimonialRef.current.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
+  };
+
+  const renderTestimonials = () => (
+    <div className="mt-12 mb-8">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-foreground">What our members say about Surebird</h2>
+        <div className="flex gap-2">
+          <button
+            onClick={() => scrollTestimonials("left")}
+            className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4 text-foreground" />
+          </button>
+          <button
+            onClick={() => scrollTestimonials("right")}
+            className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
+          >
+            <ChevronRight className="w-4 h-4 text-foreground" />
+          </button>
+        </div>
+      </div>
+      <div
+        ref={testimonialRef}
+        className="flex gap-4 overflow-x-auto pb-2"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {TESTIMONIALS.map((t, i) => (
+          <button
+            key={i}
+            onClick={() => setVideoModal(t.videoId)}
+            className="relative shrink-0 w-[220px] h-[300px] rounded-2xl overflow-hidden group cursor-pointer"
+          >
+            <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <Play className="w-6 h-6 text-primary ml-0.5" fill="currentColor" />
+              </div>
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 p-4">
+              <p className="text-white font-semibold text-sm">{t.name}</p>
+              <p className="text-white/80 text-xs">on {t.topic}</p>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {/* Video Modal */}
+      {videoModal && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-50" onClick={() => setVideoModal(null)} />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="relative w-full max-w-3xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl">
+              <button
+                onClick={() => setVideoModal(null)}
+                className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/50 flex items-center justify-center hover:bg-black/70 transition-colors"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+              <iframe
+                src={`https://www.youtube.com/embed/${videoModal}?autoplay=1`}
+                title="Testimonial video"
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
 
   const totalBeforeDiscount = selectedInsurances.reduce((sum, id) => sum + (INSURER_DATA[id]?.monthlyPrice || 5), 0);
   const discountPercent = 10;
@@ -490,8 +578,11 @@ const StepOffer = ({
                   <p className="text-sm text-muted-foreground leading-relaxed">{card.text}</p>
                 </div>
               ))}
-            </div>
           </div>
+
+          {/* Video testimonials carousel */}
+          {renderTestimonials()}
+        </div>
         </div>
 
         {/* Right sidebar - calculations */}
