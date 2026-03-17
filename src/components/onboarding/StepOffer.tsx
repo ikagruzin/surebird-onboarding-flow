@@ -150,7 +150,6 @@ const StepOffer = ({
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number>(0); // first open by default
   const testimonialRef = useRef<HTMLDivElement>(null);
-  const trustpilotRef = useRef<HTMLDivElement>(null);
 
   const FAQ_DATA = [
     {
