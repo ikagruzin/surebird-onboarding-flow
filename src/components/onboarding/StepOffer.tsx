@@ -726,7 +726,7 @@ const StepOffer = ({
         </div>
 
         {/* Right sidebar - calculations */}
-        <div className="min-w-0 lg:sticky lg:top-8">
+        <div className="w-full xl:w-[320px] xl:shrink-0 xl:sticky xl:top-8 self-start">
           {renderCalculations()}
         </div>
       </div>
