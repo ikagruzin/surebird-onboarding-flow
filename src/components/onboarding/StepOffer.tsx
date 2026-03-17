@@ -1,8 +1,11 @@
-import { useState } from "react";
-import { Check, CheckCircle2, ChevronLeft, ChevronRight, Plus, X, Info, MessageCircle, Lock, Calendar, Shield } from "lucide-react";
+import { useState, useRef } from "react";
+import { Check, CheckCircle2, ChevronLeft, ChevronRight, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play } from "lucide-react";
 import LegalCoverageSelector from "./LegalCoverageSelector";
 import { INSURANCE_TYPES } from "./types";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
+import person1 from "@/assets/person-1.png";
+import person2 from "@/assets/person-2.png";
+import person3 from "@/assets/person-3.png";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
 import iconCar from "@/assets/icon-car.svg";
