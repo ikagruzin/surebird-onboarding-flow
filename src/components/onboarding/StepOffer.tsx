@@ -330,32 +330,13 @@ const StepOffer = ({
 
   const renderTrustpilotReviews = () => (
     <div className="mt-12 mb-8">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-foreground">Check out our reviews</h2>
-        <div className="flex gap-2">
-          <button
-            onClick={() => scrollTrustpilot("left")}
-            className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
-          >
-            <ChevronLeft className="w-4 h-4 text-foreground" />
-          </button>
-          <button
-            onClick={() => scrollTrustpilot("right")}
-            className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
-          >
-            <ChevronRight className="w-4 h-4 text-foreground" />
-          </button>
-        </div>
-      </div>
-      <div
-        ref={trustpilotRef}
-        className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-      >
+      <h2 className="text-xl font-bold text-foreground mb-6">Check out our reviews</h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {/* Trustpilot overview card */}
-        <div className="shrink-0 w-[280px] snap-start bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm">
+        <div className="bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm min-h-[280px]">
           <div className="flex items-center gap-2 mb-4">
-            <Star className="w-5 h-5 text-[#00b67a]" fill="currentColor" />
+            <Star className="w-5 h-5 text-success" fill="currentColor" />
             <span className="text-lg font-bold text-foreground">Trustpilot</span>
           </div>
           <div className="flex flex-col items-center my-4">
@@ -370,7 +351,7 @@ const StepOffer = ({
           const isLong = review.text.length > 180;
           const displayText = isLong ? review.text.slice(0, 180) + "..." : review.text;
           return (
-            <div key={i} className="shrink-0 w-[280px] snap-start bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm">
+            <div key={i} className="bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm min-h-[280px]">
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-sm font-bold text-foreground">{review.rating}.0</span>
