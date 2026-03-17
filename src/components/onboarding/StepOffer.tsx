@@ -234,6 +234,115 @@ const StepOffer = ({
     </div>
   );
 
+  const TRUSTPILOT_REVIEWS = [
+    {
+      name: "Marieke",
+      rating: 5,
+      title: "Positive experience so far.",
+      text: "I have had a positive experience with this company so far. Prices are competitive, and they use an effective system to ensure that costs remain low. When I looked at one insurance it was a bit high, but when I put together my whole package it turned out that I would get 45 euros per month for the whole.",
+    },
+    {
+      name: "Leontine",
+      rating: 5,
+      title: "No need to compare anymore.",
+      text: "No need to compare anymore. Usually every year, or every now and then, I look for the most suitable coverage and the most affordable insurance myself. However, I now have coverage that better suits my needs and at the same time has a lower premium.",
+    },
+    {
+      name: "Ronald",
+      rating: 5,
+      title: "Really hundreds of euros cheaper.",
+      text: "Today all our insurance policies converted and taken out through Surebird. I'm really hundreds of euros cheaper. After today where I was well advised and helped by Taco I have confidence that if there is any damage, I will also be well helped.",
+    },
+  ];
+
+  const scrollTrustpilot = (dir: "left" | "right") => {
+    if (!trustpilotRef.current) return;
+    trustpilotRef.current.scrollBy({ left: dir === "left" ? -340 : 340, behavior: "smooth" });
+  };
+
+  const TrustpilotStars = ({ count, size = 16 }: { count: number; size?: number }) => (
+    <div className="flex gap-0.5">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div
+          key={i}
+          className={`flex items-center justify-center rounded-sm ${i <= count ? "bg-[#00b67a]" : "bg-[#dcdce6]"}`}
+          style={{ width: size + 4, height: size + 4 }}
+        >
+          <Star className="text-white" style={{ width: size - 2, height: size - 2 }} fill="currentColor" />
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderTrustpilotReviews = () => (
+    <div className="mt-12 mb-8">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-foreground">Check out our reviews</h2>
+        <div className="flex gap-2">
+          <button
+            onClick={() => scrollTrustpilot("left")}
+            className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4 text-foreground" />
+          </button>
+          <button
+            onClick={() => scrollTrustpilot("right")}
+            className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
+          >
+            <ChevronRight className="w-4 h-4 text-foreground" />
+          </button>
+        </div>
+      </div>
+      <div
+        ref={trustpilotRef}
+        className="flex gap-4 overflow-x-auto pb-2"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {/* Trustpilot overview card */}
+        <div className="shrink-0 w-[300px] bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <Star className="w-5 h-5 text-[#00b67a]" fill="currentColor" />
+            <span className="text-lg font-bold text-foreground">Trustpilot</span>
+          </div>
+          <div className="flex flex-col items-center my-4">
+            <span className="text-5xl font-bold text-foreground mb-3">4.2</span>
+            <TrustpilotStars count={4} size={20} />
+          </div>
+          <p className="text-sm text-muted-foreground mt-4">2,466 Trustpilot reviews</p>
+        </div>
+
+        {/* Review cards */}
+        {TRUSTPILOT_REVIEWS.map((review, i) => {
+          const isLong = review.text.length > 180;
+          const displayText = isLong ? review.text.slice(0, 180) + "..." : review.text;
+          return (
+            <div key={i} className="shrink-0 w-[300px] bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm">
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm font-bold text-foreground">{review.rating}.0</span>
+                  <TrustpilotStars count={review.rating} />
+                </div>
+                <h3 className="font-bold text-foreground mb-2 text-sm">{review.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {expandedReview === i ? review.text : displayText}
+                </p>
+                {isLong && (
+                  <button
+                    onClick={() => setExpandedReview(expandedReview === i ? null : i)}
+                    className="text-sm font-semibold text-foreground underline mt-2"
+                  >
+                    {expandedReview === i ? "Show less" : "Read more"}
+                  </button>
+                )}
+              </div>
+              <p className="text-sm text-muted-foreground mt-4">— {review.name}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   const totalBeforeDiscount = selectedInsurances.reduce((sum, id) => sum + (INSURER_DATA[id]?.monthlyPrice || 5), 0);
   const discountPercent = 10;
   const discountAmount = totalBeforeDiscount * (discountPercent / 100);
