@@ -1,5 +1,6 @@
 export type StepId =
   | "product-selection"
+  | "policy-upload"
   | "name"
   | "address"
   | "birthdate"
