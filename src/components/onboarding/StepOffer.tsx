@@ -636,7 +636,7 @@ const StepOffer = ({
   );
 
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in overflow-hidden">
       <h1 className="text-[32px] font-bold text-foreground mb-6">Your personal offer</h1>
 
       {/* Product tabs */}
@@ -688,7 +688,7 @@ const StepOffer = ({
 
       <div className="flex gap-8">
         {/* Main content */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 overflow-hidden">
           {activeTab === "all" && (
             <>
               {/* Taco message */}
