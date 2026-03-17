@@ -161,6 +161,7 @@ interface StepOneProps {
   onToggle: (id: string) => void;
   onBundleSelect: (ids: string[]) => void;
   onNext: () => void;
+  onSmartAudit?: () => void;
 }
 
 const StepOne = ({ selected, onToggle, onBundleSelect, onNext }: StepOneProps) => {
