@@ -493,8 +493,11 @@ const StepOffer = ({
                   <p className="text-sm text-muted-foreground leading-relaxed">{card.text}</p>
                 </div>
               ))}
-            </div>
           </div>
+
+          {/* Video testimonials carousel */}
+          {renderTestimonials()}
+        </div>
         </div>
 
         {/* Right sidebar - calculations */}
