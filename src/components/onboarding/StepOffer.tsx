@@ -159,10 +159,7 @@ const StepOffer = ({
 
   const scrollTestimonials = (dir: "left" | "right") => {
     if (!testimonialRef.current) return;
-    const el = testimonialRef.current;
-    el.style.overflowX = "auto";
-    el.scrollBy({ left: dir === "left" ? -236 : 236, behavior: "smooth" });
-    setTimeout(() => { el.style.overflowX = "hidden"; }, 400);
+    testimonialRef.current.scrollBy({ left: dir === "left" ? -236 : 236, behavior: "smooth" });
   };
 
   const renderTestimonials = () => (
@@ -186,7 +183,7 @@ const StepOffer = ({
       </div>
       <div
         ref={testimonialRef}
-        className="flex gap-4 overflow-x-hidden pb-2 snap-x snap-mandatory scroll-smooth"
+        className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {TESTIMONIALS.map((t, i) => (
@@ -259,11 +256,7 @@ const StepOffer = ({
 
   const scrollTrustpilot = (dir: "left" | "right") => {
     if (!trustpilotRef.current) return;
-    const el = trustpilotRef.current;
-    // Enable scrolling momentarily for programmatic scroll
-    el.style.overflowX = "auto";
-    el.scrollBy({ left: dir === "left" ? -296 : 296, behavior: "smooth" });
-    setTimeout(() => { el.style.overflowX = "hidden"; }, 400);
+    trustpilotRef.current.scrollBy({ left: dir === "left" ? -296 : 296, behavior: "smooth" });
   };
 
   const TrustpilotStars = ({ count, size = 16 }: { count: number; size?: number }) => (
@@ -301,7 +294,7 @@ const StepOffer = ({
       </div>
       <div
         ref={trustpilotRef}
-        className="flex gap-4 overflow-x-hidden pb-2 snap-x snap-mandatory scroll-smooth"
+        className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {/* Trustpilot overview card */}
