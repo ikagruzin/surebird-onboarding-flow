@@ -150,7 +150,6 @@ const StepOffer = ({
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number>(0); // first open by default
   const testimonialRef = useRef<HTMLDivElement>(null);
-  const trustpilotRef = useRef<HTMLDivElement>(null);
 
   const FAQ_DATA = [
     {
@@ -314,10 +313,6 @@ const StepOffer = ({
     },
   ];
 
-  const scrollTrustpilot = (dir: "left" | "right") => {
-    if (!trustpilotRef.current) return;
-    trustpilotRef.current.scrollBy({ left: dir === "left" ? -296 : 296, behavior: "smooth" });
-  };
 
   const TrustpilotStars = ({ count, size = 16 }: { count: number; size?: number }) => (
     <div className="flex gap-0.5">
@@ -335,32 +330,13 @@ const StepOffer = ({
 
   const renderTrustpilotReviews = () => (
     <div className="mt-12 mb-8">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-foreground">Check out our reviews</h2>
-        <div className="flex gap-2">
-          <button
-            onClick={() => scrollTrustpilot("left")}
-            className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
-          >
-            <ChevronLeft className="w-4 h-4 text-foreground" />
-          </button>
-          <button
-            onClick={() => scrollTrustpilot("right")}
-            className="w-9 h-9 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors"
-          >
-            <ChevronRight className="w-4 h-4 text-foreground" />
-          </button>
-        </div>
-      </div>
-      <div
-        ref={trustpilotRef}
-        className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-      >
+      <h2 className="text-xl font-bold text-foreground mb-6">Check out our reviews</h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {/* Trustpilot overview card */}
-        <div className="shrink-0 w-[280px] snap-start bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm">
+        <div className="bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm min-h-[280px]">
           <div className="flex items-center gap-2 mb-4">
-            <Star className="w-5 h-5 text-[#00b67a]" fill="currentColor" />
+            <Star className="w-5 h-5 text-success" fill="currentColor" />
             <span className="text-lg font-bold text-foreground">Trustpilot</span>
           </div>
           <div className="flex flex-col items-center my-4">
@@ -375,7 +351,7 @@ const StepOffer = ({
           const isLong = review.text.length > 180;
           const displayText = isLong ? review.text.slice(0, 180) + "..." : review.text;
           return (
-            <div key={i} className="shrink-0 w-[280px] snap-start bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm">
+            <div key={i} className="bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm min-h-[280px]">
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-sm font-bold text-foreground">{review.rating}.0</span>
@@ -555,7 +531,7 @@ const StepOffer = ({
 
   // Sidebar calculations
   const renderCalculations = () => (
-    <div className="space-y-6 lg:sticky lg:top-8">
+    <div className="space-y-6">
       {/* Offer calculations */}
       <div className="border border-border rounded-3xl p-6 bg-card">
         <h3 className="text-lg font-bold text-foreground mb-1">Offer calculations</h3>
@@ -648,7 +624,7 @@ const StepOffer = ({
               ? "bg-foreground text-background border-foreground"
               : "bg-white border-[hsl(0,0%,84%)] text-foreground"
           }`}
-          style={{ borderWidth: '1px' }}
+          style={{ borderWidth: "1px" }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={activeTab === "all" ? "text-background" : "text-foreground"}>
             <rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
@@ -658,8 +634,8 @@ const StepOffer = ({
           </svg>
           All offers
         </button>
-        {selectedInsurances.map(id => {
-          const ins = INSURANCE_TYPES.find(t => t.id === id)!;
+        {selectedInsurances.map((id) => {
+          const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
           const isActive = activeTab === id;
           return (
             <button
@@ -670,7 +646,7 @@ const StepOffer = ({
                   ? "bg-foreground text-background border-foreground"
                   : "bg-white border-[hsl(0,0%,84%)] text-foreground"
               }`}
-              style={{ borderWidth: '1px' }}
+              style={{ borderWidth: "1px" }}
             >
               <img
                 src={ICON_MAP[ins.icon]}
@@ -686,12 +662,11 @@ const StepOffer = ({
         </button>
       </div>
 
-      <div className="flex flex-col xl:flex-row gap-8 items-start">
+      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px] items-start">
         {/* Main content */}
-        <div className="flex-1 min-w-0">
-          {activeTab === "all" && (
+        <div className="min-w-0">
+          {activeTab === "all" ? (
             <>
-              {/* Taco message */}
               <div className="border border-border rounded-3xl p-6 bg-card mb-8">
                 <div className="flex items-start gap-3 mb-4">
                   <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
@@ -704,23 +679,17 @@ const StepOffer = ({
                   Chat via WhatsApp
                 </button>
               </div>
-
-              {/* All offer cards */}
-              {selectedInsurances.map(id => renderOfferCard(id))}
+              {selectedInsurances.map((id) => renderOfferCard(id))}
             </>
-          )}
-
-          {activeTab !== "all" && (
+          ) : (
             <>
               {renderOfferCard(activeTab)}
               {renderPreferences(activeTab)}
             </>
           )}
-          {/* Your benefits with Surebird */}
+
           <div className="mt-12 mb-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">
-              Your benefits with Surebird
-            </h2>
+            <h2 className="text-xl font-bold text-foreground mb-6">Your benefits with Surebird</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 {
@@ -748,21 +717,16 @@ const StepOffer = ({
                   <p className="text-sm text-muted-foreground leading-relaxed">{card.text}</p>
                 </div>
               ))}
+            </div>
           </div>
 
-          {/* Video testimonials carousel */}
           {renderTestimonials()}
-
-          {/* Trustpilot reviews carousel */}
           {renderTrustpilotReviews()}
-
-          {/* FAQ */}
           {renderFAQ()}
-        </div>
         </div>
 
         {/* Right sidebar - calculations */}
-        <div className="w-full xl:w-[320px] xl:shrink-0">
+        <div className="w-full xl:w-[320px] xl:shrink-0 xl:sticky xl:top-8 self-start">
           {renderCalculations()}
         </div>
       </div>
