@@ -374,24 +374,6 @@ const StepOffer = ({
         </div>
       </div>
 
-      {/* Advantages */}
-      <div>
-        <h3 className="text-base font-bold text-foreground mb-3">Your advantage at Surebird</h3>
-        <div className="space-y-2">
-          {["Concealable daily", "Arranged today, insured tomorrow", "No service charges"].map(item => (
-            <div key={item} className="flex items-center gap-2 text-sm">
-              <Check className="w-4 h-4 text-success" />
-              <span className="text-foreground">{item}</span>
-            </div>
-          ))}
-        </div>
-        <div className="flex items-center gap-2 mt-4">
-          <span className="text-yellow-500 text-lg">★</span>
-          <span className="text-sm font-semibold text-foreground">Trustpilot</span>
-          <span className="text-lg font-bold text-foreground ml-1">4.6</span>
-          <span className="text-xs text-muted-foreground">Excellent</span>
-        </div>
-      </div>
     </div>
   );
 
