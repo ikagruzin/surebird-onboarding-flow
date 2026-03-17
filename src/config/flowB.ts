@@ -29,6 +29,7 @@ const flowB: FlowConfig = {
       id: "name",
       phase: "about-you",
       hideSavings: true,
+      getPrevStep: () => "product-selection",
     },
     {
       id: "address",
