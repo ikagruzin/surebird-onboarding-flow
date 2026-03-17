@@ -44,6 +44,7 @@ const StepPolicyUpload = ({ onParsed, onBack }: StepPolicyUploadProps) => {
   const [dragOver, setDragOver] = useState(false);
   const [fileName, setFileName] = useState("");
   const [currentAuditStep, setCurrentAuditStep] = useState(0);
+  const [showHelp, setShowHelp] = useState(false);
 
   const startParsing = useCallback((name: string) => {
     setFileName(name);
