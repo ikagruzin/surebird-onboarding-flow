@@ -762,7 +762,7 @@ const StepOffer = ({
         </div>
 
         {/* Right sidebar - calculations */}
-        <div className="hidden lg:block w-[320px] shrink-0">
+        <div className="w-full xl:w-[320px] xl:shrink-0">
           {renderCalculations()}
         </div>
       </div>
