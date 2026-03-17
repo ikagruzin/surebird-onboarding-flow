@@ -246,12 +246,6 @@ const StepOffer = ({
       title: "No need to compare anymore.",
       text: "No need to compare anymore. Usually every year, or every now and then, I look for the most suitable coverage and the most affordable insurance myself. However, I now have coverage that better suits my needs and at the same time has a lower premium.",
     },
-    {
-      name: "Ronald",
-      rating: 5,
-      title: "Really hundreds of euros cheaper.",
-      text: "Today all our insurance policies converted and taken out through Surebird. I'm really hundreds of euros cheaper. After today where I was well advised and helped by Taco I have confidence that if there is any damage, I will also be well helped.",
-    },
   ];
 
   const scrollTrustpilot = (dir: "left" | "right") => {
