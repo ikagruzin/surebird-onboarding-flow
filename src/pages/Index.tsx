@@ -13,6 +13,7 @@ import StepReady from "@/components/onboarding/StepReady";
 import StepLoading from "@/components/onboarding/StepLoading";
 import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepOffer from "@/components/onboarding/StepOffer";
+import StepPolicyUpload from "@/components/onboarding/StepPolicyUpload";
 import StepStartDate from "@/components/onboarding/StepStartDate";
 import StepConfirmDetails from "@/components/onboarding/StepConfirmDetails";
 import StepPhoneVerification from "@/components/onboarding/StepPhoneVerification";
