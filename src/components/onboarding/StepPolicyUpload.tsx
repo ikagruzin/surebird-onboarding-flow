@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Upload, FileText, CheckCircle2, Sparkles, Shield, Clock, ArrowRight } from "lucide-react";
+import { Upload, FileText, CheckCircle2, Sparkles, Shield, Clock, ArrowRight, HelpCircle, Mail, Monitor, Smartphone, Lightbulb, X } from "lucide-react";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 
 interface StepPolicyUploadProps {
@@ -44,6 +44,7 @@ const StepPolicyUpload = ({ onParsed, onBack }: StepPolicyUploadProps) => {
   const [dragOver, setDragOver] = useState(false);
   const [fileName, setFileName] = useState("");
   const [currentAuditStep, setCurrentAuditStep] = useState(0);
+  const [showHelp, setShowHelp] = useState(false);
 
   const startParsing = useCallback((name: string) => {
     setFileName(name);
@@ -218,6 +219,101 @@ const StepPolicyUpload = ({ onParsed, onBack }: StepPolicyUploadProps) => {
           className="hidden"
         />
       </label>
+
+      {/* Policy help link */}
+      <div className="mt-5 text-center">
+        <button
+          onClick={() => setShowHelp(true)}
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <HelpCircle className="w-4 h-4" />
+          Don't know where to find your policy?
+        </button>
+      </div>
+
+      {/* Policy Help Modal */}
+      {showHelp && (
+        <>
+          <div className="fixed inset-0 bg-black/40 z-50" onClick={() => setShowHelp(false)} />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="bg-card border border-border rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto">
+              {/* Modal header */}
+              <div className="flex items-start gap-3 p-6 pb-4 border-b border-border">
+                <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover ring-2 ring-success/20 shrink-0" />
+                <div className="flex-1">
+                  <h2 className="text-lg font-bold text-foreground">No worries, Taco is here to help!</h2>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Most Dutch insurers make it easy to grab your policy in under 2 minutes. Here is where to look:
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowHelp(false)}
+                  className="p-1 rounded-lg hover:bg-muted transition-colors shrink-0"
+                >
+                  <X className="w-5 h-5 text-muted-foreground" />
+                </button>
+              </div>
+
+              {/* Modal body */}
+              <div className="p-6 space-y-5">
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                    <Mail className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">Check your Email</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Search your inbox for terms like <span className="font-medium text-foreground">'Polisblad'</span>, <span className="font-medium text-foreground">'Verzekeringsbewijs'</span>, or the name of your current insurer (e.g., Allianz, Interpolis, Centraal Beheer).
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                    <Monitor className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">Log in to 'Mijn [Insurer's Name]'</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Every major insurer has a customer portal. Log in and look for a <span className="font-medium text-foreground">'Documents'</span> or <span className="font-medium text-foreground">'Downloads'</span> section to find your most recent Polisblad as a PDF.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                    <Smartphone className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">Use your Insurer's App</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      If you have your insurer's app on your phone, you can often download the policy and upload it directly here.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Tip */}
+                <div className="flex gap-3 p-4 rounded-xl bg-success/5 border border-success/20">
+                  <Lightbulb className="w-5 h-5 text-success shrink-0 mt-0.5" />
+                  <p className="text-sm text-foreground leading-relaxed">
+                    <span className="font-semibold">Tip:</span> We specifically need the <span className="font-medium">'Polisblad'</span> (Policy Sheet) because it contains the technical details Taco needs to find you a better deal!
+                  </p>
+                </div>
+              </div>
+
+              {/* Modal footer */}
+              <div className="p-6 pt-2">
+                <button
+                  onClick={() => setShowHelp(false)}
+                  className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity"
+                >
+                  Got it, let me find my policy
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Back link */}
       <button
