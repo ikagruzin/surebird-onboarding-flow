@@ -16,11 +16,13 @@ const flowB: FlowConfig = {
       phase: null,
       standalone: true,
       buttonLabel: "Next",
+      getNextStep: () => "name", // Normal path skips policy-upload
     },
     {
       id: "policy-upload",
       phase: null,
       hideFooter: true,
+      getPrevStep: () => "product-selection",
     },
     // About you steps still exist for the normal path
     {
