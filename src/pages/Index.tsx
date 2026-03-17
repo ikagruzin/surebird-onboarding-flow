@@ -260,6 +260,32 @@ const Index = () => {
             onToggle={toggleInsurance}
             onBundleSelect={selectBundle}
             onNext={() => goToIndex(getNextIndex())}
+            onSmartAudit={
+              flow.steps.some((s) => s.id === "policy-upload")
+                ? () => goToStepId("policy-upload")
+                : undefined
+            }
+          />
+        );
+      case "policy-upload":
+        return (
+          <StepPolicyUpload
+            onParsed={(data) => {
+              setState((s) => ({
+                ...s,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                postcode: data.postcode,
+                houseNumber: data.houseNumber,
+                birthdate: data.birthdate,
+                selectedInsurances: data.selectedInsurances,
+                preferences: { ...s.preferences, ...data.preferences },
+                familyStatus: "single", // default for fast-track
+              }));
+              // Fast-track: jump directly to offer
+              goToStepId("offer");
+            }}
+            onBack={() => goToStepId("product-selection")}
           />
         );
       case "name":
