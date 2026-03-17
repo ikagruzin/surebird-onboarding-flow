@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Check, CheckCircle2, ChevronLeft, ChevronRight, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play, Star } from "lucide-react";
+import { Check, CheckCircle2, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play, Star } from "lucide-react";
 import LegalCoverageSelector from "./LegalCoverageSelector";
 import { INSURANCE_TYPES } from "./types";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
@@ -148,8 +148,74 @@ const StepOffer = ({
   const [activeTab, setActiveTab] = useState("all");
   const [videoModal, setVideoModal] = useState<string | null>(null);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
+  const [openFaq, setOpenFaq] = useState<number>(0); // first open by default
   const testimonialRef = useRef<HTMLDivElement>(null);
   const trustpilotRef = useRef<HTMLDivElement>(null);
+
+  const FAQ_DATA = [
+    {
+      q: "Why is regular switching good?",
+      a: "Insurers regularly change their conditions and premiums. Did you know that premiums can increase by up to 57% annually for loyal customers? If you stay with the same insurer for a long time, you often end up paying a \"Loyalty Tax.\" Surebird monitors the market 24/7 for you and makes switching as easy as the push of a button.",
+    },
+    {
+      q: "How can I be sure that Surebird is reliable?",
+      a: "We work only with top-tier Dutch insurers and are fully transparent about our offers. Our platform is designed to provide an extra layer of confidence by negotiating the best terms and quality for you, ensuring your coverage is always robust and up to date.",
+    },
+    {
+      q: "Why choose Surebird?",
+      a: "Surebird makes insurance \"an afterthought.\" Instead of you managing separate policies and researching websites every year, our smart systems automate the entire process. You get one clear overview, one point of contact, and the guarantee that you never overpay again.",
+    },
+    {
+      q: "What is the business model of Surebird?",
+      a: "We act as your digital insurance partner. Our goal is to save you money through smart bundling and commission rebates. We believe in long-term value; when you save, we succeed in building a platform that keeps insurance fair for everyone.",
+    },
+    {
+      q: "How do I cancel my old insurance?",
+      a: "You don't have to! Once you confirm your new Surebird package, our automated Switch Service handles the cancellation of your old policies for you. We ensure a seamless transition so you are never double-insured or without coverage.",
+    },
+    {
+      q: "There are service costs on my quote, what are these?",
+      a: "The service cost covers the continuous monitoring of your policies, our 24/7 \"Ask Taco\" support, and the technology that prevents your premiums from creeping up. When you bundle 3 or more products, these costs are diluted, often making the total package significantly cheaper than individual policies elsewhere.",
+    },
+    {
+      q: "How much does Surebird cost?",
+      a: "Our pricing is built into the transparent monthly premium you see on your offer page. There are no hidden fees. The amount you see includes your high-quality coverage and the service that ensures you stay on the best possible deal year after year.",
+    },
+  ];
+
+  const renderFAQ = () => (
+    <div className="mt-12 mb-8">
+      <h2 className="text-xl font-bold text-foreground mb-6">FAQ</h2>
+      <div className="space-y-3">
+        {FAQ_DATA.map((item, i) => {
+          const isOpen = openFaq === i;
+          return (
+            <div key={i} className="border border-border rounded-2xl bg-card overflow-hidden">
+              <button
+                onClick={() => setOpenFaq(isOpen ? -1 : i)}
+                className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-muted/50 transition-colors"
+              >
+                <span className="font-semibold text-foreground text-sm">{item.q}</span>
+                <ChevronDown className={`w-5 h-5 text-muted-foreground shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+              </button>
+              {isOpen && (
+                <div className="px-6 pb-5 animate-fade-in">
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
+        <span>Is your question not included? Taco and his team are here for you.</span>
+        <button className="inline-flex items-center gap-1.5 font-semibold text-success hover:underline transition-colors">
+          <MessageCircle className="w-4 h-4" />
+          Chat with Taco
+        </button>
+      </div>
+    </div>
+  );
 
   const TESTIMONIALS = [
     { name: "Lars", topic: "the 'Loyalty Tax' savings", image: person1, videoId: "HYtrufZHVIM" },
@@ -689,6 +755,9 @@ const StepOffer = ({
 
           {/* Trustpilot reviews carousel */}
           {renderTrustpilotReviews()}
+
+          {/* FAQ */}
+          {renderFAQ()}
         </div>
         </div>
 
