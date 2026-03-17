@@ -147,7 +147,9 @@ const StepOffer = ({
 }: StepOfferProps) => {
   const [activeTab, setActiveTab] = useState("all");
   const [videoModal, setVideoModal] = useState<string | null>(null);
+  const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const testimonialRef = useRef<HTMLDivElement>(null);
+  const trustpilotRef = useRef<HTMLDivElement>(null);
 
   const TESTIMONIALS = [
     { name: "Lars", topic: "the 'Loyalty Tax' savings", image: person1, videoId: "HYtrufZHVIM" },
