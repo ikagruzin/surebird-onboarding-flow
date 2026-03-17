@@ -13,7 +13,7 @@ import iconLegal from "@/assets/icon-legal.svg";
 import iconAccidents from "@/assets/icon-accidents.svg";
 import iconCaravan from "@/assets/icon-caravan.svg";
 import iconTravel from "@/assets/icon-travel.svg";
-import { Globe, User, LayoutGrid, Layers, GalleryHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
+import { Globe, User, LayoutGrid, Layers, GalleryHorizontal, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Plane: <img src={iconTravel} alt="Travel" className="w-10 h-10" />,
