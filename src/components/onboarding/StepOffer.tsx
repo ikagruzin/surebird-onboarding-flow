@@ -316,7 +316,7 @@ const StepOffer = ({
           const isLong = review.text.length > 180;
           const displayText = isLong ? review.text.slice(0, 180) + "..." : review.text;
           return (
-            <div key={i} className="shrink-0 w-[300px] bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm">
+            <div key={i} className="shrink-0 w-[280px] snap-start bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm">
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-sm font-bold text-foreground">{review.rating}.0</span>
