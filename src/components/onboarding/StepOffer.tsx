@@ -313,10 +313,6 @@ const StepOffer = ({
     },
   ];
 
-  const scrollTrustpilot = (dir: "left" | "right") => {
-    if (!trustpilotRef.current) return;
-    trustpilotRef.current.scrollBy({ left: dir === "left" ? -296 : 296, behavior: "smooth" });
-  };
 
   const TrustpilotStars = ({ count, size = 16 }: { count: number; size?: number }) => (
     <div className="flex gap-0.5">
