@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Upload, FileText, CheckCircle2, Sparkles, Shield, Clock, ArrowRight } from "lucide-react";
+import { Upload, FileText, CheckCircle2, Sparkles, Shield, Clock, ArrowRight, HelpCircle, Mail, Monitor, Smartphone, Lightbulb, X } from "lucide-react";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 
 interface StepPolicyUploadProps {
