@@ -458,10 +458,10 @@ const StepOffer = ({
               {renderPreferences(activeTab)}
             </>
           )}
-          {/* Why Surebird section - inside main content column */}
+          {/* Your benefits with Surebird */}
           <div className="mt-12 mb-8">
             <h2 className="text-xl font-bold text-foreground mb-6">
-              Why is it better to choose Surebird?
+              Your benefits with Surebird
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
@@ -482,12 +482,12 @@ const StepOffer = ({
                   text: "If something happens, you only have one point of contact for service and support in case of damage.",
                 },
               ].map((card, i) => (
-                <div key={i} className="flex gap-4 p-5 rounded-2xl border border-border bg-card">
-                  <CheckCircle2 className="w-5 h-5 text-success shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-1 text-sm">{card.title}</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{card.text}</p>
+                <div key={i} className="flex flex-col p-6 rounded-2xl border border-border bg-card">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                    <Check className="w-6 h-6 text-primary" />
                   </div>
+                  <h3 className="font-bold text-foreground mb-2">{card.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{card.text}</p>
                 </div>
               ))}
             </div>
