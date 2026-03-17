@@ -257,7 +257,11 @@ const StepOffer = ({
 
   const scrollTrustpilot = (dir: "left" | "right") => {
     if (!trustpilotRef.current) return;
-    trustpilotRef.current.scrollBy({ left: dir === "left" ? -340 : 340, behavior: "smooth" });
+    const el = trustpilotRef.current;
+    // Enable scrolling momentarily for programmatic scroll
+    el.style.overflowX = "auto";
+    el.scrollBy({ left: dir === "left" ? -296 : 296, behavior: "smooth" });
+    setTimeout(() => { el.style.overflowX = "hidden"; }, 400);
   };
 
   const TrustpilotStars = ({ count, size = 16 }: { count: number; size?: number }) => (
