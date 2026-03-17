@@ -1,4 +1,5 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import Sidebar from "@/components/onboarding/Sidebar";
 import StepOne from "@/components/onboarding/StepOne";
 import StepName from "@/components/onboarding/StepName";
@@ -20,43 +21,99 @@ import StepAcceptanceQuestions from "@/components/onboarding/StepAcceptanceQuest
 import StepFinalPreview from "@/components/onboarding/StepFinalPreview";
 import StepSuccess from "@/components/onboarding/StepSuccess";
 import Footer from "@/components/onboarding/Footer";
-import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
+import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
 import { Progress } from "@/components/ui/progress";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
 import type { WizardState } from "@/components/onboarding/types";
+import type { StepId, StepConfig, FlowConfig } from "@/config/flowTypes";
+import { getFlow, DEFAULT_FLOW_ID } from "@/config/flows";
+
+const INITIAL_STATE: WizardState = {
+  currentStep: 0,
+  selectedInsurances: [],
+  preferences: {},
+  email: "",
+  emailSubmitted: false,
+  firstName: "",
+  infix: "",
+  lastName: "",
+  postcode: "",
+  houseNumber: "",
+  addition: "",
+  birthdate: "",
+  familyStatus: "",
+  insurePartner: "",
+  childrenCount: 0,
+  childrenAges: [],
+  includeFamily: "",
+  phone: "+31",
+  startDates: {},
+  iban: "",
+  acceptanceAnswers: {},
+  agreeTerms: false,
+  agreeDebit: false,
+};
 
 const Index = () => {
-  const [state, setState] = useState<WizardState>({
-    currentStep: 1,
-    selectedInsurances: [],
-    preferences: {},
-    email: "",
-    emailSubmitted: false,
-    firstName: "",
-    infix: "",
-    lastName: "",
-    postcode: "",
-    houseNumber: "",
-    addition: "",
-    birthdate: "",
-    familyStatus: "",
-    insurePartner: "",
-    childrenCount: 0,
-    childrenAges: [],
-    includeFamily: "",
-    phone: "+31",
-    startDates: {},
-    iban: "",
-    acceptanceAnswers: {},
-    agreeTerms: false,
-    agreeDebit: false,
-  });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const flowId = searchParams.get("flow") || DEFAULT_FLOW_ID;
+  const flow = useMemo(() => getFlow(flowId), [flowId]);
 
+  const [state, setState] = useState<WizardState>({ ...INITIAL_STATE });
   const prefsRef = useRef<StepPreferencesHandle>(null);
 
-  const setStep = (step: number) =>
-    setState((s) => ({ ...s, currentStep: step }));
+  // Current step index into flow.steps array
+  const stepIndex = state.currentStep;
+  const currentStepConfig = flow.steps[stepIndex] as StepConfig | undefined;
+  const currentStepId = currentStepConfig?.id || "product-selection";
+
+  const switchFlow = (newFlowId: string) => {
+    setSearchParams({ flow: newFlowId });
+    setState({ ...INITIAL_STATE });
+  };
+
+  // Navigate to a step by its ID
+  const goToStepId = (id: StepId) => {
+    const idx = flow.steps.findIndex((s) => s.id === id);
+    if (idx !== -1) setState((s) => ({ ...s, currentStep: idx }));
+  };
+
+  const goToIndex = (idx: number) => {
+    setState((s) => ({ ...s, currentStep: idx }));
+  };
+
+  // Get next step index, respecting skipConditions and getNextStep overrides
+  const getNextIndex = (): number => {
+    if (currentStepConfig?.getNextStep) {
+      const nextId = currentStepConfig.getNextStep(state);
+      if (nextId) {
+        const idx = flow.steps.findIndex((s) => s.id === nextId);
+        if (idx !== -1) return idx;
+      }
+    }
+    // Default: next in sequence, skipping any that should be skipped
+    let next = stepIndex + 1;
+    while (next < flow.steps.length && flow.steps[next].shouldSkip?.(state)) {
+      next++;
+    }
+    return Math.min(next, flow.steps.length - 1);
+  };
+
+  const getPrevIndex = (): number => {
+    if (currentStepConfig?.getPrevStep) {
+      const prevId = currentStepConfig.getPrevStep(state);
+      if (prevId) {
+        const idx = flow.steps.findIndex((s) => s.id === prevId);
+        if (idx !== -1) return idx;
+      }
+    }
+    let prev = stepIndex - 1;
+    while (prev >= 0 && flow.steps[prev].shouldSkip?.(state)) {
+      prev--;
+    }
+    return Math.max(prev, 0);
+  };
 
   const toggleInsurance = useCallback((id: string) => {
     setState((s) => ({
@@ -91,145 +148,176 @@ const Index = () => {
     state.selectedInsurances.includes(t.id)
   ).reduce((sum, t) => sum + t.savings, 0);
 
-  const isStep1 = state.currentStep === 1;
-  const isReadyStep = state.currentStep === 7;
-  const isAboutYou = state.currentStep >= 2 && state.currentStep <= 7;
-
-  // "About you" sub-step progress
-  const aboutYouSubStep = state.currentStep - 1;
-  const aboutYouTotalSubs = state.familyStatus === "single" ? 4 : 5;
-  const aboutYouProgress = isReadyStep ? 100 : (Math.min(aboutYouSubStep, aboutYouTotalSubs) / aboutYouTotalSubs) * 100;
-
-  const canProceedAboutYou = () => {
-    switch (state.currentStep) {
-      case 2:
+  // Validation
+  const canProceed = (): boolean => {
+    switch (currentStepId) {
+      case "product-selection":
+        return state.selectedInsurances.length > 0;
+      case "name":
         return state.firstName.trim().length > 0 && state.lastName.trim().length > 0;
-      case 3: {
+      case "address": {
         const pc = state.postcode.replace(/\s/g, "");
         return pc.length >= 6 && state.houseNumber.trim().length > 0;
       }
-      case 4:
+      case "birthdate":
         return state.birthdate.trim().length > 0;
-      case 5:
+      case "family":
         return !!state.familyStatus;
-      case 6:
+      case "family-details":
         return true;
+      case "ready":
+        return true;
+      case "preferences":
+        return true;
+      case "start-date": {
+        const products = INSURANCE_TYPES.filter((t) => state.selectedInsurances.includes(t.id));
+        return products.every((p) => {
+          const val = state.startDates[p.id] || "";
+          if (val.length !== 10) return false;
+          const [dd, mm, yyyy] = val.split("-").map(Number);
+          if (!dd || !mm || !yyyy) return false;
+          const date = new Date(yyyy, mm - 1, dd);
+          return date.getFullYear() === yyyy && date.getMonth() === mm - 1 && date.getDate() === dd;
+        });
+      }
+      case "confirm-details":
+        return !!(state.firstName && state.lastName && state.email.includes("@"));
+      case "phone-verification":
+        return false; // auto-submits
+      case "idin-verification":
+        return state.iban.length >= 5;
+      case "acceptance-questions":
+        return true;
+      case "final-preview":
+        return state.agreeTerms && state.agreeDebit;
       default:
         return true;
     }
   };
 
-  const isValidDate = (val: string): boolean => {
-    if (val.length !== 10) return false;
-    const [dd, mm, yyyy] = val.split("-").map(Number);
-    if (!dd || !mm || !yyyy) return false;
-    const date = new Date(yyyy, mm - 1, dd);
-    return date.getFullYear() === yyyy && date.getMonth() === mm - 1 && date.getDate() === dd;
+  // Phase progress calculation
+  const getPhaseProgress = (): number => {
+    if (!currentStepConfig?.phase) return 0;
+    const phaseSteps = flow.steps.filter((s) => s.phase === currentStepConfig.phase);
+    const idxInPhase = phaseSteps.findIndex((s) => s.id === currentStepId);
+    // If it's the last step in phase (like "ready"), show 100%
+    if (idxInPhase === phaseSteps.length - 1) return 100;
+    return ((idxInPhase + 1) / phaseSteps.length) * 100;
   };
 
-  const canProceedStartDate = (): boolean => {
-    const products = INSURANCE_TYPES.filter((t) => state.selectedInsurances.includes(t.id));
-    return products.every((p) => isValidDate(state.startDates[p.id] || ""));
+  // Sidebar step
+  const getSidebarStep = (): number => {
+    if (!currentStepConfig?.phase) {
+      if (currentStepId === "product-selection") return 1;
+      if (currentStepId === "preferences" || currentStepId === "loading") return 2;
+      if (currentStepId === "offer") return 3;
+      return 4;
+    }
+    const phase = flow.phases.find((p) => p.id === currentStepConfig.phase);
+    return phase?.sidebarStep || 1;
+  };
+
+  const handleNext = () => {
+    // Family step auto-advances via onSelect
+    if (currentStepId === "family" && state.familyStatus) return;
+
+    // Preferences delegates internally
+    if (currentStepId === "preferences" && prefsRef.current) {
+      const handled = prefsRef.current.handleNext();
+      if (handled) return;
+    }
+
+    goToIndex(getNextIndex());
   };
 
   const handleBack = () => {
-    if (state.currentStep === 8) {
-      // In preferences, try internal back first
-      if (prefsRef.current) {
-        const handled = prefsRef.current.handleBack();
-        if (handled) return;
-      }
-      setStep(7);
-      return;
+    if (currentStepId === "preferences" && prefsRef.current) {
+      const handled = prefsRef.current.handleBack();
+      if (handled) return;
     }
-    if (state.currentStep === 7) {
-      setStep(state.familyStatus === "single" ? 5 : 6);
-      return;
-    }
-    setStep(state.currentStep - 1);
+    goToIndex(getPrevIndex());
   };
 
-  // Steps:
-  // 1: Product selection
-  // 2: Name, 3: Address, 4: Birthdate, 5: Family, 6: Family details, 7: Ready
-  // 8: Preferences
-  // 9: Loading, 10: Offer
-  // 11: Start date, 12: Confirm details, 13: Phone verification, 14: iDIN, 15: Acceptance, 16: Final preview
-  // 17: Success
+  const phaseLabel = currentStepConfig?.phase
+    ? flow.phases.find((p) => p.id === currentStepConfig.phase)?.label
+    : null;
 
+  const showFooter = !currentStepConfig?.hideFooter;
+  const showSavings = !currentStepConfig?.hideSavings;
+  const showNextButton = !currentStepConfig?.hideNextButton;
+  const buttonLabel = currentStepConfig?.buttonLabel || "Next";
+  const isStandalone = currentStepConfig?.standalone;
+  const isFullWidth = currentStepConfig?.fullWidth;
+
+  // Render step component by ID
   const renderStep = () => {
-    switch (state.currentStep) {
-      case 1:
+    switch (currentStepId) {
+      case "product-selection":
         return (
           <StepOne
             selected={state.selectedInsurances}
             onToggle={toggleInsurance}
             onBundleSelect={selectBundle}
-            onNext={() => setStep(2)}
+            onNext={() => goToIndex(getNextIndex())}
           />
         );
-      case 2:
+      case "name":
         return (
           <StepName
             firstName={state.firstName}
             lastName={state.lastName}
-            onUpdate={(field, value) =>
-              setState((s) => ({ ...s, [field]: value }))
-            }
-            onNext={() => setStep(3)}
-            onBack={() => setStep(1)}
+            onUpdate={(field, value) => setState((s) => ({ ...s, [field]: value }))}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 3:
+      case "address":
         return (
           <StepAddress
             firstName={state.firstName}
             postcode={state.postcode}
             houseNumber={state.houseNumber}
             addition={state.addition}
-            onUpdate={(field, value) =>
-              setState((s) => ({ ...s, [field]: value }))
-            }
-            onNext={() => setStep(4)}
-            onBack={() => setStep(2)}
+            onUpdate={(field, value) => setState((s) => ({ ...s, [field]: value }))}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 4:
+      case "birthdate":
         return (
           <StepBirthdate
             birthdate={state.birthdate}
-            onUpdate={(value) =>
-              setState((s) => ({ ...s, birthdate: value }))
-            }
-            onNext={() => setStep(5)}
-            onBack={() => setStep(3)}
+            onUpdate={(value) => setState((s) => ({ ...s, birthdate: value }))}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 5:
+      case "family":
         return (
           <StepFamily
             familyStatus={state.familyStatus}
             onSelect={(value) => {
               setState((s) => ({ ...s, familyStatus: value }));
-              if (value === "single") {
-                setStep(7);
+              // Use the step config's getNextStep if available
+              const config = flow.steps[stepIndex];
+              if (config?.getNextStep) {
+                const nextId = config.getNextStep({ ...state, familyStatus: value });
+                if (nextId) goToStepId(nextId);
               } else {
-                setStep(6);
+                goToIndex(stepIndex + 1);
               }
             }}
-            onBack={() => setStep(4)}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 6:
+      case "family-details":
         return (
           <StepFamilyDetails
             familyStatus={state.familyStatus}
             insurePartner={state.insurePartner}
             childrenCount={state.childrenCount}
             childrenAges={state.childrenAges}
-            onUpdatePartner={(value) =>
-              setState((s) => ({ ...s, insurePartner: value }))
-            }
+            onUpdatePartner={(value) => setState((s) => ({ ...s, insurePartner: value }))}
             onUpdateChildren={(value) => {
               setState((s) => {
                 const newAges = [...s.childrenAges];
@@ -245,19 +333,19 @@ const Index = () => {
                 return { ...s, childrenAges: newAges };
               });
             }}
-            onNext={() => setStep(7)}
-            onBack={() => setStep(5)}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 7:
+      case "ready":
         return (
           <StepReady
             selectedInsurances={state.selectedInsurances}
-            onNext={() => setStep(8)}
-            onBack={() => setStep(state.familyStatus === "single" ? 5 : 6)}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 8:
+      case "preferences":
         return (
           <StepPreferences
             ref={prefsRef}
@@ -271,28 +359,24 @@ const Index = () => {
             onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
             onUpdateEmail={(value) => setState((s) => ({ ...s, email: value }))}
             onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
-            onNext={() => setStep(9)}
-            onBack={() => setStep(7)}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 9:
-        return (
-          <StepLoading
-            onComplete={() => setStep(10)}
-          />
-        );
-      case 10:
+      case "loading":
+        return <StepLoading onComplete={() => goToIndex(getNextIndex())} />;
+      case "offer":
         return (
           <StepOffer
             selectedInsurances={state.selectedInsurances}
             preferences={state.preferences}
             firstName={state.firstName}
             onUpdatePreference={updatePreference}
-            onNext={() => setStep(11)}
-            onBack={() => setStep(9)}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 11:
+      case "start-date":
         return (
           <StepStartDate
             selectedInsurances={state.selectedInsurances}
@@ -300,11 +384,11 @@ const Index = () => {
             onUpdateStartDate={(id, date) =>
               setState((s) => ({ ...s, startDates: { ...s.startDates, [id]: date } }))
             }
-            onNext={() => setStep(12)}
-            onBack={() => setStep(10)}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 12:
+      case "confirm-details":
         return (
           <StepConfirmDetails
             firstName={state.firstName}
@@ -312,31 +396,29 @@ const Index = () => {
             lastName={state.lastName}
             phone={state.phone}
             email={state.email}
-            onUpdateField={(field, value) =>
-              setState((s) => ({ ...s, [field]: value }))
-            }
-            onNext={() => setStep(13)}
-            onBack={() => setStep(11)}
+            onUpdateField={(field, value) => setState((s) => ({ ...s, [field]: value }))}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 13:
+      case "phone-verification":
         return (
           <StepPhoneVerification
             phone={state.phone}
-            onVerified={() => setStep(14)}
-            onBack={() => setStep(12)}
+            onVerified={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 14:
+      case "idin-verification":
         return (
           <StepIdinVerification
             iban={state.iban}
             onUpdateIban={(value) => setState((s) => ({ ...s, iban: value }))}
-            onNext={() => setStep(15)}
-            onBack={() => setStep(13)}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 15:
+      case "acceptance-questions":
         return (
           <StepAcceptanceQuestions
             answers={state.acceptanceAnswers}
@@ -346,11 +428,11 @@ const Index = () => {
                 acceptanceAnswers: { ...s.acceptanceAnswers, [qId]: val },
               }))
             }
-            onNext={() => setStep(16)}
-            onBack={() => setStep(14)}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 16:
+      case "final-preview":
         return (
           <StepFinalPreview
             selectedInsurances={state.selectedInsurances}
@@ -362,129 +444,66 @@ const Index = () => {
             email={state.email}
             agreeTerms={state.agreeTerms}
             agreeDebit={state.agreeDebit}
-            onUpdateAgree={(field, value) =>
-              setState((s) => ({ ...s, [field]: value }))
-            }
-            onNext={() => setStep(17)}
-            onBack={() => setStep(15)}
+            onUpdateAgree={(field, value) => setState((s) => ({ ...s, [field]: value }))}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      case 17:
+      case "success":
         return <StepSuccess email={state.email} />;
       default:
         return <StepSuccess email={state.email} />;
     }
   };
 
-  const isOfferStep = state.currentStep === 10;
-  const isLoadingStep = state.currentStep === 9;
-  const isPreferencesStep = state.currentStep === 8;
-  const sidebarStep =
-    state.currentStep <= 1
-      ? 1
-      : state.currentStep <= 7
-      ? 1
-      : state.currentStep <= 9
-      ? 2
-      : state.currentStep === 10
-      ? 3
-      : 4;
-  const isStartDateStep = state.currentStep === 11;
-  const isConfirmStep = state.currentStep === 12;
-  const isPhoneVerifyStep = state.currentStep === 13;
-  const isIdinStep = state.currentStep === 14;
-  const isAcceptanceStep = state.currentStep === 15;
-  const isFinalPreviewStep = state.currentStep === 16;
-  const isSuccessStep = state.currentStep === 17;
-  const shouldShowStickyFooter = !isLoadingStep && !isOfferStep && !isSuccessStep;
-  const isFinalise = state.currentStep >= 11 && state.currentStep <= 16;
-
-  // Finalise sub-step progress (steps 11-16 → 6 sub-steps)
-  const finaliseSubStep = state.currentStep - 10;
-  const finaliseTotalSubs = 6;
-  const finaliseProgress = (finaliseSubStep / finaliseTotalSubs) * 100;
-
-  // Step 1 has its own full layout with sidebar
-  if (isStep1) {
+  // Standalone layout (Step 1)
+  if (isStandalone) {
     return (
       <div className="pb-0">
+        <FlowSwitcher currentFlowId={flowId} onSwitch={switchFlow} />
         {renderStep()}
-        {shouldShowStickyFooter && <div aria-hidden className="h-36 md:h-40" />}
-        <StickyFooter
-          savings={totalSavings}
-          onNext={() => setStep(2)}
-          disabled={state.selectedInsurances.length === 0}
-          buttonLabel="Next"
-          hasSidebar={true}
-        />
+        {showFooter && <div aria-hidden className="h-36 md:h-40" />}
+        {showFooter && (
+          <StickyFooter
+            savings={totalSavings}
+            onNext={handleNext}
+            disabled={!canProceed()}
+            buttonLabel={buttonLabel}
+            hasSidebar={true}
+            showSavings={showSavings}
+            showNextButton={showNextButton}
+          />
+        )}
       </div>
     );
   }
 
-  const canProceedIdin = (): boolean => {
-    return state.iban.length >= 5;
-  };
-
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar currentStep={sidebarStep} visible={true} />
+      <Sidebar currentStep={getSidebarStep()} visible={true} />
+      <FlowSwitcher currentFlowId={flowId} onSwitch={switchFlow} />
 
-      <main className={`flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 ${isOfferStep ? '' : 'max-w-3xl mx-auto'}`}>
-        {isAboutYou && (
+      <main className={`flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 ${isFullWidth ? '' : 'max-w-3xl mx-auto'}`}>
+        {phaseLabel && (
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-4">About you</h1>
-            <Progress value={aboutYouProgress} className="h-2 [&>div]:bg-success" />
-          </div>
-        )}
-        {isFinalise && (
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-4">Finalise</h1>
-            <Progress value={finaliseProgress} className="h-2 [&>div]:bg-success" />
+            <h1 className="text-3xl font-bold text-foreground mb-4">{phaseLabel}</h1>
+            <Progress value={getPhaseProgress()} className="h-2 [&>div]:bg-success" />
           </div>
         )}
         {renderStep()}
-        {shouldShowStickyFooter && <div aria-hidden className="h-36 md:h-40" />}
-        {!isAboutYou && !isLoadingStep && !isPreferencesStep && !isStartDateStep && !isConfirmStep && !isPhoneVerifyStep && !isIdinStep && !isAcceptanceStep && !isFinalPreviewStep && !isSuccessStep && <Footer />}
+        {showFooter && <div aria-hidden className="h-36 md:h-40" />}
       </main>
 
-      {shouldShowStickyFooter && (
+      {showFooter && (
         <StickyFooter
           savings={totalSavings}
-          onNext={() => {
-            if (state.currentStep === 5 && state.familyStatus) {
-              return;
-            }
-            // For preferences step, delegate to internal handler
-            if (state.currentStep === 8 && prefsRef.current) {
-              const handled = prefsRef.current.handleNext();
-              if (handled) return;
-            }
-            setStep(state.currentStep + 1);
-          }}
+          onNext={handleNext}
           onBack={handleBack}
-          disabled={
-            isAboutYou ? !canProceedAboutYou() :
-            isStartDateStep ? !canProceedStartDate() :
-            isConfirmStep ? !(state.firstName && state.lastName && state.email.includes("@")) :
-            isPhoneVerifyStep ? true : // Disabled - OTP auto-submits
-            isIdinStep ? !canProceedIdin() :
-            isAcceptanceStep ? false :
-            isFinalPreviewStep ? !(state.agreeTerms && state.agreeDebit) :
-            state.selectedInsurances.length === 0
-          }
-          buttonLabel={
-            isReadyStep ? "Set preferences" :
-            isStartDateStep ? "Go further" :
-            isConfirmStep ? "Next" :
-            isPhoneVerifyStep ? "Verifying..." :
-            isIdinStep ? "Confirm & continue" :
-            isAcceptanceStep ? "Continue" :
-            isFinalPreviewStep ? "Confirm & Insure" :
-            "Next"
-          }
+          disabled={!canProceed()}
+          buttonLabel={buttonLabel}
           hasSidebar={true}
-          showSavings={!isAboutYou && !isReadyStep && !isPreferencesStep && !isFinalise}
-          showNextButton={state.currentStep !== 5 && !isPhoneVerifyStep}
+          showSavings={showSavings}
+          showNextButton={showNextButton}
         />
       )}
     </div>
