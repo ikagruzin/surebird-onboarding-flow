@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, ChevronLeft, ChevronRight, Plus, X, Info, MessageCircle, Lock, Calendar, Shield } from "lucide-react";
+import { Check, CheckCircle2, ChevronLeft, ChevronRight, Plus, X, Info, MessageCircle, Lock, Calendar, Shield } from "lucide-react";
 import LegalCoverageSelector from "./LegalCoverageSelector";
 import { INSURANCE_TYPES } from "./types";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
@@ -481,6 +481,41 @@ const StepOffer = ({
         {/* Right sidebar - calculations */}
         <div className="hidden lg:block w-[320px] shrink-0">
           {renderCalculations()}
+        </div>
+      </div>
+
+      {/* Why Surebird section */}
+      <div className="mt-16 mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-10">
+          Why is it better to choose Surebird?
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {[
+            {
+              title: "Always well insured",
+              text: "Insurance boring? Not with Surebird! Our platform manages your insurance and offers customized personal coverage.",
+            },
+            {
+              title: "Never compare yourself again",
+              text: "Our smart systems find the best deals and stop premium increases. Always top insurance for the best price.",
+            },
+            {
+              title: "All in 1 overview",
+              text: "No more separate policies. All your insurance policies in one place, clear and efficient.",
+            },
+            {
+              title: "One point of contact for advice and damage",
+              text: "If something happens, you only have one point of contact for service and support in case of damage.",
+            },
+          ].map((card, i) => (
+            <div key={i} className="flex gap-4 p-6 rounded-2xl border border-border bg-card">
+              <CheckCircle2 className="w-6 h-6 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-foreground mb-1">{card.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{card.text}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
