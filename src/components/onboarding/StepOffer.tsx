@@ -636,7 +636,7 @@ const StepOffer = ({
   );
 
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in overflow-hidden">
       <h1 className="text-[32px] font-bold text-foreground mb-6">Your personal offer</h1>
 
       {/* Product tabs */}
