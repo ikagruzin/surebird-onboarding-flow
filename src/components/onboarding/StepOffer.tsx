@@ -159,8 +159,10 @@ const StepOffer = ({
 
   const scrollTestimonials = (dir: "left" | "right") => {
     if (!testimonialRef.current) return;
-    const amount = 280;
-    testimonialRef.current.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
+    const el = testimonialRef.current;
+    el.style.overflowX = "auto";
+    el.scrollBy({ left: dir === "left" ? -236 : 236, behavior: "smooth" });
+    setTimeout(() => { el.style.overflowX = "hidden"; }, 400);
   };
 
   const renderTestimonials = () => (
@@ -184,14 +186,14 @@ const StepOffer = ({
       </div>
       <div
         ref={testimonialRef}
-        className="flex gap-4 overflow-x-auto pb-2"
+        className="flex gap-4 overflow-x-hidden pb-2 snap-x snap-mandatory scroll-smooth"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {TESTIMONIALS.map((t, i) => (
           <button
             key={i}
             onClick={() => setVideoModal(t.videoId)}
-            className="relative shrink-0 w-[220px] h-[300px] rounded-2xl overflow-hidden group cursor-pointer"
+            className="relative shrink-0 w-[220px] h-[300px] rounded-2xl overflow-hidden group cursor-pointer snap-start"
           >
             <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
@@ -257,7 +259,11 @@ const StepOffer = ({
 
   const scrollTrustpilot = (dir: "left" | "right") => {
     if (!trustpilotRef.current) return;
-    trustpilotRef.current.scrollBy({ left: dir === "left" ? -340 : 340, behavior: "smooth" });
+    const el = trustpilotRef.current;
+    // Enable scrolling momentarily for programmatic scroll
+    el.style.overflowX = "auto";
+    el.scrollBy({ left: dir === "left" ? -296 : 296, behavior: "smooth" });
+    setTimeout(() => { el.style.overflowX = "hidden"; }, 400);
   };
 
   const TrustpilotStars = ({ count, size = 16 }: { count: number; size?: number }) => (
@@ -295,11 +301,11 @@ const StepOffer = ({
       </div>
       <div
         ref={trustpilotRef}
-        className="flex gap-4 overflow-x-auto pb-2"
+        className="flex gap-4 overflow-x-hidden pb-2 snap-x snap-mandatory scroll-smooth"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {/* Trustpilot overview card */}
-        <div className="shrink-0 w-[300px] bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm">
+        <div className="shrink-0 w-[280px] snap-start bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <Star className="w-5 h-5 text-[#00b67a]" fill="currentColor" />
             <span className="text-lg font-bold text-foreground">Trustpilot</span>
@@ -316,7 +322,7 @@ const StepOffer = ({
           const isLong = review.text.length > 180;
           const displayText = isLong ? review.text.slice(0, 180) + "..." : review.text;
           return (
-            <div key={i} className="shrink-0 w-[300px] bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm">
+            <div key={i} className="shrink-0 w-[280px] snap-start bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm">
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-sm font-bold text-foreground">{review.rating}.0</span>
