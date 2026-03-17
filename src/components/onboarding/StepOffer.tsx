@@ -624,7 +624,7 @@ const StepOffer = ({
               ? "bg-foreground text-background border-foreground"
               : "bg-white border-[hsl(0,0%,84%)] text-foreground"
           }`}
-          style={{ borderWidth: '1px' }}
+          style={{ borderWidth: "1px" }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={activeTab === "all" ? "text-background" : "text-foreground"}>
             <rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
@@ -634,8 +634,8 @@ const StepOffer = ({
           </svg>
           All offers
         </button>
-        {selectedInsurances.map(id => {
-          const ins = INSURANCE_TYPES.find(t => t.id === id)!;
+        {selectedInsurances.map((id) => {
+          const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
           const isActive = activeTab === id;
           return (
             <button
@@ -646,7 +646,7 @@ const StepOffer = ({
                   ? "bg-foreground text-background border-foreground"
                   : "bg-white border-[hsl(0,0%,84%)] text-foreground"
               }`}
-              style={{ borderWidth: '1px' }}
+              style={{ borderWidth: "1px" }}
             >
               <img
                 src={ICON_MAP[ins.icon]}
@@ -662,12 +662,11 @@ const StepOffer = ({
         </button>
       </div>
 
-      <div className="flex flex-col xl:flex-row gap-8 items-start">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] items-start">
         {/* Main content */}
-        <div className="flex-1 min-w-0">
-          {activeTab === "all" && (
+        <div className="min-w-0">
+          {activeTab === "all" ? (
             <>
-              {/* Taco message */}
               <div className="border border-border rounded-3xl p-6 bg-card mb-8">
                 <div className="flex items-start gap-3 mb-4">
                   <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
@@ -680,23 +679,17 @@ const StepOffer = ({
                   Chat via WhatsApp
                 </button>
               </div>
-
-              {/* All offer cards */}
-              {selectedInsurances.map(id => renderOfferCard(id))}
+              {selectedInsurances.map((id) => renderOfferCard(id))}
             </>
-          )}
-
-          {activeTab !== "all" && (
+          ) : (
             <>
               {renderOfferCard(activeTab)}
               {renderPreferences(activeTab)}
             </>
           )}
-          {/* Your benefits with Surebird */}
+
           <div className="mt-12 mb-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">
-              Your benefits with Surebird
-            </h2>
+            <h2 className="text-xl font-bold text-foreground mb-6">Your benefits with Surebird</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 {
@@ -724,21 +717,16 @@ const StepOffer = ({
                   <p className="text-sm text-muted-foreground leading-relaxed">{card.text}</p>
                 </div>
               ))}
+            </div>
           </div>
 
-          {/* Video testimonials carousel */}
           {renderTestimonials()}
-
-          {/* Trustpilot reviews carousel */}
           {renderTrustpilotReviews()}
-
-          {/* FAQ */}
           {renderFAQ()}
-        </div>
         </div>
 
         {/* Right sidebar - calculations */}
-        <div className="w-full xl:w-[320px] xl:shrink-0">
+        <div className="min-w-0 lg:sticky lg:top-8">
           {renderCalculations()}
         </div>
       </div>
