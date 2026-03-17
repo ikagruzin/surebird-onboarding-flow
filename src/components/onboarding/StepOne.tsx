@@ -438,6 +438,16 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
               {version === "A" ? t.subtitle : t.bundleSubtitle}
             </p>
 
+            {onSmartAudit && (
+              <button
+                onClick={onSmartAudit}
+                className="mb-8 inline-flex items-center gap-2 text-primary font-semibold text-base hover:underline transition-colors bg-primary/5 border border-primary/20 rounded-full px-5 py-2.5"
+              >
+                <Sparkles className="w-4 h-4" />
+                Already insured? Let us do the work for you.
+              </button>
+            )}
+
             {version === "A" ? (
               <>
                 <InsuranceGrid />
