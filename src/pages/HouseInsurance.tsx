@@ -1,7 +1,6 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight, ChevronLeft, RotateCcw, Home, Info, Check } from "lucide-react";
-import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
 import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
 import Sidebar from "@/components/onboarding/Sidebar";
@@ -76,8 +75,6 @@ const PRESET_HOUSE: Partial<HouseState> = {
   floorMaterial: "Stone/concrete",
   roofShape: "Sloping",
   roofMaterial: "Pan roof",
-  ownRisk: "€250",
-  basicCoverage: "Extra Extensive",
 };
 
 const BUILDING_TYPES = [
@@ -246,12 +243,13 @@ function getStepSequence(
         else if (state.coverageChoice === "both") steps.push("contents", "building");
       }
     } else if (presetAnswer === "no") {
-      // No → manual flow (same as Version B)
+      // No → home-details first, then role → insurance
+      steps.push("home-details");
       steps.push("role");
       if (state.role === "tenant") {
-        steps.push("home-details", "contents");
+        steps.push("contents");
       } else if (state.role === "homeowner") {
-        steps.push("coverage-path", "home-details");
+        steps.push("coverage-path");
         if (state.coverageChoice === "household") steps.push("contents");
         else if (state.coverageChoice === "building") steps.push("building");
         else if (state.coverageChoice === "both") steps.push("contents", "building");
@@ -300,13 +298,15 @@ const HouseInsurance = () => {
         return !!(
           house.buildingType && house.usage.length > 0 &&
           house.constructionMaterial && house.floorMaterial &&
-          house.roofShape && house.roofMaterial && house.ownRisk
+          house.roofShape && house.roofMaterial
         );
       case "coverage-path":
         return house.coverageChoice !== "";
       case "contents":
+        if (testVersion === "a") return !!(house.security && house.netIncome && house.outsideValue);
         return !!(house.security && house.netIncome && house.outsideValue && house.basicCoverage);
       case "building":
+        if (testVersion === "a") return !!house.floorCount;
         return !!(house.floorCount && house.basicCoverage);
       default:
         return false;
@@ -317,7 +317,8 @@ const HouseInsurance = () => {
 
   const handleNext = () => {
     if (isLastStep) {
-      navigate("/?flow=a");
+      navigate("/test-flows/house");
+      handleReset();
       return;
     }
     const nextIdx = currentStepIdx + 1;
@@ -343,7 +344,7 @@ const HouseInsurance = () => {
   const handleVersionSwitch = (v: "a" | "b") => {
     setTestVersion(v);
     setHouse({ ...INITIAL_HOUSE });
-    setCurrentStepIdx(0);
+    setCurrentStepIdx(1); // stay past product-selection
     setPresetAnswer("");
   };
 
@@ -472,10 +473,12 @@ const HouseInsurance = () => {
           <label className="text-sm font-semibold text-foreground mb-2 block">Roof Material</label>
           <DropdownSelect options={ROOF_MATERIALS} value={house.roofMaterial} onChange={(v) => update("roofMaterial", v)} placeholder="Select roof material" />
         </div>
-        <div>
-          <label className="text-sm font-semibold text-foreground mb-2 block">Own Risk</label>
-          <SegmentedControl options={OWN_RISK_OPTIONS} value={house.ownRisk} onChange={(v) => update("ownRisk", v)} columns={4} />
-        </div>
+        {testVersion !== "a" && (
+          <div>
+            <label className="text-sm font-semibold text-foreground mb-2 block">Own Risk</label>
+            <SegmentedControl options={OWN_RISK_OPTIONS} value={house.ownRisk} onChange={(v) => update("ownRisk", v)} columns={4} />
+          </div>
+        )}
       </div>
     </SectionCard>
   );
@@ -515,10 +518,12 @@ const HouseInsurance = () => {
           <label className="text-sm font-semibold text-foreground mb-2 block">Outside Value</label>
           <DropdownSelect options={OUTSIDE_VALUE_OPTIONS} value={house.outsideValue} onChange={(v) => update("outsideValue", v)} placeholder="Select outside value" />
         </div>
-        <div className="border-t border-border pt-5">
-          <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
-          <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} columns={2} />
-        </div>
+        {testVersion !== "a" && (
+          <div className="border-t border-border pt-5">
+            <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
+            <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} columns={2} />
+          </div>
+        )}
       </div>
     </SectionCard>
   );
@@ -537,10 +542,12 @@ const HouseInsurance = () => {
           <ToggleRow label="Smart sensors" checked={house.smartSensors} onChange={(v) => update("smartSensors", v)} />
           <ToggleRow label="Heat pump" checked={house.heatPump} onChange={(v) => update("heatPump", v)} />
         </div>
-        <div className="border-t border-border pt-5">
-          <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
-          <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} columns={2} />
-        </div>
+        {testVersion !== "a" && (
+          <div className="border-t border-border pt-5">
+            <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
+            <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} columns={2} />
+          </div>
+        )}
       </div>
     </SectionCard>
   );
@@ -548,7 +555,6 @@ const HouseInsurance = () => {
   const renderProductSelection = () => (
     <div className="flex min-h-screen bg-background">
       <FlowSwitcher currentFlowId="c" onSwitch={() => navigate("/?flow=a")} />
-      <Sidebar showProgress={false} showAvatar={true} />
       <div className="flex-1 flex flex-col items-center">
         <div className="w-full max-w-3xl px-6 py-16">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Choose your insurances</h2>
@@ -610,9 +616,6 @@ const HouseInsurance = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <FlowSwitcher currentFlowId="c" onSwitch={() => navigate("/?flow=a")} />
-      <AskTacoFloat />
-
       {/* Header */}
       <div className="bg-card border-b border-border">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
