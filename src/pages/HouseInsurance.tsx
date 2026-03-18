@@ -601,6 +601,7 @@ const HouseInsurance = () => {
 
   const renderProductSelection = () => (
     <div className="flex min-h-screen bg-background">
+      <FlowSwitcher currentFlowId="c" onSwitch={() => navigate("/?flow=a")} />
       <Sidebar showProgress={false} showAvatar={true} />
       <div className="flex-1 flex flex-col items-center">
         <div className="w-full max-w-3xl px-6 py-16">
