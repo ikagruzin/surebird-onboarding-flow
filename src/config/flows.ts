@@ -1,11 +1,13 @@
 import type { FlowConfig } from "./flowTypes";
 import flowA from "./flowA";
 import flowB from "./flowB";
+import flowC from "./flowC";
 
 /** Registry of all available flows. Add new flows here. */
 export const FLOWS: Record<string, FlowConfig> = {
   a: flowA,
   b: flowB,
+  c: flowC,
 };
 
 export const DEFAULT_FLOW_ID = "a";
