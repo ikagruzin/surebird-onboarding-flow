@@ -617,9 +617,6 @@ const HouseInsurance = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <FlowSwitcher currentFlowId="c" onSwitch={() => navigate("/?flow=a")} />
-      <AskTacoFloat />
-
       {/* Header */}
       <div className="bg-card border-b border-border">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
