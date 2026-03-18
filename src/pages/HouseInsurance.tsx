@@ -598,8 +598,143 @@ const HouseInsurance = () => {
     </SectionCard>
   );
 
+  const renderProductSelection = () => (
+    <div className="flex min-h-screen bg-background">
+      <Sidebar showProgress={false} showAvatar={true} />
+      <div className="flex-1 flex flex-col items-center">
+        <div className="w-full max-w-3xl px-6 py-16">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Choose your insurances</h2>
+          <p className="text-muted-foreground mb-8">Select the product you'd like to test in this flow.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button
+              className="flex items-center gap-3 px-5 py-4 rounded-2xl border-2 border-primary bg-primary/10 shadow-md text-left"
+              onClick={handleNext}
+            >
+              <img src={iconHome} alt="Home" className="w-10 h-10" />
+              <span className="font-medium text-foreground flex-1">Home</span>
+              <div className="w-5 h-5 rounded border-2 border-primary bg-primary flex items-center justify-center">
+                <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderPreferences = () => {
+    const sections = [
+      { label: "Role", value: house.role === "tenant" ? "Tenant" : "Homeowner", key: "role" as const },
+      { label: "Building Type", value: house.buildingType, key: "buildingType" as const },
+      { label: "Usage", value: house.usage.join(", "), key: "usage" as const },
+      { label: "Construction Material", value: house.constructionMaterial, key: "constructionMaterial" as const },
+      { label: "Floor Material", value: house.floorMaterial, key: "floorMaterial" as const },
+      { label: "Roof Shape", value: house.roofShape, key: "roofShape" as const },
+      { label: "Roof Material", value: house.roofMaterial, key: "roofMaterial" as const },
+      { label: "Own Risk", value: house.ownRisk, key: "ownRisk" as const },
+    ];
+
+    if (house.role === "homeowner" && house.coverageChoice) {
+      sections.push({ label: "Coverage Choice", value: house.coverageChoice === "household" ? "Household Goods" : house.coverageChoice === "building" ? "Building" : "Both", key: "coverageChoice" as const });
+    }
+
+    if (house.coverageChoice !== "building" || house.role === "tenant") {
+      sections.push(
+        { label: "Security", value: house.security, key: "security" as const },
+        { label: "Net Income", value: house.netIncome, key: "netIncome" as const },
+        { label: "Outside Value", value: house.outsideValue, key: "outsideValue" as const },
+      );
+    }
+
+    if (house.coverageChoice === "building" || house.coverageChoice === "both") {
+      sections.push({ label: "Floor Count", value: house.floorCount, key: "floorCount" as const });
+    }
+
+    sections.push({ label: "Basic Coverage", value: house.basicCoverage, key: "basicCoverage" as const });
+
+    return (
+      <SectionCard title="Review Your Preferences">
+        <p className="text-sm text-muted-foreground mb-6">Review and edit your selections before viewing your offer.</p>
+        <div className="space-y-4">
+          {sections.map((s) => (
+            <div key={s.key} className="flex items-center justify-between py-3 border-b border-border last:border-0">
+              <span className="text-sm font-medium text-muted-foreground">{s.label}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-foreground">{s.value || "—"}</span>
+                <button
+                  onClick={() => {
+                    // Navigate to the step that contains this field
+                    const targetStep = s.key === "role" ? "role"
+                      : s.key === "coverageChoice" ? "coverage-path"
+                      : ["security", "netIncome", "outsideValue"].includes(s.key) ? "contents"
+                      : s.key === "floorCount" ? "building"
+                      : s.key === "basicCoverage" ? "conclusion"
+                      : "home-details";
+                    const idx = steps.indexOf(targetStep as StepKey);
+                    if (idx !== -1) setCurrentStepIdx(idx);
+                  }}
+                  className="text-primary text-xs font-medium hover:underline"
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Toggle details */}
+        {house.highValueAV && (
+          <div className="flex justify-between py-2 text-sm">
+            <span className="text-muted-foreground">High-value AV</span>
+            <span className="text-foreground font-medium">{house.highValueAVAmount || "Yes"}</span>
+          </div>
+        )}
+        {house.jewelry && (
+          <div className="flex justify-between py-2 text-sm">
+            <span className="text-muted-foreground">Jewelry</span>
+            <span className="text-foreground font-medium">{house.jewelryAmount || "Yes"}</span>
+          </div>
+        )}
+        {house.specialAssets && (
+          <div className="flex justify-between py-2 text-sm">
+            <span className="text-muted-foreground">Special Assets</span>
+            <span className="text-foreground font-medium">{house.specialAssetsAmount || "Yes"}</span>
+          </div>
+        )}
+        {house.monumental && (
+          <div className="flex justify-between py-2 text-sm">
+            <span className="text-muted-foreground">Monumental Status</span>
+            <span className="text-foreground font-medium">Yes</span>
+          </div>
+        )}
+        {house.rainwater && (
+          <div className="flex justify-between py-2 text-sm">
+            <span className="text-muted-foreground">Rainwater Collection</span>
+            <span className="text-foreground font-medium">Yes</span>
+          </div>
+        )}
+        {house.smartSensors && (
+          <div className="flex justify-between py-2 text-sm">
+            <span className="text-muted-foreground">Smart Sensors</span>
+            <span className="text-foreground font-medium">Yes</span>
+          </div>
+        )}
+        {house.heatPump && (
+          <div className="flex justify-between py-2 text-sm">
+            <span className="text-muted-foreground">Heat Pump</span>
+            <span className="text-foreground font-medium">Yes</span>
+          </div>
+        )}
+      </SectionCard>
+    );
+  };
+
   const renderCurrentStep = () => {
     switch (currentStep) {
+      case "product-selection":
+        return null; // handled separately with full-page layout
       case "role":
         return renderRoleSelection();
       case "home-details":
@@ -612,19 +747,28 @@ const HouseInsurance = () => {
         return renderBuildingInsurance();
       case "conclusion":
         return renderConclusion();
+      case "preferences":
+        return renderPreferences();
       default:
         return null;
     }
   };
 
   const stepLabels: Record<StepKey, string> = {
+    "product-selection": "Products",
     role: "Role",
     "home-details": "Home Details",
     "coverage-path": "Coverage",
     contents: "Contents Insurance",
     building: "Building Insurance",
     conclusion: "Coverage Level",
+    preferences: "Review",
   };
+
+  // Product selection gets its own full-page layout
+  if (currentStep === "product-selection") {
+    return renderProductSelection();
+  }
 
   return (
     <div className="min-h-screen bg-background">
