@@ -298,7 +298,7 @@ const HouseInsurance = () => {
         return !!(
           house.buildingType && house.usage.length > 0 &&
           house.constructionMaterial && house.floorMaterial &&
-          house.roofShape && house.roofMaterial && house.ownRisk
+          house.roofShape && house.roofMaterial
         );
       case "coverage-path":
         return house.coverageChoice !== "";
