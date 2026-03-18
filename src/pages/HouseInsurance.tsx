@@ -315,7 +315,8 @@ const HouseInsurance = () => {
 
   const handleNext = () => {
     if (isLastStep) {
-      navigate("/?flow=a");
+      navigate("/test-flows/house");
+      handleReset();
       return;
     }
     const nextIdx = currentStepIdx + 1;
