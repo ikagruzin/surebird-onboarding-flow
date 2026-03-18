@@ -303,8 +303,10 @@ const HouseInsurance = () => {
       case "coverage-path":
         return house.coverageChoice !== "";
       case "contents":
+        if (testVersion === "a") return !!(house.security && house.netIncome && house.outsideValue);
         return !!(house.security && house.netIncome && house.outsideValue && house.basicCoverage);
       case "building":
+        if (testVersion === "a") return !!house.floorCount;
         return !!(house.floorCount && house.basicCoverage);
       default:
         return false;
