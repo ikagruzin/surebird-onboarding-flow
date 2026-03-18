@@ -844,7 +844,7 @@ const HouseInsurance = () => {
         onNext={handleNext}
         onBack={currentStepIdx > 0 ? handleBack : undefined}
         disabled={!canGoNext()}
-        buttonLabel={currentStep === "conclusion" ? "Continue to Offer" : "Next"}
+        buttonLabel={currentStep === "preferences" ? "Continue to Offer" : "Next"}
         showSavings={false}
         showNextButton
       />
