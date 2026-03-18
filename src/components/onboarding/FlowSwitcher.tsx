@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllFlows } from "@/config/flows";
 import { ChevronDown } from "lucide-react";
 
@@ -7,10 +8,25 @@ interface FlowSwitcherProps {
   onSwitch: (flowId: string) => void;
 }
 
+/** Flow IDs that redirect to dedicated routes instead of the main wizard */
+const FLOW_ROUTES: Record<string, string> = {
+  c: "/test-flows/house",
+};
+
 const FlowSwitcher = ({ currentFlowId, onSwitch }: FlowSwitcherProps) => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const flows = getAllFlows();
   const current = flows.find((f) => f.id === currentFlowId);
+
+  const handleSelect = (flowId: string) => {
+    setOpen(false);
+    if (FLOW_ROUTES[flowId]) {
+      navigate(FLOW_ROUTES[flowId]);
+    } else {
+      onSwitch(flowId);
+    }
+  };
 
   return (
     <div className="fixed top-4 right-4 z-[100]">
@@ -34,10 +50,7 @@ const FlowSwitcher = ({ currentFlowId, onSwitch }: FlowSwitcherProps) => {
               {flows.map((flow) => (
                 <button
                   key={flow.id}
-                  onClick={() => {
-                    onSwitch(flow.id);
-                    setOpen(false);
-                  }}
+                  onClick={() => handleSelect(flow.id)}
                   className={`w-full text-left px-4 py-3 hover:bg-muted transition-colors ${
                     flow.id === currentFlowId ? "bg-muted/50" : ""
                   }`}
