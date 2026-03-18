@@ -540,10 +540,12 @@ const HouseInsurance = () => {
           <ToggleRow label="Smart sensors" checked={house.smartSensors} onChange={(v) => update("smartSensors", v)} />
           <ToggleRow label="Heat pump" checked={house.heatPump} onChange={(v) => update("heatPump", v)} />
         </div>
-        <div className="border-t border-border pt-5">
-          <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
-          <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} columns={2} />
-        </div>
+        {testVersion !== "a" && (
+          <div className="border-t border-border pt-5">
+            <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
+            <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} columns={2} />
+          </div>
+        )}
       </div>
     </SectionCard>
   );
