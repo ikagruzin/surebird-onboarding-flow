@@ -338,8 +338,7 @@ const HouseInsurance = () => {
   };
 
   const handleNext = () => {
-    if (currentStep === "conclusion") {
-      // Navigate to offer page with house selected
+    if (currentStep === "preferences") {
       navigate("/?flow=a");
       return;
     }
