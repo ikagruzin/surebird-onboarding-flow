@@ -273,21 +273,23 @@ const ToggleRow = ({
 );
 
 /* ─── Steps ─── */
-type StepKey = "product-selection" | "role" | "home-details" | "coverage-path" | "contents" | "building" | "conclusion" | "preferences";
+type StepKey = "product-selection" | "role" | "home-details" | "coverage-path" | "contents" | "building";
 
 function getStepSequence(state: HouseState): StepKey[] {
-  const steps: StepKey[] = ["product-selection", "role", "home-details"];
+  const steps: StepKey[] = ["product-selection", "role"];
 
   if (state.role === "tenant") {
-    steps.push("contents", "conclusion", "preferences");
+    // Tenant: home-details → contents (includes coverage level)
+    steps.push("home-details", "contents");
   } else if (state.role === "homeowner") {
-    steps.push("coverage-path");
+    // Homeowner: coverage-path → home-details → then insurance steps
+    steps.push("coverage-path", "home-details");
     if (state.coverageChoice === "household") {
-      steps.push("contents", "conclusion", "preferences");
+      steps.push("contents");
     } else if (state.coverageChoice === "building") {
-      steps.push("building", "conclusion", "preferences");
+      steps.push("building");
     } else if (state.coverageChoice === "both") {
-      steps.push("building", "contents", "conclusion", "preferences");
+      steps.push("contents", "building");
     }
   }
 
