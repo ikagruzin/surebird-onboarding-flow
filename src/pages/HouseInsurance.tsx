@@ -6,12 +6,11 @@ import StickyFooter from "@/components/onboarding/StickyFooter";
 import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
 import Sidebar from "@/components/onboarding/Sidebar";
 import iconHome from "@/assets/icon-home.svg";
+import tacoAvatar from "@/assets/taco-avatar.jpg";
 
 /* ─── Types ─── */
 interface HouseState {
-  // Step A
   role: "tenant" | "homeowner" | "";
-  // Step B – Home Details
   buildingType: string;
   usage: string[];
   constructionMaterial: string;
@@ -19,9 +18,7 @@ interface HouseState {
   roofShape: string;
   roofMaterial: string;
   ownRisk: string;
-  // Step C – Coverage path
   coverageChoice: "household" | "building" | "both" | "";
-  // Step D – Contents
   highValueAV: boolean;
   highValueAVAmount: string;
   jewelry: boolean;
@@ -33,14 +30,12 @@ interface HouseState {
   security: string;
   netIncome: string;
   outsideValue: string;
-  // Step D – Building
   monumental: boolean;
   quoted: boolean;
   floorCount: string;
   rainwater: boolean;
   smartSensors: boolean;
   heatPump: boolean;
-  // Conclusion
   basicCoverage: string;
 }
 
@@ -74,62 +69,41 @@ const INITIAL_HOUSE: HouseState = {
   basicCoverage: "",
 };
 
+const PRESET_HOUSE: Partial<HouseState> = {
+  buildingType: "Townhouse",
+  usage: ["I live there"],
+  constructionMaterial: "(Largely) stone",
+  floorMaterial: "Stone/concrete",
+  roofShape: "Sloping",
+  roofMaterial: "Pan roof",
+  ownRisk: "€250",
+  basicCoverage: "Extra Extensive",
+};
+
 const BUILDING_TYPES = [
-  "Detached house",
-  "Apartment",
-  "Canal house",
-  "Corner house",
-  "Two-under-a-roof",
-  "Townhouse",
-  "Farmhouse",
+  "Detached house", "Apartment", "Canal house", "Corner house",
+  "Two-under-a-roof", "Townhouse", "Farmhouse",
 ];
-
 const USAGE_OPTIONS = [
-  "I live there",
-  "Holiday home",
-  "I rent it out",
-  "Rental company for rooms",
-  "Different",
+  "I live there", "Holiday home", "I rent it out",
+  "Rental company for rooms", "Different",
 ];
-
 const CONSTRUCTION_MATERIALS = [
-  "Wooden skeleton",
-  "(Largely) stone",
-  "Wooden frame with stone wall",
+  "Wooden skeleton", "(Largely) stone", "Wooden frame with stone wall",
 ];
-
 const FLOOR_MATERIALS = ["No floors", "Wood", "Stone/concrete"];
-
 const ROOF_SHAPES = ["Flat", "Sloping", "Special"];
-
 const ROOF_MATERIALS = [
-  "Wood",
-  "Artificial reeds",
-  "Asphalt/bitumen",
-  "Pan roof",
-  "(Largely) reed",
-  "Shingles",
+  "Wood", "Artificial reeds", "Asphalt/bitumen",
+  "Pan roof", "(Largely) reed", "Shingles",
 ];
-
 const OWN_RISK_OPTIONS = ["€100", "€250", "€500", "No deductible"];
-
 const SECURITY_OPTIONS = ["None", "BORG", "Police mark", "Both"];
-
 const NET_INCOME_OPTIONS = [
-  "< €25,000",
-  "€25,000 – €50,000",
-  "€50,000 – €75,000",
-  "€75,000 – €100,000",
-  "> €100,000",
+  "< €25,000", "€25,000 – €50,000", "€50,000 – €75,000",
+  "€75,000 – €100,000", "> €100,000",
 ];
-
-const OUTSIDE_VALUE_OPTIONS = [
-  "€0",
-  "€2,500",
-  "€5,000",
-  "€7,500",
-  "€10,000",
-];
+const OUTSIDE_VALUE_OPTIONS = ["€0", "€2,500", "€5,000", "€7,500", "€10,000"];
 
 /* ─── Reusable UI Pieces ─── */
 
@@ -141,15 +115,9 @@ const SectionCard = ({ title, children }: { title: string; children: React.React
 );
 
 const SegmentedControl = ({
-  options,
-  value,
-  onChange,
-  columns = 3,
+  options, value, onChange, columns = 3,
 }: {
-  options: string[];
-  value: string;
-  onChange: (v: string) => void;
-  columns?: number;
+  options: string[]; value: string; onChange: (v: string) => void; columns?: number;
 }) => (
   <div className={`grid gap-2 ${columns === 2 ? "grid-cols-2" : columns === 4 ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-1 sm:grid-cols-3"}`}>
     {options.map((opt) => (
@@ -169,13 +137,9 @@ const SegmentedControl = ({
 );
 
 const ChipSelect = ({
-  options,
-  selected,
-  onChange,
+  options, selected, onChange,
 }: {
-  options: string[];
-  selected: string[];
-  onChange: (v: string[]) => void;
+  options: string[]; selected: string[]; onChange: (v: string[]) => void;
 }) => (
   <div className="flex flex-wrap gap-2">
     {options.map((opt) => {
@@ -183,9 +147,7 @@ const ChipSelect = ({
       return (
         <button
           key={opt}
-          onClick={() =>
-            onChange(isActive ? selected.filter((s) => s !== opt) : [...selected, opt])
-          }
+          onClick={() => onChange(isActive ? selected.filter((s) => s !== opt) : [...selected, opt])}
           className={`px-4 py-2.5 rounded-full border-2 text-sm font-medium transition-all ${
             isActive
               ? "border-primary bg-primary/5 text-foreground"
@@ -200,15 +162,9 @@ const ChipSelect = ({
 );
 
 const DropdownSelect = ({
-  options,
-  value,
-  onChange,
-  placeholder,
+  options, value, onChange, placeholder,
 }: {
-  options: string[];
-  value: string;
-  onChange: (v: string) => void;
-  placeholder: string;
+  options: string[]; value: string; onChange: (v: string) => void; placeholder: string;
 }) => (
   <select
     value={value}
@@ -217,29 +173,16 @@ const DropdownSelect = ({
   >
     <option value="">{placeholder}</option>
     {options.map((o) => (
-      <option key={o} value={o}>
-        {o}
-      </option>
+      <option key={o} value={o}>{o}</option>
     ))}
   </select>
 );
 
 const ToggleRow = ({
-  label,
-  sublabel,
-  checked,
-  onChange,
-  showAmount,
-  amount,
-  onAmountChange,
+  label, sublabel, checked, onChange, showAmount, amount, onAmountChange,
 }: {
-  label: string;
-  sublabel?: string;
-  checked: boolean;
-  onChange: (v: boolean) => void;
-  showAmount?: boolean;
-  amount?: string;
-  onAmountChange?: (v: string) => void;
+  label: string; sublabel?: string; checked: boolean; onChange: (v: boolean) => void;
+  showAmount?: boolean; amount?: string; onAmountChange?: (v: string) => void;
 }) => (
   <div className="space-y-2">
     <div className="flex items-center justify-between gap-4">
@@ -253,11 +196,9 @@ const ToggleRow = ({
           checked ? "bg-primary" : "bg-input"
         }`}
       >
-        <span
-          className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${
-            checked ? "translate-x-5" : "translate-x-0"
-          }`}
-        />
+        <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${
+          checked ? "translate-x-5" : "translate-x-0"
+        }`} />
       </button>
     </div>
     {showAmount && checked && (
@@ -273,23 +214,59 @@ const ToggleRow = ({
 );
 
 /* ─── Steps ─── */
-type StepKey = "product-selection" | "role" | "home-details" | "coverage-path" | "contents" | "building";
+type StepKey =
+  | "product-selection"
+  | "preset-verification"
+  | "role"
+  | "home-details"
+  | "coverage-path"
+  | "contents"
+  | "building";
 
-function getStepSequence(state: HouseState): StepKey[] {
-  const steps: StepKey[] = ["product-selection", "role"];
+function getStepSequence(
+  state: HouseState,
+  version: "a" | "b",
+  presetAnswer: "yes" | "no" | "",
+): StepKey[] {
+  const steps: StepKey[] = ["product-selection"];
 
-  if (state.role === "tenant") {
-    // Tenant: home-details → contents (includes coverage level)
-    steps.push("home-details", "contents");
-  } else if (state.role === "homeowner") {
-    // Homeowner: coverage-path → home-details → then insurance steps
-    steps.push("coverage-path", "home-details");
-    if (state.coverageChoice === "household") {
-      steps.push("contents");
-    } else if (state.coverageChoice === "building") {
-      steps.push("building");
-    } else if (state.coverageChoice === "both") {
-      steps.push("contents", "building");
+  if (version === "a") {
+    // Version A: Smart Preset
+    steps.push("preset-verification");
+
+    if (presetAnswer === "yes") {
+      // Yes → skip home-details, go to role → insurance steps → offer
+      steps.push("role");
+      if (state.role === "tenant") {
+        steps.push("contents");
+      } else if (state.role === "homeowner") {
+        steps.push("coverage-path");
+        if (state.coverageChoice === "household") steps.push("contents");
+        else if (state.coverageChoice === "building") steps.push("building");
+        else if (state.coverageChoice === "both") steps.push("contents", "building");
+      }
+    } else if (presetAnswer === "no") {
+      // No → manual flow (same as Version B)
+      steps.push("role");
+      if (state.role === "tenant") {
+        steps.push("home-details", "contents");
+      } else if (state.role === "homeowner") {
+        steps.push("coverage-path", "home-details");
+        if (state.coverageChoice === "household") steps.push("contents");
+        else if (state.coverageChoice === "building") steps.push("building");
+        else if (state.coverageChoice === "both") steps.push("contents", "building");
+      }
+    }
+  } else {
+    // Version B: Manual Only
+    steps.push("role");
+    if (state.role === "tenant") {
+      steps.push("home-details", "contents");
+    } else if (state.role === "homeowner") {
+      steps.push("coverage-path", "home-details");
+      if (state.coverageChoice === "household") steps.push("contents");
+      else if (state.coverageChoice === "building") steps.push("building");
+      else if (state.coverageChoice === "both") steps.push("contents", "building");
     }
   }
 
@@ -301,29 +278,29 @@ const HouseInsurance = () => {
   const navigate = useNavigate();
   const [house, setHouse] = useState<HouseState>({ ...INITIAL_HOUSE });
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
+  const [testVersion, setTestVersion] = useState<"a" | "b">("a");
+  const [presetAnswer, setPresetAnswer] = useState<"yes" | "no" | "">("");
 
   const update = useCallback(<K extends keyof HouseState>(key: K, val: HouseState[K]) => {
     setHouse((s) => ({ ...s, [key]: val }));
   }, []);
 
-  const steps = getStepSequence(house);
-  const currentStep = steps[currentStepIdx] || "role";
+  const steps = getStepSequence(house, testVersion, presetAnswer);
+  const currentStep = steps[currentStepIdx] || "product-selection";
 
   const canGoNext = (): boolean => {
     switch (currentStep) {
       case "product-selection":
         return true;
+      case "preset-verification":
+        return presetAnswer !== "";
       case "role":
         return house.role !== "";
       case "home-details":
         return !!(
-          house.buildingType &&
-          house.usage.length > 0 &&
-          house.constructionMaterial &&
-          house.floorMaterial &&
-          house.roofShape &&
-          house.roofMaterial &&
-          house.ownRisk
+          house.buildingType && house.usage.length > 0 &&
+          house.constructionMaterial && house.floorMaterial &&
+          house.roofShape && house.roofMaterial && house.ownRisk
         );
       case "coverage-path":
         return house.coverageChoice !== "";
@@ -340,7 +317,6 @@ const HouseInsurance = () => {
 
   const handleNext = () => {
     if (isLastStep) {
-      // Redirect to offer page (same as Flow A/B)
       navigate("/?flow=a");
       return;
     }
@@ -361,11 +337,102 @@ const HouseInsurance = () => {
   const handleReset = () => {
     setHouse({ ...INITIAL_HOUSE });
     setCurrentStepIdx(0);
+    setPresetAnswer("");
   };
 
-  const totalSavings = 45; // Home product savings
+  const handleVersionSwitch = (v: "a" | "b") => {
+    setTestVersion(v);
+    setHouse({ ...INITIAL_HOUSE });
+    setCurrentStepIdx(0);
+    setPresetAnswer("");
+  };
+
+  const handlePresetAnswer = (answer: "yes" | "no") => {
+    setPresetAnswer(answer);
+    if (answer === "yes") {
+      // Apply preset values
+      setHouse((s) => ({ ...s, ...PRESET_HOUSE }));
+    }
+  };
+
+  const totalSavings = 45;
 
   /* ─── Step Renders ─── */
+
+  const renderPresetVerification = () => (
+    <div className="animate-fade-in space-y-6">
+      {/* Taco message */}
+      <div className="flex items-start gap-3">
+        <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
+        <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
+          <p className="text-base text-foreground">
+            Based on your address, I've found some details about your home. Can you confirm this?
+          </p>
+        </div>
+      </div>
+
+      {/* Verification card */}
+      <div className="border-2 border-border rounded-2xl bg-card p-6 shadow-sm space-y-5">
+        <h3 className="text-lg font-bold text-foreground">Is this information correct?</h3>
+        <p className="text-sm text-muted-foreground">My house has:</p>
+        <ul className="space-y-3">
+          {[
+            "Stone/concrete exterior walls",
+            "A sloping or mainly sloping roof without thatch",
+            "A kitchen or bathroom less than 10 years old",
+            "Outbuildings of up to 100 m²",
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-3">
+              <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                <Check className="w-3 h-3 text-primary" />
+              </div>
+              <span className="text-sm font-medium text-foreground">{item}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="border-t border-border pt-5">
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={() => handlePresetAnswer("yes")}
+              className={`px-5 py-3.5 rounded-xl border-2 text-sm font-semibold transition-all ${
+                presetAnswer === "yes"
+                  ? "border-primary bg-primary/10 text-foreground"
+                  : "border-border text-foreground hover:border-muted-foreground/30"
+              }`}
+            >
+              Yes, that's correct
+            </button>
+            <button
+              onClick={() => handlePresetAnswer("no")}
+              className={`px-5 py-3.5 rounded-xl border-2 text-sm font-semibold transition-all ${
+                presetAnswer === "no"
+                  ? "border-destructive bg-destructive/10 text-foreground"
+                  : "border-border text-foreground hover:border-muted-foreground/30"
+              }`}
+            >
+              No, I'll fill it in
+            </button>
+          </div>
+        </div>
+
+        {presetAnswer === "yes" && (
+          <div className="bg-success/10 border border-success/20 rounded-xl px-4 py-3 animate-fade-in">
+            <p className="text-sm text-success font-medium">
+              ✓ Great! We'll use these details. You can always edit them later from the offer page.
+            </p>
+          </div>
+        )}
+        {presetAnswer === "no" && (
+          <div className="bg-muted rounded-xl px-4 py-3 animate-fade-in">
+            <p className="text-sm text-muted-foreground">
+              No problem — you'll be able to enter your home details manually in the next steps.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 
   const renderRoleSelection = () => (
     <SectionCard title="You are the...">
@@ -383,68 +450,31 @@ const HouseInsurance = () => {
       <div className="space-y-6">
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">Building Type</label>
-          <DropdownSelect
-            options={BUILDING_TYPES}
-            value={house.buildingType}
-            onChange={(v) => update("buildingType", v)}
-            placeholder="Select building type"
-          />
+          <DropdownSelect options={BUILDING_TYPES} value={house.buildingType} onChange={(v) => update("buildingType", v)} placeholder="Select building type" />
         </div>
-
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">Usage</label>
-          <ChipSelect
-            options={USAGE_OPTIONS}
-            selected={house.usage}
-            onChange={(v) => update("usage", v)}
-          />
+          <ChipSelect options={USAGE_OPTIONS} selected={house.usage} onChange={(v) => update("usage", v)} />
         </div>
-
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">Construction Materials</label>
-          <SegmentedControl
-            options={CONSTRUCTION_MATERIALS}
-            value={house.constructionMaterial}
-            onChange={(v) => update("constructionMaterial", v)}
-          />
+          <SegmentedControl options={CONSTRUCTION_MATERIALS} value={house.constructionMaterial} onChange={(v) => update("constructionMaterial", v)} />
         </div>
-
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">Floor Material</label>
-          <SegmentedControl
-            options={FLOOR_MATERIALS}
-            value={house.floorMaterial}
-            onChange={(v) => update("floorMaterial", v)}
-          />
+          <SegmentedControl options={FLOOR_MATERIALS} value={house.floorMaterial} onChange={(v) => update("floorMaterial", v)} />
         </div>
-
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">Roof Shape</label>
-          <SegmentedControl
-            options={ROOF_SHAPES}
-            value={house.roofShape}
-            onChange={(v) => update("roofShape", v)}
-          />
+          <SegmentedControl options={ROOF_SHAPES} value={house.roofShape} onChange={(v) => update("roofShape", v)} />
         </div>
-
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">Roof Material</label>
-          <DropdownSelect
-            options={ROOF_MATERIALS}
-            value={house.roofMaterial}
-            onChange={(v) => update("roofMaterial", v)}
-            placeholder="Select roof material"
-          />
+          <DropdownSelect options={ROOF_MATERIALS} value={house.roofMaterial} onChange={(v) => update("roofMaterial", v)} placeholder="Select roof material" />
         </div>
-
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">Own Risk</label>
-          <SegmentedControl
-            options={OWN_RISK_OPTIONS}
-            value={house.ownRisk}
-            onChange={(v) => update("ownRisk", v)}
-            columns={4}
-          />
+          <SegmentedControl options={OWN_RISK_OPTIONS} value={house.ownRisk} onChange={(v) => update("ownRisk", v)} columns={4} />
         </div>
       </div>
     </SectionCard>
@@ -455,19 +485,12 @@ const HouseInsurance = () => {
       <SegmentedControl
         options={["Household Goods", "Building", "Both"]}
         value={
-          house.coverageChoice === "household"
-            ? "Household Goods"
-            : house.coverageChoice === "building"
-            ? "Building"
-            : house.coverageChoice === "both"
-            ? "Both"
-            : ""
+          house.coverageChoice === "household" ? "Household Goods"
+            : house.coverageChoice === "building" ? "Building"
+            : house.coverageChoice === "both" ? "Both" : ""
         }
         onChange={(v) =>
-          update(
-            "coverageChoice",
-            v === "Household Goods" ? "household" : v === "Building" ? "building" : "both"
-          )
+          update("coverageChoice", v === "Household Goods" ? "household" : v === "Building" ? "building" : "both")
         }
       />
     </SectionCard>
@@ -476,80 +499,25 @@ const HouseInsurance = () => {
   const renderContentsInsurance = () => (
     <SectionCard title="Contents Insurance">
       <div className="space-y-5">
-        <ToggleRow
-          label="High-value Audiovisual"
-          sublabel=">€12k"
-          checked={house.highValueAV}
-          onChange={(v) => update("highValueAV", v)}
-          showAmount
-          amount={house.highValueAVAmount}
-          onAmountChange={(v) => update("highValueAVAmount", v)}
-        />
-        <ToggleRow
-          label="Jewelry"
-          sublabel=">€6k"
-          checked={house.jewelry}
-          onChange={(v) => update("jewelry", v)}
-          showAmount
-          amount={house.jewelryAmount}
-          onAmountChange={(v) => update("jewelryAmount", v)}
-        />
-        <ToggleRow
-          label="Special assets"
-          sublabel=">€15k"
-          checked={house.specialAssets}
-          onChange={(v) => update("specialAssets", v)}
-          showAmount
-          amount={house.specialAssetsAmount}
-          onAmountChange={(v) => update("specialAssetsAmount", v)}
-        />
-        <ToggleRow
-          label="Owner interest"
-          sublabel=">€6k"
-          checked={house.ownerInterest}
-          onChange={(v) => update("ownerInterest", v)}
-          showAmount
-          amount={house.ownerInterestAmount}
-          onAmountChange={(v) => update("ownerInterestAmount", v)}
-        />
-
+        <ToggleRow label="High-value Audiovisual" sublabel=">€12k" checked={house.highValueAV} onChange={(v) => update("highValueAV", v)} showAmount amount={house.highValueAVAmount} onAmountChange={(v) => update("highValueAVAmount", v)} />
+        <ToggleRow label="Jewelry" sublabel=">€6k" checked={house.jewelry} onChange={(v) => update("jewelry", v)} showAmount amount={house.jewelryAmount} onAmountChange={(v) => update("jewelryAmount", v)} />
+        <ToggleRow label="Special assets" sublabel=">€15k" checked={house.specialAssets} onChange={(v) => update("specialAssets", v)} showAmount amount={house.specialAssetsAmount} onAmountChange={(v) => update("specialAssetsAmount", v)} />
+        <ToggleRow label="Owner interest" sublabel=">€6k" checked={house.ownerInterest} onChange={(v) => update("ownerInterest", v)} showAmount amount={house.ownerInterestAmount} onAmountChange={(v) => update("ownerInterestAmount", v)} />
         <div className="border-t border-border pt-5">
           <label className="text-sm font-semibold text-foreground mb-2 block">Security</label>
-          <SegmentedControl
-            options={SECURITY_OPTIONS}
-            value={house.security}
-            onChange={(v) => update("security", v)}
-            columns={4}
-          />
+          <SegmentedControl options={SECURITY_OPTIONS} value={house.security} onChange={(v) => update("security", v)} columns={4} />
         </div>
-
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">Net Income</label>
-          <SegmentedControl
-            options={NET_INCOME_OPTIONS}
-            value={house.netIncome}
-            onChange={(v) => update("netIncome", v)}
-          />
+          <SegmentedControl options={NET_INCOME_OPTIONS} value={house.netIncome} onChange={(v) => update("netIncome", v)} />
         </div>
-
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">Outside Value</label>
-          <DropdownSelect
-            options={OUTSIDE_VALUE_OPTIONS}
-            value={house.outsideValue}
-            onChange={(v) => update("outsideValue", v)}
-            placeholder="Select outside value"
-          />
+          <DropdownSelect options={OUTSIDE_VALUE_OPTIONS} value={house.outsideValue} onChange={(v) => update("outsideValue", v)} placeholder="Select outside value" />
         </div>
-
         <div className="border-t border-border pt-5">
           <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
-          <SegmentedControl
-            options={["Extra Extensive", "All Risk"]}
-            value={house.basicCoverage}
-            onChange={(v) => update("basicCoverage", v)}
-            columns={2}
-          />
+          <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} columns={2} />
         </div>
       </div>
     </SectionCard>
@@ -558,52 +526,20 @@ const HouseInsurance = () => {
   const renderBuildingInsurance = () => (
     <SectionCard title="Building Insurance">
       <div className="space-y-5">
-        <ToggleRow
-          label="Monumental status"
-          checked={house.monumental}
-          onChange={(v) => update("monumental", v)}
-        />
-        <ToggleRow
-          label="Quoted status"
-          checked={house.quoted}
-          onChange={(v) => update("quoted", v)}
-        />
-
+        <ToggleRow label="Monumental status" checked={house.monumental} onChange={(v) => update("monumental", v)} />
+        <ToggleRow label="Quoted status" checked={house.quoted} onChange={(v) => update("quoted", v)} />
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">Floor count</label>
-          <SegmentedControl
-            options={["1", "2", "2+"]}
-            value={house.floorCount}
-            onChange={(v) => update("floorCount", v)}
-          />
+          <SegmentedControl options={["1", "2", "2+"]} value={house.floorCount} onChange={(v) => update("floorCount", v)} />
         </div>
-
         <div className="border-t border-border pt-5 space-y-5">
-          <ToggleRow
-            label="Rainwater collection"
-            checked={house.rainwater}
-            onChange={(v) => update("rainwater", v)}
-          />
-          <ToggleRow
-            label="Smart sensors"
-            checked={house.smartSensors}
-            onChange={(v) => update("smartSensors", v)}
-          />
-          <ToggleRow
-            label="Heat pump"
-            checked={house.heatPump}
-            onChange={(v) => update("heatPump", v)}
-          />
+          <ToggleRow label="Rainwater collection" checked={house.rainwater} onChange={(v) => update("rainwater", v)} />
+          <ToggleRow label="Smart sensors" checked={house.smartSensors} onChange={(v) => update("smartSensors", v)} />
+          <ToggleRow label="Heat pump" checked={house.heatPump} onChange={(v) => update("heatPump", v)} />
         </div>
-
         <div className="border-t border-border pt-5">
           <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
-          <SegmentedControl
-            options={["Extra Extensive", "All Risk"]}
-            value={house.basicCoverage}
-            onChange={(v) => update("basicCoverage", v)}
-            columns={2}
-          />
+          <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} columns={2} />
         </div>
       </div>
     </SectionCard>
@@ -640,6 +576,8 @@ const HouseInsurance = () => {
     switch (currentStep) {
       case "product-selection":
         return null;
+      case "preset-verification":
+        return renderPresetVerification();
       case "role":
         return renderRoleSelection();
       case "home-details":
@@ -657,6 +595,7 @@ const HouseInsurance = () => {
 
   const stepLabels: Record<StepKey, string> = {
     "product-selection": "Products",
+    "preset-verification": "Verify",
     role: "Role",
     "home-details": "Home Details",
     "coverage-path": "Coverage",
@@ -686,13 +625,49 @@ const HouseInsurance = () => {
               <p className="text-xs text-muted-foreground">Product Flow Test</p>
             </div>
           </div>
-          <button
-            onClick={handleReset}
-            className="inline-flex items-center gap-2 text-sm font-medium text-destructive hover:text-destructive/80 border border-destructive/30 rounded-full px-4 py-2 hover:bg-destructive/5 transition-colors"
-          >
-            <RotateCcw className="w-4 h-4" />
-            Reset Sandbox
-          </button>
+
+          <div className="flex items-center gap-3">
+            {/* Version switcher */}
+            <div className="flex items-center bg-muted rounded-full p-1">
+              <button
+                onClick={() => handleVersionSwitch("a")}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  testVersion === "a"
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Version A
+              </button>
+              <button
+                onClick={() => handleVersionSwitch("b")}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  testVersion === "b"
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Version B
+              </button>
+            </div>
+
+            <button
+              onClick={handleReset}
+              className="inline-flex items-center gap-2 text-sm font-medium text-destructive hover:text-destructive/80 border border-destructive/30 rounded-full px-4 py-2 hover:bg-destructive/5 transition-colors"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Reset
+            </button>
+          </div>
+        </div>
+
+        {/* Version description */}
+        <div className="max-w-4xl mx-auto px-6 pb-3">
+          <p className="text-xs text-muted-foreground">
+            {testVersion === "a"
+              ? "Smart Preset — Confirms pre-filled home details before continuing."
+              : "Manual Only — Fill in all home details from scratch."}
+          </p>
         </div>
       </div>
 
@@ -736,7 +711,6 @@ const HouseInsurance = () => {
         </div>
       </div>
 
-      {/* Spacer for sticky footer */}
       <div aria-hidden className="h-36" />
 
       <StickyFooter
