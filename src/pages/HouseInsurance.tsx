@@ -243,12 +243,13 @@ function getStepSequence(
         else if (state.coverageChoice === "both") steps.push("contents", "building");
       }
     } else if (presetAnswer === "no") {
-      // No → manual flow (same as Version B)
+      // No → home-details first, then role → insurance
+      steps.push("home-details");
       steps.push("role");
       if (state.role === "tenant") {
-        steps.push("home-details", "contents");
+        steps.push("contents");
       } else if (state.role === "homeowner") {
-        steps.push("coverage-path", "home-details");
+        steps.push("coverage-path");
         if (state.coverageChoice === "household") steps.push("contents");
         else if (state.coverageChoice === "building") steps.push("building");
         else if (state.coverageChoice === "both") steps.push("contents", "building");
