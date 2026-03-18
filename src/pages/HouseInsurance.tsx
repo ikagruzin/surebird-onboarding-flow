@@ -625,34 +625,34 @@ const HouseInsurance = () => {
   );
 
   const renderPreferences = () => {
-    const sections = [
-      { label: "Role", value: house.role === "tenant" ? "Tenant" : "Homeowner", key: "role" as const },
-      { label: "Building Type", value: house.buildingType, key: "buildingType" as const },
-      { label: "Usage", value: house.usage.join(", "), key: "usage" as const },
-      { label: "Construction Material", value: house.constructionMaterial, key: "constructionMaterial" as const },
-      { label: "Floor Material", value: house.floorMaterial, key: "floorMaterial" as const },
-      { label: "Roof Shape", value: house.roofShape, key: "roofShape" as const },
-      { label: "Roof Material", value: house.roofMaterial, key: "roofMaterial" as const },
-      { label: "Own Risk", value: house.ownRisk, key: "ownRisk" as const },
+    const sections: { label: string; value: string; key: string }[] = [
+      { label: "Role", value: house.role === "tenant" ? "Tenant" : "Homeowner", key: "role" },
+      { label: "Building Type", value: house.buildingType, key: "buildingType" },
+      { label: "Usage", value: house.usage.join(", "), key: "usage" },
+      { label: "Construction Material", value: house.constructionMaterial, key: "constructionMaterial" },
+      { label: "Floor Material", value: house.floorMaterial, key: "floorMaterial" },
+      { label: "Roof Shape", value: house.roofShape, key: "roofShape" },
+      { label: "Roof Material", value: house.roofMaterial, key: "roofMaterial" },
+      { label: "Own Risk", value: house.ownRisk, key: "ownRisk" },
     ];
 
     if (house.role === "homeowner" && house.coverageChoice) {
-      sections.push({ label: "Coverage Choice", value: house.coverageChoice === "household" ? "Household Goods" : house.coverageChoice === "building" ? "Building" : "Both", key: "coverageChoice" as const });
+      sections.push({ label: "Coverage Choice", value: house.coverageChoice === "household" ? "Household Goods" : house.coverageChoice === "building" ? "Building" : "Both", key: "coverageChoice" });
     }
 
     if (house.coverageChoice !== "building" || house.role === "tenant") {
       sections.push(
-        { label: "Security", value: house.security, key: "security" as const },
-        { label: "Net Income", value: house.netIncome, key: "netIncome" as const },
-        { label: "Outside Value", value: house.outsideValue, key: "outsideValue" as const },
+        { label: "Security", value: house.security, key: "security" },
+        { label: "Net Income", value: house.netIncome, key: "netIncome" },
+        { label: "Outside Value", value: house.outsideValue, key: "outsideValue" },
       );
     }
 
     if (house.coverageChoice === "building" || house.coverageChoice === "both") {
-      sections.push({ label: "Floor Count", value: house.floorCount, key: "floorCount" as const });
+      sections.push({ label: "Floor Count", value: house.floorCount, key: "floorCount" });
     }
 
-    sections.push({ label: "Basic Coverage", value: house.basicCoverage, key: "basicCoverage" as const });
+    sections.push({ label: "Basic Coverage", value: house.basicCoverage, key: "basicCoverage" });
 
     return (
       <SectionCard title="Review Your Preferences">
