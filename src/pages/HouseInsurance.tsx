@@ -774,6 +774,7 @@ const HouseInsurance = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <FlowSwitcher currentFlowId="c" onSwitch={() => navigate("/?flow=a")} />
       <AskTacoFloat />
 
       {/* Header */}
