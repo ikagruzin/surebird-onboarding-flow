@@ -75,8 +75,6 @@ const PRESET_HOUSE: Partial<HouseState> = {
   floorMaterial: "Stone/concrete",
   roofShape: "Sloping",
   roofMaterial: "Pan roof",
-  ownRisk: "€250",
-  basicCoverage: "Extra Extensive",
 };
 
 const BUILDING_TYPES = [
