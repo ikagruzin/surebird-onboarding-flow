@@ -609,17 +609,6 @@ const HouseInsurance = () => {
     </SectionCard>
   );
 
-  const renderConclusion = () => (
-    <SectionCard title="Basic Coverage">
-      <SegmentedControl
-        options={["Extra Extensive", "All Risk"]}
-        value={house.basicCoverage}
-        onChange={(v) => update("basicCoverage", v)}
-        columns={2}
-      />
-    </SectionCard>
-  );
-
   const renderProductSelection = () => (
     <div className="flex min-h-screen bg-background">
       <FlowSwitcher currentFlowId="c" onSwitch={() => navigate("/?flow=a")} />
@@ -647,117 +636,10 @@ const HouseInsurance = () => {
     </div>
   );
 
-  const renderPreferences = () => {
-    const sections: { label: string; value: string; key: string }[] = [
-      { label: "Role", value: house.role === "tenant" ? "Tenant" : "Homeowner", key: "role" },
-      { label: "Building Type", value: house.buildingType, key: "buildingType" },
-      { label: "Usage", value: house.usage.join(", "), key: "usage" },
-      { label: "Construction Material", value: house.constructionMaterial, key: "constructionMaterial" },
-      { label: "Floor Material", value: house.floorMaterial, key: "floorMaterial" },
-      { label: "Roof Shape", value: house.roofShape, key: "roofShape" },
-      { label: "Roof Material", value: house.roofMaterial, key: "roofMaterial" },
-      { label: "Own Risk", value: house.ownRisk, key: "ownRisk" },
-    ];
-
-    if (house.role === "homeowner" && house.coverageChoice) {
-      sections.push({ label: "Coverage Choice", value: house.coverageChoice === "household" ? "Household Goods" : house.coverageChoice === "building" ? "Building" : "Both", key: "coverageChoice" });
-    }
-
-    if (house.coverageChoice !== "building" || house.role === "tenant") {
-      sections.push(
-        { label: "Security", value: house.security, key: "security" },
-        { label: "Net Income", value: house.netIncome, key: "netIncome" },
-        { label: "Outside Value", value: house.outsideValue, key: "outsideValue" },
-      );
-    }
-
-    if (house.coverageChoice === "building" || house.coverageChoice === "both") {
-      sections.push({ label: "Floor Count", value: house.floorCount, key: "floorCount" });
-    }
-
-    sections.push({ label: "Basic Coverage", value: house.basicCoverage, key: "basicCoverage" });
-
-    return (
-      <SectionCard title="Review Your Preferences">
-        <p className="text-sm text-muted-foreground mb-6">Review and edit your selections before viewing your offer.</p>
-        <div className="space-y-4">
-          {sections.map((s) => (
-            <div key={s.key} className="flex items-center justify-between py-3 border-b border-border last:border-0">
-              <span className="text-sm font-medium text-muted-foreground">{s.label}</span>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-foreground">{s.value || "—"}</span>
-                <button
-                  onClick={() => {
-                    // Navigate to the step that contains this field
-                    const targetStep = s.key === "role" ? "role"
-                      : s.key === "coverageChoice" ? "coverage-path"
-                      : ["security", "netIncome", "outsideValue"].includes(s.key) ? "contents"
-                      : s.key === "floorCount" ? "building"
-                      : s.key === "basicCoverage" ? "conclusion"
-                      : "home-details";
-                    const idx = steps.indexOf(targetStep as StepKey);
-                    if (idx !== -1) setCurrentStepIdx(idx);
-                  }}
-                  className="text-primary text-xs font-medium hover:underline"
-                >
-                  Edit
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Toggle details */}
-        {house.highValueAV && (
-          <div className="flex justify-between py-2 text-sm">
-            <span className="text-muted-foreground">High-value AV</span>
-            <span className="text-foreground font-medium">{house.highValueAVAmount || "Yes"}</span>
-          </div>
-        )}
-        {house.jewelry && (
-          <div className="flex justify-between py-2 text-sm">
-            <span className="text-muted-foreground">Jewelry</span>
-            <span className="text-foreground font-medium">{house.jewelryAmount || "Yes"}</span>
-          </div>
-        )}
-        {house.specialAssets && (
-          <div className="flex justify-between py-2 text-sm">
-            <span className="text-muted-foreground">Special Assets</span>
-            <span className="text-foreground font-medium">{house.specialAssetsAmount || "Yes"}</span>
-          </div>
-        )}
-        {house.monumental && (
-          <div className="flex justify-between py-2 text-sm">
-            <span className="text-muted-foreground">Monumental Status</span>
-            <span className="text-foreground font-medium">Yes</span>
-          </div>
-        )}
-        {house.rainwater && (
-          <div className="flex justify-between py-2 text-sm">
-            <span className="text-muted-foreground">Rainwater Collection</span>
-            <span className="text-foreground font-medium">Yes</span>
-          </div>
-        )}
-        {house.smartSensors && (
-          <div className="flex justify-between py-2 text-sm">
-            <span className="text-muted-foreground">Smart Sensors</span>
-            <span className="text-foreground font-medium">Yes</span>
-          </div>
-        )}
-        {house.heatPump && (
-          <div className="flex justify-between py-2 text-sm">
-            <span className="text-muted-foreground">Heat Pump</span>
-            <span className="text-foreground font-medium">Yes</span>
-          </div>
-        )}
-      </SectionCard>
-    );
-  };
-
   const renderCurrentStep = () => {
     switch (currentStep) {
       case "product-selection":
-        return null; // handled separately with full-page layout
+        return null;
       case "role":
         return renderRoleSelection();
       case "home-details":
@@ -768,10 +650,6 @@ const HouseInsurance = () => {
         return renderContentsInsurance();
       case "building":
         return renderBuildingInsurance();
-      case "conclusion":
-        return renderConclusion();
-      case "preferences":
-        return renderPreferences();
       default:
         return null;
     }
@@ -784,8 +662,6 @@ const HouseInsurance = () => {
     "coverage-path": "Coverage",
     contents: "Contents Insurance",
     building: "Building Insurance",
-    conclusion: "Coverage Level",
-    preferences: "Review",
   };
 
   // Product selection gets its own full-page layout
@@ -868,7 +744,7 @@ const HouseInsurance = () => {
         onNext={handleNext}
         onBack={currentStepIdx > 0 ? handleBack : undefined}
         disabled={!canGoNext()}
-        buttonLabel={currentStep === "preferences" ? "Continue to Offer" : "Next"}
+        buttonLabel={isLastStep ? "Continue to Offer" : "Next"}
         showSavings={false}
         showNextButton
       />
