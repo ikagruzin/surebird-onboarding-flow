@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronRight, ChevronLeft, RotateCcw, Home, Info, Check } from "lucide-react";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
+import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
 import Sidebar from "@/components/onboarding/Sidebar";
 import iconHome from "@/assets/icon-home.svg";
 
