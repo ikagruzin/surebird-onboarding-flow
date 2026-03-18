@@ -312,7 +312,7 @@ const HouseInsurance = () => {
   const canGoNext = (): boolean => {
     switch (currentStep) {
       case "product-selection":
-        return true; // only Home is available, auto-selected
+        return true;
       case "role":
         return house.role !== "";
       case "home-details":
@@ -328,13 +328,9 @@ const HouseInsurance = () => {
       case "coverage-path":
         return house.coverageChoice !== "";
       case "contents":
-        return !!(house.security && house.netIncome && house.outsideValue);
+        return !!(house.security && house.netIncome && house.outsideValue && house.basicCoverage);
       case "building":
-        return !!house.floorCount;
-      case "conclusion":
-        return !!house.basicCoverage;
-      case "preferences":
-        return true;
+        return !!(house.floorCount && house.basicCoverage);
       default:
         return false;
     }
