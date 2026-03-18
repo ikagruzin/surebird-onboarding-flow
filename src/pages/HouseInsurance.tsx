@@ -342,7 +342,7 @@ const HouseInsurance = () => {
   const handleVersionSwitch = (v: "a" | "b") => {
     setTestVersion(v);
     setHouse({ ...INITIAL_HOUSE });
-    setCurrentStepIdx(0);
+    setCurrentStepIdx(1); // stay past product-selection
     setPresetAnswer("");
   };
 
