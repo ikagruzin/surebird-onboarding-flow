@@ -471,10 +471,12 @@ const HouseInsurance = () => {
           <label className="text-sm font-semibold text-foreground mb-2 block">Roof Material</label>
           <DropdownSelect options={ROOF_MATERIALS} value={house.roofMaterial} onChange={(v) => update("roofMaterial", v)} placeholder="Select roof material" />
         </div>
-        <div>
-          <label className="text-sm font-semibold text-foreground mb-2 block">Own Risk</label>
-          <SegmentedControl options={OWN_RISK_OPTIONS} value={house.ownRisk} onChange={(v) => update("ownRisk", v)} columns={4} />
-        </div>
+        {testVersion !== "a" && (
+          <div>
+            <label className="text-sm font-semibold text-foreground mb-2 block">Own Risk</label>
+            <SegmentedControl options={OWN_RISK_OPTIONS} value={house.ownRisk} onChange={(v) => update("ownRisk", v)} columns={4} />
+          </div>
+        )}
       </div>
     </SectionCard>
   );
