@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronRight, ChevronLeft, RotateCcw, Home, Info, Check } from "lucide-react";
 import AskTacoFloat from "@/components/onboarding/AskTacoFloat";
 import StickyFooter from "@/components/onboarding/StickyFooter";
+import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
 import Sidebar from "@/components/onboarding/Sidebar";
 import iconHome from "@/assets/icon-home.svg";
 
@@ -600,6 +601,7 @@ const HouseInsurance = () => {
 
   const renderProductSelection = () => (
     <div className="flex min-h-screen bg-background">
+      <FlowSwitcher currentFlowId="c" onSwitch={() => navigate("/?flow=a")} />
       <Sidebar showProgress={false} showAvatar={true} />
       <div className="flex-1 flex flex-col items-center">
         <div className="w-full max-w-3xl px-6 py-16">
@@ -772,6 +774,7 @@ const HouseInsurance = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <FlowSwitcher currentFlowId="c" onSwitch={() => navigate("/?flow=a")} />
       <AskTacoFloat />
 
       {/* Header */}
