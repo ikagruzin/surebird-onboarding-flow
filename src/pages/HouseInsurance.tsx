@@ -336,8 +336,11 @@ const HouseInsurance = () => {
     }
   };
 
+  const isLastStep = currentStepIdx === steps.length - 1 && steps.length > 1;
+
   const handleNext = () => {
-    if (currentStep === "preferences") {
+    if (isLastStep) {
+      // Redirect to offer page (same as Flow A/B)
       navigate("/?flow=a");
       return;
     }
