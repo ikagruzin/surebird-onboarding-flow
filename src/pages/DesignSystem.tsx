@@ -568,10 +568,10 @@ const DesignSystem = () => {
 
             <SubSection title="Outline Pill Button (Tab-style)">
               <div className="flex gap-2">
-                <button className="h-[48px] px-5 rounded-full border border-tab-border bg-card flex items-center justify-center text-sm font-medium text-foreground hover:bg-muted transition-colors">
+                <button className="h-12 px-5 rounded-full border border-tab-border bg-card flex items-center justify-center text-sm font-medium text-foreground hover:bg-muted transition-colors">
                   Tab Item
                 </button>
-                <button className="h-[48px] px-4 rounded-full border border-tab-border bg-card flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
+                <button className="h-12 px-4 rounded-full border border-tab-border bg-card flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
                   <Plus className="w-4 h-4" />
                 </button>
               </div>
