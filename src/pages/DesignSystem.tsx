@@ -66,16 +66,11 @@ const SEMANTIC_TOKENS = [
   { name: "--destructive-foreground", label: "Destructive FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
   { name: "--success", label: "Success", cssVar: "121 66% 42%", hex: "#25B327", brand: "Light Green 500" },
   { name: "--success-foreground", label: "Success FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
-  { name: "--info", label: "Info", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
-  { name: "--info-light", label: "Info Light", cssVar: "209 100% 96%", hex: "#EBF5FF", brand: "Light Blue" },
-  { name: "--savings", label: "Savings", cssVar: "121 66% 42%", hex: "#25B327", brand: "Light Green 500" },
   { name: "--border", label: "Border", cssVar: "220 5% 92%", hex: "#E9EAEB", brand: "Neutral 200" },
   { name: "--input", label: "Input", cssVar: "220 5% 92%", hex: "#E9EAEB", brand: "Neutral 200" },
   { name: "--ring", label: "Ring", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
   { name: "--card", label: "Card", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
   { name: "--card-foreground", label: "Card FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
-  { name: "--subtitle", label: "Subtitle", cssVar: "221 10% 29%", hex: "#414651", brand: "Neutral 700" },
-  { name: "--tab-border", label: "Tab Border", cssVar: "216 7% 85%", hex: "#D5D7DA", brand: "Neutral 300" },
   { name: "--popover", label: "Popover", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
   { name: "--popover-foreground", label: "Popover FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
 ];
@@ -839,10 +834,10 @@ const DesignSystem = () => {
 
               <SubSection title="Offer Badge (tokenized)">
                 <div className="flex flex-wrap gap-2">
-                  <span className="bg-info-light text-primary text-xs font-medium px-2.5 py-1 rounded-full">Best and cheapest choice</span>
-                  <span className="bg-info-light text-primary text-xs font-medium px-2.5 py-1 rounded-full">The most popular choice</span>
+                  <span className="bg-primary/5 text-primary text-xs font-medium px-2.5 py-1 rounded-full">Best and cheapest choice</span>
+                  <span className="bg-primary/5 text-primary text-xs font-medium px-2.5 py-1 rounded-full">The most popular choice</span>
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">✓ Uses bg-info-light text-primary</p>
+                <p className="text-xs text-muted-foreground mt-1">✓ Uses bg-primary/5 text-primary</p>
               </SubSection>
 
               <SubSection title="Success Feedback">
@@ -922,7 +917,7 @@ const DesignSystem = () => {
             </SubSection>
 
             <SubSection title="Product Tabs (1px border, no shadow)">
-              <div className="flex gap-2 border-b border-tab-border pb-2 max-w-md">
+              <div className="flex gap-2 border-b border-border pb-2 max-w-md">
                 {["Liability", "Home", "Travel"].map((tab, i) => (
                   <button
                     key={tab}

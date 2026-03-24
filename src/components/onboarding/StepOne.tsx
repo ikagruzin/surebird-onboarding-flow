@@ -216,7 +216,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
             {t.bundleHeading}
           </h2>
-          <p className="text-subtitle mb-8">
+          <p className="text-muted-foreground mb-8">
                     {t.bundleSubtitle}
                   </p>
         </>
@@ -284,7 +284,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
             {t.bundleHeading}
           </h2>
-          <p className="text-subtitle mb-4">
+          <p className="text-muted-foreground mb-4">
             {t.bundleSubtitle}
           </p>
         </>
@@ -434,7 +434,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
             <h1 className="text-3xl leading-tight font-bold text-foreground mb-3">
               {version === "A" ? t.heading : t.bundleHeading}
             </h1>
-            <p className="mb-8 text-subtitle">
+            <p className="mb-8 text-muted-foreground">
               {version === "A" ? t.subtitle : t.bundleSubtitle}
             </p>
 
@@ -462,9 +462,9 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
                   <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                     {t.individualHeading}
                   </h2>
-                   <p className="text-subtitle mb-8">
+                   <p className="text-muted-foreground mb-8">
                     {t.individualSubtitle}
-                  </p>
+                   </p>
                   <InsuranceGrid />
                 </div>
               </>
@@ -475,7 +475,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
                   <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                     {t.individualHeading}
                   </h2>
-                   <p className="text-subtitle mb-8">
+                   <p className="text-muted-foreground mb-8">
                     {t.individualSubtitle}
                   </p>
                   <InsuranceGrid />

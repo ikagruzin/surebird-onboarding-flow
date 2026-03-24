@@ -8,7 +8,6 @@
   :root {
     --background: 0 0% 98%;
     --foreground: 220 20% 12%;
-    --subtitle: 221 10% 29%;
 
     --card: 0 0% 100%;
     --card-foreground: 220 20% 12%;
@@ -41,11 +40,6 @@
 
     --success: 121 66% 42%;
     --success-foreground: 0 0% 100%;
-    --info: 209 100% 51%;
-    --info-light: 209 100% 96%;
-    --savings: 121 66% 42%;
-
-    --tab-border: 216 7% 85%;
 
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
@@ -53,7 +47,6 @@
   .dark {
     --background: 220 20% 10%;
     --foreground: 210 20% 98%;
-    --subtitle: 0 0% 80%;
     --card: 220 18% 14%;
     --card-foreground: 210 20% 98%;
     --popover: 220 18% 14%;
@@ -75,10 +68,6 @@
 
     --success: 121 66% 42%;
     --success-foreground: 0 0% 100%;
-    --info: 209 100% 55%;
-    --info-light: 209 50% 20%;
-    --savings: 121 66% 42%;
-    --tab-border: 0 0% 35%;
   }
 }
 

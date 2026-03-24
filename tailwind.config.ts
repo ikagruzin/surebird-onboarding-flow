@@ -25,7 +25,7 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        subtitle: "hsl(var(--subtitle))",
+        
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -59,7 +59,7 @@ export default {
           foreground: "hsl(var(--foreground))",
           primary: "hsl(var(--primary))",
           "primary-foreground": "hsl(var(--primary-foreground))",
-          accent: "hsl(var(--info-light))",
+          accent: "hsl(var(--primary) / 0.05)",
           "accent-foreground": "hsl(var(--primary))",
           border: "hsl(var(--border))",
           ring: "hsl(var(--ring))",
@@ -68,12 +68,6 @@ export default {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
         },
-        info: {
-          DEFAULT: "hsl(var(--info))",
-          light: "hsl(var(--info-light))",
-        },
-        savings: "hsl(var(--savings))",
-        "tab-border": "hsl(var(--tab-border))",
       },
       borderRadius: {
         lg: "var(--radius)",
