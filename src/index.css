@@ -6,53 +6,53 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 220 20% 10%;
-    --subtitle: 0 0% 19%;
+    --background: 0 0% 98%;
+    --foreground: 220 20% 12%;
+    --subtitle: 221 10% 29%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 20% 10%;
+    --card-foreground: 220 20% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 10%;
+    --popover-foreground: 220 20% 12%;
 
     --primary: 209 100% 51%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 20% 96%;
-    --secondary-foreground: 220 20% 10%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 220 20% 12%;
 
-    --muted: 210 15% 95%;
-    --muted-foreground: 215 14% 46%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 224 5% 47%;
 
-    --accent: 152 77% 39%;
+    --accent: 152 79% 39%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 4 86% 58%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 209 20% 90%;
-    --input: 209 20% 90%;
+    --border: 220 5% 92%;
+    --input: 220 5% 92%;
     --ring: 209 100% 51%;
 
     --radius: 0.625rem;
 
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 15% 20%;
+    --sidebar-foreground: 222 18% 18%;
     --sidebar-primary: 209 100% 51%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 209 100% 96%;
     --sidebar-accent-foreground: 209 100% 51%;
-    --sidebar-border: 209 20% 92%;
+    --sidebar-border: 220 5% 92%;
     --sidebar-ring: 209 100% 51%;
 
-    --success: 152 77% 39%;
+    --success: 152 79% 39%;
     --success-foreground: 0 0% 100%;
     --info: 209 100% 51%;
     --info-light: 209 100% 96%;
-    --savings: 152 77% 39%;
+    --savings: 152 79% 39%;
 
-    --tab-border: 0 0% 84%;
+    --tab-border: 216 7% 85%;
 
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
