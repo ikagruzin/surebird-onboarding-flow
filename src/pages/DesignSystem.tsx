@@ -644,20 +644,45 @@ const DesignSystem = () => {
 
             <Separator className="my-6" />
 
-            <SubSection title="Variant Reference Table">
+            <SubSection title="Variant × Size × State Reference Matrix">
+              <p className="text-xs text-muted-foreground mb-4">Every variant shown across all sizes in enabled and disabled states. Hover over buttons to preview hover styles.</p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm border border-border rounded-xl overflow-hidden">
                   <thead>
                     <tr className="bg-muted">
-                      <th className="text-left px-4 py-2 font-semibold text-foreground">Variant</th>
-                      <th className="text-left px-4 py-2 font-semibold text-foreground">Preview</th>
+                      <th className="text-left px-4 py-2 font-semibold text-foreground sticky left-0 bg-muted z-10 min-w-28">Variant</th>
+                      {(["sm", "default", "lg", "icon"] as const).map((s) => (
+                        <th key={s} colSpan={2} className="text-center px-4 py-2 font-semibold text-foreground">{s}</th>
+                      ))}
+                    </tr>
+                    <tr className="bg-muted/60">
+                      <th className="sticky left-0 bg-muted/60 z-10" />
+                      {(["sm", "default", "lg", "icon"] as const).map((s) => (
+                        <React.Fragment key={s}>
+                          <th className="px-3 py-1.5 text-xs font-medium text-muted-foreground">Enabled</th>
+                          <th className="px-3 py-1.5 text-xs font-medium text-muted-foreground">Disabled</th>
+                        </React.Fragment>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
                     {(["default", "secondary", "outline", "outline-primary", "ghost", "destructive", "destructive-outline", "link"] as const).map((v) => (
                       <tr key={v} className="border-t border-border">
-                        <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{v}</td>
-                        <td className="px-4 py-3"><Button variant={v} size="sm">{v}</Button></td>
+                        <td className="px-4 py-3 font-mono text-xs text-muted-foreground sticky left-0 bg-card z-10">{v}</td>
+                        {(["sm", "default", "lg", "icon"] as const).map((s) => (
+                          <React.Fragment key={s}>
+                            <td className="px-3 py-3 text-center">
+                              <Button variant={v} size={s}>
+                                {s === "icon" ? <Plus className="w-4 h-4" /> : v}
+                              </Button>
+                            </td>
+                            <td className="px-3 py-3 text-center">
+                              <Button variant={v} size={s} disabled>
+                                {s === "icon" ? <Plus className="w-4 h-4" /> : v}
+                              </Button>
+                            </td>
+                          </React.Fragment>
+                        ))}
                       </tr>
                     ))}
                   </tbody>
