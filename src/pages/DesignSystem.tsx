@@ -357,30 +357,26 @@ const DesignSystem = () => {
               </TabsContent>
 
               <TabsContent value="audit">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Every unique color used across the platform — flat view with color codes for quick reference and duplicate spotting.
+                <p className="text-sm text-muted-foreground mb-6">
+                  Every unique color used across the platform, grouped by palette with hex codes.
                 </p>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                  {[
-                    ...SEMANTIC_TOKENS.map((t) => ({ color: `hsl(${t.cssVar})`, code: `hsl(${t.cssVar})` })),
-                    ...SIDEBAR_TOKENS.map((t) => ({ color: `hsl(${t.cssVar})`, code: `hsl(${t.cssVar})` })),
-                    ...HARDCODED_COLORS.map((c) => ({ color: c.color, code: c.name })),
-                    { color: "hsl(214 100% 50% / 0.05)", code: "primary/5" },
-                    { color: "hsl(214 100% 50% / 0.1)", code: "primary/10" },
-                    { color: "hsl(121 72% 42% / 0.1)", code: "success/10" },
-                    { color: "hsl(0 84% 60% / 0.1)", code: "destructive/10" },
-                  ]
-                    .filter((v, i, a) => a.findIndex((x) => x.code === v.code) === i)
-                    .map((item) => (
-                      <div key={item.code} className="flex flex-col items-center gap-1.5">
-                        <div
-                          className="w-full h-14 rounded-lg border border-border"
-                          style={{ backgroundColor: item.color }}
-                        />
-                        <code className="text-[10px] text-muted-foreground font-mono text-center leading-tight break-all">{item.code}</code>
-                      </div>
-                    ))}
-                </div>
+                {COLOR_AUDIT.map((group) => (
+                  <div key={group.group} className="mb-6">
+                    <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{group.group}</h4>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                      {group.colors.map((c) => (
+                        <div key={c.hex + c.label} className="flex flex-col items-center gap-1.5">
+                          <div
+                            className="w-full h-14 rounded-lg border border-border"
+                            style={{ backgroundColor: c.hex }}
+                          />
+                          <span className="text-[10px] font-medium text-foreground text-center">{c.label}</span>
+                          <code className="text-[10px] text-muted-foreground font-mono">{c.hex}</code>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </TabsContent>
             </Tabs>
           </Section>
