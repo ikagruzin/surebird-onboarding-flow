@@ -393,8 +393,6 @@ const DesignSystem = () => {
                   </div>
                 ))}
               </TabsContent>
-
-              </TabsContent>
             </Tabs>
           </Section>
 
