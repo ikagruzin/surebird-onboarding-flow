@@ -186,15 +186,15 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
             onClick={() => onToggle(ins.id)}
             className={`flex items-center gap-3 px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
               isSelected
-                ? "border-[#0177E5] bg-[#0385FF]/10 shadow-md"
-                : "border-border bg-card hover:border-[#0177E5]/40"
+                ? "border-[#0385FF] bg-[#0385FF]/10 shadow-md"
+                : "border-border bg-card hover:border-[#0385FF]/40"
             }`}
           >
             <span className="text-foreground">{ICON_MAP[ins.icon]}</span>
             <span className="font-medium text-foreground flex-1">{label}</span>
             <div
               className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                isSelected ? "border-[#0177E5] bg-[#0177E5]" : "border-border"
+                isSelected ? "border-[#0385FF] bg-[#0385FF]" : "border-border"
               }`}
             >
               {isSelected && (
@@ -232,7 +232,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
               onClick={() => onBundleSelect(preset.insuranceIds)}
               className={`text-left rounded-xl border-2 overflow-hidden transition-all hover:shadow-md ${
                 isActive
-                  ? "border-[#0177E5] bg-[#0385FF]/10 ring-2 ring-[#0177E5]/20 shadow-md"
+                  ? "border-[#0385FF] bg-[#0385FF]/10 ring-2 ring-[#0385FF]/20 shadow-md"
                   : "border-border bg-card"
               }`}
             >
@@ -317,7 +317,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
               onClick={() => onBundleSelect(preset.insuranceIds)}
               className={`text-left rounded-xl border-2 overflow-hidden transition-all hover:shadow-md snap-start shrink-0 w-[calc(50%-8px)] min-w-[260px] ${
                 isActive
-                  ? "border-[#0177E5] bg-[#0385FF]/10 ring-2 ring-[#0177E5]/20 shadow-md"
+                  ? "border-[#0385FF] bg-[#0385FF]/10 ring-2 ring-[#0385FF]/20 shadow-md"
                   : "border-border bg-card"
               }`}
             >
