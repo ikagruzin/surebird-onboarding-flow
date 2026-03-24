@@ -834,10 +834,10 @@ const DesignSystem = () => {
 
               <SubSection title="Offer Badge (tokenized)">
                 <div className="flex flex-wrap gap-2">
-                  <span className="bg-info-light text-primary text-xs font-medium px-2.5 py-1 rounded-full">Best and cheapest choice</span>
-                  <span className="bg-info-light text-primary text-xs font-medium px-2.5 py-1 rounded-full">The most popular choice</span>
+                  <span className="bg-primary/5 text-primary text-xs font-medium px-2.5 py-1 rounded-full">Best and cheapest choice</span>
+                  <span className="bg-primary/5 text-primary text-xs font-medium px-2.5 py-1 rounded-full">The most popular choice</span>
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">✓ Uses bg-info-light text-primary</p>
+                <p className="text-xs text-muted-foreground mt-1">✓ Uses bg-primary/5 text-primary</p>
               </SubSection>
 
               <SubSection title="Success Feedback">
