@@ -366,9 +366,6 @@ const DesignSystem = () => {
 
 
 
-                 <SubSection title="Hardcoded / Non-Tokenized Colors">
-                  <p className="text-xs text-success mb-3">✓ All hardcoded colors have been refactored to semantic tokens.</p>
-                </SubSection>
 
                 <SubSection title="Opacity Patterns">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
