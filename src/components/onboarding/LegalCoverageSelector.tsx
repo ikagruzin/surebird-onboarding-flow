@@ -126,7 +126,7 @@ const LegalCoverageSelector = ({ selected, onChange }: LegalCoverageSelectorProp
 
             {/* Badge */}
             <span
-              className={`absolute top-3 right-3 text-[10px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${
+              className={`absolute top-3 right-3 text-2xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${
                 opt.badgeHighlight
                   ? "bg-success/10 text-success"
                   : "bg-muted text-muted-foreground"

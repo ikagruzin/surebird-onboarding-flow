@@ -340,8 +340,8 @@ const DesignSystem = () => {
                           style={{ backgroundColor: `hsl(${token.cssVar})` }}
                         />
                         <span className="text-xs font-medium text-foreground">{token.label}</span>
-                        <code className="text-[10px] text-muted-foreground font-mono">{token.name}</code>
-                        <code className="text-[10px] text-muted-foreground font-mono">hsl({token.cssVar})</code>
+                        <code className="text-2xs text-muted-foreground font-mono">{token.name}</code>
+                        <code className="text-2xs text-muted-foreground font-mono">hsl({token.cssVar})</code>
                       </div>
                     ))}
                   </div>
@@ -364,7 +364,7 @@ const DesignSystem = () => {
                     ].map((o) => (
                       <div key={o.label} className="flex flex-col gap-1.5">
                         <div className={`h-12 rounded-xl border border-border ${o.cls}`} />
-                        <code className="text-[10px] text-muted-foreground font-mono">{o.label}</code>
+                        <code className="text-2xs text-muted-foreground font-mono">{o.label}</code>
                       </div>
                     ))}
                   </div>
@@ -385,8 +385,8 @@ const DesignSystem = () => {
                             className="w-full aspect-square rounded-lg border border-border"
                             style={{ backgroundColor: c.hex }}
                           />
-                          <span className="text-[9px] font-medium text-foreground text-center leading-tight">{c.label}</span>
-                          <code className="text-[9px] text-muted-foreground font-mono">{c.hex}</code>
+                          <span className="text-2xs font-medium text-foreground text-center leading-tight">{c.label}</span>
+                          <code className="text-2xs text-muted-foreground font-mono">{c.hex}</code>
                         </div>
                       ))}
                     </div>
@@ -439,7 +439,7 @@ const DesignSystem = () => {
 
             <SubSection title="Question Label Convention">
               <p className="text-base font-semibold text-foreground mb-1">What is your name?</p>
-              <p className="text-xs text-muted-foreground">Questions use <code className="bg-muted px-1 rounded text-[10px]">text-base font-semibold</code> — 48px gap between header and input.</p>
+              <p className="text-xs text-muted-foreground">Questions use <code className="bg-muted px-1 rounded text-2xs">text-base font-semibold</code> — 48px gap between header and input.</p>
             </SubSection>
           </Section>
 
@@ -458,8 +458,8 @@ const DesignSystem = () => {
                 ].map((r) => (
                   <div key={r.label} className="flex flex-col items-center gap-1.5">
                     <div className={`w-16 h-16 bg-primary ${r.cls}`} />
-                    <code className="text-[10px] text-muted-foreground">{r.label}</code>
-                    <code className="text-[10px] text-muted-foreground">{r.val}</code>
+                    <code className="text-2xs text-muted-foreground">{r.label}</code>
+                    <code className="text-2xs text-muted-foreground">{r.val}</code>
                   </div>
                 ))}
               </div>
@@ -568,10 +568,10 @@ const DesignSystem = () => {
 
             <SubSection title="Outline Pill Button (Tab-style)">
               <div className="flex gap-2">
-                <button className="h-[48px] px-5 rounded-full border border-tab-border bg-card flex items-center justify-center text-sm font-medium text-foreground hover:bg-muted transition-colors">
+                <button className="h-12 px-5 rounded-full border border-tab-border bg-card flex items-center justify-center text-sm font-medium text-foreground hover:bg-muted transition-colors">
                   Tab Item
                 </button>
-                <button className="h-[48px] px-4 rounded-full border border-tab-border bg-card flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
+                <button className="h-12 px-4 rounded-full border border-tab-border bg-card flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
                   <Plus className="w-4 h-4" />
                 </button>
               </div>
@@ -969,7 +969,7 @@ const DesignSystem = () => {
                 <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
                   <span className="text-sm font-medium text-white">bg-black/80</span>
                 </div>
-                <p className="absolute bottom-1 left-2 text-[10px] text-muted-foreground">Dialog/Drawer overlay</p>
+                <p className="absolute bottom-1 left-2 text-2xs text-muted-foreground">Dialog/Drawer overlay</p>
               </div>
 
               <div className="relative h-32 rounded-xl border border-border overflow-hidden">
@@ -977,7 +977,7 @@ const DesignSystem = () => {
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                   <span className="text-sm font-medium text-white">bg-black/40</span>
                 </div>
-                <p className="absolute bottom-1 left-2 text-[10px] text-muted-foreground">Modal backdrop</p>
+                <p className="absolute bottom-1 left-2 text-2xs text-muted-foreground">Modal backdrop</p>
               </div>
 
               <div className="relative h-32 rounded-xl border border-border overflow-hidden">
@@ -986,7 +986,7 @@ const DesignSystem = () => {
                     <span className="text-xs font-medium text-foreground">shadow-2xl modal</span>
                   </div>
                 </div>
-                <p className="absolute bottom-1 left-2 text-[10px] text-muted-foreground">Help modal card</p>
+                <p className="absolute bottom-1 left-2 text-2xs text-muted-foreground">Help modal card</p>
               </div>
             </div>
           </Section>
@@ -1105,7 +1105,7 @@ const DesignSystem = () => {
               {ALL_ICONS.map(({ name, component: Icon }) => (
                 <div key={name} className="flex flex-col items-center gap-1.5 p-2 rounded-lg hover:bg-muted transition-colors">
                   <Icon className="w-5 h-5 text-foreground" />
-                  <span className="text-[10px] text-muted-foreground text-center leading-tight">{name}</span>
+                  <span className="text-2xs text-muted-foreground text-center leading-tight">{name}</span>
                 </div>
               ))}
             </div>

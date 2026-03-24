@@ -22,7 +22,7 @@ const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, showAva
 
         {showProgress && (
           <nav className="relative ml-2">
-            <div className="absolute left-[5px] top-3 bottom-3 w-[2px] bg-border" />
+            <div className="absolute left-1 top-3 bottom-3 w-0.5 bg-border" />
 
             {STEP_LABELS.map((label, i) => {
               const stepNum = i + 1;

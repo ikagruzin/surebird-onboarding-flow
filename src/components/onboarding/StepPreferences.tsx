@@ -437,7 +437,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
           <button
             key={id}
             onClick={() => handleTabClick(id)}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border h-[48px] ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border h-12 ${
               isActive
                 ? "bg-foreground text-background border-foreground"
                 : "bg-white border-tab-border text-foreground"
@@ -458,7 +458,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       })}
       <button
         onClick={handleOpenAddModal}
-        className="h-[48px] px-4 rounded-full border border-tab-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
+        className="h-12 px-4 rounded-full border border-tab-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
       >
         <Plus className="w-4 h-4" />
       </button>
@@ -546,7 +546,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   if (showPhoneStep) {
     return (
       <div className="animate-fade-in">
-        <h1 className="text-[32px] font-bold text-foreground mb-6">Set your preferences</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-6">Set your preferences</h1>
 
         {renderProductTabs()}
         <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
@@ -637,7 +637,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-[32px] font-bold text-foreground mb-6">Set your preferences</h1>
+      <h1 className="text-3xl font-bold text-foreground mb-6">Set your preferences</h1>
 
       {/* Product tabs */}
       {renderProductTabs()}

@@ -315,9 +315,9 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
             <button
               key={preset.id}
               onClick={() => onBundleSelect(preset.insuranceIds)}
-              className={`text-left rounded-xl border-2 overflow-hidden transition-all hover:shadow-md snap-start shrink-0 w-[calc(50%-8px)] min-w-[260px] ${
+              className={`text-left rounded-xl border-2 overflow-hidden transition-all hover:shadow-md snap-start shrink-0 w-[calc(50%-8px)] min-w-64 ${
                 isActive
-                  ? "border-[#0385FF] bg-[#0385FF]/10 ring-2 ring-[#0385FF]/20 shadow-md"
+                  ? "border-primary bg-primary/10 ring-2 ring-primary/20 shadow-md"
                   : "border-border bg-card"
               }`}
             >
@@ -431,7 +431,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
         {/* Content */}
         <main className="w-full max-w-3xl px-6 py-8 pb-32">
           <div className="animate-fade-in">
-            <h1 className="text-[32px] leading-tight font-bold text-foreground mb-3">
+            <h1 className="text-3xl leading-tight font-bold text-foreground mb-3">
               {version === "A" ? t.heading : t.bundleHeading}
             </h1>
             <p className="mb-8 text-subtitle">

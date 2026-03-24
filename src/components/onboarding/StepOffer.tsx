@@ -256,7 +256,7 @@ const StepOffer = ({
           <button
             key={i}
             onClick={() => setVideoModal(t.videoId)}
-            className="relative shrink-0 w-[220px] h-[300px] rounded-2xl overflow-hidden group cursor-pointer snap-start"
+            className="relative shrink-0 w-56 h-72 rounded-2xl overflow-hidden group cursor-pointer snap-start"
           >
             <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
@@ -360,7 +360,7 @@ const StepOffer = ({
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {/* Trustpilot overview card */}
-        <div className="shrink-0 w-[280px] bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm min-h-[280px] snap-start">
+        <div className="shrink-0 w-72 bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm min-h-72 snap-start">
           <div className="flex items-center gap-2 mb-4">
             <Star className="w-5 h-5 text-success" fill="currentColor" />
             <span className="text-lg font-bold text-foreground">Trustpilot</span>
@@ -377,7 +377,7 @@ const StepOffer = ({
           const isLong = review.text.length > 180;
           const displayText = isLong ? review.text.slice(0, 180) + "..." : review.text;
           return (
-            <div key={i} className="shrink-0 w-[280px] bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm min-h-[280px] snap-start">
+            <div key={i} className="shrink-0 w-72 bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm min-h-72 snap-start">
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-sm font-bold text-foreground">{review.rating}.0</span>
@@ -639,7 +639,7 @@ const StepOffer = ({
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-[32px] font-bold text-foreground mb-6">Your personal offer</h1>
+      <h1 className="text-3xl font-bold text-foreground mb-6">Your personal offer</h1>
 
       {/* Product tabs */}
       <div className="flex flex-wrap items-center gap-2 mb-8">
@@ -683,7 +683,7 @@ const StepOffer = ({
             </button>
           );
         })}
-        <button className="h-[44px] w-[44px] rounded-full border border-[hsl(0,0%,84%)] bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
+        <button className="h-11 w-11 rounded-full border border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
           <Plus className="w-4 h-4" />
         </button>
       </div>
@@ -752,7 +752,7 @@ const StepOffer = ({
         </div>
 
         {/* Right sidebar - calculations */}
-        <div className="w-full xl:w-[320px] xl:shrink-0 xl:sticky xl:top-8 self-start">
+        <div className="w-full xl:w-80 xl:shrink-0 xl:sticky xl:top-8 self-start">
           {renderCalculations()}
         </div>
       </div>
