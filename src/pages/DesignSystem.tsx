@@ -71,8 +71,6 @@ const SEMANTIC_TOKENS = [
   { name: "--ring", label: "Ring", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
   { name: "--card", label: "Card", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
   { name: "--card-foreground", label: "Card FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
-  { name: "--subtitle", label: "Subtitle", cssVar: "221 10% 29%", hex: "#414651", brand: "Neutral 700" },
-  { name: "--tab-border", label: "Tab Border", cssVar: "216 7% 85%", hex: "#D5D7DA", brand: "Neutral 300" },
   { name: "--popover", label: "Popover", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
   { name: "--popover-foreground", label: "Popover FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
 ];
