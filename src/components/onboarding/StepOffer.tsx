@@ -683,7 +683,7 @@ const StepOffer = ({
             </button>
           );
         })}
-        <button className="h-[44px] w-[44px] rounded-full border border-[hsl(0,0%,84%)] bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
+        <button className="h-11 w-11 rounded-full border border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
           <Plus className="w-4 h-4" />
         </button>
       </div>
