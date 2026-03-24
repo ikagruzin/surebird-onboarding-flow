@@ -250,69 +250,105 @@ const DesignSystem = () => {
 
           {/* ── 1. COLOR PALETTE ── */}
           <Section title="Color Palette" id="colors">
-            <SubSection title="Semantic Tokens (from index.css)">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {SEMANTIC_TOKENS.map((token) => (
-                  <div key={token.name} className="flex flex-col gap-1.5">
-                    <div
-                      className="h-16 rounded-xl border border-border"
-                      style={{ backgroundColor: `hsl(${token.cssVar})` }}
-                    />
-                    <span className="text-xs font-medium text-foreground">{token.label}</span>
-                    <code className="text-[10px] text-muted-foreground font-mono">{token.name}</code>
-                    <code className="text-[10px] text-muted-foreground font-mono">hsl({token.cssVar})</code>
-                  </div>
-                ))}
-              </div>
-            </SubSection>
+            <Tabs defaultValue="tokens" className="w-full">
+              <TabsList className="mb-6">
+                <TabsTrigger value="tokens">Design Tokens</TabsTrigger>
+                <TabsTrigger value="audit">Color Audit</TabsTrigger>
+              </TabsList>
 
-            <SubSection title="Sidebar Tokens">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {SIDEBAR_TOKENS.map((token) => (
-                  <div key={token.name} className="flex flex-col gap-1.5">
-                    <div
-                      className="h-16 rounded-xl border border-border"
-                      style={{ backgroundColor: `hsl(${token.cssVar})` }}
-                    />
-                    <span className="text-xs font-medium text-foreground">{token.label}</span>
-                    <code className="text-[10px] text-muted-foreground font-mono">{token.name}</code>
+              <TabsContent value="tokens">
+                <SubSection title="Semantic Tokens (from index.css)">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    {SEMANTIC_TOKENS.map((token) => (
+                      <div key={token.name} className="flex flex-col gap-1.5">
+                        <div
+                          className="h-16 rounded-xl border border-border"
+                          style={{ backgroundColor: `hsl(${token.cssVar})` }}
+                        />
+                        <span className="text-xs font-medium text-foreground">{token.label}</span>
+                        <code className="text-[10px] text-muted-foreground font-mono">{token.name}</code>
+                        <code className="text-[10px] text-muted-foreground font-mono">hsl({token.cssVar})</code>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </SubSection>
+                </SubSection>
 
-            <SubSection title="Hardcoded / Non-Tokenized Colors (⚠️ used in codebase)">
-              <p className="text-xs text-destructive mb-3">These colors are used directly in components and are not part of the semantic token system. Consider tokenizing them.</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {HARDCODED_COLORS.map((c) => (
-                  <div key={c.name} className="flex flex-col gap-1.5">
-                    <div
-                      className="h-16 rounded-xl border border-border"
-                      style={{ backgroundColor: c.color }}
-                    />
-                    <span className="text-xs font-medium text-foreground">{c.label}</span>
-                    <code className="text-[10px] text-muted-foreground font-mono">{c.name}</code>
-                    <p className="text-[10px] text-muted-foreground">{c.usage}</p>
+                <SubSection title="Sidebar Tokens">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    {SIDEBAR_TOKENS.map((token) => (
+                      <div key={token.name} className="flex flex-col gap-1.5">
+                        <div
+                          className="h-16 rounded-xl border border-border"
+                          style={{ backgroundColor: `hsl(${token.cssVar})` }}
+                        />
+                        <span className="text-xs font-medium text-foreground">{token.label}</span>
+                        <code className="text-[10px] text-muted-foreground font-mono">{token.name}</code>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </SubSection>
+                </SubSection>
 
-            <SubSection title="Opacity Patterns">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {[
-                  { label: "primary/5", cls: "bg-primary/5" },
-                  { label: "primary/10", cls: "bg-primary/10" },
-                  { label: "success/10", cls: "bg-success/10" },
-                  { label: "destructive/10", cls: "bg-destructive/10" },
-                ].map((o) => (
-                  <div key={o.label} className="flex flex-col gap-1.5">
-                    <div className={`h-12 rounded-xl border border-border ${o.cls}`} />
-                    <code className="text-[10px] text-muted-foreground font-mono">{o.label}</code>
+                <SubSection title="Hardcoded / Non-Tokenized Colors (⚠️ used in codebase)">
+                  <p className="text-xs text-destructive mb-3">These colors are used directly in components and are not part of the semantic token system. Consider tokenizing them.</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    {HARDCODED_COLORS.map((c) => (
+                      <div key={c.name} className="flex flex-col gap-1.5">
+                        <div
+                          className="h-16 rounded-xl border border-border"
+                          style={{ backgroundColor: c.color }}
+                        />
+                        <span className="text-xs font-medium text-foreground">{c.label}</span>
+                        <code className="text-[10px] text-muted-foreground font-mono">{c.name}</code>
+                        <p className="text-[10px] text-muted-foreground">{c.usage}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </SubSection>
+                </SubSection>
+
+                <SubSection title="Opacity Patterns">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {[
+                      { label: "primary/5", cls: "bg-primary/5" },
+                      { label: "primary/10", cls: "bg-primary/10" },
+                      { label: "success/10", cls: "bg-success/10" },
+                      { label: "destructive/10", cls: "bg-destructive/10" },
+                    ].map((o) => (
+                      <div key={o.label} className="flex flex-col gap-1.5">
+                        <div className={`h-12 rounded-xl border border-border ${o.cls}`} />
+                        <code className="text-[10px] text-muted-foreground font-mono">{o.label}</code>
+                      </div>
+                    ))}
+                  </div>
+                </SubSection>
+              </TabsContent>
+
+              <TabsContent value="audit">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Every unique color used across the platform — flat view with color codes for quick reference and duplicate spotting.
+                </p>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                  {[
+                    ...SEMANTIC_TOKENS.map((t) => ({ color: `hsl(${t.cssVar})`, code: `hsl(${t.cssVar})` })),
+                    ...SIDEBAR_TOKENS.map((t) => ({ color: `hsl(${t.cssVar})`, code: `hsl(${t.cssVar})` })),
+                    ...HARDCODED_COLORS.map((c) => ({ color: c.color, code: c.name })),
+                    { color: "hsl(214 100% 50% / 0.05)", code: "primary/5" },
+                    { color: "hsl(214 100% 50% / 0.1)", code: "primary/10" },
+                    { color: "hsl(121 72% 42% / 0.1)", code: "success/10" },
+                    { color: "hsl(0 84% 60% / 0.1)", code: "destructive/10" },
+                  ]
+                    .filter((v, i, a) => a.findIndex((x) => x.code === v.code) === i)
+                    .map((item) => (
+                      <div key={item.code} className="flex flex-col items-center gap-1.5">
+                        <div
+                          className="w-full h-14 rounded-lg border border-border"
+                          style={{ backgroundColor: item.color }}
+                        />
+                        <code className="text-[10px] text-muted-foreground font-mono text-center leading-tight break-all">{item.code}</code>
+                      </div>
+                    ))}
+                </div>
+              </TabsContent>
+            </Tabs>
           </Section>
 
           {/* ── 2. TYPOGRAPHY ── */}
