@@ -86,11 +86,11 @@
     --sidebar-accent-foreground: 210 15% 85%;
     --sidebar-border: 220 15% 20%;
     --sidebar-ring: 209 100% 55%;
-    --success: 121 72% 42%;
+    --success: 152 77% 39%;
     --success-foreground: 0 0% 100%;
-    --info: 214 100% 55%;
-    --info-light: 214 50% 20%;
-    --savings: 121 72% 42%;
+    --info: 209 100% 55%;
+    --info-light: 209 50% 20%;
+    --savings: 152 77% 39%;
     --tab-border: 0 0% 35%;
   }
 }
