@@ -343,18 +343,41 @@ const DesignSystem = () => {
 
               <TabsContent value="tokens">
                 <SubSection title="Semantic Tokens (from index.css)">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {SEMANTIC_TOKENS.map((token) => (
-                      <div key={token.name} className="flex flex-col gap-1.5">
-                        <div
-                          className="h-16 rounded-xl border border-border"
-                          style={{ backgroundColor: `hsl(${token.cssVar})` }}
-                        />
-                        <span className="text-xs font-medium text-foreground">{token.label}</span>
-                        <code className="text-2xs text-muted-foreground font-mono">{token.name}</code>
-                        <code className="text-2xs text-muted-foreground font-mono">hsl({token.cssVar})</code>
-                      </div>
-                    ))}
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-border text-left">
+                          <th className="py-2 pr-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</th>
+                          <th className="py-2 pr-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Color</th>
+                          <th className="py-2 pr-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">HSL</th>
+                          <th className="py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Role</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {SEMANTIC_TOKENS.map((token) => (
+                          <tr key={token.name} className="border-b border-border/50">
+                            <td className="py-2.5 pr-4">
+                              <code className="text-xs font-mono text-foreground">{token.name}</code>
+                            </td>
+                            <td className="py-2.5 pr-4">
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="w-6 h-6 rounded-md border border-border shrink-0"
+                                  style={{ backgroundColor: `hsl(${token.hsl})` }}
+                                />
+                                <code className="text-2xs text-muted-foreground font-mono">{token.hex}</code>
+                              </div>
+                            </td>
+                            <td className="py-2.5 pr-4">
+                              <code className="text-2xs text-muted-foreground font-mono">{token.hsl}</code>
+                            </td>
+                            <td className="py-2.5">
+                              <span className="text-xs text-muted-foreground">{token.role}</span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </SubSection>
 
