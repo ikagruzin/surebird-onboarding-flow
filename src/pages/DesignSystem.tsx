@@ -79,16 +79,8 @@ const SEMANTIC_TOKENS = [
   { name: "--popover-foreground", label: "Popover FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
 ];
 
-const SIDEBAR_TOKENS = [
-  { name: "--sidebar-background", label: "Sidebar BG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
-  { name: "--sidebar-foreground", label: "Sidebar FG", cssVar: "222 18% 18%", hex: "#252B37", brand: "Neutral 800" },
-  { name: "--sidebar-primary", label: "Sidebar Primary", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
-  { name: "--sidebar-primary-foreground", label: "Sidebar Primary FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
-  { name: "--sidebar-accent", label: "Sidebar Accent", cssVar: "209 100% 96%", hex: "#EBF5FF", brand: "Light Blue" },
-  { name: "--sidebar-accent-foreground", label: "Sidebar Accent FG", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
-  { name: "--sidebar-border", label: "Sidebar Border", cssVar: "220 5% 92%", hex: "#E9EAEB", brand: "Neutral 200" },
-  { name: "--sidebar-ring", label: "Sidebar Ring", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
-];
+
+
 
 const HARDCODED_COLORS: { name: string; label: string; color: string; hex: string; usage: string }[] = [];
 
@@ -346,20 +338,8 @@ const DesignSystem = () => {
                   </div>
                 </SubSection>
 
-                <SubSection title="Sidebar Tokens">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {SIDEBAR_TOKENS.map((token) => (
-                      <div key={token.name} className="flex flex-col gap-1.5">
-                        <div
-                          className="h-16 rounded-xl border border-border"
-                          style={{ backgroundColor: `hsl(${token.cssVar})` }}
-                        />
-                        <span className="text-xs font-medium text-foreground">{token.label}</span>
-                        <code className="text-[10px] text-muted-foreground font-mono">{token.name}</code>
-                      </div>
-                    ))}
-                  </div>
-                </SubSection>
+
+
 
                  <SubSection title="Hardcoded / Non-Tokenized Colors">
                   <p className="text-xs text-success mb-3">✓ All hardcoded colors have been refactored to semantic tokens.</p>
