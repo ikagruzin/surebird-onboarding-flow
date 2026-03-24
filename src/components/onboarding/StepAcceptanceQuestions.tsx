@@ -122,7 +122,7 @@ const StepAcceptanceQuestions = ({
                   </TooltipTrigger>
                   <TooltipContent
                     side="top"
-                    className="max-w-[260px] text-xs"
+                    className="max-w-64 text-xs"
                   >
                     {q.tooltip}
                   </TooltipContent>

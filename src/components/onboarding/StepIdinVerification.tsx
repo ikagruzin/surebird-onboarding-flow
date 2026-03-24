@@ -228,7 +228,7 @@ const StepIdinVerification = ({
               </p>
             </div>
 
-            <div className="aspect-square max-w-[200px] mx-auto rounded-2xl border-2 border-input bg-muted/30 flex items-center justify-center">
+            <div className="aspect-square max-w-52 mx-auto rounded-2xl border-2 border-input bg-muted/30 flex items-center justify-center">
               <QrCode className="w-24 h-24 text-muted-foreground/50" />
             </div>
 

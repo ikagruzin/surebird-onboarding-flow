@@ -637,7 +637,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-[32px] font-bold text-foreground mb-6">Set your preferences</h1>
+      <h1 className="text-3xl font-bold text-foreground mb-6">Set your preferences</h1>
 
       {/* Product tabs */}
       {renderProductTabs()}
