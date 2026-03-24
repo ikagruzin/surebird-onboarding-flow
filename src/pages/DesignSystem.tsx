@@ -68,7 +68,7 @@ const SEMANTIC_TOKENS = [
   { name: "--success-foreground", label: "Success FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
   { name: "--info", label: "Info", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
   { name: "--info-light", label: "Info Light", cssVar: "209 100% 96%", hex: "#EBF5FF", brand: "Light Blue" },
-  { name: "--savings", label: "Savings", cssVar: "152 79% 39%", hex: "#17B26A", brand: "Green 500" },
+  { name: "--savings", label: "Savings", cssVar: "121 66% 42%", hex: "#25B327", brand: "Light Green 500" },
   { name: "--border", label: "Border", cssVar: "220 5% 92%", hex: "#E9EAEB", brand: "Neutral 200" },
   { name: "--input", label: "Input", cssVar: "220 5% 92%", hex: "#E9EAEB", brand: "Neutral 200" },
   { name: "--ring", label: "Ring", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
