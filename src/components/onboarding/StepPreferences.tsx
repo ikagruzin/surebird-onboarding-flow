@@ -546,7 +546,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   if (showPhoneStep) {
     return (
       <div className="animate-fade-in">
-        <h1 className="text-[32px] font-bold text-foreground mb-6">Set your preferences</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-6">Set your preferences</h1>
 
         {renderProductTabs()}
         <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
