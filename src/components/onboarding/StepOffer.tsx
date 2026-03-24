@@ -639,7 +639,7 @@ const StepOffer = ({
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-[32px] font-bold text-foreground mb-6">Your personal offer</h1>
+      <h1 className="text-3xl font-bold text-foreground mb-6">Your personal offer</h1>
 
       {/* Product tabs */}
       <div className="flex flex-wrap items-center gap-2 mb-8">
