@@ -517,12 +517,6 @@ const DesignSystem = () => {
                 <Button size="lg">Large</Button>
                 <Button size="icon"><Plus className="w-4 h-4" /></Button>
               </div>
-              <div className="flex flex-wrap gap-3 items-center mt-3">
-                <Button size="sm" shape="pill">Small Pill</Button>
-                <Button size="default" shape="pill">Default Pill</Button>
-                <Button size="lg" shape="pill">Large Pill</Button>
-                <Button size="icon" shape="pill"><Plus className="w-4 h-4" /></Button>
-              </div>
             </SubSection>
 
             <SubSection title="States">
