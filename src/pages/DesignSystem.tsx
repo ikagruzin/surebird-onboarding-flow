@@ -361,21 +361,8 @@ const DesignSystem = () => {
                   </div>
                 </SubSection>
 
-                <SubSection title="Hardcoded / Non-Tokenized Colors (⚠️ used in codebase)">
-                  <p className="text-xs text-destructive mb-3">These colors are used directly in components and are not part of the semantic token system. Consider tokenizing them.</p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {HARDCODED_COLORS.map((c) => (
-                      <div key={c.name} className="flex flex-col gap-1.5">
-                        <div
-                          className="h-16 rounded-xl border border-border"
-                          style={{ backgroundColor: c.color }}
-                        />
-                        <span className="text-xs font-medium text-foreground">{c.label}</span>
-                        <code className="text-[10px] text-muted-foreground font-mono">{c.name}</code>
-                        <p className="text-[10px] text-muted-foreground">{c.usage}</p>
-                      </div>
-                    ))}
-                  </div>
+                 <SubSection title="Hardcoded / Non-Tokenized Colors">
+                  <p className="text-xs text-success mb-3">✓ All hardcoded colors have been refactored to semantic tokens.</p>
                 </SubSection>
 
                 <SubSection title="Opacity Patterns">
@@ -393,6 +380,29 @@ const DesignSystem = () => {
                     ))}
                   </div>
                 </SubSection>
+              </TabsContent>
+
+              <TabsContent value="audit">
+                <p className="text-sm text-muted-foreground mb-6">
+                  Full brand color palette — source of truth for all design decisions.
+                </p>
+                {COLOR_AUDIT.map((group) => (
+                  <div key={group.group} className="mb-6">
+                    <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{group.group}</h4>
+                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2">
+                      {group.colors.map((c) => (
+                        <div key={c.hex + c.label} className="flex flex-col items-center gap-1">
+                          <div
+                            className="w-full aspect-square rounded-lg border border-border"
+                            style={{ backgroundColor: c.hex }}
+                          />
+                          <span className="text-[9px] font-medium text-foreground text-center leading-tight">{c.label}</span>
+                          <code className="text-[9px] text-muted-foreground font-mono">{c.hex}</code>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </TabsContent>
 
               <TabsContent value="audit">
