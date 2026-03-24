@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 // ── Lucide icons (every icon used across the platform) ──
@@ -248,8 +248,7 @@ const ALL_ICONS: { name: string; component: LucideIcon }[] = [
 
 const Section = ({ title, id, children }: { title: string; id?: string; children: React.ReactNode }) => (
   <section className="mb-14" id={id}>
-    <h2 className="text-xl font-bold text-foreground mb-1">{title}</h2>
-    <Separator className="mb-6" />
+    <h2 className="text-xl font-bold text-foreground mb-6">{title}</h2>
     {children}
   </section>
 );
@@ -276,6 +275,7 @@ const DesignSystem = () => {
   const [demoSegmented, setDemoSegmented] = useState("Option A");
   const [demoChip, setDemoChip] = useState<string[]>(["Chip 2"]);
   const [demoSelection, setDemoSelection] = useState("radio-demo");
+  const [activeSection, setActiveSection] = useState("colors");
 
   const handleFlowSwitch = (flowId: string) => {
     if (flowId === "c") {
@@ -304,6 +304,29 @@ const DesignSystem = () => {
     { id: "animations", label: "Animations" },
   ];
 
+  // Intersection observer for active TOC tracking
+  useEffect(() => {
+    const sectionIds = TOC.map((t) => t.id);
+    const observers: IntersectionObserver[] = [];
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(id);
+          }
+        },
+        { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
+      );
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Flow Switcher */}
@@ -325,7 +348,11 @@ const DesignSystem = () => {
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className="px-2.5 py-1 rounded-full border border-border bg-card text-xs font-medium text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
+                className={`px-2.5 py-1 rounded-full border text-xs font-medium transition-colors ${
+                  activeSection === item.id
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary"
+                }`}
               >
                 {item.label}
               </a>
