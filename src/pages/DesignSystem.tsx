@@ -536,29 +536,8 @@ const DesignSystem = () => {
                 <Button variant="outline">Outline</Button>
                 <Button variant="outline-primary">Outline Primary</Button>
                 <Button variant="ghost">Ghost</Button>
-                <Button variant="destructive">Destructive</Button>
-                <Button variant="destructive-outline">Destructive Outline</Button>
+                <Button variant="destructive-outline">Destructive</Button>
                 <Button variant="link">Link</Button>
-              </div>
-            </SubSection>
-
-            <SubSection title="Sizes">
-              <div className="flex flex-wrap gap-3 items-center">
-                <Button size="sm">Small</Button>
-                <Button size="default">Default</Button>
-                <Button size="lg">Large</Button>
-                <Button size="icon"><Plus className="w-4 h-4" /></Button>
-              </div>
-            </SubSection>
-
-            <SubSection title="States">
-              <div className="flex flex-wrap gap-3 items-center">
-                <Button>Enabled</Button>
-                <Button disabled>Disabled</Button>
-                <Button variant="outline-primary">Enabled</Button>
-                <Button variant="outline-primary" disabled>Disabled</Button>
-                <Button variant="secondary">Enabled</Button>
-                <Button variant="secondary" disabled>Disabled</Button>
               </div>
             </SubSection>
 
