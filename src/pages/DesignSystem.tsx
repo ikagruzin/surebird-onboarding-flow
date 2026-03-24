@@ -773,12 +773,12 @@ const DesignSystem = () => {
                 </div>
               </SubSection>
 
-              <SubSection title="Offer Badge (hardcoded)">
+              <SubSection title="Offer Badge (tokenized)">
                 <div className="flex flex-wrap gap-2">
-                  <span className="bg-blue-50 text-blue-600 text-xs font-medium px-2.5 py-1 rounded-full">Best and cheapest choice</span>
-                  <span className="bg-blue-50 text-blue-600 text-xs font-medium px-2.5 py-1 rounded-full">The most popular choice</span>
+                  <span className="bg-info-light text-primary text-xs font-medium px-2.5 py-1 rounded-full">Best and cheapest choice</span>
+                  <span className="bg-info-light text-primary text-xs font-medium px-2.5 py-1 rounded-full">The most popular choice</span>
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">⚠️ Uses hardcoded bg-blue-50 text-blue-600 — consider tokenizing</p>
+                <p className="text-xs text-muted-foreground mt-1">✓ Uses bg-info-light text-primary</p>
               </SubSection>
 
               <SubSection title="Success Feedback">
