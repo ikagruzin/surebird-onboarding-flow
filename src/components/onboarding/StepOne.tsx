@@ -434,7 +434,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
             <h1 className="text-3xl leading-tight font-bold text-foreground mb-3">
               {version === "A" ? t.heading : t.bundleHeading}
             </h1>
-            <p className="mb-8 text-subtitle">
+            <p className="mb-8 text-muted-foreground">
               {version === "A" ? t.subtitle : t.bundleSubtitle}
             </p>
 
