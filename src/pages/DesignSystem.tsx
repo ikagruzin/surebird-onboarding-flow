@@ -417,37 +417,51 @@ const DesignSystem = () => {
               </p>
             </SubSection>
 
-            <SubSection title="Headings">
-              <div className="space-y-3">
-                <div><span className="text-4xl font-bold text-foreground">Heading 1</span> <span className="text-xs text-muted-foreground ml-2">text-4xl / font-bold</span></div>
-                <div><span className="text-3xl font-bold text-foreground">Heading 2</span> <span className="text-xs text-muted-foreground ml-2">text-3xl / font-bold</span></div>
-                <div><span className="text-2xl font-semibold text-foreground">Heading 3</span> <span className="text-xs text-muted-foreground ml-2">text-2xl / font-semibold</span></div>
-                <div><span className="text-xl font-semibold text-foreground">Heading 4</span> <span className="text-xs text-muted-foreground ml-2">text-xl / font-semibold</span></div>
-                <div><span className="text-lg font-medium text-foreground">Heading 5</span> <span className="text-xs text-muted-foreground ml-2">text-lg / font-medium</span></div>
-              </div>
-            </SubSection>
-
-            <SubSection title="Body & Utility Text">
-              <div className="space-y-2">
-                <div><span className="text-base text-foreground">Body — base (16px)</span> <span className="text-xs text-muted-foreground ml-2">text-base</span></div>
-                <div><span className="text-sm text-foreground">Body — small (14px)</span> <span className="text-xs text-muted-foreground ml-2">text-sm</span></div>
-                <div><span className="text-xs text-muted-foreground">Caption / Helper (12px)</span> <span className="text-xs text-muted-foreground ml-2">text-xs / text-muted-foreground</span></div>
-                <div><span className="text-sm text-subtitle">Subtitle (#313131)</span> <span className="text-xs text-muted-foreground ml-2">text-subtitle</span></div>
-              </div>
-            </SubSection>
-
-            <SubSection title="Font Weights">
-              <div className="flex flex-wrap gap-6">
+            <SubSection title="Type Scale Reference">
+              <div className="border border-border rounded-2xl overflow-hidden">
+                {/* Header */}
+                <div className="grid grid-cols-[200px_1fr_140px_140px] bg-muted px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <span>Token</span>
+                  <span>Preview</span>
+                  <span>Tailwind Size</span>
+                  <span>Weight</span>
+                </div>
+                {/* Rows */}
                 {[
-                  { w: "font-normal", label: "400 Regular" },
-                  { w: "font-medium", label: "500 Medium" },
-                  { w: "font-semibold", label: "600 Semibold" },
-                  { w: "font-bold", label: "700 Bold" },
-                  { w: "font-extrabold", label: "800 Extra Bold" },
-                ].map((f) => (
-                  <span key={f.w} className={`text-base text-foreground ${f.w}`}>{f.label}</span>
+                  { token: "H1 Large", size: "text-5xl", leading: "leading-none", weight: "font-extrabold", label: "48px / 1.0" },
+                  { token: "H1", size: "text-4xl", leading: "leading-10", weight: "font-bold", label: "36px / 40px" },
+                  { token: "H2", size: "text-3xl", leading: "leading-9", weight: "font-bold", label: "30px / 36px" },
+                  { token: "H3", size: "text-2xl", leading: "leading-8", weight: "font-semibold", label: "24px / 32px" },
+                  { token: "H4", size: "text-xl", leading: "leading-7", weight: "font-semibold", label: "20px / 28px" },
+                  { token: "H5", size: "text-lg", leading: "leading-7", weight: "font-medium", label: "18px / 28px" },
+                  { token: "P Large Normal", size: "text-lg", leading: "leading-7", weight: "font-normal", label: "18px / 28px" },
+                  { token: "P Large Medium", size: "text-lg", leading: "leading-7", weight: "font-medium", label: "18px / 28px" },
+                  { token: "P Large SemiBold", size: "text-lg", leading: "leading-7", weight: "font-semibold", label: "18px / 28px" },
+                  { token: "P Base Normal", size: "text-base", leading: "leading-6", weight: "font-normal", label: "16px / 24px" },
+                  { token: "P Base Medium", size: "text-base", leading: "leading-6", weight: "font-medium", label: "16px / 24px" },
+                  { token: "P Base SemiBold", size: "text-base", leading: "leading-6", weight: "font-semibold", label: "16px / 24px" },
+                  { token: "P Small Normal", size: "text-sm", leading: "leading-5", weight: "font-normal", label: "14px / 20px" },
+                  { token: "P Small Medium", size: "text-sm", leading: "leading-5", weight: "font-medium", label: "14px / 20px" },
+                  { token: "P Small SemiBold", size: "text-sm", leading: "leading-5", weight: "font-semibold", label: "14px / 20px" },
+                  { token: "P XSmall Normal", size: "text-xs", leading: "leading-4", weight: "font-normal", label: "12px / 16px" },
+                  { token: "P XSmall Medium", size: "text-xs", leading: "leading-4", weight: "font-medium", label: "12px / 16px" },
+                  { token: "P XSmall SemiBold", size: "text-xs", leading: "leading-4", weight: "font-semibold", label: "12px / 16px" },
+                  { token: "Button", size: "text-sm", leading: "leading-5", weight: "font-medium", label: "14px / 20px" },
+                ].map((row, i) => (
+                  <div
+                    key={row.token}
+                    className={`grid grid-cols-[200px_1fr_140px_140px] items-center px-4 py-3 ${i % 2 === 0 ? "bg-card" : "bg-muted/50"} border-t border-border`}
+                  >
+                    <span className="text-sm font-medium text-foreground">{row.token}</span>
+                    <span className={`${row.size} ${row.leading} ${row.weight} text-foreground truncate pr-4`}>Ag</span>
+                    <code className="text-xs text-muted-foreground font-mono">{row.size}</code>
+                    <code className="text-xs text-muted-foreground font-mono">{row.weight}</code>
+                  </div>
                 ))}
               </div>
+              <p className="text-xs text-muted-foreground mt-3">
+                All sizes and line-heights use standard Tailwind utilities — no custom tokens required.
+              </p>
             </SubSection>
 
             <SubSection title="Question Label Convention">
