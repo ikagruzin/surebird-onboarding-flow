@@ -1234,7 +1234,6 @@ const DesignSystem = () => {
           </Section>
 
         </div>
-      </ScrollArea>
     </div>
   );
 };
