@@ -248,8 +248,7 @@ const ALL_ICONS: { name: string; component: LucideIcon }[] = [
 
 const Section = ({ title, id, children }: { title: string; id?: string; children: React.ReactNode }) => (
   <section className="mb-14" id={id}>
-    <h2 className="text-xl font-bold text-foreground mb-1">{title}</h2>
-    <Separator className="mb-6" />
+    <h2 className="text-xl font-bold text-foreground mb-6">{title}</h2>
     {children}
   </section>
 );
