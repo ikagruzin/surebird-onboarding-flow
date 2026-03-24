@@ -437,7 +437,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
           <button
             key={id}
             onClick={() => handleTabClick(id)}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border h-[48px] ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border h-12 ${
               isActive
                 ? "bg-foreground text-background border-foreground"
                 : "bg-white border-tab-border text-foreground"
