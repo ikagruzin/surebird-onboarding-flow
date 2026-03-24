@@ -310,27 +310,31 @@ const DesignSystem = () => {
       <FlowSwitcher currentFlowId="design-system" onSwitch={handleFlowSwitch} />
 
       {/* Header */}
-      <div className="max-w-5xl mx-auto px-6 pt-16 pb-4">
-        <h1 className="text-3xl font-bold text-foreground mb-1">Design System</h1>
-        <p className="text-muted-foreground text-base mb-6">
+      <div className="max-w-5xl mx-auto px-6 pt-10 pb-2">
+        <h1 className="text-2xl font-bold text-foreground mb-0.5">Design System</h1>
+        <p className="text-muted-foreground text-sm mb-3">
           Living reference of all tokens, components, and icons used across the platform.
         </p>
+      </div>
 
-        {/* Table of Contents */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {TOC.map((item) => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              className="px-3 py-1.5 rounded-full border border-border bg-card text-xs font-medium text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
-            >
-              {item.label}
-            </a>
-          ))}
+      {/* Sticky TOC */}
+      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="max-w-5xl mx-auto px-6 py-2.5">
+          <div className="flex flex-wrap gap-1.5">
+            {TOC.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className="px-2.5 py-1 rounded-full border border-border bg-card text-xs font-medium text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 
-      <ScrollArea className="h-[calc(100vh-220px)]">
+      <ScrollArea className="h-[calc(100vh-130px)]">
         <div className="max-w-5xl mx-auto px-6 pb-32">
 
           {/* ── 1. COLOR PALETTE ── */}
