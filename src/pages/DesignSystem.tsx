@@ -334,8 +334,7 @@ const DesignSystem = () => {
         </div>
       </div>
 
-      <ScrollArea className="h-[calc(100vh-130px)]">
-        <div className="max-w-5xl mx-auto px-6 pb-32">
+      <div className="max-w-5xl mx-auto px-6 pb-32 pt-6">
 
           {/* ── 1. COLOR PALETTE ── */}
           <Section title="Color Palette" id="colors">
