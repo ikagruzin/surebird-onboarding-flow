@@ -242,7 +242,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
                   alt={bundleT?.title || preset.title}
                   className="w-full h-full object-cover"
                 />
-                <span className="absolute bottom-3 left-3 inline-flex items-center bg-card text-success text-xs font-semibold px-3 py-1.5 rounded-full border border-[#EEEEEE]">
+                <span className="absolute bottom-3 left-3 inline-flex items-center bg-card text-success text-xs font-semibold px-3 py-1.5 rounded-full border border-border">
                   {t.saveAnnually} €{preset.annualSavings}
                 </span>
               </div>
@@ -327,7 +327,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
                   alt={bundleT?.title || preset.title}
                   className="w-full h-full object-cover"
                 />
-                <span className="absolute bottom-3 left-3 inline-flex items-center bg-card text-success text-xs font-semibold px-3 py-1.5 rounded-full border border-[#EEEEEE]">
+                <span className="absolute bottom-3 left-3 inline-flex items-center bg-card text-success text-xs font-semibold px-3 py-1.5 rounded-full border border-border">
                   {t.saveAnnually} €{preset.annualSavings}
                 </span>
               </div>

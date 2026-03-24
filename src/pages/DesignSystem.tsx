@@ -51,88 +51,127 @@ import { getAllFlows } from "@/config/flows";
 /* ─────────────────────────── COLOR TOKENS ─────────────────────────── */
 
 const SEMANTIC_TOKENS = [
-  { name: "--background", label: "Background", cssVar: "210 20% 98%", hex: "#F5F7FA" },
-  { name: "--foreground", label: "Foreground", cssVar: "220 20% 10%", hex: "#141B2B" },
-  { name: "--primary", label: "Primary", cssVar: "209 100% 51%", hex: "#0385FF" },
-  { name: "--primary-foreground", label: "Primary FG", cssVar: "0 0% 100%", hex: "#FFFFFF" },
-  { name: "--secondary", label: "Secondary", cssVar: "210 20% 96%", hex: "#F0F2F5" },
-  { name: "--secondary-foreground", label: "Secondary FG", cssVar: "220 20% 10%", hex: "#141B2B" },
-  { name: "--muted", label: "Muted", cssVar: "210 15% 95%", hex: "#EFF1F3" },
-  { name: "--muted-foreground", label: "Muted FG", cssVar: "215 14% 46%", hex: "#65707E" },
-  { name: "--accent", label: "Accent (Green)", cssVar: "152 77% 39%", hex: "#17B26A" },
-  { name: "--accent-foreground", label: "Accent FG", cssVar: "0 0% 100%", hex: "#FFFFFF" },
-  { name: "--destructive", label: "Destructive", cssVar: "0 84% 60%", hex: "#EF4444" },
-  { name: "--destructive-foreground", label: "Destructive FG", cssVar: "0 0% 100%", hex: "#FFFFFF" },
-  { name: "--success", label: "Success", cssVar: "152 77% 39%", hex: "#17B26A" },
-  { name: "--success-foreground", label: "Success FG", cssVar: "0 0% 100%", hex: "#FFFFFF" },
-  { name: "--info", label: "Info", cssVar: "209 100% 51%", hex: "#0385FF" },
-  { name: "--info-light", label: "Info Light", cssVar: "209 100% 96%", hex: "#EBF5FF" },
-  { name: "--savings", label: "Savings", cssVar: "152 77% 39%", hex: "#17B26A" },
-  { name: "--border", label: "Border", cssVar: "209 20% 90%", hex: "#DDE3EA" },
-  { name: "--input", label: "Input", cssVar: "209 20% 90%", hex: "#DDE3EA" },
-  { name: "--ring", label: "Ring", cssVar: "209 100% 51%", hex: "#0385FF" },
-  { name: "--card", label: "Card", cssVar: "0 0% 100%", hex: "#FFFFFF" },
-  { name: "--card-foreground", label: "Card FG", cssVar: "220 20% 10%", hex: "#141B2B" },
-  { name: "--subtitle", label: "Subtitle", cssVar: "0 0% 19%", hex: "#313131" },
-  { name: "--tab-border", label: "Tab Border", cssVar: "0 0% 84%", hex: "#D6D6D6" },
-  { name: "--popover", label: "Popover", cssVar: "0 0% 100%", hex: "#FFFFFF" },
-  { name: "--popover-foreground", label: "Popover FG", cssVar: "220 20% 10%", hex: "#141B2B" },
+  { name: "--background", label: "Background", cssVar: "0 0% 98%", hex: "#FAFAFA", brand: "Neutral 50" },
+  { name: "--foreground", label: "Foreground", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
+  { name: "--primary", label: "Primary", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
+  { name: "--primary-foreground", label: "Primary FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
+  { name: "--secondary", label: "Secondary", cssVar: "0 0% 96%", hex: "#F5F5F5", brand: "Neutral 100" },
+  { name: "--secondary-foreground", label: "Secondary FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
+  { name: "--muted", label: "Muted", cssVar: "0 0% 96%", hex: "#F5F5F5", brand: "Neutral 100" },
+  { name: "--muted-foreground", label: "Muted FG", cssVar: "224 5% 47%", hex: "#717680", brand: "Neutral 500" },
+  { name: "--accent", label: "Accent (Green)", cssVar: "152 79% 39%", hex: "#17B26A", brand: "Green 500" },
+  { name: "--accent-foreground", label: "Accent FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
+  { name: "--destructive", label: "Destructive", cssVar: "4 86% 58%", hex: "#F04438", brand: "Red 500" },
+  { name: "--destructive-foreground", label: "Destructive FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
+  { name: "--success", label: "Success", cssVar: "152 79% 39%", hex: "#17B26A", brand: "Green 500" },
+  { name: "--success-foreground", label: "Success FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
+  { name: "--info", label: "Info", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
+  { name: "--info-light", label: "Info Light", cssVar: "209 100% 96%", hex: "#EBF5FF", brand: "Light Blue" },
+  { name: "--savings", label: "Savings", cssVar: "152 79% 39%", hex: "#17B26A", brand: "Green 500" },
+  { name: "--border", label: "Border", cssVar: "220 5% 92%", hex: "#E9EAEB", brand: "Neutral 200" },
+  { name: "--input", label: "Input", cssVar: "220 5% 92%", hex: "#E9EAEB", brand: "Neutral 200" },
+  { name: "--ring", label: "Ring", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
+  { name: "--card", label: "Card", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
+  { name: "--card-foreground", label: "Card FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
+  { name: "--subtitle", label: "Subtitle", cssVar: "221 10% 29%", hex: "#414651", brand: "Neutral 700" },
+  { name: "--tab-border", label: "Tab Border", cssVar: "216 7% 85%", hex: "#D5D7DA", brand: "Neutral 300" },
+  { name: "--popover", label: "Popover", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
+  { name: "--popover-foreground", label: "Popover FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
 ];
 
 const SIDEBAR_TOKENS = [
-  { name: "--sidebar-background", label: "Sidebar BG", cssVar: "0 0% 100%", hex: "#FFFFFF" },
-  { name: "--sidebar-foreground", label: "Sidebar FG", cssVar: "220 15% 20%", hex: "#2C3340" },
-  { name: "--sidebar-primary", label: "Sidebar Primary", cssVar: "209 100% 51%", hex: "#0385FF" },
-  { name: "--sidebar-primary-foreground", label: "Sidebar Primary FG", cssVar: "0 0% 100%", hex: "#FFFFFF" },
-  { name: "--sidebar-accent", label: "Sidebar Accent", cssVar: "209 100% 96%", hex: "#EBF5FF" },
-  { name: "--sidebar-accent-foreground", label: "Sidebar Accent FG", cssVar: "209 100% 51%", hex: "#0385FF" },
-  { name: "--sidebar-border", label: "Sidebar Border", cssVar: "209 20% 92%", hex: "#E3E8EE" },
-  { name: "--sidebar-ring", label: "Sidebar Ring", cssVar: "209 100% 51%", hex: "#0385FF" },
+  { name: "--sidebar-background", label: "Sidebar BG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
+  { name: "--sidebar-foreground", label: "Sidebar FG", cssVar: "222 18% 18%", hex: "#252B37", brand: "Neutral 800" },
+  { name: "--sidebar-primary", label: "Sidebar Primary", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
+  { name: "--sidebar-primary-foreground", label: "Sidebar Primary FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
+  { name: "--sidebar-accent", label: "Sidebar Accent", cssVar: "209 100% 96%", hex: "#EBF5FF", brand: "Light Blue" },
+  { name: "--sidebar-accent-foreground", label: "Sidebar Accent FG", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
+  { name: "--sidebar-border", label: "Sidebar Border", cssVar: "220 5% 92%", hex: "#E9EAEB", brand: "Neutral 200" },
+  { name: "--sidebar-ring", label: "Sidebar Ring", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
 ];
 
-const HARDCODED_COLORS = [
-  { name: "bg-white", label: "White (bg-white)", color: "#FFFFFF", hex: "#FFFFFF", usage: "Input fields, form cards, tab backgrounds" },
-  { name: "bg-black/80", label: "Overlay Dark 80%", color: "rgba(0,0,0,0.8)", hex: "#000000 80%", usage: "Dialog/Drawer backdrops" },
-  { name: "bg-black/40", label: "Overlay Dark 40%", color: "rgba(0,0,0,0.4)", hex: "#000000 40%", usage: "Modal backdrops, help overlays" },
-  { name: "#0385FF", label: "Primary Blue (hex)", color: "#0385FF", hex: "#0385FF", usage: "StepOne selected card border" },
-  { name: "#0385FF/10", label: "Primary Blue BG (hex)", color: "rgba(3,133,255,0.1)", hex: "#0385FF 10%", usage: "StepOne selected card background" },
-  { name: "bg-blue-50", label: "Blue 50 (Tailwind)", color: "#eff6ff", hex: "#EFF6FF", usage: "StepOffer badge backgrounds" },
-  { name: "text-blue-600", label: "Blue 600 (Tailwind)", color: "#2563eb", hex: "#2563EB", usage: "StepOffer badge text" },
-  { name: "text-red-300", label: "Red 300 (Tailwind)", color: "#fca5a5", hex: "#FCA5A5", usage: "Toast destructive close icon" },
-  { name: "text-red-50", label: "Red 50 (Tailwind)", color: "#fef2f2", hex: "#FEF2F2", usage: "Toast destructive hover" },
-];
+const HARDCODED_COLORS: { name: string; label: string; color: string; hex: string; usage: string }[] = [];
 
-/* ── Color Audit: grouped by palette ── */
+/* ── Color Audit: full brand palette ── */
 const COLOR_AUDIT = [
-  { group: "Blues", colors: [
-    { hex: "#0385FF", label: "Primary Blue" },
-    { hex: "#EBF5FF", label: "Info Light / Blue BG" },
-    { hex: "#EFF6FF", label: "Blue 50 (Tailwind)" },
-    { hex: "#2563EB", label: "Blue 600 (Tailwind)" },
+  { group: "Base", colors: [
+    { hex: "#FFFFFF", label: "White" },
+    { hex: "#000000", label: "Black" },
   ]},
-  { group: "Greens", colors: [
-    { hex: "#17B26A", label: "Accent / Success / Savings" },
+  { group: "Blue", colors: [
+    { hex: "#0385FF", label: "Blue 500 (Primary)" },
+    { hex: "#0177E5", label: "Dark Blue" },
+    { hex: "#EBF5FF", label: "Light Blue" },
   ]},
-  { group: "Reds", colors: [
-    { hex: "#EF4444", label: "Destructive" },
-    { hex: "#FCA5A5", label: "Red 300" },
-    { hex: "#FEF2F2", label: "Red 50" },
+  { group: "Neutral", colors: [
+    { hex: "#FDFDFD", label: "25" },
+    { hex: "#FAFAFA", label: "50" },
+    { hex: "#F5F5F5", label: "100" },
+    { hex: "#E9EAEB", label: "200" },
+    { hex: "#D5D7DA", label: "300" },
+    { hex: "#A4A7AE", label: "400" },
+    { hex: "#717680", label: "500" },
+    { hex: "#535862", label: "600" },
+    { hex: "#414651", label: "700" },
+    { hex: "#252B37", label: "800" },
+    { hex: "#181D27", label: "900" },
+    { hex: "#0A0D12", label: "950" },
   ]},
-  { group: "Neutrals — Light", colors: [
-    { hex: "#FFFFFF", label: "White / Card / Popover" },
-    { hex: "#F5F7FA", label: "Background" },
-    { hex: "#F0F2F5", label: "Secondary" },
-    { hex: "#EFF1F3", label: "Muted" },
-    { hex: "#E3E8EE", label: "Sidebar Border" },
-    { hex: "#DDE3EA", label: "Border / Input" },
-    { hex: "#D6D6D6", label: "Tab Border" },
+  { group: "Red / Error", colors: [
+    { hex: "#FFFBFA", label: "25" },
+    { hex: "#FEF3F2", label: "50" },
+    { hex: "#FEE4E2", label: "100" },
+    { hex: "#FECDCA", label: "200" },
+    { hex: "#FDA29B", label: "300" },
+    { hex: "#F97066", label: "400" },
+    { hex: "#F04438", label: "500" },
+    { hex: "#D92D20", label: "600" },
+    { hex: "#B42318", label: "700" },
+    { hex: "#912018", label: "800" },
+    { hex: "#7A271A", label: "900" },
+    { hex: "#55160C", label: "950" },
   ]},
-  { group: "Neutrals — Dark", colors: [
-    { hex: "#65707E", label: "Muted Foreground" },
-    { hex: "#313131", label: "Subtitle" },
-    { hex: "#2C3340", label: "Sidebar Foreground" },
-    { hex: "#141B2B", label: "Foreground" },
-    { hex: "#000000", label: "Black (overlays)" },
+  { group: "Green", colors: [
+    { hex: "#F6FEF9", label: "25" },
+    { hex: "#ECFDF3", label: "50" },
+    { hex: "#DCFAE6", label: "100" },
+    { hex: "#A9EFC5", label: "200" },
+    { hex: "#75E0A7", label: "300" },
+    { hex: "#47CD89", label: "400" },
+    { hex: "#17B26A", label: "500" },
+    { hex: "#079455", label: "600" },
+    { hex: "#067647", label: "700" },
+    { hex: "#085D3A", label: "800" },
+    { hex: "#074D31", label: "900" },
+    { hex: "#053321", label: "950" },
+  ]},
+  { group: "Orange", colors: [
+    { hex: "#FEFBF5", label: "25" },
+    { hex: "#FEF6EB", label: "50" },
+    { hex: "#FDEED7", label: "100" },
+    { hex: "#F8DDAF", label: "200" },
+    { hex: "#F9CB86", label: "300" },
+    { hex: "#F7BA5E", label: "400" },
+    { hex: "#F5A938", label: "500" },
+    { hex: "#C4872B", label: "600" },
+    { hex: "#936520", label: "700" },
+    { hex: "#624416", label: "800" },
+    { hex: "#31220B", label: "900" },
+    { hex: "#251908", label: "950" },
+  ]},
+  { group: "Purple", colors: [
+    { hex: "#F6F5FE", label: "25" },
+    { hex: "#EEEBFD", label: "50" },
+    { hex: "#DDD8FB", label: "100" },
+    { hex: "#B8B1F6", label: "200" },
+    { hex: "#9989F2", label: "300" },
+    { hex: "#7762ED", label: "400" },
+    { hex: "#553BE9", label: "500" },
+    { hex: "#442FBA", label: "600" },
+    { hex: "#33238C", label: "700" },
+    { hex: "#22185D", label: "800" },
+    { hex: "#110C2F", label: "900" },
+    { hex: "#0D0923", label: "950" },
   ]},
 ];
 
@@ -322,21 +361,8 @@ const DesignSystem = () => {
                   </div>
                 </SubSection>
 
-                <SubSection title="Hardcoded / Non-Tokenized Colors (⚠️ used in codebase)">
-                  <p className="text-xs text-destructive mb-3">These colors are used directly in components and are not part of the semantic token system. Consider tokenizing them.</p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {HARDCODED_COLORS.map((c) => (
-                      <div key={c.name} className="flex flex-col gap-1.5">
-                        <div
-                          className="h-16 rounded-xl border border-border"
-                          style={{ backgroundColor: c.color }}
-                        />
-                        <span className="text-xs font-medium text-foreground">{c.label}</span>
-                        <code className="text-[10px] text-muted-foreground font-mono">{c.name}</code>
-                        <p className="text-[10px] text-muted-foreground">{c.usage}</p>
-                      </div>
-                    ))}
-                  </div>
+                 <SubSection title="Hardcoded / Non-Tokenized Colors">
+                  <p className="text-xs text-success mb-3">✓ All hardcoded colors have been refactored to semantic tokens.</p>
                 </SubSection>
 
                 <SubSection title="Opacity Patterns">
@@ -354,6 +380,29 @@ const DesignSystem = () => {
                     ))}
                   </div>
                 </SubSection>
+              </TabsContent>
+
+              <TabsContent value="audit">
+                <p className="text-sm text-muted-foreground mb-6">
+                  Full brand color palette — source of truth for all design decisions.
+                </p>
+                {COLOR_AUDIT.map((group) => (
+                  <div key={group.group} className="mb-6">
+                    <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{group.group}</h4>
+                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2">
+                      {group.colors.map((c) => (
+                        <div key={c.hex + c.label} className="flex flex-col items-center gap-1">
+                          <div
+                            className="w-full aspect-square rounded-lg border border-border"
+                            style={{ backgroundColor: c.hex }}
+                          />
+                          <span className="text-[9px] font-medium text-foreground text-center leading-tight">{c.label}</span>
+                          <code className="text-[9px] text-muted-foreground font-mono">{c.hex}</code>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </TabsContent>
 
               <TabsContent value="audit">
@@ -734,12 +783,12 @@ const DesignSystem = () => {
                 </div>
               </SubSection>
 
-              <SubSection title="Offer Badge (hardcoded)">
+              <SubSection title="Offer Badge (tokenized)">
                 <div className="flex flex-wrap gap-2">
-                  <span className="bg-blue-50 text-blue-600 text-xs font-medium px-2.5 py-1 rounded-full">Best and cheapest choice</span>
-                  <span className="bg-blue-50 text-blue-600 text-xs font-medium px-2.5 py-1 rounded-full">The most popular choice</span>
+                  <span className="bg-info-light text-primary text-xs font-medium px-2.5 py-1 rounded-full">Best and cheapest choice</span>
+                  <span className="bg-info-light text-primary text-xs font-medium px-2.5 py-1 rounded-full">The most popular choice</span>
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">⚠️ Uses hardcoded bg-blue-50 text-blue-600 — consider tokenizing</p>
+                <p className="text-xs text-muted-foreground mt-1">✓ Uses bg-info-light text-primary</p>
               </SubSection>
 
               <SubSection title="Success Feedback">
