@@ -458,7 +458,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       })}
       <button
         onClick={handleOpenAddModal}
-        className="h-[48px] px-4 rounded-full border border-tab-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
+        className="h-12 px-4 rounded-full border border-tab-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
       >
         <Plus className="w-4 h-4" />
       </button>
