@@ -478,11 +478,12 @@ const DesignSystem = () => {
                 </div>
                 {/* Rows */}
                 {[
-                  { token: "H1", size: "36px", lh: "40px", tw: "text-4xl", leading: "leading-10", weight: "font-bold" },
-                  { token: "H2", size: "30px", lh: "36px", tw: "text-3xl", leading: "leading-9", weight: "font-bold" },
-                  { token: "H3", size: "24px", lh: "32px", tw: "text-2xl", leading: "leading-8", weight: "font-semibold" },
-                  { token: "H4", size: "20px", lh: "28px", tw: "text-xl", leading: "leading-7", weight: "font-semibold" },
-                  { token: "H5", size: "18px", lh: "28px", tw: "text-lg", leading: "leading-7", weight: "font-medium" },
+                  { token: "H1", size: "48px", lh: "48px", tw: "text-5xl", leading: "leading-none", weight: "font-bold" },
+                  { token: "H2", size: "36px", lh: "40px", tw: "text-4xl", leading: "leading-10", weight: "font-bold" },
+                  { token: "H3", size: "30px", lh: "36px", tw: "text-3xl", leading: "leading-9", weight: "font-bold" },
+                  { token: "H4", size: "24px", lh: "32px", tw: "text-2xl", leading: "leading-8", weight: "font-semibold" },
+                  { token: "H5", size: "20px", lh: "28px", tw: "text-xl", leading: "leading-7", weight: "font-semibold" },
+                  { token: "H6", size: "18px", lh: "28px", tw: "text-lg", leading: "leading-7", weight: "font-medium" },
                   { token: "P Large Normal", size: "18px", lh: "28px", tw: "text-lg", leading: "leading-7", weight: "font-normal" },
                   { token: "P Large Medium", size: "18px", lh: "28px", tw: "text-lg", leading: "leading-7", weight: "font-medium" },
                   { token: "P Large SemiBold", size: "18px", lh: "28px", tw: "text-lg", leading: "leading-7", weight: "font-semibold" },
