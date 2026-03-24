@@ -655,9 +655,17 @@ const DesignSystem = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {(["default", "secondary", "outline", "outline-primary", "ghost", "destructive", "destructive-outline", "link"] as const).map((v) => (
+                    {([
+                      { variant: "default" as const, label: "primary" },
+                      { variant: "secondary" as const, label: "secondary" },
+                      { variant: "outline" as const, label: "outline" },
+                      { variant: "outline-primary" as const, label: "outline-primary" },
+                      { variant: "ghost" as const, label: "ghost" },
+                      { variant: "destructive-outline" as const, label: "destructive" },
+                      { variant: "link" as const, label: "link" },
+                    ]).map(({ variant: v, label }) => (
                       <tr key={v} className="border-t border-border">
-                        <td className="px-4 py-3 font-mono text-xs text-muted-foreground sticky left-0 bg-card z-10">{v}</td>
+                        <td className="px-4 py-3 font-mono text-xs text-muted-foreground sticky left-0 bg-card z-10">{label}</td>
                         {(["sm", "default", "lg", "icon"] as const).map((s) => (
                           <React.Fragment key={s}>
                             <td className="px-3 py-3 text-center">
