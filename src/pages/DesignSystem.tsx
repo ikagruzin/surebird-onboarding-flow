@@ -535,9 +535,9 @@ const DesignSystem = () => {
                 <Button variant="outline-primary"><CheckCircle className="w-4 h-4" /> Verify with my Bank</Button>
                 <Button variant="default"><Check className="w-4 h-4" /> Simulate Verification</Button>
                 <Button variant="destructive-outline"><X className="w-4 h-4" /> Simulate Failure</Button>
-                <Button variant="success" shape="pill">Next step <ChevronRight className="w-4 h-4" /></Button>
-                <Button variant="ghost" shape="pill"><ChevronLeft className="w-4 h-4" /> Back</Button>
-                <Button variant="outline" shape="pill"><Lock className="w-4 h-4" /> Lock discount for 24h</Button>
+                <Button variant="secondary">Next step <ChevronRight className="w-4 h-4" /></Button>
+                <Button variant="ghost"><ChevronLeft className="w-4 h-4" /> Back</Button>
+                <Button variant="outline"><Lock className="w-4 h-4" /> Lock discount for 24h</Button>
               </div>
             </SubSection>
 
