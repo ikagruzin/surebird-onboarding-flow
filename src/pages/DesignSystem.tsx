@@ -596,17 +596,20 @@ const DesignSystem = () => {
                 <SelectionCard
                   label="Radio"
                   indicator="radio"
-                  selected={true}
+                  selected={demoSelection === "radio-demo"}
+                  onClick={() => setDemoSelection(demoSelection === "radio-demo" ? "" : "radio-demo")}
                 />
                 <SelectionCard
                   label="Checkbox"
                   indicator="checkbox"
-                  selected={true}
+                  selected={demoSelection === "checkbox-demo"}
+                  onClick={() => setDemoSelection(demoSelection === "checkbox-demo" ? "" : "checkbox-demo")}
                 />
                 <SelectionCard
                   label="None"
                   indicator="none"
-                  selected={true}
+                  selected={demoSelection === "none-demo"}
+                  onClick={() => setDemoSelection(demoSelection === "none-demo" ? "" : "none-demo")}
                 />
               </div>
               <p className="text-xs text-muted-foreground mt-2">
