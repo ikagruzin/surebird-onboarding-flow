@@ -525,8 +525,8 @@ const DesignSystem = () => {
                 <Button disabled>Disabled</Button>
                 <Button variant="outline-primary">Enabled</Button>
                 <Button variant="outline-primary" disabled>Disabled</Button>
-                <Button variant="success" shape="pill">Enabled</Button>
-                <Button variant="success" shape="pill" disabled>Disabled</Button>
+                <Button variant="secondary">Enabled</Button>
+                <Button variant="secondary" disabled>Disabled</Button>
               </div>
             </SubSection>
 
