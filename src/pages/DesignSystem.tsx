@@ -365,7 +365,7 @@ const DesignSystem = () => {
                                   className="w-6 h-6 rounded-md border border-border shrink-0"
                                   style={{ backgroundColor: `hsl(${token.hsl})` }}
                                 />
-                                <code className="text-2xs text-muted-foreground font-mono">{token.hex}</code>
+                                <code className="text-2xs text-muted-foreground font-mono">{token.palette}</code>
                               </div>
                             </td>
                             <td className="py-2.5 pr-4">
