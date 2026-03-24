@@ -91,9 +91,18 @@ const COLOR_AUDIT = [
     { hex: "#000000", label: "Black" },
   ]},
   { group: "Blue", colors: [
-    { hex: "#0385FF", label: "Blue 500 (Primary)" },
-    { hex: "#0177E5", label: "Dark Blue" },
-    { hex: "#EBF5FF", label: "Light Blue" },
+    { hex: "#F0F8FF", label: "25" },
+    { hex: "#EBF5FF", label: "50" },
+    { hex: "#CCE7FF", label: "100" },
+    { hex: "#99CFFF", label: "200" },
+    { hex: "#66B7FF", label: "300" },
+    { hex: "#339EFF", label: "400" },
+    { hex: "#0385FF", label: "500" },
+    { hex: "#0177E5", label: "600" },
+    { hex: "#0160B8", label: "700" },
+    { hex: "#01498A", label: "800" },
+    { hex: "#01325D", label: "900" },
+    { hex: "#001B30", label: "950" },
   ]},
   { group: "Neutral", colors: [
     { hex: "#FDFDFD", label: "25" },
@@ -378,29 +387,6 @@ const DesignSystem = () => {
                           />
                           <span className="text-[9px] font-medium text-foreground text-center leading-tight">{c.label}</span>
                           <code className="text-[9px] text-muted-foreground font-mono">{c.hex}</code>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </TabsContent>
-
-              <TabsContent value="audit">
-                <p className="text-sm text-muted-foreground mb-6">
-                  Every unique color used across the platform, grouped by palette with hex codes.
-                </p>
-                {COLOR_AUDIT.map((group) => (
-                  <div key={group.group} className="mb-6">
-                    <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{group.group}</h4>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                      {group.colors.map((c) => (
-                        <div key={c.hex + c.label} className="flex flex-col items-center gap-1.5">
-                          <div
-                            className="w-full h-14 rounded-lg border border-border"
-                            style={{ backgroundColor: c.hex }}
-                          />
-                          <span className="text-[10px] font-medium text-foreground text-center">{c.label}</span>
-                          <code className="text-[10px] text-muted-foreground font-mono">{c.hex}</code>
                         </div>
                       ))}
                     </div>
