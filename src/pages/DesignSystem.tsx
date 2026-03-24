@@ -280,7 +280,7 @@ const DesignSystem = () => {
   const [demoToggle, setDemoToggle] = useState("phone");
   const [demoSegmented, setDemoSegmented] = useState("Option A");
   const [demoChip, setDemoChip] = useState<string[]>(["Chip 2"]);
-  const [demoSelection, setDemoSelection] = useState("travel");
+  const [demoSelection, setDemoSelection] = useState("radio-demo");
 
   const handleFlowSwitch = (flowId: string) => {
     if (flowId === "c") {
@@ -366,9 +366,6 @@ const DesignSystem = () => {
 
 
 
-                 <SubSection title="Hardcoded / Non-Tokenized Colors">
-                  <p className="text-xs text-success mb-3">✓ All hardcoded colors have been refactored to semantic tokens.</p>
-                </SubSection>
 
                 <SubSection title="Opacity Patterns">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -599,17 +596,20 @@ const DesignSystem = () => {
                 <SelectionCard
                   label="Radio"
                   indicator="radio"
-                  selected={true}
+                  selected={demoSelection === "radio-demo"}
+                  onClick={() => setDemoSelection(demoSelection === "radio-demo" ? "" : "radio-demo")}
                 />
                 <SelectionCard
                   label="Checkbox"
                   indicator="checkbox"
-                  selected={true}
+                  selected={demoSelection === "checkbox-demo"}
+                  onClick={() => setDemoSelection(demoSelection === "checkbox-demo" ? "" : "checkbox-demo")}
                 />
                 <SelectionCard
                   label="None"
                   indicator="none"
-                  selected={true}
+                  selected={demoSelection === "none-demo"}
+                  onClick={() => setDemoSelection(demoSelection === "none-demo" ? "" : "none-demo")}
                 />
               </div>
               <p className="text-xs text-muted-foreground mt-2">
