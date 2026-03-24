@@ -52,27 +52,27 @@ import { getAllFlows } from "@/config/flows";
 /* ─────────────────────────── COLOR TOKENS ─────────────────────────── */
 
 const SEMANTIC_TOKENS = [
-  { name: "--background", label: "Background", cssVar: "0 0% 98%", hex: "#FAFAFA", brand: "Neutral 50" },
-  { name: "--foreground", label: "Foreground", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
-  { name: "--primary", label: "Primary", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
-  { name: "--primary-foreground", label: "Primary FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
-  { name: "--secondary", label: "Secondary", cssVar: "0 0% 96%", hex: "#F5F5F5", brand: "Neutral 100" },
-  { name: "--secondary-foreground", label: "Secondary FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
-  { name: "--muted", label: "Muted", cssVar: "0 0% 96%", hex: "#F5F5F5", brand: "Neutral 100" },
-  { name: "--muted-foreground", label: "Muted FG", cssVar: "224 5% 47%", hex: "#717680", brand: "Neutral 500" },
-  { name: "--accent", label: "Accent (Green)", cssVar: "121 66% 42%", hex: "#25B327", brand: "Light Green 500" },
-  { name: "--accent-foreground", label: "Accent FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
-  { name: "--destructive", label: "Destructive", cssVar: "4 86% 58%", hex: "#F04438", brand: "Red 500" },
-  { name: "--destructive-foreground", label: "Destructive FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
-  { name: "--success", label: "Success", cssVar: "121 66% 42%", hex: "#25B327", brand: "Light Green 500" },
-  { name: "--success-foreground", label: "Success FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
-  { name: "--border", label: "Border", cssVar: "220 5% 92%", hex: "#E9EAEB", brand: "Neutral 200" },
-  { name: "--input", label: "Input", cssVar: "220 5% 92%", hex: "#E9EAEB", brand: "Neutral 200" },
-  { name: "--ring", label: "Ring", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
-  { name: "--card", label: "Card", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
-  { name: "--card-foreground", label: "Card FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
-  { name: "--popover", label: "Popover", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
-  { name: "--popover-foreground", label: "Popover FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
+  { name: "--accent", role: "Accent/highlight color", hsl: "121 66% 42%", hex: "#25B327" },
+  { name: "--accent-foreground", role: "Text on accent", hsl: "0 0% 100%", hex: "#FFFFFF" },
+  { name: "--background", role: "Page background", hsl: "0 0% 98%", hex: "#FAFAFA" },
+  { name: "--border", role: "Default borders", hsl: "220 5% 92%", hex: "#E9EAEB" },
+  { name: "--card", role: "Card background", hsl: "0 0% 100%", hex: "#FFFFFF" },
+  { name: "--card-foreground", role: "Card text", hsl: "220 20% 12%", hex: "#181D27" },
+  { name: "--destructive", role: "Error/danger", hsl: "4 86% 58%", hex: "#F04438" },
+  { name: "--destructive-foreground", role: "Text on destructive", hsl: "0 0% 100%", hex: "#FFFFFF" },
+  { name: "--foreground", role: "Primary text", hsl: "220 20% 12%", hex: "#181D27" },
+  { name: "--input", role: "Input borders", hsl: "220 5% 92%", hex: "#E9EAEB" },
+  { name: "--muted", role: "Muted backgrounds", hsl: "0 0% 96%", hex: "#F5F5F5" },
+  { name: "--muted-foreground", role: "Secondary/subtle text", hsl: "224 5% 47%", hex: "#717680" },
+  { name: "--popover", role: "Popover background", hsl: "0 0% 100%", hex: "#FFFFFF" },
+  { name: "--popover-foreground", role: "Popover text", hsl: "220 20% 12%", hex: "#181D27" },
+  { name: "--primary", role: "Primary action (blue)", hsl: "209 100% 51%", hex: "#0385FF" },
+  { name: "--primary-foreground", role: "Text on primary", hsl: "0 0% 100%", hex: "#FFFFFF" },
+  { name: "--ring", role: "Focus ring", hsl: "209 100% 51%", hex: "#0385FF" },
+  { name: "--secondary", role: "Secondary surfaces", hsl: "0 0% 96%", hex: "#F5F5F5" },
+  { name: "--secondary-foreground", role: "Text on secondary", hsl: "220 20% 12%", hex: "#181D27" },
+  { name: "--success", role: "Success/positive", hsl: "121 66% 42%", hex: "#25B327" },
+  { name: "--success-foreground", role: "Text on success", hsl: "0 0% 100%", hex: "#FFFFFF" },
 ];
 
 
@@ -343,18 +343,41 @@ const DesignSystem = () => {
 
               <TabsContent value="tokens">
                 <SubSection title="Semantic Tokens (from index.css)">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {SEMANTIC_TOKENS.map((token) => (
-                      <div key={token.name} className="flex flex-col gap-1.5">
-                        <div
-                          className="h-16 rounded-xl border border-border"
-                          style={{ backgroundColor: `hsl(${token.cssVar})` }}
-                        />
-                        <span className="text-xs font-medium text-foreground">{token.label}</span>
-                        <code className="text-2xs text-muted-foreground font-mono">{token.name}</code>
-                        <code className="text-2xs text-muted-foreground font-mono">hsl({token.cssVar})</code>
-                      </div>
-                    ))}
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-border text-left">
+                          <th className="py-2 pr-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</th>
+                          <th className="py-2 pr-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Color</th>
+                          <th className="py-2 pr-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">HSL</th>
+                          <th className="py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Role</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {SEMANTIC_TOKENS.map((token) => (
+                          <tr key={token.name} className="border-b border-border/50">
+                            <td className="py-2.5 pr-4">
+                              <code className="text-xs font-mono text-foreground">{token.name}</code>
+                            </td>
+                            <td className="py-2.5 pr-4">
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="w-6 h-6 rounded-md border border-border shrink-0"
+                                  style={{ backgroundColor: `hsl(${token.hsl})` }}
+                                />
+                                <code className="text-2xs text-muted-foreground font-mono">{token.hex}</code>
+                              </div>
+                            </td>
+                            <td className="py-2.5 pr-4">
+                              <code className="text-2xs text-muted-foreground font-mono">{token.hsl}</code>
+                            </td>
+                            <td className="py-2.5">
+                              <span className="text-xs text-muted-foreground">{token.role}</span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </SubSection>
 
