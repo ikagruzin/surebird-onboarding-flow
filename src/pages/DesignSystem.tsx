@@ -917,7 +917,7 @@ const DesignSystem = () => {
             </SubSection>
 
             <SubSection title="Product Tabs (1px border, no shadow)">
-              <div className="flex gap-2 border-b border-tab-border pb-2 max-w-md">
+              <div className="flex gap-2 border-b border-border pb-2 max-w-md">
                 {["Liability", "Home", "Travel"].map((tab, i) => (
                   <button
                     key={tab}

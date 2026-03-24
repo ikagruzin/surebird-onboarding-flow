@@ -68,12 +68,6 @@ export default {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
         },
-        info: {
-          DEFAULT: "hsl(var(--info))",
-          light: "hsl(var(--info-light))",
-        },
-        savings: "hsl(var(--savings))",
-        "tab-border": "hsl(var(--tab-border))",
       },
       borderRadius: {
         lg: "var(--radius)",

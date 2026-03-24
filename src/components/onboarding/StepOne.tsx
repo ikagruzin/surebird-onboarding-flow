@@ -462,9 +462,9 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
                   <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                     {t.individualHeading}
                   </h2>
-                   <p className="text-subtitle mb-8">
+                   <p className="text-muted-foreground mb-8">
                     {t.individualSubtitle}
-                  </p>
+                   </p>
                   <InsuranceGrid />
                 </div>
               </>
@@ -475,7 +475,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
                   <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                     {t.individualHeading}
                   </h2>
-                   <p className="text-subtitle mb-8">
+                   <p className="text-muted-foreground mb-8">
                     {t.individualSubtitle}
                   </p>
                   <InsuranceGrid />
