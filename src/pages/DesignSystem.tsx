@@ -594,52 +594,27 @@ const DesignSystem = () => {
 
             <Separator className="my-6" />
 
-            <SubSection title="Selection Card (Radio Indicator)">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-lg">
-                {["travel", "home", "car"].map((item) => (
-                  <SelectionCard
-                    key={item}
-                    label={item.charAt(0).toUpperCase() + item.slice(1)}
-                    indicator="radio"
-                    selected={demoSelection === item}
-                    onClick={() => setDemoSelection(item)}
-                  />
-                ))}
+            <SubSection title="Selection Cards">
+              <div className="flex items-center gap-4">
+                <SelectionCard
+                  label="Radio"
+                  indicator="radio"
+                  selected={true}
+                />
+                <SelectionCard
+                  label="Checkbox"
+                  indicator="checkbox"
+                  selected={true}
+                />
+                <SelectionCard
+                  label="None"
+                  indicator="none"
+                  selected={true}
+                />
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Reusable <code className="bg-muted px-1 rounded text-2xs">SelectionCard</code> — rounded-2xl, radio dot, primary border on select</p>
-            </SubSection>
-
-            <SubSection title="Selection Card (Checkbox Indicator)">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-lg">
-                {["travel", "home", "car"].map((item) => (
-                  <SelectionCard
-                    key={item}
-                    label={item.charAt(0).toUpperCase() + item.slice(1)}
-                    indicator="checkbox"
-                    selected={demoChip.includes(item)}
-                    onClick={() =>
-                      setDemoChip((prev) =>
-                        prev.includes(item) ? prev.filter((c) => c !== item) : [...prev, item]
-                      )
-                    }
-                  />
-                ))}
-              </div>
-              <p className="text-xs text-muted-foreground mt-2">Multi-select mode with checkbox indicator</p>
-            </SubSection>
-
-            <SubSection title="Selection Card (No Indicator)">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-lg">
-                {["travel", "home", "car"].map((item) => (
-                  <SelectionCard
-                    key={item}
-                    label={item.charAt(0).toUpperCase() + item.slice(1)}
-                    indicator="none"
-                    selected={demoSelection === item}
-                    onClick={() => setDemoSelection(item)}
-                  />
-                ))}
-              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Three indicator modes: <code className="bg-muted px-1 rounded text-2xs">radio</code>, <code className="bg-muted px-1 rounded text-2xs">checkbox</code>, <code className="bg-muted px-1 rounded text-2xs">none</code>
+              </p>
             </SubSection>
 
             <Separator className="my-6" />
