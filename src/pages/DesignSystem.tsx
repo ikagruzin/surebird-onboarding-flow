@@ -17,6 +17,7 @@ import {
 // ── UI Components ──
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SelectionCard } from "@/components/ui/selection-card";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -279,6 +280,7 @@ const DesignSystem = () => {
   const [demoToggle, setDemoToggle] = useState("phone");
   const [demoSegmented, setDemoSegmented] = useState("Option A");
   const [demoChip, setDemoChip] = useState<string[]>(["Chip 2"]);
+  const [demoSelection, setDemoSelection] = useState("travel");
 
   const handleFlowSwitch = (flowId: string) => {
     if (flowId === "c") {
@@ -494,14 +496,42 @@ const DesignSystem = () => {
 
           {/* ── 4. BUTTONS ── */}
           <Section title="Buttons" id="buttons">
-            <SubSection title="shadcn Variants">
+
+            <SubSection title="Variants × Shape: default (rounded-2xl)">
               <div className="flex flex-wrap gap-3 items-center">
-                <Button>Default</Button>
+                <Button variant="default">Primary</Button>
                 <Button variant="secondary">Secondary</Button>
                 <Button variant="outline">Outline</Button>
+                <Button variant="outline-primary">Outline Primary</Button>
                 <Button variant="ghost">Ghost</Button>
                 <Button variant="destructive">Destructive</Button>
+                <Button variant="destructive-outline">Destructive Outline</Button>
+                <Button variant="success">Success</Button>
                 <Button variant="link">Link</Button>
+              </div>
+            </SubSection>
+
+            <SubSection title="Variants × Shape: pill (rounded-full)">
+              <div className="flex flex-wrap gap-3 items-center">
+                <Button shape="pill" variant="default">Primary</Button>
+                <Button shape="pill" variant="secondary">Secondary</Button>
+                <Button shape="pill" variant="outline">Outline</Button>
+                <Button shape="pill" variant="outline-primary">Outline Primary</Button>
+                <Button shape="pill" variant="ghost">Ghost</Button>
+                <Button shape="pill" variant="destructive">Destructive</Button>
+                <Button shape="pill" variant="destructive-outline">Destructive Outline</Button>
+                <Button shape="pill" variant="success">Success</Button>
+                <Button shape="pill" variant="link">Link</Button>
+              </div>
+            </SubSection>
+
+            <SubSection title="Variants × Shape: rounded (rounded-md)">
+              <div className="flex flex-wrap gap-3 items-center">
+                <Button shape="rounded" variant="default">Primary</Button>
+                <Button shape="rounded" variant="secondary">Secondary</Button>
+                <Button shape="rounded" variant="outline">Outline</Button>
+                <Button shape="rounded" variant="outline-primary">Outline Primary</Button>
+                <Button shape="rounded" variant="ghost">Ghost</Button>
               </div>
             </SubSection>
 
@@ -512,12 +542,33 @@ const DesignSystem = () => {
                 <Button size="lg">Large</Button>
                 <Button size="icon"><Plus className="w-4 h-4" /></Button>
               </div>
+              <div className="flex flex-wrap gap-3 items-center mt-3">
+                <Button size="sm" shape="pill">Small Pill</Button>
+                <Button size="default" shape="pill">Default Pill</Button>
+                <Button size="lg" shape="pill">Large Pill</Button>
+                <Button size="icon" shape="pill"><Plus className="w-4 h-4" /></Button>
+              </div>
             </SubSection>
 
             <SubSection title="States">
               <div className="flex flex-wrap gap-3 items-center">
                 <Button>Enabled</Button>
                 <Button disabled>Disabled</Button>
+                <Button variant="outline-primary">Enabled</Button>
+                <Button variant="outline-primary" disabled>Disabled</Button>
+                <Button variant="success" shape="pill">Enabled</Button>
+                <Button variant="success" shape="pill" disabled>Disabled</Button>
+              </div>
+            </SubSection>
+
+            <SubSection title="With Icons">
+              <div className="flex flex-wrap gap-3 items-center">
+                <Button variant="outline-primary"><CheckCircle className="w-4 h-4" /> Verify with my Bank</Button>
+                <Button variant="default"><Check className="w-4 h-4" /> Simulate Verification</Button>
+                <Button variant="destructive-outline"><X className="w-4 h-4" /> Simulate Failure</Button>
+                <Button variant="success" shape="pill">Next step <ChevronRight className="w-4 h-4" /></Button>
+                <Button variant="ghost" shape="pill"><ChevronLeft className="w-4 h-4" /> Back</Button>
+                <Button variant="outline" shape="pill"><Lock className="w-4 h-4" /> Lock discount for 24h</Button>
               </div>
             </SubSection>
 
@@ -543,15 +594,7 @@ const DesignSystem = () => {
                   Disabled <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Used in: StickyFooter, StepSuccess, StepPreferences — Green 3D gradient with inset highlight</p>
-            </SubSection>
-
-            <SubSection title="Back Button (StickyFooter)">
-              <button className="inline-flex items-center gap-2 text-foreground px-4 py-3 rounded-full font-medium text-base hover:bg-muted transition-colors">
-                <ChevronLeft className="w-5 h-5" />
-                Back
-              </button>
-              <p className="text-xs text-muted-foreground mt-2">Used in: StickyFooter when showSavings=false</p>
+              <p className="text-xs text-muted-foreground mt-2">Used in: StickyFooter, StepSuccess — Green 3D gradient with inset highlight</p>
             </SubSection>
 
             <SubSection title="Inverted Toggle Button">
@@ -577,35 +620,84 @@ const DesignSystem = () => {
                   <Mail className="w-4 h-4 inline mr-1.5" /> Email
                 </button>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Used in: StepPreferences contact method & tab selectors — active state inverts fg/bg</p>
+              <p className="text-xs text-muted-foreground mt-2">Active state inverts fg/bg — used for tab-style toggles</p>
             </SubSection>
 
-            <SubSection title="Outline Pill Button (Tab-style)">
-              <div className="flex gap-2">
-                <button className="h-12 px-5 rounded-full border border-tab-border bg-card flex items-center justify-center text-sm font-medium text-foreground hover:bg-muted transition-colors">
-                  Tab Item
-                </button>
-                <button className="h-12 px-4 rounded-full border border-tab-border bg-card flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
-                  <Plus className="w-4 h-4" />
-                </button>
+            <Separator className="my-6" />
+
+            <SubSection title="Selection Card (Radio Indicator)">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-lg">
+                {["travel", "home", "car"].map((item) => (
+                  <SelectionCard
+                    key={item}
+                    label={item.charAt(0).toUpperCase() + item.slice(1)}
+                    indicator="radio"
+                    selected={demoSelection === item}
+                    onClick={() => setDemoSelection(item)}
+                  />
+                ))}
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Used in: StepPreferences add-product tabs — 1px stroke, no shadow</p>
+              <p className="text-xs text-muted-foreground mt-2">Reusable <code className="bg-muted px-1 rounded text-2xs">SelectionCard</code> — rounded-2xl, radio dot, primary border on select</p>
             </SubSection>
 
-            <SubSection title="WhatsApp CTA">
-              <button className="w-56 flex items-center justify-center gap-2 border border-border rounded-full py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors">
-                <MessageCircle className="w-4 h-4 text-success" />
-                Chat via WhatsApp
-              </button>
-              <p className="text-xs text-muted-foreground mt-2">Used in: AskTacoFloat, Sidebar</p>
+            <SubSection title="Selection Card (Checkbox Indicator)">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-lg">
+                {["travel", "home", "car"].map((item) => (
+                  <SelectionCard
+                    key={item}
+                    label={item.charAt(0).toUpperCase() + item.slice(1)}
+                    indicator="checkbox"
+                    selected={demoChip.includes(item)}
+                    onClick={() =>
+                      setDemoChip((prev) =>
+                        prev.includes(item) ? prev.filter((c) => c !== item) : [...prev, item]
+                      )
+                    }
+                  />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Multi-select mode with checkbox indicator</p>
             </SubSection>
 
-            <SubSection title="Reset / Utility Button">
-              <button className="flex items-center gap-2 text-sm text-destructive hover:text-destructive/80 font-medium transition-colors">
-                <RotateCcw className="w-4 h-4" />
-                Reset Sandbox
-              </button>
-              <p className="text-xs text-muted-foreground mt-2">Used in: HouseInsurance test page</p>
+            <SubSection title="Selection Card (No Indicator)">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-lg">
+                {["travel", "home", "car"].map((item) => (
+                  <SelectionCard
+                    key={item}
+                    label={item.charAt(0).toUpperCase() + item.slice(1)}
+                    indicator="none"
+                    selected={demoSelection === item}
+                    onClick={() => setDemoSelection(item)}
+                  />
+                ))}
+              </div>
+            </SubSection>
+
+            <Separator className="my-6" />
+
+            <SubSection title="Variant × Shape Reference Table">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm border border-border rounded-xl overflow-hidden">
+                  <thead>
+                    <tr className="bg-muted">
+                      <th className="text-left px-4 py-2 font-semibold text-foreground">Variant</th>
+                      <th className="text-left px-4 py-2 font-semibold text-foreground">default (16px)</th>
+                      <th className="text-left px-4 py-2 font-semibold text-foreground">pill (full)</th>
+                      <th className="text-left px-4 py-2 font-semibold text-foreground">rounded (md)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(["default", "secondary", "outline", "outline-primary", "ghost", "destructive", "destructive-outline", "success", "link"] as const).map((v) => (
+                      <tr key={v} className="border-t border-border">
+                        <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{v}</td>
+                        <td className="px-4 py-3"><Button variant={v} size="sm">{v}</Button></td>
+                        <td className="px-4 py-3"><Button variant={v} size="sm" shape="pill">{v}</Button></td>
+                        <td className="px-4 py-3"><Button variant={v} size="sm" shape="rounded">{v}</Button></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </SubSection>
           </Section>
 
