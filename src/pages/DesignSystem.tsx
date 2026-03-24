@@ -60,7 +60,7 @@ const SEMANTIC_TOKENS = [
   { name: "--secondary-foreground", label: "Secondary FG", cssVar: "220 20% 12%", hex: "#181D27", brand: "Neutral 900" },
   { name: "--muted", label: "Muted", cssVar: "0 0% 96%", hex: "#F5F5F5", brand: "Neutral 100" },
   { name: "--muted-foreground", label: "Muted FG", cssVar: "224 5% 47%", hex: "#717680", brand: "Neutral 500" },
-  { name: "--accent", label: "Accent (Green)", cssVar: "152 79% 39%", hex: "#17B26A", brand: "Green 500" },
+  { name: "--accent", label: "Accent (Green)", cssVar: "121 66% 42%", hex: "#25B327", brand: "Light Green 500" },
   { name: "--accent-foreground", label: "Accent FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
   { name: "--destructive", label: "Destructive", cssVar: "4 86% 58%", hex: "#F04438", brand: "Red 500" },
   { name: "--destructive-foreground", label: "Destructive FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
