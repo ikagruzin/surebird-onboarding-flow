@@ -59,7 +59,7 @@ export default {
           foreground: "hsl(var(--foreground))",
           primary: "hsl(var(--primary))",
           "primary-foreground": "hsl(var(--primary-foreground))",
-          accent: "hsl(var(--info-light))",
+          accent: "hsl(var(--primary) / 0.05)",
           "accent-foreground": "hsl(var(--primary))",
           border: "hsl(var(--border))",
           ring: "hsl(var(--ring))",
