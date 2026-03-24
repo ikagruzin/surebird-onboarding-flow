@@ -25,7 +25,7 @@
     --muted: 0 0% 96%;
     --muted-foreground: 224 5% 47%;
 
-    --accent: 152 79% 39%;
+    --accent: 121 66% 42%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 4 86% 58%;
@@ -39,11 +39,11 @@
 
 
 
-    --success: 152 79% 39%;
+    --success: 121 66% 42%;
     --success-foreground: 0 0% 100%;
     --info: 209 100% 51%;
     --info-light: 209 100% 96%;
-    --savings: 152 79% 39%;
+    --savings: 121 66% 42%;
 
     --tab-border: 216 7% 85%;
 
