@@ -360,7 +360,7 @@ const StepOffer = ({
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {/* Trustpilot overview card */}
-        <div className="shrink-0 w-[280px] bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm min-h-[280px] snap-start">
+        <div className="shrink-0 w-72 bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm min-h-72 snap-start">
           <div className="flex items-center gap-2 mb-4">
             <Star className="w-5 h-5 text-success" fill="currentColor" />
             <span className="text-lg font-bold text-foreground">Trustpilot</span>
