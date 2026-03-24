@@ -639,7 +639,7 @@ const DesignSystem = () => {
                 <table className="w-full text-sm border border-border rounded-xl overflow-hidden">
                   <thead>
                     <tr className="bg-muted">
-                      <th className="text-left px-4 py-2 font-semibold text-foreground sticky left-0 bg-muted z-10 min-w-28">Variant</th>
+                      <th className="text-left px-4 py-2 font-semibold text-foreground sticky left-0 bg-muted z-10 min-w-40">Variant</th>
                       {(["sm", "default", "lg", "icon"] as const).map((s) => (
                         <th key={s} colSpan={2} className="text-center px-4 py-2 font-semibold text-foreground">{s}</th>
                       ))}
