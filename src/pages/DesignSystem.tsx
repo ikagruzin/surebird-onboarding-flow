@@ -394,27 +394,6 @@ const DesignSystem = () => {
                 ))}
               </TabsContent>
 
-              <TabsContent value="audit">
-                <p className="text-sm text-muted-foreground mb-6">
-                  Every unique color used across the platform, grouped by palette with hex codes.
-                </p>
-                {COLOR_AUDIT.map((group) => (
-                  <div key={group.group} className="mb-6">
-                    <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{group.group}</h4>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                      {group.colors.map((c) => (
-                        <div key={c.hex + c.label} className="flex flex-col items-center gap-1.5">
-                          <div
-                            className="w-full h-14 rounded-lg border border-border"
-                            style={{ backgroundColor: c.hex }}
-                          />
-                          <span className="text-[10px] font-medium text-foreground text-center">{c.label}</span>
-                          <code className="text-[10px] text-muted-foreground font-mono">{c.hex}</code>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
               </TabsContent>
             </Tabs>
           </Section>
