@@ -64,7 +64,7 @@ const SEMANTIC_TOKENS = [
   { name: "--accent-foreground", label: "Accent FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
   { name: "--destructive", label: "Destructive", cssVar: "4 86% 58%", hex: "#F04438", brand: "Red 500" },
   { name: "--destructive-foreground", label: "Destructive FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
-  { name: "--success", label: "Success", cssVar: "152 79% 39%", hex: "#17B26A", brand: "Green 500" },
+  { name: "--success", label: "Success", cssVar: "121 66% 42%", hex: "#25B327", brand: "Light Green 500" },
   { name: "--success-foreground", label: "Success FG", cssVar: "0 0% 100%", hex: "#FFFFFF", brand: "White" },
   { name: "--info", label: "Info", cssVar: "209 100% 51%", hex: "#0385FF", brand: "Blue 500" },
   { name: "--info-light", label: "Info Light", cssVar: "209 100% 96%", hex: "#EBF5FF", brand: "Light Blue" },
