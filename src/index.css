@@ -40,11 +40,6 @@
 
     --success: 121 66% 42%;
     --success-foreground: 0 0% 100%;
-    --info: 209 100% 51%;
-    --info-light: 209 100% 96%;
-    --savings: 121 66% 42%;
-
-    --tab-border: 216 7% 85%;
 
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
