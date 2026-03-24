@@ -536,29 +536,8 @@ const DesignSystem = () => {
                 <Button variant="outline">Outline</Button>
                 <Button variant="outline-primary">Outline Primary</Button>
                 <Button variant="ghost">Ghost</Button>
-                <Button variant="destructive">Destructive</Button>
-                <Button variant="destructive-outline">Destructive Outline</Button>
+                <Button variant="destructive-outline">Destructive</Button>
                 <Button variant="link">Link</Button>
-              </div>
-            </SubSection>
-
-            <SubSection title="Sizes">
-              <div className="flex flex-wrap gap-3 items-center">
-                <Button size="sm">Small</Button>
-                <Button size="default">Default</Button>
-                <Button size="lg">Large</Button>
-                <Button size="icon"><Plus className="w-4 h-4" /></Button>
-              </div>
-            </SubSection>
-
-            <SubSection title="States">
-              <div className="flex flex-wrap gap-3 items-center">
-                <Button>Enabled</Button>
-                <Button disabled>Disabled</Button>
-                <Button variant="outline-primary">Enabled</Button>
-                <Button variant="outline-primary" disabled>Disabled</Button>
-                <Button variant="secondary">Enabled</Button>
-                <Button variant="secondary" disabled>Disabled</Button>
               </div>
             </SubSection>
 
@@ -676,9 +655,17 @@ const DesignSystem = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {(["default", "secondary", "outline", "outline-primary", "ghost", "destructive", "destructive-outline", "link"] as const).map((v) => (
+                    {([
+                      { variant: "default" as const, label: "primary" },
+                      { variant: "secondary" as const, label: "secondary" },
+                      { variant: "outline" as const, label: "outline" },
+                      { variant: "outline-primary" as const, label: "outline-primary" },
+                      { variant: "ghost" as const, label: "ghost" },
+                      { variant: "destructive-outline" as const, label: "destructive" },
+                      { variant: "link" as const, label: "link" },
+                    ]).map(({ variant: v, label }) => (
                       <tr key={v} className="border-t border-border">
-                        <td className="px-4 py-3 font-mono text-xs text-muted-foreground sticky left-0 bg-card z-10">{v}</td>
+                        <td className="px-4 py-3 font-mono text-xs text-muted-foreground sticky left-0 bg-card z-10">{label}</td>
                         {(["sm", "default", "lg", "icon"] as const).map((s) => (
                           <React.Fragment key={s}>
                             <td className="px-3 py-3 text-center">
