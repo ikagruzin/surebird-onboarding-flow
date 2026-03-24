@@ -497,7 +497,7 @@ const DesignSystem = () => {
           {/* ── 4. BUTTONS ── */}
           <Section title="Buttons" id="buttons">
 
-            <SubSection title="Variants × Shape: default (rounded-2xl)">
+            <SubSection title="All Variants">
               <div className="flex flex-wrap gap-3 items-center">
                 <Button variant="default">Primary</Button>
                 <Button variant="secondary">Secondary</Button>
@@ -506,32 +506,7 @@ const DesignSystem = () => {
                 <Button variant="ghost">Ghost</Button>
                 <Button variant="destructive">Destructive</Button>
                 <Button variant="destructive-outline">Destructive Outline</Button>
-                <Button variant="success">Success</Button>
                 <Button variant="link">Link</Button>
-              </div>
-            </SubSection>
-
-            <SubSection title="Variants × Shape: pill (rounded-full)">
-              <div className="flex flex-wrap gap-3 items-center">
-                <Button shape="pill" variant="default">Primary</Button>
-                <Button shape="pill" variant="secondary">Secondary</Button>
-                <Button shape="pill" variant="outline">Outline</Button>
-                <Button shape="pill" variant="outline-primary">Outline Primary</Button>
-                <Button shape="pill" variant="ghost">Ghost</Button>
-                <Button shape="pill" variant="destructive">Destructive</Button>
-                <Button shape="pill" variant="destructive-outline">Destructive Outline</Button>
-                <Button shape="pill" variant="success">Success</Button>
-                <Button shape="pill" variant="link">Link</Button>
-              </div>
-            </SubSection>
-
-            <SubSection title="Variants × Shape: rounded (rounded-md)">
-              <div className="flex flex-wrap gap-3 items-center">
-                <Button shape="rounded" variant="default">Primary</Button>
-                <Button shape="rounded" variant="secondary">Secondary</Button>
-                <Button shape="rounded" variant="outline">Outline</Button>
-                <Button shape="rounded" variant="outline-primary">Outline Primary</Button>
-                <Button shape="rounded" variant="ghost">Ghost</Button>
               </div>
             </SubSection>
 
