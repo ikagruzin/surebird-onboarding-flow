@@ -420,41 +420,44 @@ const DesignSystem = () => {
             <SubSection title="Type Scale Reference">
               <div className="border border-border rounded-2xl overflow-hidden">
                 {/* Header */}
-                <div className="grid grid-cols-[200px_1fr_140px_140px] bg-muted px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                <div className="grid grid-cols-[180px_60px_80px_1fr_120px_120px] bg-muted px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   <span>Token</span>
+                  <span>Size</span>
+                  <span>Line H.</span>
                   <span>Preview</span>
-                  <span>Tailwind Size</span>
+                  <span>Tailwind</span>
                   <span>Weight</span>
                 </div>
                 {/* Rows */}
                 {[
-                  { token: "H1 Large", size: "text-5xl", leading: "leading-none", weight: "font-extrabold", label: "48px / 1.0" },
-                  { token: "H1", size: "text-4xl", leading: "leading-10", weight: "font-bold", label: "36px / 40px" },
-                  { token: "H2", size: "text-3xl", leading: "leading-9", weight: "font-bold", label: "30px / 36px" },
-                  { token: "H3", size: "text-2xl", leading: "leading-8", weight: "font-semibold", label: "24px / 32px" },
-                  { token: "H4", size: "text-xl", leading: "leading-7", weight: "font-semibold", label: "20px / 28px" },
-                  { token: "H5", size: "text-lg", leading: "leading-7", weight: "font-medium", label: "18px / 28px" },
-                  { token: "P Large Normal", size: "text-lg", leading: "leading-7", weight: "font-normal", label: "18px / 28px" },
-                  { token: "P Large Medium", size: "text-lg", leading: "leading-7", weight: "font-medium", label: "18px / 28px" },
-                  { token: "P Large SemiBold", size: "text-lg", leading: "leading-7", weight: "font-semibold", label: "18px / 28px" },
-                  { token: "P Base Normal", size: "text-base", leading: "leading-6", weight: "font-normal", label: "16px / 24px" },
-                  { token: "P Base Medium", size: "text-base", leading: "leading-6", weight: "font-medium", label: "16px / 24px" },
-                  { token: "P Base SemiBold", size: "text-base", leading: "leading-6", weight: "font-semibold", label: "16px / 24px" },
-                  { token: "P Small Normal", size: "text-sm", leading: "leading-5", weight: "font-normal", label: "14px / 20px" },
-                  { token: "P Small Medium", size: "text-sm", leading: "leading-5", weight: "font-medium", label: "14px / 20px" },
-                  { token: "P Small SemiBold", size: "text-sm", leading: "leading-5", weight: "font-semibold", label: "14px / 20px" },
-                  { token: "P XSmall Normal", size: "text-xs", leading: "leading-4", weight: "font-normal", label: "12px / 16px" },
-                  { token: "P XSmall Medium", size: "text-xs", leading: "leading-4", weight: "font-medium", label: "12px / 16px" },
-                  { token: "P XSmall SemiBold", size: "text-xs", leading: "leading-4", weight: "font-semibold", label: "12px / 16px" },
-                  { token: "Button", size: "text-sm", leading: "leading-5", weight: "font-medium", label: "14px / 20px" },
+                  { token: "H1", size: "36px", lh: "40px", tw: "text-4xl", leading: "leading-10", weight: "font-bold" },
+                  { token: "H2", size: "30px", lh: "36px", tw: "text-3xl", leading: "leading-9", weight: "font-bold" },
+                  { token: "H3", size: "24px", lh: "32px", tw: "text-2xl", leading: "leading-8", weight: "font-semibold" },
+                  { token: "H4", size: "20px", lh: "28px", tw: "text-xl", leading: "leading-7", weight: "font-semibold" },
+                  { token: "H5", size: "18px", lh: "28px", tw: "text-lg", leading: "leading-7", weight: "font-medium" },
+                  { token: "P Large Normal", size: "18px", lh: "28px", tw: "text-lg", leading: "leading-7", weight: "font-normal" },
+                  { token: "P Large Medium", size: "18px", lh: "28px", tw: "text-lg", leading: "leading-7", weight: "font-medium" },
+                  { token: "P Large SemiBold", size: "18px", lh: "28px", tw: "text-lg", leading: "leading-7", weight: "font-semibold" },
+                  { token: "P Base Normal", size: "16px", lh: "24px", tw: "text-base", leading: "leading-6", weight: "font-normal" },
+                  { token: "P Base Medium", size: "16px", lh: "24px", tw: "text-base", leading: "leading-6", weight: "font-medium" },
+                  { token: "P Base SemiBold", size: "16px", lh: "24px", tw: "text-base", leading: "leading-6", weight: "font-semibold" },
+                  { token: "P Small Normal", size: "14px", lh: "20px", tw: "text-sm", leading: "leading-5", weight: "font-normal" },
+                  { token: "P Small Medium", size: "14px", lh: "20px", tw: "text-sm", leading: "leading-5", weight: "font-medium" },
+                  { token: "P Small SemiBold", size: "14px", lh: "20px", tw: "text-sm", leading: "leading-5", weight: "font-semibold" },
+                  { token: "P XSmall Normal", size: "12px", lh: "16px", tw: "text-xs", leading: "leading-4", weight: "font-normal" },
+                  { token: "P XSmall Medium", size: "12px", lh: "16px", tw: "text-xs", leading: "leading-4", weight: "font-medium" },
+                  { token: "P XSmall SemiBold", size: "12px", lh: "16px", tw: "text-xs", leading: "leading-4", weight: "font-semibold" },
+                  { token: "Button", size: "14px", lh: "20px", tw: "text-sm", leading: "leading-5", weight: "font-medium" },
                 ].map((row, i) => (
                   <div
                     key={row.token}
-                    className={`grid grid-cols-[200px_1fr_140px_140px] items-center px-4 py-3 ${i % 2 === 0 ? "bg-card" : "bg-muted/50"} border-t border-border`}
+                    className={`grid grid-cols-[180px_60px_80px_1fr_120px_120px] items-center px-4 py-3 ${i % 2 === 0 ? "bg-card" : "bg-muted/50"} border-t border-border`}
                   >
                     <span className="text-sm font-medium text-foreground">{row.token}</span>
-                    <span className={`${row.size} ${row.leading} ${row.weight} text-foreground truncate pr-4`}>Ag</span>
-                    <code className="text-xs text-muted-foreground font-mono">{row.size}</code>
+                    <span className="text-xs text-muted-foreground">{row.size}</span>
+                    <span className="text-xs text-muted-foreground">{row.lh}</span>
+                    <span className={`${row.tw} ${row.leading} ${row.weight} text-foreground truncate pr-4`}>Ag</span>
+                    <code className="text-xs text-muted-foreground font-mono">{row.tw}</code>
                     <code className="text-xs text-muted-foreground font-mono">{row.weight}</code>
                   </div>
                 ))}
