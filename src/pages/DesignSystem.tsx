@@ -497,7 +497,7 @@ const DesignSystem = () => {
           {/* ── 4. BUTTONS ── */}
           <Section title="Buttons" id="buttons">
 
-            <SubSection title="Variants × Shape: default (rounded-2xl)">
+            <SubSection title="All Variants">
               <div className="flex flex-wrap gap-3 items-center">
                 <Button variant="default">Primary</Button>
                 <Button variant="secondary">Secondary</Button>
@@ -506,32 +506,7 @@ const DesignSystem = () => {
                 <Button variant="ghost">Ghost</Button>
                 <Button variant="destructive">Destructive</Button>
                 <Button variant="destructive-outline">Destructive Outline</Button>
-                <Button variant="success">Success</Button>
                 <Button variant="link">Link</Button>
-              </div>
-            </SubSection>
-
-            <SubSection title="Variants × Shape: pill (rounded-full)">
-              <div className="flex flex-wrap gap-3 items-center">
-                <Button shape="pill" variant="default">Primary</Button>
-                <Button shape="pill" variant="secondary">Secondary</Button>
-                <Button shape="pill" variant="outline">Outline</Button>
-                <Button shape="pill" variant="outline-primary">Outline Primary</Button>
-                <Button shape="pill" variant="ghost">Ghost</Button>
-                <Button shape="pill" variant="destructive">Destructive</Button>
-                <Button shape="pill" variant="destructive-outline">Destructive Outline</Button>
-                <Button shape="pill" variant="success">Success</Button>
-                <Button shape="pill" variant="link">Link</Button>
-              </div>
-            </SubSection>
-
-            <SubSection title="Variants × Shape: rounded (rounded-md)">
-              <div className="flex flex-wrap gap-3 items-center">
-                <Button shape="rounded" variant="default">Primary</Button>
-                <Button shape="rounded" variant="secondary">Secondary</Button>
-                <Button shape="rounded" variant="outline">Outline</Button>
-                <Button shape="rounded" variant="outline-primary">Outline Primary</Button>
-                <Button shape="rounded" variant="ghost">Ghost</Button>
               </div>
             </SubSection>
 
@@ -542,12 +517,6 @@ const DesignSystem = () => {
                 <Button size="lg">Large</Button>
                 <Button size="icon"><Plus className="w-4 h-4" /></Button>
               </div>
-              <div className="flex flex-wrap gap-3 items-center mt-3">
-                <Button size="sm" shape="pill">Small Pill</Button>
-                <Button size="default" shape="pill">Default Pill</Button>
-                <Button size="lg" shape="pill">Large Pill</Button>
-                <Button size="icon" shape="pill"><Plus className="w-4 h-4" /></Button>
-              </div>
             </SubSection>
 
             <SubSection title="States">
@@ -556,8 +525,8 @@ const DesignSystem = () => {
                 <Button disabled>Disabled</Button>
                 <Button variant="outline-primary">Enabled</Button>
                 <Button variant="outline-primary" disabled>Disabled</Button>
-                <Button variant="success" shape="pill">Enabled</Button>
-                <Button variant="success" shape="pill" disabled>Disabled</Button>
+                <Button variant="secondary">Enabled</Button>
+                <Button variant="secondary" disabled>Disabled</Button>
               </div>
             </SubSection>
 
@@ -566,9 +535,9 @@ const DesignSystem = () => {
                 <Button variant="outline-primary"><CheckCircle className="w-4 h-4" /> Verify with my Bank</Button>
                 <Button variant="default"><Check className="w-4 h-4" /> Simulate Verification</Button>
                 <Button variant="destructive-outline"><X className="w-4 h-4" /> Simulate Failure</Button>
-                <Button variant="success" shape="pill">Next step <ChevronRight className="w-4 h-4" /></Button>
-                <Button variant="ghost" shape="pill"><ChevronLeft className="w-4 h-4" /> Back</Button>
-                <Button variant="outline" shape="pill"><Lock className="w-4 h-4" /> Lock discount for 24h</Button>
+                <Button variant="secondary">Next step <ChevronRight className="w-4 h-4" /></Button>
+                <Button variant="ghost"><ChevronLeft className="w-4 h-4" /> Back</Button>
+                <Button variant="outline"><Lock className="w-4 h-4" /> Lock discount for 24h</Button>
               </div>
             </SubSection>
 
@@ -675,24 +644,20 @@ const DesignSystem = () => {
 
             <Separator className="my-6" />
 
-            <SubSection title="Variant × Shape Reference Table">
+            <SubSection title="Variant Reference Table">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm border border-border rounded-xl overflow-hidden">
                   <thead>
                     <tr className="bg-muted">
                       <th className="text-left px-4 py-2 font-semibold text-foreground">Variant</th>
-                      <th className="text-left px-4 py-2 font-semibold text-foreground">default (16px)</th>
-                      <th className="text-left px-4 py-2 font-semibold text-foreground">pill (full)</th>
-                      <th className="text-left px-4 py-2 font-semibold text-foreground">rounded (md)</th>
+                      <th className="text-left px-4 py-2 font-semibold text-foreground">Preview</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {(["default", "secondary", "outline", "outline-primary", "ghost", "destructive", "destructive-outline", "success", "link"] as const).map((v) => (
+                    {(["default", "secondary", "outline", "outline-primary", "ghost", "destructive", "destructive-outline", "link"] as const).map((v) => (
                       <tr key={v} className="border-t border-border">
                         <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{v}</td>
                         <td className="px-4 py-3"><Button variant={v} size="sm">{v}</Button></td>
-                        <td className="px-4 py-3"><Button variant={v} size="sm" shape="pill">{v}</Button></td>
-                        <td className="px-4 py-3"><Button variant={v} size="sm" shape="rounded">{v}</Button></td>
                       </tr>
                     ))}
                   </tbody>
