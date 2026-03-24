@@ -280,6 +280,7 @@ const DesignSystem = () => {
   const [demoToggle, setDemoToggle] = useState("phone");
   const [demoSegmented, setDemoSegmented] = useState("Option A");
   const [demoChip, setDemoChip] = useState<string[]>(["Chip 2"]);
+  const [demoSelection, setDemoSelection] = useState("travel");
 
   const handleFlowSwitch = (flowId: string) => {
     if (flowId === "c") {
