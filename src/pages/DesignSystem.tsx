@@ -338,20 +338,8 @@ const DesignSystem = () => {
                   </div>
                 </SubSection>
 
-                <SubSection title="Sidebar Tokens">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {SIDEBAR_TOKENS.map((token) => (
-                      <div key={token.name} className="flex flex-col gap-1.5">
-                        <div
-                          className="h-16 rounded-xl border border-border"
-                          style={{ backgroundColor: `hsl(${token.cssVar})` }}
-                        />
-                        <span className="text-xs font-medium text-foreground">{token.label}</span>
-                        <code className="text-[10px] text-muted-foreground font-mono">{token.name}</code>
-                      </div>
-                    ))}
-                  </div>
-                </SubSection>
+
+
 
                  <SubSection title="Hardcoded / Non-Tokenized Colors">
                   <p className="text-xs text-success mb-3">✓ All hardcoded colors have been refactored to semantic tokens.</p>
