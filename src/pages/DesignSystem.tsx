@@ -670,12 +670,12 @@ const DesignSystem = () => {
                           <React.Fragment key={s}>
                             <td className="px-3 py-3 text-center">
                               <Button variant={v} size={s}>
-                                {s === "icon" ? <Plus className="w-4 h-4" /> : v}
+                                {s === "icon" ? <Plus className="w-4 h-4" /> : label}
                               </Button>
                             </td>
                             <td className="px-3 py-3 text-center">
                               <Button variant={v} size={s} disabled>
-                                {s === "icon" ? <Plus className="w-4 h-4" /> : v}
+                                {s === "icon" ? <Plus className="w-4 h-4" /> : label}
                               </Button>
                             </td>
                           </React.Fragment>
