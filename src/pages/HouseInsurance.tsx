@@ -418,7 +418,7 @@ const HouseInsurance = () => {
           ))}
         </ul>
 
-        <div className="border-t border-border pt-5">
+        <div className="mt-5">
           <div className="grid grid-cols-2 gap-3">
             <Button
               variant="outline"
