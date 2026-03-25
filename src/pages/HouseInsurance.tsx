@@ -5,6 +5,7 @@ import StickyFooter from "@/components/onboarding/StickyFooter";
 import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
 import TacoMessage from "@/components/onboarding/TacoMessage";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SelectionCard } from "@/components/ui/selection-card";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -109,10 +110,16 @@ const OUTSIDE_VALUE_OPTIONS = ["€0", "€2,500", "€5,000", "€7,500", "€1
 /* ─── Reusable UI Pieces ─── */
 
 const SectionCard = ({ title, children }: { title?: string; children: React.ReactNode }) => (
-  <div className="border border-border rounded-3xl bg-card p-6 shadow-sm">
-    {title && <h3 className="text-lg font-bold text-foreground mb-5">{title}</h3>}
-    {children}
-  </div>
+  <Card>
+    {title && (
+      <CardHeader>
+        <CardTitle className="text-lg">{title}</CardTitle>
+      </CardHeader>
+    )}
+    <CardContent className={title ? "" : "pt-6"}>
+      {children}
+    </CardContent>
+  </Card>
 );
 
 const ChipSelect = ({
@@ -446,20 +453,22 @@ const HouseInsurance = () => {
         onAnimationComplete={markAnimated}
       />
 
-      <div className="space-y-3">
-        <SelectionCard
-          label="Tenant"
-          selected={house.role === "tenant"}
-          onClick={() => handleRoleSelect("tenant")}
-          indicator="radio"
-        />
-        <SelectionCard
-          label="Homeowner"
-          selected={house.role === "homeowner"}
-          onClick={() => handleRoleSelect("homeowner")}
-          indicator="radio"
-        />
-      </div>
+      <Card>
+        <CardContent className="pt-6 space-y-3">
+          <SelectionCard
+            label="Tenant"
+            selected={house.role === "tenant"}
+            onClick={() => handleRoleSelect("tenant")}
+            indicator="radio"
+          />
+          <SelectionCard
+            label="Homeowner"
+            selected={house.role === "homeowner"}
+            onClick={() => handleRoleSelect("homeowner")}
+            indicator="radio"
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 
@@ -476,7 +485,7 @@ const HouseInsurance = () => {
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Building Type</label>
             <Select value={house.buildingType} onValueChange={(v) => update("buildingType", v)}>
-              <SelectTrigger className="h-14 rounded-2xl border-2 border-input bg-background text-foreground hover:border-foreground/30 focus:border-primary focus:ring-0 data-[state=open]:border-primary">
+              <SelectTrigger>
                 <SelectValue placeholder="Select building type" />
               </SelectTrigger>
               <SelectContent>
@@ -535,7 +544,7 @@ const HouseInsurance = () => {
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Roof Material</label>
             <Select value={house.roofMaterial} onValueChange={(v) => update("roofMaterial", v)}>
-              <SelectTrigger className="h-14 rounded-2xl border-2 border-input bg-background text-foreground hover:border-foreground/30 focus:border-primary focus:ring-0 data-[state=open]:border-primary">
+              <SelectTrigger>
                 <SelectValue placeholder="Select roof material" />
               </SelectTrigger>
               <SelectContent>
@@ -564,26 +573,28 @@ const HouseInsurance = () => {
         onAnimationComplete={markAnimated}
       />
 
-      <div className="space-y-3">
-        <SelectionCard
-          label="Household Goods"
-          selected={house.coverageChoice === "household"}
-          onClick={() => handleCoverageSelect("household")}
-          indicator="radio"
-        />
-        <SelectionCard
-          label="Building"
-          selected={house.coverageChoice === "building"}
-          onClick={() => handleCoverageSelect("building")}
-          indicator="radio"
-        />
-        <SelectionCard
-          label="Both"
-          selected={house.coverageChoice === "both"}
-          onClick={() => handleCoverageSelect("both")}
-          indicator="radio"
-        />
-      </div>
+      <Card>
+        <CardContent className="pt-6 space-y-3">
+          <SelectionCard
+            label="Household Goods"
+            selected={house.coverageChoice === "household"}
+            onClick={() => handleCoverageSelect("household")}
+            indicator="radio"
+          />
+          <SelectionCard
+            label="Building"
+            selected={house.coverageChoice === "building"}
+            onClick={() => handleCoverageSelect("building")}
+            indicator="radio"
+          />
+          <SelectionCard
+            label="Both"
+            selected={house.coverageChoice === "both"}
+            onClick={() => handleCoverageSelect("both")}
+            indicator="radio"
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 
@@ -612,7 +623,7 @@ const HouseInsurance = () => {
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Outside Value</label>
             <Select value={house.outsideValue} onValueChange={(v) => update("outsideValue", v)}>
-              <SelectTrigger className="h-14 rounded-2xl border-2 border-input bg-background text-foreground hover:border-foreground/30 focus:border-primary focus:ring-0 data-[state=open]:border-primary">
+              <SelectTrigger>
                 <SelectValue placeholder="Select outside value" />
               </SelectTrigger>
               <SelectContent>
@@ -784,44 +795,11 @@ const HouseInsurance = () => {
         </div>
       </div>
 
-      {/* Progress indicator */}
-      <div className="max-w-4xl mx-auto px-6 pt-6">
-        <div className="flex items-center gap-2 mb-2">
-          {steps.map((s, i) => (
-            <div key={s} className="flex items-center gap-2">
-              <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                  i < currentStepIdx
-                    ? "bg-success text-success-foreground"
-                    : i === currentStepIdx
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {i + 1}
-              </div>
-              <span
-                className={`text-xs font-medium hidden sm:inline ${
-                  i === currentStepIdx ? "text-foreground" : "text-muted-foreground"
-                }`}
-              >
-                {stepLabels[s]}
-              </span>
-              {i < steps.length - 1 && (
-                <div className={`w-6 h-0.5 ${i < currentStepIdx ? "bg-success" : "bg-border"}`} />
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Progress indicator hidden */}
 
       {/* Main content */}
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-          <div className="md:col-span-2">
-            {renderCurrentStep()}
-          </div>
-        </div>
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        {renderCurrentStep()}
       </div>
 
       <div aria-hidden className="h-36" />
