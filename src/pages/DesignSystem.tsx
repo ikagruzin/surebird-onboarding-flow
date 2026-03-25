@@ -538,7 +538,7 @@ const DesignSystem = () => {
                   { label: "full", cls: "rounded-full", val: "9999px" },
                 ].map((r) => (
                   <div key={r.label} className="flex flex-col items-center gap-1.5">
-                    <div className={`w-16 h-16 bg-primary ${r.cls}`} />
+                    <div className={`w-16 h-16 border-2 border-border ${r.cls}`} />
                     <code className="text-2xs text-muted-foreground">{r.label}</code>
                     <code className="text-2xs text-muted-foreground">{r.val}</code>
                   </div>
