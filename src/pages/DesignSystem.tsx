@@ -41,8 +41,6 @@ import {
 import {
   Tooltip, TooltipContent, TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Slider } from "@/components/ui/slider";
-import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -267,7 +265,7 @@ const DesignSystem = () => {
   const navigate = useNavigate();
   const [demoRadio, setDemoRadio] = useState("option-1");
   const [demoSwitch, setDemoSwitch] = useState(false);
-  const [demoSlider, setDemoSlider] = useState([50]);
+  
   const [demoCheck, setDemoCheck] = useState(false);
   const [demoInput, setDemoInput] = useState("");
   const [demoFloat, setDemoFloat] = useState("");
@@ -414,9 +412,6 @@ const DesignSystem = () => {
                 </SubSection>
 
 
-
-
-
                 <SubSection title="Opacity Patterns">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {[
@@ -538,7 +533,7 @@ const DesignSystem = () => {
                   { label: "full", cls: "rounded-full", val: "9999px" },
                 ].map((r) => (
                   <div key={r.label} className="flex flex-col items-center gap-1.5">
-                    <div className={`w-16 h-16 bg-primary ${r.cls}`} />
+                    <div className={`w-16 h-16 border-2 border-border ${r.cls}`} />
                     <code className="text-2xs text-muted-foreground">{r.label}</code>
                     <code className="text-2xs text-muted-foreground">{r.val}</code>
                   </div>
@@ -546,16 +541,45 @@ const DesignSystem = () => {
               </div>
             </SubSection>
 
-            <SubSection title="Key Conventions">
-              <ul className="text-sm text-muted-foreground space-y-1.5 list-disc list-inside">
-                <li>Question containers: <code className="bg-muted px-1 rounded text-xs">rounded-3xl</code> + <code className="bg-muted px-1 rounded text-xs">shadow-sm</code> + <code className="bg-muted px-1 rounded text-xs">border-2 border-input bg-white</code></li>
-                <li>Product cards: <code className="bg-muted px-1 rounded text-xs">rounded-2xl</code> + 2px stroke + <code className="bg-muted px-1 rounded text-xs">hover:shadow-md</code></li>
-                <li>CTA buttons: <code className="bg-muted px-1 rounded text-xs">rounded-full</code></li>
-                <li>Section cards: <code className="bg-muted px-1 rounded text-xs">rounded-2xl border border-border bg-card p-6 shadow-sm</code></li>
-                <li>Selected state: blue stroke <code className="bg-muted px-1 rounded text-xs">border-primary</code> + <code className="bg-muted px-1 rounded text-xs">bg-primary/10</code></li>
-                <li>Chat bubbles: <code className="bg-muted px-1 rounded text-xs">rounded-2xl rounded-tl-md</code></li>
-                <li>Input fields: <code className="bg-muted px-1 rounded text-xs">rounded-xl border-2 border-input bg-white</code></li>
-              </ul>
+
+            <SubSection title="Spacing Scale">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-left">
+                      <th className="py-2 pr-4 font-medium text-muted-foreground">Name</th>
+                      <th className="py-2 pr-4 font-medium text-muted-foreground">Size</th>
+                      <th className="py-2 pr-4 font-medium text-muted-foreground">Pixels</th>
+                      <th className="py-2 font-medium text-muted-foreground">Preview</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { name: "0.5", rem: "0.125rem", px: "2px" },
+                      { name: "1", rem: "0.25rem", px: "4px" },
+                      { name: "1.5", rem: "0.375rem", px: "6px" },
+                      { name: "2", rem: "0.5rem", px: "8px" },
+                      { name: "3", rem: "0.75rem", px: "12px" },
+                      { name: "4", rem: "1rem", px: "16px" },
+                      { name: "5", rem: "1.25rem", px: "20px" },
+                      { name: "6", rem: "1.5rem", px: "24px" },
+                      { name: "8", rem: "2rem", px: "32px" },
+                      { name: "10", rem: "2.5rem", px: "40px" },
+                      { name: "12", rem: "3rem", px: "48px" },
+                      { name: "16", rem: "4rem", px: "64px" },
+                      { name: "20", rem: "5rem", px: "80px" },
+                      { name: "24", rem: "6rem", px: "96px" },
+                    ].map((s) => (
+                      <tr key={s.name} className="border-b border-border/50">
+                        <td className="py-2 pr-4"><code className="text-xs bg-muted px-1.5 py-0.5 rounded">{s.name}</code></td>
+                        <td className="py-2 pr-4 text-muted-foreground">{s.rem}</td>
+                        <td className="py-2 pr-4 text-muted-foreground">{s.px}</td>
+                        <td className="py-2"><div className="h-3 rounded-sm bg-primary/20" style={{ width: s.px }} /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </SubSection>
           </Section>
 
@@ -730,9 +754,6 @@ const DesignSystem = () => {
                 <p className="text-xs text-muted-foreground mt-1">floating-label · border-2 · bg-white · rounded-xl</p>
               </SubSection>
 
-              <SubSection title="Textarea">
-                <Textarea placeholder="Enter your message..." />
-              </SubSection>
 
               <SubSection title="Select">
                 <div className="relative">
@@ -770,22 +791,6 @@ const DesignSystem = () => {
                 </div>
               </SubSection>
 
-              <SubSection title="Custom Toggle Switch (Flow-style)">
-                <div className="flex items-center justify-between max-w-xs">
-                  <span className="text-sm font-medium text-foreground">High-value items</span>
-                  <button
-                    onClick={() => setDemoSwitch(!demoSwitch)}
-                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${
-                      demoSwitch ? "bg-primary" : "bg-input"
-                    }`}
-                  >
-                    <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${
-                      demoSwitch ? "translate-x-5" : "translate-x-0"
-                    }`} />
-                  </button>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">Used in: HouseInsurance toggle rows with conditional amount input</p>
-              </SubSection>
 
               <SubSection title="Radio Group">
                 <RadioGroup value={demoRadio} onValueChange={setDemoRadio}>
@@ -800,10 +805,6 @@ const DesignSystem = () => {
                 </RadioGroup>
               </SubSection>
 
-              <SubSection title="Slider">
-                <Slider value={demoSlider} onValueChange={setDemoSlider} max={100} step={1} />
-                <p className="text-xs text-muted-foreground mt-1">Value: {demoSlider[0]}</p>
-              </SubSection>
             </div>
           </Section>
 
