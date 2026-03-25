@@ -22,7 +22,6 @@ const StepAllSet = ({
       <TacoMessage
         message={`Great job, ${firstName || "there"}! 🎉 You've filled in all the required information. Click "Send request" to get your personal offer!`}
         animate={animateTaco}
-        variant="bubble"
       />
 
       <div className="rounded-3xl border-2 border-input bg-card p-6 space-y-5">

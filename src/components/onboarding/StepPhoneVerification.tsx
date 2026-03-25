@@ -69,7 +69,6 @@ const StepPhoneVerification = ({ phone, onVerified, onBack, animateTaco }: StepP
       <TacoMessage
         message="I just sent a verification code to your phone 📱"
         animate={animateTaco}
-        variant="bubble"
       />
 
       <div className="rounded-3xl border-2 border-input bg-white p-8 space-y-6">

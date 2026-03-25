@@ -63,7 +63,6 @@ const StepIdinVerification = ({
       <TacoMessage
         message="Let's verify your identity securely 🔒"
         animate={animateTaco}
-        variant="bubble"
       />
 
       {/* iDIN verification card */}

@@ -42,7 +42,6 @@ const StepFinalPreview = ({
       <TacoMessage
         message="Everything looks good! 🎉 Let's confirm and get you insured."
         animate={animateTaco}
-        variant="bubble"
       />
 
       {/* Summary card */}
