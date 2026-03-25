@@ -310,9 +310,9 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
     if (!completedTabs.includes(activeTab)) {
       setCompletedTabs((prev) => [...prev, activeTab]);
     }
-    const currentIndex = selectedInsurances.indexOf(activeTab);
-    if (currentIndex < selectedInsurances.length - 1) {
-      const nextTab = selectedInsurances[currentIndex + 1];
+    const currentIndex = prefInsurances.indexOf(activeTab);
+    if (currentIndex < prefInsurances.length - 1) {
+      const nextTab = prefInsurances[currentIndex + 1];
       animateTabSwitch(nextTab);
       setQuestionStep(0);
     } else {
