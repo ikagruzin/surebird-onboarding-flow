@@ -10,9 +10,11 @@ import StepFamilyDetails from "@/components/onboarding/StepFamilyDetails";
 import StepPreferences from "@/components/onboarding/StepPreferences";
 import type { StepPreferencesHandle } from "@/components/onboarding/StepPreferences";
 import StepReady from "@/components/onboarding/StepReady";
+import StepAllSet from "@/components/onboarding/StepAllSet";
 import StepLoading from "@/components/onboarding/StepLoading";
 import StepUpsell from "@/components/onboarding/StepUpsell";
 import StepOffer from "@/components/onboarding/StepOffer";
+import OfferGate from "@/components/onboarding/OfferGate";
 import StepPolicyUpload from "@/components/onboarding/StepPolicyUpload";
 import StepStartDate from "@/components/onboarding/StepStartDate";
 import StepConfirmDetails from "@/components/onboarding/StepConfirmDetails";
@@ -62,6 +64,7 @@ const Index = () => {
   const flow = useMemo(() => getFlow(flowId), [flowId]);
 
   const [state, setState] = useState<WizardState>({ ...INITIAL_STATE });
+  const [offerUnlocked, setOfferUnlocked] = useState(false);
   const prefsRef = useRef<StepPreferencesHandle>(null);
   const seenStepsRef = useRef<Set<string>>(new Set());
 
@@ -80,6 +83,7 @@ const Index = () => {
   const switchFlow = (newFlowId: string) => {
     setSearchParams({ flow: newFlowId });
     setState({ ...INITIAL_STATE });
+    setOfferUnlocked(false);
   };
 
   // Navigate to a step by its ID
@@ -177,6 +181,8 @@ const Index = () => {
       case "ready":
         return true;
       case "preferences":
+        return true;
+      case "all-set":
         return true;
       case "start-date": {
         const products = INSURANCE_TYPES.filter((t) => state.selectedInsurances.includes(t.id));
@@ -402,11 +408,23 @@ const Index = () => {
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+            skipContactStep={flow.steps.some((s) => s.id === "all-set")}
           />
         );
       case "loading":
         return <StepLoading onComplete={() => goToIndex(getNextIndex())} animateTaco={shouldAnimateTaco} />;
-      case "offer":
+      case "all-set":
+        return (
+          <StepAllSet
+            selectedInsurances={state.selectedInsurances}
+            firstName={state.firstName}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+          />
+        );
+      case "offer": {
+        const isGatedFlow = flow.steps.some((s) => s.id === "all-set");
         return (
           <StepOffer
             selectedInsurances={state.selectedInsurances}
@@ -415,8 +433,21 @@ const Index = () => {
             onUpdatePreference={updatePreference}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            gated={isGatedFlow}
+            gateUnlocked={offerUnlocked}
+            gateOverlay={
+              <OfferGate
+                firstName={state.firstName}
+                phone={state.phone}
+                email={state.email}
+                onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
+                onUpdateEmail={(value) => setState((s) => ({ ...s, email: value }))}
+                onUnlock={() => setOfferUnlocked(true)}
+              />
+            }
           />
         );
+      }
       case "start-date":
         return (
           <StepStartDate

@@ -135,6 +135,10 @@ interface StepOfferProps {
   onUpdatePreference: (insuranceId: string, questionId: string, value: string) => void;
   onNext: () => void;
   onBack: () => void;
+  /** Flow D: gated mode — blur offer until contact info provided */
+  gated?: boolean;
+  gateUnlocked?: boolean;
+  gateOverlay?: React.ReactNode;
 }
 
 const StepOffer = ({
@@ -144,6 +148,9 @@ const StepOffer = ({
   onUpdatePreference,
   onNext,
   onBack,
+  gated = false,
+  gateUnlocked = false,
+  gateOverlay,
 }: StepOfferProps) => {
   const [activeTab, setActiveTab] = useState("all");
   const [videoModal, setVideoModal] = useState<string | null>(null);
@@ -637,8 +644,15 @@ const StepOffer = ({
     </div>
   );
 
+  const isBlurred = gated && !gateUnlocked;
+
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in relative">
+      {/* Gate overlay */}
+      {isBlurred && gateOverlay}
+
+      {/* Content wrapper — blurred when gated */}
+      <div className={isBlurred ? "filter blur-md select-none pointer-events-none transition-all duration-700" : "transition-all duration-700"}>
       <h1 className="text-3xl font-bold text-foreground mb-6">Your personal offer</h1>
 
       {/* Product tabs */}
@@ -755,6 +769,7 @@ const StepOffer = ({
         <div className="w-full xl:w-80 xl:shrink-0 xl:sticky xl:top-8 self-start">
           {renderCalculations()}
         </div>
+      </div>
       </div>
     </div>
   );

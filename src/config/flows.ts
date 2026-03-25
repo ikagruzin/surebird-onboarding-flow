@@ -2,6 +2,7 @@ import type { FlowConfig } from "./flowTypes";
 import flowA from "./flowA";
 import flowB from "./flowB";
 import flowC from "./flowC";
+import flowD from "./flowD";
 
 const designSystemEntry: FlowConfig = {
   id: "design-system",
@@ -16,6 +17,7 @@ export const FLOWS: Record<string, FlowConfig> = {
   a: flowA,
   b: flowB,
   c: flowC,
+  d: flowD,
   "design-system": designSystemEntry,
 };
 

@@ -8,6 +8,7 @@ export type StepId =
   | "family-details"
   | "ready"
   | "preferences"
+  | "all-set"
   | "loading"
   | "offer"
   | "start-date"
