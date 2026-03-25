@@ -336,7 +336,6 @@ const Index = () => {
             familyStatus={state.familyStatus}
             onSelect={(value) => {
               setState((s) => ({ ...s, familyStatus: value }));
-              // Use the step config's getNextStep if available
               const config = flow.steps[stepIndex];
               if (config?.getNextStep) {
                 const nextId = config.getNextStep({ ...state, familyStatus: value });
@@ -346,6 +345,7 @@ const Index = () => {
               }
             }}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "family-details":
