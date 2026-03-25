@@ -599,7 +599,7 @@ const HouseInsurance = () => {
           <ToggleRow label="Owner interest" sublabel=">€6k" checked={house.ownerInterest} onChange={(v) => update("ownerInterest", v)} showAmount amount={house.ownerInterestAmount} onAmountChange={(v) => update("ownerInterestAmount", v)} />
           <div className="border-t border-border pt-5">
             <label className="text-sm font-semibold text-foreground mb-2 block">Security</label>
-            <SegmentedControl options={SECURITY_OPTIONS} value={house.security} onChange={(v) => update("security", v)} columns={4} />
+            <SegmentedControl options={SECURITY_OPTIONS} value={house.security} onChange={(v) => update("security", v)} />
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Net Income</label>
