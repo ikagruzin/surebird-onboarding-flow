@@ -3,17 +3,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const selectionCardVariants = cva(
-  "relative flex items-center gap-3 rounded-2xl border-2 px-5 h-14 text-left transition-all cursor-pointer",
+  "relative flex items-center gap-3 rounded-xl border-2 px-4 h-12 text-left transition-all cursor-pointer shadow-sm",
   {
     variants: {
       selected: {
-        true: "border-primary bg-primary/10",
-        false: "border-border bg-card hover:border-foreground/30",
+        true: "border-primary bg-primary/5",
+        false: "border-border bg-card hover:border-muted-foreground/30",
       },
       size: {
-        default: "px-5",
-        sm: "px-4",
-        lg: "px-6",
+        default: "px-4",
+        sm: "px-3",
+        lg: "px-5",
       },
     },
     defaultVariants: {
@@ -51,10 +51,10 @@ const SelectionCard = React.forwardRef<HTMLButtonElement, SelectionCardProps>(
           <span
             className={cn(
               "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
-              selected ? "border-primary bg-primary" : "border-border bg-card"
+              selected ? "border-primary" : "border-muted-foreground/40"
             )}
           >
-            {selected && <span className="h-2 w-2 rounded-full bg-white" />}
+            {selected && <span className="h-2.5 w-2.5 rounded-full bg-primary" />}
           </span>
         )}
         {indicator === "checkbox" && (
@@ -76,7 +76,7 @@ const SelectionCard = React.forwardRef<HTMLButtonElement, SelectionCardProps>(
         {icon && <span className="shrink-0">{icon}</span>}
 
         {/* Label */}
-        <span className="flex-1 font-medium text-foreground">{label}</span>
+        <span className="flex-1 text-sm font-medium text-foreground">{label}</span>
       </button>
     );
   },
