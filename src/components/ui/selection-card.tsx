@@ -11,9 +11,9 @@ const selectionCardVariants = cva(
         false: "border-border bg-card hover:border-foreground/30",
       },
       size: {
-        default: "px-5 py-4",
-        sm: "px-4 py-3",
-        lg: "px-6 py-5",
+        default: "px-5",
+        sm: "px-4",
+        lg: "px-6",
       },
     },
     defaultVariants: {
