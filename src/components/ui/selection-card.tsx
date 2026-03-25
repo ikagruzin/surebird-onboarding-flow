@@ -3,12 +3,12 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const selectionCardVariants = cva(
-  "relative flex items-center gap-3 rounded-2xl border-2 px-5 py-4 text-left transition-all cursor-pointer hover:shadow-md",
+  "relative flex items-center gap-3 rounded-2xl border-2 px-5 py-4 text-left transition-all cursor-pointer hover:border-muted-foreground/30",
   {
     variants: {
       selected: {
-        true: "border-primary bg-primary/10 shadow-md",
-        false: "border-border bg-card hover:border-primary/40",
+        true: "border-primary bg-primary/5",
+        false: "border-input bg-card",
       },
       size: {
         default: "px-5 py-4",
