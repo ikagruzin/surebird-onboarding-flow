@@ -4,6 +4,7 @@ import { INSURANCE_TYPES } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import LegalCoverageSelector from "./LegalCoverageSelector";
+import HomePreferencesFlow from "./HomePreferencesFlow";
 import TacoMessage from "./TacoMessage";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import iconLiability from "@/assets/icon-liability.svg";
@@ -36,7 +37,14 @@ interface PreferenceQuestion {
 }
 
 const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
-  // home preferences are handled by dedicated house steps outside StepPreferences
+  home: [
+    {
+      id: "house_flow_completed",
+      label: "Let’s set up your home insurance details",
+      options: [],
+      customComponent: "home_flow_c",
+    },
+  ],
   liability: [
     {
       id: "dog",
