@@ -2,6 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { Check, Loader2 } from "lucide-react";
 import TacoMessage from "./TacoMessage";
 
+const USP_INTERVAL = 3500; // ~3.5s per card (30% slower)
+const FINAL_CARD_PAUSE = 2600; // 30% slower
+
 interface StepLoadingProps {
   onComplete: () => void;
   animateTaco?: boolean;
