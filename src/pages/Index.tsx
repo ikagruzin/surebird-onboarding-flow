@@ -182,6 +182,8 @@ const Index = () => {
         return true;
       case "preferences":
         return true;
+      case "all-set":
+        return true;
       case "start-date": {
         const products = INSURANCE_TYPES.filter((t) => state.selectedInsurances.includes(t.id));
         return products.every((p) => {
