@@ -4,7 +4,7 @@ import type { WizardState } from "./types";
 import type { FlowConfig } from "@/config/flowTypes";
 
 const DUMMY_DATA: Partial<WizardState> = {
-  selectedInsurances: ["liability", "home", "legal"],
+  selectedInsurances: ["liability"],
   firstName: "Jan",
   infix: "van",
   lastName: "Testerman",
@@ -17,8 +17,6 @@ const DUMMY_DATA: Partial<WizardState> = {
   phone: "+31612345678",
   preferences: {
     liability: { coverage: "2500000", deductible: "0" },
-    home: { coverage: "standard", deductible: "150" },
-    legal: { module: "basic" },
   },
 };
 
