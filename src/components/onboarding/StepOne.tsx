@@ -446,8 +446,14 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
             <h1 className="text-3xl leading-tight font-bold text-foreground mb-3">
               {version === "A" ? t.heading : t.bundleHeading}
             </h1>
-            <p className="mb-8 text-muted-foreground">
-              {version === "A" ? t.subtitle : t.bundleSubtitle}
+            <p className="text-muted-foreground">
+              {version === "A" ? (
+                <>{t.subtitle}<span className="font-semibold text-success">{t.subtitleAmount}</span>{t.subtitleEnd}</>
+              ) : t.bundleSubtitle}
+            </p>
+            <p className="mt-2 mb-8 text-sm text-muted-foreground">
+              {t.savedOffer}
+              <a href="#" className="text-primary underline-offset-4 hover:underline">{t.savedOfferLink}</a>
             </p>
 
             {onSmartAudit && (
