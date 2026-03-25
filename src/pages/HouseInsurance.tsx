@@ -355,12 +355,28 @@ const HouseInsurance = () => {
   const handlePresetAnswer = (answer: "yes" | "no") => {
     setPresetAnswer(answer);
     if (answer === "yes") {
-      // Apply preset values
       setHouse((s) => ({ ...s, ...PRESET_HOUSE }));
     }
+    // Auto-advance to next step
+    setTimeout(() => {
+      const nextIdx = currentStepIdx + 1;
+      const nextSteps = getStepSequence(
+        answer === "yes" ? { ...house, ...PRESET_HOUSE } : house,
+        testVersion,
+        answer,
+      );
+      if (nextIdx < nextSteps.length) {
+        setCurrentStepIdx(nextIdx);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }, 400);
   };
 
-  const totalSavings = 45;
+  // Track animation per step
+  const shouldAnimateTaco = !animatedSteps.has(currentStep);
+  const markAnimated = useCallback(() => {
+    setAnimatedSteps((prev) => new Set(prev).add(currentStep));
+  }, [currentStep]);
 
   /* ─── Step Renders ─── */
 
