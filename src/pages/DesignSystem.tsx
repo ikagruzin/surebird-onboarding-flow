@@ -781,10 +781,6 @@ const DesignSystem = () => {
                 </RadioGroup>
               </SubSection>
 
-              <SubSection title="Slider">
-                <Slider value={demoSlider} onValueChange={setDemoSlider} max={100} step={1} />
-                <p className="text-xs text-muted-foreground mt-1">Value: {demoSlider[0]}</p>
-              </SubSection>
             </div>
           </Section>
 
