@@ -750,10 +750,10 @@ const DesignSystem = () => {
                     value={demoSelectVal}
                     onChange={(e) => setDemoSelectVal(e.target.value)}
                     className={cn(
-                      "flex h-14 w-full appearance-none rounded-2xl border-2 bg-white px-4 py-2 pr-10 text-sm font-medium text-foreground transition-colors focus:outline-none focus:border-primary",
+                      "flex h-12 w-full appearance-none rounded-xl border-2 bg-white px-4 py-2 pr-10 text-sm font-medium text-foreground transition-colors focus:outline-none focus:border-primary",
                       demoSelectVal
-                        ? "border-primary bg-primary/10"
-                        : "border-input hover:border-foreground/30 focus:hover:border-primary"
+                        ? "border-primary bg-primary/5"
+                        : "border-input hover:border-muted-foreground/30 focus:hover:border-primary"
                     )}
                   >
                     <option value="">Select building type...</option>
@@ -763,7 +763,7 @@ const DesignSystem = () => {
                   </select>
                   <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">h-14 · rounded-2xl · border-2 · bg-white · native dropdown</p>
+                <p className="text-xs text-muted-foreground mt-1">h-12 · rounded-xl · border-2 · bg-white · native dropdown</p>
               </SubSection>
 
               <SubSection title="Checkbox">
