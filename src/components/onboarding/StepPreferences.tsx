@@ -246,8 +246,8 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   const allQuestionsAnswered = questions.every((q) => currentPrefs[q.id]);
 
   // Total progress across all products
-  const totalQuestions = selectedInsurances.reduce((sum, id) => sum + (QUESTIONS_BY_TYPE[id]?.length || 0), 0);
-  const answeredQuestions = selectedInsurances.reduce((sum, id) => {
+  const totalQuestions = prefInsurances.reduce((sum, id) => sum + (QUESTIONS_BY_TYPE[id]?.length || 0), 0);
+  const answeredQuestions = prefInsurances.reduce((sum, id) => {
     const qs = QUESTIONS_BY_TYPE[id] || [];
     return sum + qs.filter(q => (preferences[id] || {})[q.id]).length;
   }, 0);
