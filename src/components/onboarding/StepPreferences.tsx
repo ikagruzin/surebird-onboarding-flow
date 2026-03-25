@@ -556,7 +556,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
 
         <TacoMessage
           message={`We are almost there, ${firstName} 🙌 Just one more detail so we can send you your personal offer!`}
-          animate={false}
+          animate={animateTaco}
         />
 
         <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
@@ -646,10 +646,10 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       {/* Questions card with transition */}
         <div key={activeTab} className={getTransitionClass()}>
           {showAllQuestions && introMessage && (
-            <TacoMessage message={introMessage} animate={false} />
+            <TacoMessage message={introMessage} animate={animateTaco} />
           )}
           {!showAllQuestions && currentQuestion && (
-            <TacoMessage message={currentQuestion.label} animate={false} />
+            <TacoMessage message={currentQuestion.label} animate={animateTaco} />
           )}
         <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
           {showAllQuestions ? (

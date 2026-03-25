@@ -82,11 +82,11 @@ const TacoMessage = ({
   }
 
   return (
-    <div className="flex items-start gap-3 mb-6">
+    <div className="flex items-center gap-3 mb-6">
       <img
         src={tacoAvatar}
         alt="Taco"
-        className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
+        className="w-10 h-10 rounded-full object-cover shrink-0"
       />
       <p className="text-base font-semibold text-foreground">{textContent}</p>
     </div>
