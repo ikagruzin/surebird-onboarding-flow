@@ -434,6 +434,7 @@ const Index = () => {
             onUpdatePreference={updatePreference}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
             gated={isGatedFlow}
             gateUnlocked={offerUnlocked}
             gateOverlay={
