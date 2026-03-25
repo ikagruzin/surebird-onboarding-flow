@@ -603,7 +603,7 @@ const HouseInsurance = () => {
             <SegmentedControl options={["1", "2", "2+"]} value={house.floorCount} onChange={(v) => update("floorCount", v)} />
           </div>
           <div className="border-t border-border pt-5 space-y-5">
-            <ToggleRow label="Rainwater collection" checked={house.rainwater} onChange={(v) => update("rainwater", v)} />
+            <ToggleRow label="Renovation" checked={house.rainwater} onChange={(v) => update("rainwater", v)} />
             <ToggleRow label="Solar Panels" checked={house.smartSensors} onChange={(v) => update("smartSensors", v)} />
             <ToggleRow label="Heat pump" checked={house.heatPump} onChange={(v) => update("heatPump", v)} />
           </div>
