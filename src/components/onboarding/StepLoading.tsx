@@ -35,19 +35,11 @@ const CHECKMARK_STEPS = [
   "Preparing your offer",
 ];
 
-const TACO_MESSAGES = [
-  "I'm crunching the numbers to find your best deal...",
-  "Almost there! While I work, here's why our members love Surebird...",
-  "Everything is ready. Taking you to your personal offer now!",
-];
-
-const USP_INTERVAL = 2700; // ~2.7s per card
-const FINAL_CARD_PAUSE = 2000; // 2s after 4th card before navigating
+const INITIAL_DELAY = 1950; // 30% slower
 
 const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
   const [visibleCards, setVisibleCards] = useState(0);
   const [completedChecks, setCompletedChecks] = useState<number[]>([]);
-  const [tacoMessageIndex, setTacoMessageIndex] = useState(0);
 
   const stableOnComplete = useCallback(onComplete, []);
 
