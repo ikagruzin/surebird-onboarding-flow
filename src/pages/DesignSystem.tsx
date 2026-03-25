@@ -722,137 +722,95 @@ const DesignSystem = () => {
 
           {/* ── 5. FORM CONTROLS ── */}
           <Section title="Form Controls" id="forms">
-            <p className="text-sm text-muted-foreground mb-6">
-              All form components share: <span className="font-medium text-foreground">rounded-2xl · border-2 border-input · h-12 · hover:border-muted-foreground/30 · focus:border-primary</span>
-            </p>
-
-            <div className="space-y-8">
-              {/* Product Selection Card */}
-              <SubSection title="Product Selection Card">
-                <p className="text-xs text-muted-foreground mb-3">Taller (py-4) — contains icon + label + indicator</p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-2xl">
-                  <SelectionCard label="Travel" icon={<Plane className="w-5 h-5 text-muted-foreground" />} indicator="checkbox" selected={false} />
-                  <SelectionCard label="Travel" icon={<Plane className="w-5 h-5 text-muted-foreground" />} indicator="checkbox" selected={false} className="border-muted-foreground/30" />
-                  <SelectionCard label="Travel" icon={<Plane className="w-5 h-5 text-primary" />} indicator="checkbox" selected={true} />
-                </div>
-                <div className="flex gap-6 mt-2">
-                  <span className="text-2xs text-muted-foreground">Default</span>
-                  <span className="text-2xs text-muted-foreground ml-20">Hover</span>
-                  <span className="text-2xs text-muted-foreground ml-20">Selected</span>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <SubSection title="Input (Standard)">
+                <Input placeholder="Standard input" value={demoInput} onChange={(e) => setDemoInput(e.target.value)} />
+                <p className="text-xs text-muted-foreground mt-1">border-2 · bg-white · rounded-md</p>
               </SubSection>
 
-              {/* Radio Selection */}
-              <SubSection title="Radio Selection">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-2xl">
-                  <SelectionCard label="Travel" indicator="radio" selected={false} />
-                  <SelectionCard label="Travel" indicator="radio" selected={false} className="border-muted-foreground/30" />
-                  <SelectionCard label="Travel" indicator="radio" selected={true} />
-                </div>
-                <div className="flex gap-6 mt-2">
-                  <span className="text-2xs text-muted-foreground">Default</span>
-                  <span className="text-2xs text-muted-foreground ml-20">Hover</span>
-                  <span className="text-2xs text-muted-foreground ml-20">Selected</span>
-                </div>
-              </SubSection>
-
-              {/* Select / Dropdown */}
-              <SubSection title="Dropdown">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-2xl">
-                  <Select>
-                    <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="travel">Travel</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select>
-                    <SelectTrigger className="border-muted-foreground/30"><SelectValue placeholder="Select" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="travel">Travel</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value="travel">
-                    <SelectTrigger className="border-primary bg-primary/5"><SelectValue placeholder="Select" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="travel">Travel</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex gap-6 mt-2">
-                  <span className="text-2xs text-muted-foreground">Default</span>
-                  <span className="text-2xs text-muted-foreground ml-20">Hover</span>
-                  <span className="text-2xs text-muted-foreground ml-20">Selected</span>
-                </div>
-              </SubSection>
-
-              {/* Input */}
-              <SubSection title="Input Field">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-2xl">
-                  <Input placeholder="Surname" />
-                  <Input placeholder="Surname" className="border-muted-foreground/30" />
-                  <Input placeholder="Surname" value="Surname" readOnly className="border-primary bg-primary/5" />
-                </div>
-                <div className="flex gap-6 mt-2">
-                  <span className="text-2xs text-muted-foreground">Default</span>
-                  <span className="text-2xs text-muted-foreground ml-20">Hover</span>
-                  <span className="text-2xs text-muted-foreground ml-20">Selected</span>
-                </div>
-              </SubSection>
-
-              {/* Floating Label Input */}
               <SubSection title="Floating Label Input">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-2xl">
-                  <FloatingLabelInput label="Email address" value="" onChange={() => {}} />
-                  <FloatingLabelInput label="Email address" value="" onChange={() => {}} className="border-muted-foreground/30" />
-                  <FloatingLabelInput label="Email address" value="john@email.com" onChange={() => {}} className="border-primary bg-primary/5" />
-                </div>
-                <div className="flex gap-6 mt-2">
-                  <span className="text-2xs text-muted-foreground">Default</span>
-                  <span className="text-2xs text-muted-foreground ml-20">Hover</span>
-                  <span className="text-2xs text-muted-foreground ml-20">Selected</span>
+                <FloatingLabelInput label="Email address" value={demoFloat} onChange={(e) => setDemoFloat(e.target.value)} />
+              </SubSection>
+
+              <SubSection title="Custom Flow Input">
+                <input
+                  className="w-full rounded-xl border-2 border-input bg-white px-4 py-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  placeholder="Flow-style input (rounded-xl)"
+                />
+                <p className="text-xs text-muted-foreground mt-1">Used in: HouseInsurance dropdowns & amount fields</p>
+              </SubSection>
+
+              <SubSection title="Textarea">
+                <Textarea placeholder="Enter your message..." />
+              </SubSection>
+
+              <SubSection title="Select">
+                <Select>
+                  <SelectTrigger><SelectValue placeholder="Choose option" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="a">Option A</SelectItem>
+                    <SelectItem value="b">Option B</SelectItem>
+                    <SelectItem value="c">Option C</SelectItem>
+                  </SelectContent>
+                </Select>
+              </SubSection>
+
+              <SubSection title="Custom Select (Flow-style)">
+                <select className="w-full rounded-xl border-2 border-input bg-white px-4 py-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 appearance-none">
+                  <option value="">Select building type...</option>
+                  <option value="a">Detached house</option>
+                  <option value="b">Apartment</option>
+                </select>
+                <p className="text-xs text-muted-foreground mt-1">Used in: HouseInsurance — native select with custom styling</p>
+              </SubSection>
+
+              <SubSection title="Checkbox">
+                <div className="flex items-center gap-2">
+                  <Checkbox checked={demoCheck} onCheckedChange={(v) => setDemoCheck(!!v)} id="demo-check" />
+                  <Label htmlFor="demo-check">Accept terms</Label>
                 </div>
               </SubSection>
 
-              {/* Other Controls */}
-              <SubSection title="Other Controls">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <p className="text-xs font-medium text-foreground mb-2">Checkbox</p>
-                    <div className="flex items-center gap-2">
-                      <Checkbox checked={demoCheck} onCheckedChange={(v) => setDemoCheck(!!v)} id="demo-check" />
-                      <Label htmlFor="demo-check">Accept terms</Label>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium text-foreground mb-2">Switch</p>
-                    <div className="flex items-center gap-2">
-                      <Switch checked={demoSwitch} onCheckedChange={setDemoSwitch} id="demo-switch" />
-                      <Label htmlFor="demo-switch">Toggle option</Label>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium text-foreground mb-2">Radio Group</p>
-                    <RadioGroup value={demoRadio} onValueChange={setDemoRadio}>
-                      <div className="flex items-center gap-2">
-                        <RadioGroupItem value="option-1" id="r1" />
-                        <Label htmlFor="r1">Option 1</Label>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <RadioGroupItem value="option-2" id="r2" />
-                        <Label htmlFor="r2">Option 2</Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium text-foreground mb-2">Slider</p>
-                    <Slider value={demoSlider} onValueChange={setDemoSlider} max={100} step={1} />
-                    <p className="text-xs text-muted-foreground mt-1">Value: {demoSlider[0]}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium text-foreground mb-2">Textarea</p>
-                    <Textarea placeholder="Enter your message..." />
-                  </div>
+              <SubSection title="Switch">
+                <div className="flex items-center gap-2">
+                  <Switch checked={demoSwitch} onCheckedChange={setDemoSwitch} id="demo-switch" />
+                  <Label htmlFor="demo-switch">Toggle option</Label>
                 </div>
+              </SubSection>
+
+              <SubSection title="Custom Toggle Switch (Flow-style)">
+                <div className="flex items-center justify-between max-w-xs">
+                  <span className="text-sm font-medium text-foreground">High-value items</span>
+                  <button
+                    onClick={() => setDemoSwitch(!demoSwitch)}
+                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${
+                      demoSwitch ? "bg-primary" : "bg-input"
+                    }`}
+                  >
+                    <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${
+                      demoSwitch ? "translate-x-5" : "translate-x-0"
+                    }`} />
+                  </button>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">Used in: HouseInsurance toggle rows with conditional amount input</p>
+              </SubSection>
+
+              <SubSection title="Radio Group">
+                <RadioGroup value={demoRadio} onValueChange={setDemoRadio}>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="option-1" id="r1" />
+                    <Label htmlFor="r1">Option 1</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="option-2" id="r2" />
+                    <Label htmlFor="r2">Option 2</Label>
+                  </div>
+                </RadioGroup>
+              </SubSection>
+
+              <SubSection title="Slider">
+                <Slider value={demoSlider} onValueChange={setDemoSlider} max={100} step={1} />
+                <p className="text-xs text-muted-foreground mt-1">Value: {demoSlider[0]}</p>
               </SubSection>
             </div>
           </Section>
