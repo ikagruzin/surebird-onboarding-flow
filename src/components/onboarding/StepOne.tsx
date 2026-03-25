@@ -86,11 +86,17 @@ const ADVANTAGES = {
 const TRANSLATIONS = {
   en: {
     heading: "Choose your insurances",
-    subtitle: "Smartly insured: save up to €300 a year on a package of 6 insurances!",
+    subtitle: "Smartly insured: save up to ",
+    subtitleAmount: "€300",
+    subtitleEnd: " a year on a package of 6 insurances!",
+    savedOffer: "Have you already saved an offer? ",
+    savedOfferLink: "See your offer",
     bundleHeading: "Save the most with our packages",
     bundleSubtitle: "Our customers always save the most with our packages instead of single insurance. Select the package which suits you best and benefit from the maximum savings.",
     individualHeading: "Or choose individual insurances",
-    individualSubtitle: "Smartly insured: save up to €300 a year on a package of 6 insurances!",
+    individualSubtitle: "Smartly insured: save up to ",
+    individualSubtitleAmount: "€300",
+    individualSubtitleEnd: " a year on a package of 6 insurances!",
     advantageTitle: "Your advantage with Surebird",
     saveAnnually: "Save annually",
     versionA: "Version A",
@@ -122,11 +128,17 @@ const TRANSLATIONS = {
   },
   nl: {
     heading: "Kies uw verzekeringen",
-    subtitle: "Slim verzekerd: bespaar tot €300 per jaar op een pakket van 6 verzekeringen!",
+    subtitle: "Slim verzekerd: bespaar tot ",
+    subtitleAmount: "€300",
+    subtitleEnd: " per jaar op een pakket van 6 verzekeringen!",
+    savedOffer: "Heeft u al een offerte opgeslagen? ",
+    savedOfferLink: "Bekijk uw offerte",
     bundleHeading: "Bespaar het meest met onze pakketten",
     bundleSubtitle: "Onze klanten besparen altijd het meest met onze pakketten in plaats van losse verzekeringen. Selecteer het pakket dat het beste bij u past en profiteer van de maximale besparing.",
     individualHeading: "Of kies losse verzekeringen",
-    individualSubtitle: "Slim verzekerd: bespaar tot €300 per jaar op een pakket van 6 verzekeringen!",
+    individualSubtitle: "Slim verzekerd: bespaar tot ",
+    individualSubtitleAmount: "€300",
+    individualSubtitleEnd: " per jaar op een pakket van 6 verzekeringen!",
     advantageTitle: "Uw voordeel bij Surebird",
     saveAnnually: "Jaarlijks besparen",
     versionA: "Versie A",
@@ -434,8 +446,14 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
             <h1 className="text-3xl leading-tight font-bold text-foreground mb-3">
               {version === "A" ? t.heading : t.bundleHeading}
             </h1>
-            <p className="mb-8 text-muted-foreground">
-              {version === "A" ? t.subtitle : t.bundleSubtitle}
+            <p className="text-muted-foreground">
+              {version === "A" ? (
+                <>{t.subtitle}<span className="font-semibold text-success">{t.subtitleAmount}</span>{t.subtitleEnd}</>
+              ) : t.bundleSubtitle}
+            </p>
+            <p className="mt-2 mb-8 text-sm text-muted-foreground">
+              {t.savedOffer}
+              <a href="#" className="text-primary underline-offset-4 hover:underline">{t.savedOfferLink}</a>
             </p>
 
             {onSmartAudit && (
@@ -463,7 +481,7 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
                     {t.individualHeading}
                   </h2>
                    <p className="text-muted-foreground mb-8">
-                    {t.individualSubtitle}
+                    {t.individualSubtitle}<span className="font-semibold text-success">{t.individualSubtitleAmount}</span>{t.individualSubtitleEnd}
                    </p>
                   <InsuranceGrid />
                 </div>
@@ -476,8 +494,8 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
                     {t.individualHeading}
                   </h2>
                    <p className="text-muted-foreground mb-8">
-                    {t.individualSubtitle}
-                  </p>
+                    {t.individualSubtitle}<span className="font-semibold text-success">{t.individualSubtitleAmount}</span>{t.individualSubtitleEnd}
+                   </p>
                   <InsuranceGrid />
                 </div>
               </>
