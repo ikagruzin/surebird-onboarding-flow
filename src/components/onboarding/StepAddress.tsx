@@ -65,6 +65,7 @@ const StepAddress = ({
   onUpdate,
   onNext,
   onBack,
+  animateTaco,
 }: StepAddressProps) => {
   const [addressResult, setAddressResult] = useState<AddressResult | null>(null);
   const [loading, setLoading] = useState(false);
