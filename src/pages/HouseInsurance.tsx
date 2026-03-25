@@ -769,7 +769,7 @@ const HouseInsurance = () => {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-6 pb-3">
+        <div className="max-w-3xl mx-auto px-6 md:px-12 lg:px-16 pb-3">
           <p className="text-xs text-muted-foreground">
             {testVersion === "a"
               ? "Smart Preset — Confirms pre-filled home details before continuing."
