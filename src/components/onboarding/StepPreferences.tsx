@@ -264,9 +264,9 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
         setQuestionStep(questionStep - 1);
         return true;
       }
-      const currentIndex = selectedInsurances.indexOf(activeTab);
+      const currentIndex = prefInsurances.indexOf(activeTab);
       if (currentIndex > 0) {
-        const prevTab = selectedInsurances[currentIndex - 1];
+        const prevTab = prefInsurances[currentIndex - 1];
         animateTabSwitch(prevTab, "right");
         const prevQuestions = QUESTIONS_BY_TYPE[prevTab] || [];
         setQuestionStep(Math.max(0, prevQuestions.length - 1));
