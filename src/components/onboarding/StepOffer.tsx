@@ -1,5 +1,6 @@
-import { useState, useRef } from "react";
-import { Check, CheckCircle2, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play, Star } from "lucide-react";
+import { useState, useRef, useMemo } from "react";
+import { Check, CheckCircle2, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play, Star, Gift, Award } from "lucide-react";
+import TacoMessage from "./TacoMessage";
 import LegalCoverageSelector from "./LegalCoverageSelector";
 import { INSURANCE_TYPES } from "./types";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
