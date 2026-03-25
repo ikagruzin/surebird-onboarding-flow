@@ -522,24 +522,11 @@ const HouseInsurance = () => {
       />
 
       <Card>
-        <CardContent className="pt-6 space-y-3">
-          <SelectionCard
-            label="Household Goods"
-            selected={house.coverageChoice === "household"}
-            onClick={() => handleCoverageSelect("household")}
-            indicator="radio"
-          />
-          <SelectionCard
-            label="Building"
-            selected={house.coverageChoice === "building"}
-            onClick={() => handleCoverageSelect("building")}
-            indicator="radio"
-          />
-          <SelectionCard
-            label="Both"
-            selected={house.coverageChoice === "both"}
-            onClick={() => handleCoverageSelect("both")}
-            indicator="radio"
+        <CardContent className="pt-6">
+          <SegmentedControl
+            options={["Household Goods", "Building", "Both"]}
+            value={house.coverageChoice}
+            onChange={(v) => handleCoverageSelect(v as "household" | "building" | "both")}
           />
         </CardContent>
       </Card>
