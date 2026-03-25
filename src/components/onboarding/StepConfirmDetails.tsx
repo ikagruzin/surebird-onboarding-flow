@@ -27,7 +27,6 @@ const StepConfirmDetails = ({
       <TacoMessage
         message="Almost there! Double check your details below ✅"
         animate={animateTaco}
-        variant="bubble"
       />
 
       {/* Personal details card */}

@@ -714,7 +714,6 @@ const StepOffer = ({
                 <TacoMessage
                   message={`${firstName || "Hi"}, I have selected the best insurance policies for you based on your set preferences!`}
                   animate={animateTaco}
-                  variant="bubble"
                 />
                 <div className="flex flex-wrap items-center gap-2 mt-4">
                   <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-success bg-success/10 border border-success/20 rounded-full px-3 py-1.5">

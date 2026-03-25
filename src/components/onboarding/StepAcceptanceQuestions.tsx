@@ -73,7 +73,6 @@ const StepAcceptanceQuestions = ({
       <TacoMessage
         message="Almost there! Just a few final checks 📋 We need to confirm a few standard legal details required by all Dutch insurers."
         animate={animateTaco}
-        variant="bubble"
       />
 
       {/* Why we ask card */}
