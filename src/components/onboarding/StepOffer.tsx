@@ -418,80 +418,30 @@ const StepOffer = ({
 
     return (
       <div key={id} className="mb-8">
-        {activeTab === "all" && (
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-            <button className="text-sm font-medium text-foreground border border-border rounded-full px-4 py-2 hover:bg-muted transition-colors">
-              Edit preferences
-            </button>
-          </div>
-        )}
-
-        {/* Badge + navigation */}
-        <div className="flex items-center justify-between mb-2">
-          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary bg-primary/10 rounded-full px-3 py-1.5">
-            <Shield className="w-4 h-4" />
-            {insurer.badge}
-          </span>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
           <div className="flex items-center gap-2">
-            <button className="w-8 h-8 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors">
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button className="w-8 h-8 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors">
-              <ChevronRight className="w-4 h-4" />
-            </button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setActiveTab(id)}
+            >
+              Edit
+            </Button>
+            <Button variant="outline" size="sm">
+              Compare
+            </Button>
           </div>
         </div>
 
-        {/* Card */}
-        <div className="border border-border rounded-3xl p-6 bg-card">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-md bg-success flex items-center justify-center">
-                <Check className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span className="text-lg font-bold text-foreground">{insurer.name}</span>
-            </div>
-            <span className="text-sm text-muted-foreground flex items-center gap-1">
-              😊 {insurer.happyClients}
-            </span>
-          </div>
-
-          <div className="border-t border-border pt-4 space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Deductible:</span>
-              <span className="font-semibold text-foreground">{insurer.deductible}</span>
-            </div>
-            {insurer.priceQuality && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Price/quality:</span>
-                <span className="font-semibold text-foreground">{insurer.priceQuality}</span>
-              </div>
-            )}
-            {insurer.cancellable && (
-              <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">Can be cancelled on daily basis:</span>
-                <Check className="w-4 h-4 text-success" />
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-end justify-between mt-4 pt-4 border-t border-border">
-            <button className="text-sm font-medium text-foreground underline underline-offset-2">
-              View details
-            </button>
-            <div className="text-right">
-              <span className="text-sm text-muted-foreground">per month </span>
-              <span className="text-2xl font-bold text-foreground">€{insurer.monthlyPrice.toFixed(2)}</span>
-            </div>
-          </div>
-          <div className="flex justify-end mt-1">
-            <span className="text-xs font-medium text-success flex items-center gap-1">
-              <Check className="w-3 h-3" />
-              Discount is available for you
-            </span>
-          </div>
-        </div>
+        <InsuranceOfferCard
+          insurerName={insurer.name}
+          logoSrc={insurer.logoSrc}
+          monthlyPrice={insurer.monthlyPrice}
+          savingsPercent={insurer.savingsPercent}
+          happyClients={insurer.happyClients}
+          onViewDetails={() => setActiveTab(id)}
+        />
       </div>
     );
   };
