@@ -598,17 +598,6 @@ const DesignSystem = () => {
               </div>
             </SubSection>
 
-            <SubSection title="With Icons">
-              <div className="flex flex-wrap gap-3 items-center">
-                <Button variant="default"><Check className="w-4 h-4" /> Simulate Verification</Button>
-                <Button variant="secondary">Next step <ChevronRight className="w-4 h-4" /></Button>
-                <Button variant="outline"><Lock className="w-4 h-4" /> Lock discount for 24h</Button>
-                <Button variant="outline-primary"><CheckCircle className="w-4 h-4" /> Verify with my Bank</Button>
-                <Button variant="ghost"><ChevronLeft className="w-4 h-4" /> Back</Button>
-                <Button variant="destructive-outline"><X className="w-4 h-4" /> Simulate Failure</Button>
-                <Button variant="link"><ChevronRight className="w-4 h-4" /> Learn more</Button>
-              </div>
-            </SubSection>
 
             <SubSection title="CTA / Primary Action (3D Green Gradient)">
               <div className="flex flex-wrap gap-3 items-center">
