@@ -7,9 +7,7 @@ import TacoMessage from "@/components/onboarding/TacoMessage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SelectionCard } from "@/components/ui/selection-card";
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
+import { NativeSelect } from "@/components/ui/native-select";
 import iconHome from "@/assets/icon-home.svg";
 
 /* ─── Types ─── */
@@ -484,16 +482,11 @@ const HouseInsurance = () => {
         <div className="space-y-6">
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Building Type</label>
-            <Select value={house.buildingType} onValueChange={(v) => update("buildingType", v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select building type" />
-              </SelectTrigger>
-              <SelectContent>
-                {BUILDING_TYPES.map((t) => (
-                  <SelectItem key={t} value={t}>{t}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <NativeSelect value={house.buildingType} onChange={(e) => update("buildingType", e.target.value)} placeholder="Select building type">
+              {BUILDING_TYPES.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </NativeSelect>
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Usage</label>
@@ -543,16 +536,11 @@ const HouseInsurance = () => {
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Roof Material</label>
-            <Select value={house.roofMaterial} onValueChange={(v) => update("roofMaterial", v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select roof material" />
-              </SelectTrigger>
-              <SelectContent>
-                {ROOF_MATERIALS.map((m) => (
-                  <SelectItem key={m} value={m}>{m}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <NativeSelect value={house.roofMaterial} onChange={(e) => update("roofMaterial", e.target.value)} placeholder="Select roof material">
+              {ROOF_MATERIALS.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </NativeSelect>
           </div>
           {testVersion !== "a" && (
             <div>
@@ -622,16 +610,11 @@ const HouseInsurance = () => {
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Outside Value</label>
-            <Select value={house.outsideValue} onValueChange={(v) => update("outsideValue", v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select outside value" />
-              </SelectTrigger>
-              <SelectContent>
-                {OUTSIDE_VALUE_OPTIONS.map((o) => (
-                  <SelectItem key={o} value={o}>{o}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <NativeSelect value={house.outsideValue} onChange={(e) => update("outsideValue", e.target.value)} placeholder="Select outside value">
+              {OUTSIDE_VALUE_OPTIONS.map((o) => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </NativeSelect>
           </div>
           {testVersion !== "a" && (
             <div className="border-t border-border pt-5">
