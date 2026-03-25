@@ -795,36 +795,7 @@ const HouseInsurance = () => {
         </div>
       </div>
 
-      {/* Progress indicator */}
-      <div className="max-w-4xl mx-auto px-6 pt-6">
-        <div className="flex items-center gap-2 mb-2">
-          {steps.map((s, i) => (
-            <div key={s} className="flex items-center gap-2">
-              <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                  i < currentStepIdx
-                    ? "bg-success text-success-foreground"
-                    : i === currentStepIdx
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {i + 1}
-              </div>
-              <span
-                className={`text-xs font-medium hidden sm:inline ${
-                  i === currentStepIdx ? "text-foreground" : "text-muted-foreground"
-                }`}
-              >
-                {stepLabels[s]}
-              </span>
-              {i < steps.length - 1 && (
-                <div className={`w-6 h-0.5 ${i < currentStepIdx ? "bg-success" : "bg-border"}`} />
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Progress indicator hidden */}
 
       {/* Main content */}
       <div className="max-w-4xl mx-auto px-6 py-8">
