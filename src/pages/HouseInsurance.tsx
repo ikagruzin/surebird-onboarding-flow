@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { NativeSelect } from "@/components/ui/native-select";
+import { getSelectionGridClass } from "@/lib/grid-layout";
 import iconHome from "@/assets/icon-home.svg";
 
 /* ─── Types ─── */
@@ -125,7 +126,7 @@ const ChipSelect = ({
 }: {
   options: string[]; selected: string[]; onChange: (v: string[]) => void;
 }) => (
-  <div className="space-y-2">
+  <div className={getSelectionGridClass(options)}>
     {options.map((opt) => {
       const isActive = selected.includes(opt);
       return (
@@ -142,11 +143,11 @@ const ChipSelect = ({
 );
 
 const SegmentedControl = ({
-  options, value, onChange, columns = 3,
+  options, value, onChange,
 }: {
-  options: string[]; value: string; onChange: (v: string) => void; columns?: number;
+  options: string[]; value: string; onChange: (v: string) => void;
 }) => (
-  <div className={`grid gap-2 ${columns === 2 ? "grid-cols-2" : columns === 4 ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-1 sm:grid-cols-3"}`}>
+  <div className={getSelectionGridClass(options)}>
     {options.map((opt) => (
       <SelectionCard
         key={opt}
@@ -541,7 +542,7 @@ const HouseInsurance = () => {
           {testVersion !== "a" && (
             <div>
               <label className="text-sm font-semibold text-foreground mb-2 block">Own Risk</label>
-              <SegmentedControl options={OWN_RISK_OPTIONS} value={house.ownRisk} onChange={(v) => update("ownRisk", v)} columns={4} />
+              <SegmentedControl options={OWN_RISK_OPTIONS} value={house.ownRisk} onChange={(v) => update("ownRisk", v)} />
             </div>
           )}
         </div>
@@ -598,7 +599,7 @@ const HouseInsurance = () => {
           <ToggleRow label="Owner interest" sublabel=">€6k" checked={house.ownerInterest} onChange={(v) => update("ownerInterest", v)} showAmount amount={house.ownerInterestAmount} onAmountChange={(v) => update("ownerInterestAmount", v)} />
           <div className="border-t border-border pt-5">
             <label className="text-sm font-semibold text-foreground mb-2 block">Security</label>
-            <SegmentedControl options={SECURITY_OPTIONS} value={house.security} onChange={(v) => update("security", v)} columns={4} />
+            <SegmentedControl options={SECURITY_OPTIONS} value={house.security} onChange={(v) => update("security", v)} />
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Net Income</label>
@@ -615,7 +616,7 @@ const HouseInsurance = () => {
           {testVersion !== "a" && (
             <div className="border-t border-border pt-5">
               <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
-              <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} columns={2} />
+              <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} />
             </div>
           )}
         </div>
@@ -647,7 +648,7 @@ const HouseInsurance = () => {
           {testVersion !== "a" && (
             <div className="border-t border-border pt-5">
               <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
-              <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} columns={2} />
+              <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} />
             </div>
           )}
         </div>
