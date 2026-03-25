@@ -601,7 +601,52 @@ const StepOffer = ({
       <div className="grid gap-8 xl:grid-cols-[minmax(0,680px)_320px] justify-center items-start">
         {/* Main content */}
         <div className="min-w-0">
-           <h1 className="text-3xl font-bold text-foreground mb-8">Your personal offer</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-6">Your personal offer</h1>
+
+          {/* Product tabs */}
+          <div className="flex flex-wrap items-center gap-2 mb-8">
+            <button
+              onClick={() => setActiveTab("all")}
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border ${
+                activeTab === "all"
+                  ? "bg-foreground text-background border-foreground"
+                  : "bg-white border-border text-foreground"
+              }`}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={activeTab === "all" ? "text-background" : "text-foreground"}>
+                <rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
+                <rect x="10" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
+                <rect x="1" y="10" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
+                <rect x="10" y="10" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+              All offers
+            </button>
+            {selectedInsurances.map((id) => {
+              const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
+              const isActive = activeTab === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => setActiveTab(id)}
+                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border ${
+                    isActive
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-white border-border text-foreground"
+                  }`}
+                >
+                  <img
+                    src={ICON_MAP[ins.icon]}
+                    alt={ins.label}
+                    className={`w-6 h-6 ${isActive ? "brightness-0 invert" : ""}`}
+                  />
+                  {ins.label}
+                </button>
+              );
+            })}
+            <button className="h-11 w-11 rounded-full border border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
+              <Plus className="w-4 h-4" />
+            </button>
+          </div>
 
           {activeTab === "all" ? (
             <>
@@ -625,15 +670,6 @@ const StepOffer = ({
             </>
           ) : (
             <>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setActiveTab("all")}
-                className="mb-6"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                Back to all offers
-              </Button>
               {renderOfferCard(activeTab)}
               {renderPreferences(activeTab)}
             </>
