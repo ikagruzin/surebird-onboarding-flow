@@ -781,7 +781,7 @@ const HouseInsurance = () => {
       {/* Progress indicator hidden */}
 
       {/* Main content */}
-      <div className="max-w-3xl mx-auto px-6 py-8">
+      <div className="max-w-3xl mx-auto px-6 md:px-12 lg:px-16 py-8 md:py-12">
         {renderCurrentStep()}
       </div>
 
