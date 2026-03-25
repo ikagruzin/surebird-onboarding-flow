@@ -767,22 +767,6 @@ const DesignSystem = () => {
                 </div>
               </SubSection>
 
-              <SubSection title="Custom Toggle Switch (Flow-style)">
-                <div className="flex items-center justify-between max-w-xs">
-                  <span className="text-sm font-medium text-foreground">High-value items</span>
-                  <button
-                    onClick={() => setDemoSwitch(!demoSwitch)}
-                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${
-                      demoSwitch ? "bg-primary" : "bg-input"
-                    }`}
-                  >
-                    <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${
-                      demoSwitch ? "translate-x-5" : "translate-x-0"
-                    }`} />
-                  </button>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">Used in: HouseInsurance toggle rows with conditional amount input</p>
-              </SubSection>
 
               <SubSection title="Radio Group">
                 <RadioGroup value={demoRadio} onValueChange={setDemoRadio}>
