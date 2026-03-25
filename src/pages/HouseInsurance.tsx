@@ -133,8 +133,8 @@ const ChipSelect = ({
           key={opt}
           label={opt}
           selected={isActive}
-          onClick={() => onChange(isActive ? selected.filter((s) => s !== opt) : [...selected, opt])}
-          indicator="checkbox"
+          onClick={() => onChange(isActive ? [] : [opt])}
+          indicator="radio"
         />
       );
     })}
