@@ -209,8 +209,13 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   onBack,
   animateTaco,
 }, ref) => {
-  const [activeTab, setActiveTab] = useState(selectedInsurances[0]);
-  const [completedTabs, setCompletedTabs] = useState<string[]>([]);
+  // Filter out products with no preference questions (e.g. "home" — handled by dedicated steps)
+  const prefInsurances = selectedInsurances.filter((id) => (QUESTIONS_BY_TYPE[id]?.length ?? 0) > 0);
+  const [activeTab, setActiveTab] = useState(prefInsurances[0] || selectedInsurances[0]);
+  const [completedTabs, setCompletedTabs] = useState<string[]>(
+    // Auto-mark products with no questions as completed
+    selectedInsurances.filter((id) => !(QUESTIONS_BY_TYPE[id]?.length))
+  );
   const [questionStep, setQuestionStep] = useState(0);
   const [showPhoneStep, setShowPhoneStep] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
