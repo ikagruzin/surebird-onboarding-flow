@@ -63,11 +63,19 @@ const Index = () => {
 
   const [state, setState] = useState<WizardState>({ ...INITIAL_STATE });
   const prefsRef = useRef<StepPreferencesHandle>(null);
+  const seenStepsRef = useRef<Set<string>>(new Set());
 
   // Current step index into flow.steps array
   const stepIndex = state.currentStep;
   const currentStepConfig = flow.steps[stepIndex] as StepConfig | undefined;
   const currentStepId = currentStepConfig?.id || "product-selection";
+
+  // Track whether Taco message should animate (only on first visit)
+  const shouldAnimateTaco = !seenStepsRef.current.has(currentStepId);
+
+  useEffect(() => {
+    seenStepsRef.current.add(currentStepId);
+  }, [currentStepId]);
 
   const switchFlow = (newFlowId: string) => {
     setSearchParams({ flow: newFlowId });
