@@ -513,82 +513,86 @@ const StepOffer = ({
   const renderCalculations = () => (
     <div className="space-y-6">
       {/* Offer calculations */}
-      <div className="border border-border rounded-3xl p-6 bg-card">
-        <h3 className="text-xl font-bold text-foreground mb-4">Offer calculations</h3>
+      <div className="border border-border rounded-3xl overflow-hidden bg-card">
+        <div className="p-6">
+          <h3 className="text-xl font-bold text-foreground mb-4">Offer calculations</h3>
 
-        <div className="space-y-3 text-sm mb-4">
-          {selectedInsurances.map(id => {
-            const ins = INSURANCE_TYPES.find(t => t.id === id);
-            const insurer = INSURER_DATA[id];
-            const original = insurer?.monthlyPrice || 5;
-            const discounted = original * (1 - discountPercent / 100);
-            return (
-              <div key={id} className="flex justify-between items-center">
-                <span className="font-medium text-foreground">{ins?.label || id}</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-destructive line-through text-sm">€{original.toFixed(2)}</span>
-                  <span className="font-semibold text-foreground">€{discounted.toFixed(2)}</span>
+          <div className="space-y-3 text-sm mb-4">
+            {selectedInsurances.map(id => {
+              const ins = INSURANCE_TYPES.find(t => t.id === id);
+              const insurer = INSURER_DATA[id];
+              const original = insurer?.monthlyPrice || 5;
+              const discounted = original * (1 - discountPercent / 100);
+              return (
+                <div key={id} className="flex justify-between items-center">
+                  <span className="font-medium text-foreground">{ins?.label || id}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-muted-foreground line-through text-sm">€{original.toFixed(2)}</span>
+                    <span className="font-semibold text-foreground">€{discounted.toFixed(2)}</span>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="border-t border-border pt-4 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <CheckCircle2 className="w-5 h-5 text-success" />
-              Discount:
-            </span>
-            <span className="text-base font-semibold text-destructive">-{discountPercent}%</span>
+              );
+            })}
           </div>
 
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-foreground">Activate annual payment discount</span>
-            <button
-              type="button"
-              onClick={() => setAnnualDiscount(!annualDiscount)}
-              className={`w-11 h-6 rounded-full relative transition-colors ${annualDiscount ? "bg-success" : "bg-muted"}`}
-            >
-              <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 shadow-sm transition-transform ${annualDiscount ? "translate-x-5" : "translate-x-0.5"}`} />
-            </button>
-          </div>
-        </div>
+          <div className="border-t border-border pt-4 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+                <CheckCircle2 className="w-5 h-5 text-muted-foreground" />
+                Discount:
+              </span>
+              <span className="text-base font-semibold" style={{ color: 'hsl(0 74% 42%)' }}>-{discountPercent}%</span>
+            </div>
 
-        <div className="border-t border-border mt-4 pt-4">
-          <div className="flex justify-between items-center bg-primary/5 rounded-2xl px-5 py-4">
-            <span className="text-xl font-bold text-foreground">Total p/m</span>
-            <div className="flex items-center gap-2">
-              <span className="text-base font-semibold text-destructive line-through">€{totalBeforeDiscount.toFixed(2)}</span>
-              <span className="text-2xl font-bold text-foreground">€{totalAfterDiscount.toFixed(1)}</span>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-foreground">Activate annual payment discount</span>
+              <button
+                type="button"
+                onClick={() => setAnnualDiscount(!annualDiscount)}
+                className={`w-10 h-5 rounded-full relative transition-colors ${annualDiscount ? "bg-success" : "bg-muted"}`}
+              >
+                <div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 shadow-sm transition-transform ${annualDiscount ? "translate-x-5" : "translate-x-0.5"}`} />
+              </button>
             </div>
           </div>
-          <div className="flex items-center justify-center gap-1.5 mt-3 text-sm font-semibold text-success">
+        </div>
+
+        {/* Total row - full width background */}
+        <div className="flex justify-between items-center bg-primary/5 px-6 py-4">
+          <span className="text-xl font-bold text-foreground">Total p/m</span>
+          <div className="flex items-center gap-2">
+            <span className="text-base font-semibold line-through" style={{ color: 'hsl(0 74% 42%)' }}>€{totalBeforeDiscount.toFixed(2)}</span>
+            <span className="text-2xl font-bold text-foreground">€{totalAfterDiscount.toFixed(1)}</span>
+          </div>
+        </div>
+
+        <div className="p-6 pt-4">
+          <div className="flex items-center justify-center gap-1.5 text-sm font-semibold text-foreground">
             <Calendar className="w-4 h-4" />
             Annual savings: €{annualSavings.toFixed(2)}
           </div>
-        </div>
 
-        <button
-          onClick={onNext}
-          className="w-full mt-4 inline-flex items-center justify-center gap-2 text-success-foreground px-7 py-3.5 rounded-full font-semibold text-base transition-all"
-          style={{
-            background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
-            boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
-          }}
-        >
-          Continue
-          <ChevronRight className="w-5 h-5" />
-        </button>
+          <button
+            onClick={onNext}
+            className="w-full mt-4 inline-flex items-center justify-center gap-2 text-success-foreground px-7 py-3.5 rounded-full font-semibold text-base transition-all"
+            style={{
+              background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
+              boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
+            }}
+          >
+            Continue
+            <ChevronRight className="w-5 h-5" />
+          </button>
 
-        <button className="w-full mt-3 inline-flex items-center justify-center gap-2 border border-border rounded-full px-6 py-3 text-sm font-medium text-foreground hover:bg-muted transition-colors">
-          <Lock className="w-4 h-4" />
-          Lock discount for 24h
-        </button>
+          <button className="w-full mt-3 inline-flex items-center justify-center gap-2 border border-border rounded-full px-6 py-3 text-sm font-medium text-foreground hover:bg-muted transition-colors">
+            <Lock className="w-4 h-4" />
+            Lock discount for 24h
+          </button>
 
-        <div className="flex items-start gap-2 mt-4 text-xs text-muted-foreground">
-          <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-          <p>All prices include 21% insurance tax and service costs. <span className="underline cursor-pointer">Check the price breakdown</span></p>
+          <div className="flex items-start gap-2 mt-4 text-xs text-muted-foreground">
+            <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+            <p>All prices include 21% insurance tax and service costs. <span className="underline cursor-pointer">Check the price breakdown</span></p>
+          </div>
         </div>
       </div>
 
