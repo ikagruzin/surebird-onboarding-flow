@@ -494,8 +494,8 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
                     {t.individualHeading}
                   </h2>
                    <p className="text-muted-foreground mb-8">
-                    {t.individualSubtitle}
-                  </p>
+                    {t.individualSubtitle}<span className="font-semibold text-success">{t.individualSubtitleAmount}</span>{t.individualSubtitleEnd}
+                   </p>
                   <InsuranceGrid />
                 </div>
               </>
