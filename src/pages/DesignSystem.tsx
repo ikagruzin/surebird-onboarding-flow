@@ -733,13 +733,16 @@ const DesignSystem = () => {
               </SubSection>
 
               <SubSection title="Select">
-                <select className="flex h-14 w-full rounded-xl border-2 border-input bg-white px-4 py-2 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
-                  <option value="">Select building type...</option>
-                  <option value="a">Detached house</option>
-                  <option value="b">Apartment</option>
-                  <option value="c">Studio</option>
-                </select>
-                <p className="text-xs text-muted-foreground mt-1">h-14 · rounded-xl · border-2 · bg-white · native dropdown</p>
+                <div className="relative">
+                  <select className="flex h-14 w-full appearance-none rounded-2xl border-2 border-input bg-white px-4 py-2 pr-10 text-sm font-medium text-foreground transition-colors hover:border-foreground/30 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                    <option value="">Select building type...</option>
+                    <option value="a">Detached house</option>
+                    <option value="b">Apartment</option>
+                    <option value="c">Studio</option>
+                  </select>
+                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">h-14 · rounded-2xl · border-2 · bg-white · native dropdown</p>
               </SubSection>
 
               <SubSection title="Checkbox">
