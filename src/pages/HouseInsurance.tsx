@@ -492,17 +492,7 @@ const HouseInsurance = () => {
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Roof Shape</label>
-            <div className="space-y-2">
-              {ROOF_SHAPES.map((opt) => (
-                <SelectionCard
-                  key={opt}
-                  label={opt}
-                  selected={house.roofShape === opt}
-                  onClick={() => update("roofShape", opt)}
-                  indicator="radio"
-                />
-              ))}
-            </div>
+            <SegmentedControl options={ROOF_SHAPES} value={house.roofShape} onChange={(v) => update("roofShape", v)} />
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Roof Material</label>
