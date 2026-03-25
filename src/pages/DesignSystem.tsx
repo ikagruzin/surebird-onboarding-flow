@@ -275,6 +275,7 @@ const DesignSystem = () => {
   const [demoSegmented, setDemoSegmented] = useState("Option A");
   const [demoChip, setDemoChip] = useState<string[]>(["Chip 2"]);
   const [demoSelection, setDemoSelection] = useState("radio-demo");
+  const [demoSelectVal, setDemoSelectVal] = useState("");
   const [activeSection, setActiveSection] = useState("colors");
 
   const handleFlowSwitch = (flowId: string) => {
