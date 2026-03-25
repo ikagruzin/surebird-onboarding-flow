@@ -1,5 +1,6 @@
-import { useState, useRef } from "react";
-import { Check, CheckCircle2, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play, Star } from "lucide-react";
+import { useState, useRef, useMemo } from "react";
+import { Check, CheckCircle2, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play, Star, Gift, Award } from "lucide-react";
+import TacoMessage from "./TacoMessage";
 import LegalCoverageSelector from "./LegalCoverageSelector";
 import { INSURANCE_TYPES } from "./types";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
@@ -139,6 +140,7 @@ interface StepOfferProps {
   gated?: boolean;
   gateUnlocked?: boolean;
   gateOverlay?: React.ReactNode;
+  animateTaco?: boolean;
 }
 
 const StepOffer = ({
@@ -151,6 +153,7 @@ const StepOffer = ({
   gated = false,
   gateUnlocked = false,
   gateOverlay,
+  animateTaco,
 }: StepOfferProps) => {
   const [activeTab, setActiveTab] = useState("all");
   const [videoModal, setVideoModal] = useState<string | null>(null);
@@ -708,16 +711,21 @@ const StepOffer = ({
           {activeTab === "all" ? (
             <>
               <div className="border border-border rounded-3xl p-6 bg-card mb-8">
-                <div className="flex items-start gap-3 mb-4">
-                  <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
-                  <p className="text-base text-foreground">
-                    {firstName || "Hi"}, I have selected the best insurance policies for you based on your set preferences! If you have any questions or need my personal assistance, feel free to contact me 👍
-                  </p>
+                <TacoMessage
+                  message={`${firstName || "Hi"}, I have selected the best insurance policies for you based on your set preferences!`}
+                  animate={animateTaco}
+                  variant="bubble"
+                />
+                <div className="flex flex-wrap items-center gap-2 mt-4">
+                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-success bg-success/10 border border-success/20 rounded-full px-3 py-1.5">
+                    <Gift className="w-4 h-4" />
+                    You save with Surebird: €{annualSavings.toFixed(2)}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-3 py-1.5">
+                    <Award className="w-4 h-4" />
+                    Best and cheapest choices
+                  </span>
                 </div>
-                <button className="inline-flex items-center gap-2 border border-border rounded-full px-4 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors">
-                  <MessageCircle className="w-4 h-4 text-success" />
-                  Chat via WhatsApp
-                </button>
               </div>
               {selectedInsurances.map((id) => renderOfferCard(id))}
             </>
