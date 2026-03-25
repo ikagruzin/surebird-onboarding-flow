@@ -443,7 +443,7 @@ const HouseInsurance = () => {
   const renderRoleSelection = () => (
     <div className="animate-fade-in space-y-6">
       <TacoMessage
-        message="First things first—are you currently the tenant of this home, or do you own the property?"
+        message="Great. Now, what would you like to protect today?"
         animate={shouldAnimateTaco}
         onAnimationComplete={markAnimated}
       />
