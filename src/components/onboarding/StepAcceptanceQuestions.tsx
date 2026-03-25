@@ -57,6 +57,7 @@ interface StepAcceptanceQuestionsProps {
   onUpdateAnswer: (questionId: string, value: string) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 const StepAcceptanceQuestions = ({
