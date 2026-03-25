@@ -556,7 +556,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
 
         <TacoMessage
           message={`We are almost there, ${firstName} 🙌 Just one more detail so we can send you your personal offer!`}
-          animate={false}
+          animate={animateTaco}
         />
 
         <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
