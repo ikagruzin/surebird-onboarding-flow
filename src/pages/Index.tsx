@@ -373,6 +373,7 @@ const Index = () => {
             }}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "ready":
@@ -381,6 +382,7 @@ const Index = () => {
             selectedInsurances={state.selectedInsurances}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "preferences":
