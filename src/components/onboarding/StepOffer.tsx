@@ -1,5 +1,6 @@
 import { useState, useRef, useMemo } from "react";
 import { Check, CheckCircle2, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play, Star, Gift, Award } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import InsuranceOfferCard from "./InsuranceOfferCard";
 import logoNN from "@/assets/logo-nationale-nederlanden.svg";
 import logoAllianz from "@/assets/logo-allianz.svg";
