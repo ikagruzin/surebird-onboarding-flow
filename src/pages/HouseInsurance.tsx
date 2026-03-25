@@ -1,199 +1,19 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronRight, ChevronLeft, RotateCcw, Home, Check } from "lucide-react";
+import { Home, RotateCcw } from "lucide-react";
 import StickyFooter from "@/components/onboarding/StickyFooter";
 import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
-import TacoMessage from "@/components/onboarding/TacoMessage";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SelectionCard } from "@/components/ui/selection-card";
-import { NativeSelect } from "@/components/ui/native-select";
-import { getSelectionGridClass } from "@/lib/grid-layout";
+import type { HouseState } from "@/components/onboarding/types";
+import { INITIAL_HOUSE, PRESET_HOUSE } from "@/components/onboarding/types";
 import iconHome from "@/assets/icon-home.svg";
 
-/* ─── Types ─── */
-interface HouseState {
-  role: "tenant" | "homeowner" | "";
-  buildingType: string;
-  usage: string[];
-  constructionMaterial: string;
-  floorMaterial: string;
-  roofShape: string;
-  roofMaterial: string;
-  ownRisk: string;
-  coverageChoice: "household" | "building" | "both" | "";
-  highValueAV: boolean;
-  highValueAVAmount: string;
-  jewelry: boolean;
-  jewelryAmount: string;
-  specialAssets: boolean;
-  specialAssetsAmount: string;
-  ownerInterest: boolean;
-  ownerInterestAmount: string;
-  security: string;
-  netIncome: string;
-  outsideValue: string;
-  monumental: boolean;
-  quoted: boolean;
-  floorCount: string;
-  rainwater: boolean;
-  smartSensors: boolean;
-  heatPump: boolean;
-  basicCoverage: string;
-}
-
-const INITIAL_HOUSE: HouseState = {
-  role: "",
-  buildingType: "",
-  usage: [],
-  constructionMaterial: "",
-  floorMaterial: "",
-  roofShape: "",
-  roofMaterial: "",
-  ownRisk: "",
-  coverageChoice: "",
-  highValueAV: false,
-  highValueAVAmount: "",
-  jewelry: false,
-  jewelryAmount: "",
-  specialAssets: false,
-  specialAssetsAmount: "",
-  ownerInterest: false,
-  ownerInterestAmount: "",
-  security: "None",
-  netIncome: "",
-  outsideValue: "€0",
-  monumental: false,
-  quoted: false,
-  floorCount: "",
-  rainwater: false,
-  smartSensors: false,
-  heatPump: false,
-  basicCoverage: "",
-};
-
-const PRESET_HOUSE: Partial<HouseState> = {
-  buildingType: "Townhouse",
-  usage: ["I live there"],
-  constructionMaterial: "(Largely) stone",
-  floorMaterial: "Stone/concrete",
-  roofShape: "Sloping",
-  roofMaterial: "Pan roof",
-};
-
-const BUILDING_TYPES = [
-  "Detached house", "Apartment", "Canal house", "Corner house",
-  "Two-under-a-roof", "Townhouse", "Farmhouse",
-];
-const USAGE_OPTIONS = [
-  "I live there", "Holiday home", "I rent it out",
-  "Rental company for rooms", "Different",
-];
-const CONSTRUCTION_MATERIALS = [
-  "Wooden skeleton", "(Largely) stone", "Wooden frame with stone wall",
-];
-const FLOOR_MATERIALS = ["No floors", "Wood", "Stone/concrete"];
-const ROOF_SHAPES = ["Flat", "Sloping", "Special"];
-const ROOF_MATERIALS = [
-  "Wood", "Artificial reeds", "Asphalt/bitumen",
-  "Pan roof", "(Largely) reed", "Shingles",
-];
-const OWN_RISK_OPTIONS = ["€100", "€250", "€500", "No deductible"];
-const SECURITY_OPTIONS = ["None", "BORG", "Police mark", "Both"];
-const NET_INCOME_OPTIONS = [
-  "< €25,000", "€25,000 – €50,000", "€50,000 – €75,000",
-  "€75,000 – €100,000", "> €100,000",
-];
-const OUTSIDE_VALUE_OPTIONS = ["€0", "€2,500", "€5,000", "€7,500", "€10,000"];
-
-/* ─── Reusable UI Pieces ─── */
-
-const SectionCard = ({ title, children }: { title?: string; children: React.ReactNode }) => (
-  <Card>
-    {title && (
-      <CardHeader>
-        <CardTitle className="text-lg">{title}</CardTitle>
-      </CardHeader>
-    )}
-    <CardContent className={title ? "" : "pt-6"}>
-      {children}
-    </CardContent>
-  </Card>
-);
-
-const ChipSelect = ({
-  options, selected, onChange,
-}: {
-  options: string[]; selected: string[]; onChange: (v: string[]) => void;
-}) => (
-  <div className={getSelectionGridClass(options)}>
-    {options.map((opt) => {
-      const isActive = selected.includes(opt);
-      return (
-        <SelectionCard
-          key={opt}
-          label={opt}
-          selected={isActive}
-          onClick={() => onChange(isActive ? [] : [opt])}
-          indicator="radio"
-        />
-      );
-    })}
-  </div>
-);
-
-const SegmentedControl = ({
-  options, value, onChange,
-}: {
-  options: string[]; value: string; onChange: (v: string) => void;
-}) => (
-  <div className={getSelectionGridClass(options)}>
-    {options.map((opt) => (
-      <SelectionCard
-        key={opt}
-        label={opt}
-        selected={value === opt}
-        onClick={() => onChange(opt)}
-        indicator="radio"
-      />
-    ))}
-  </div>
-);
-
-const ToggleRow = ({
-  label, sublabel, checked, onChange, showAmount, amount, onAmountChange,
-}: {
-  label: string; sublabel?: string; checked: boolean; onChange: (v: boolean) => void;
-  showAmount?: boolean; amount?: string; onAmountChange?: (v: string) => void;
-}) => (
-  <div className="space-y-2">
-    <div className="flex items-center justify-between gap-4">
-      <div>
-        <span className="text-sm font-medium text-foreground">{label}</span>
-        {sublabel && <span className="text-xs text-muted-foreground ml-1">({sublabel})</span>}
-      </div>
-      <button
-        onClick={() => onChange(!checked)}
-        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${
-          checked ? "bg-primary" : "bg-input"
-        }`}
-      >
-        <span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${
-          checked ? "translate-x-5" : "translate-x-0"
-        }`} />
-      </button>
-    </div>
-    {showAmount && checked && (
-      <input
-        type="text"
-        placeholder="Enter amount (€)"
-        value={amount || ""}
-        onChange={(e) => onAmountChange?.(e.target.value)}
-        className="w-full rounded-2xl border-2 border-input bg-background h-14 px-4 text-sm text-foreground focus:outline-none focus:border-primary"
-      />
-    )}
-  </div>
-);
+// Shared house step components
+import StepHousePreset from "@/components/onboarding/house/StepHousePreset";
+import StepHouseRole from "@/components/onboarding/house/StepHouseRole";
+import StepHouseDetails from "@/components/onboarding/house/StepHouseDetails";
+import StepHouseCoverage from "@/components/onboarding/house/StepHouseCoverage";
+import StepHouseContents from "@/components/onboarding/house/StepHouseContents";
+import StepHouseBuilding from "@/components/onboarding/house/StepHouseBuilding";
 
 /* ─── Steps ─── */
 type StepKey =
@@ -358,7 +178,6 @@ const HouseInsurance = () => {
   const handleRoleSelect = (role: "tenant" | "homeowner") => {
     update("role", role);
     setTimeout(() => {
-      // Recalculate steps with the new role
       const updatedHouse = { ...house, role };
       const nextSteps = getStepSequence(updatedHouse, testVersion, presetAnswer);
       const roleIdx = nextSteps.indexOf("role");
@@ -393,231 +212,6 @@ const HouseInsurance = () => {
 
   /* ─── Step Renders ─── */
 
-  const renderPresetVerification = () => (
-    <div className="animate-fade-in space-y-6">
-      <TacoMessage
-        message="To save you time, I've pre-filled the standard details for a Dutch home. Can you confirm this?"
-        animate={shouldAnimateTaco}
-        onAnimationComplete={markAnimated}
-      />
-
-      <SectionCard title="Is this information correct?">
-        <ul className="space-y-3 mb-5">
-          {[
-            "Stone exterior walls",
-            "A sloping roof with tiles, pan, or shingles",
-            "Concrete or stone floors throughout",
-            "Used only for private residential living",
-          ].map((item) => (
-            <li key={item} className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                <Check className="w-3 h-3 text-primary" />
-              </div>
-              <span className="text-sm font-medium text-foreground">{item}</span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-5">
-          <div className="grid grid-cols-2 gap-3">
-            <Button
-              variant="outline"
-              onClick={() => handlePresetAnswer("yes")}
-              className={presetAnswer === "yes" ? "border-primary bg-primary/10" : ""}
-            >
-              Yes
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => handlePresetAnswer("no")}
-              className={presetAnswer === "no" ? "border-primary bg-primary/10" : ""}
-            >
-              No
-            </Button>
-          </div>
-        </div>
-      </SectionCard>
-    </div>
-  );
-
-  const renderRoleSelection = () => (
-    <div className="animate-fade-in space-y-6">
-      <TacoMessage
-        message="Great. Now, what would you like to protect today?"
-        animate={shouldAnimateTaco}
-        onAnimationComplete={markAnimated}
-      />
-
-      <Card>
-        <CardContent className="pt-6">
-          <SegmentedControl
-            options={["Tenant", "Homeowner"]}
-            value={house.role === "tenant" ? "Tenant" : house.role === "homeowner" ? "Homeowner" : ""}
-            onChange={(v) => handleRoleSelect(v.toLowerCase() as "tenant" | "homeowner")}
-          />
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  const renderHomeDetails = () => (
-    <div className="animate-fade-in space-y-6">
-      <TacoMessage
-        message="No problem! You can manually adjust the details of your home below to make sure everything is 100% accurate."
-        animate={shouldAnimateTaco}
-        onAnimationComplete={markAnimated}
-      />
-
-      <SectionCard title="Home Details">
-        <div className="space-y-6">
-          <div>
-            <label className="text-sm font-semibold text-foreground mb-2 block">Building Type</label>
-            <NativeSelect value={house.buildingType} onChange={(e) => update("buildingType", e.target.value)} placeholder="Select building type">
-              {BUILDING_TYPES.map((t) => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </NativeSelect>
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-foreground mb-2 block">Usage</label>
-            <ChipSelect options={USAGE_OPTIONS} selected={house.usage} onChange={(v) => update("usage", v)} />
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-foreground mb-2 block">Construction Materials</label>
-            <SegmentedControl options={CONSTRUCTION_MATERIALS} value={house.constructionMaterial} onChange={(v) => update("constructionMaterial", v)} />
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-foreground mb-2 block">Floor Material</label>
-            <SegmentedControl options={FLOOR_MATERIALS} value={house.floorMaterial} onChange={(v) => update("floorMaterial", v)} />
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-foreground mb-2 block">Roof Shape</label>
-            <SegmentedControl options={ROOF_SHAPES} value={house.roofShape} onChange={(v) => update("roofShape", v)} />
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-foreground mb-2 block">Roof Material</label>
-            <NativeSelect value={house.roofMaterial} onChange={(e) => update("roofMaterial", e.target.value)} placeholder="Select roof material">
-              {ROOF_MATERIALS.map((m) => (
-                <option key={m} value={m}>{m}</option>
-              ))}
-            </NativeSelect>
-          </div>
-          {testVersion !== "a" && (
-            <div>
-              <label className="text-sm font-semibold text-foreground mb-2 block">Own Risk</label>
-              <SegmentedControl options={OWN_RISK_OPTIONS} value={house.ownRisk} onChange={(v) => update("ownRisk", v)} />
-            </div>
-          )}
-        </div>
-      </SectionCard>
-    </div>
-  );
-
-  const renderCoveragePath = () => (
-    <div className="animate-fade-in space-y-6">
-      <TacoMessage
-        message="Great. Now, what would you like to protect today? You can insure your belongings, the building itself, or both for full peace of mind."
-        animate={shouldAnimateTaco}
-        onAnimationComplete={markAnimated}
-      />
-
-      <Card>
-        <CardContent className="pt-6">
-          <SegmentedControl
-            options={["Household Goods", "Building", "Both"]}
-            value={
-              house.coverageChoice === "household" ? "Household Goods"
-              : house.coverageChoice === "building" ? "Building"
-              : house.coverageChoice === "both" ? "Both"
-              : ""
-            }
-            onChange={(v) => {
-              const map: Record<string, "household" | "building" | "both"> = {
-                "Household Goods": "household",
-                "Building": "building",
-                "Both": "both",
-              };
-              handleCoverageSelect(map[v]);
-            }}
-          />
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  const renderContentsInsurance = () => (
-    <div className="animate-fade-in space-y-6">
-      <TacoMessage
-        message="Let's look at your belongings. This covers everything that would fall out if you turned your house upside down—like your furniture, electronics, and jewelry."
-        animate={shouldAnimateTaco}
-        onAnimationComplete={markAnimated}
-      />
-
-      <SectionCard title="Contents Insurance">
-        <div className="space-y-5">
-          <ToggleRow label="High-value Audiovisual" sublabel=">€12k" checked={house.highValueAV} onChange={(v) => update("highValueAV", v)} showAmount amount={house.highValueAVAmount} onAmountChange={(v) => update("highValueAVAmount", v)} />
-          <ToggleRow label="Jewelry" sublabel=">€6k" checked={house.jewelry} onChange={(v) => update("jewelry", v)} showAmount amount={house.jewelryAmount} onAmountChange={(v) => update("jewelryAmount", v)} />
-          <ToggleRow label="Special assets" sublabel=">€15k" checked={house.specialAssets} onChange={(v) => update("specialAssets", v)} showAmount amount={house.specialAssetsAmount} onAmountChange={(v) => update("specialAssetsAmount", v)} />
-          <ToggleRow label="Owner interest" sublabel=">€6k" checked={house.ownerInterest} onChange={(v) => update("ownerInterest", v)} showAmount amount={house.ownerInterestAmount} onAmountChange={(v) => update("ownerInterestAmount", v)} />
-          <div className="border-t border-border pt-5">
-            <label className="text-sm font-semibold text-foreground mb-2 block">Security</label>
-            <SegmentedControl options={SECURITY_OPTIONS} value={house.security} onChange={(v) => update("security", v)} />
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-foreground mb-2 block">Net Income</label>
-            <SegmentedControl options={NET_INCOME_OPTIONS} value={house.netIncome} onChange={(v) => update("netIncome", v)} />
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-foreground mb-2 block">Outside Value</label>
-            <NativeSelect value={house.outsideValue} onChange={(e) => update("outsideValue", e.target.value)} placeholder="Select outside value">
-              {OUTSIDE_VALUE_OPTIONS.map((o) => (
-                <option key={o} value={o}>{o}</option>
-              ))}
-            </NativeSelect>
-          </div>
-          {testVersion !== "a" && (
-            <div className="border-t border-border pt-5">
-              <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
-              <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} />
-            </div>
-          )}
-        </div>
-      </SectionCard>
-    </div>
-  );
-
-  const renderBuildingInsurance = () => (
-    <div className="animate-fade-in space-y-6">
-      <TacoMessage
-        message="Now for the structure itself. This protects the physical building, including the walls, roof, and even your fitted kitchen or bathroom pipes."
-        animate={shouldAnimateTaco}
-        onAnimationComplete={markAnimated}
-      />
-
-      <SectionCard title="Building Insurance">
-        <div className="space-y-5">
-          <ToggleRow label="Monumental status" checked={house.monumental} onChange={(v) => update("monumental", v)} />
-          <ToggleRow label="Outbuilding" checked={house.quoted} onChange={(v) => update("quoted", v)} />
-          <div>
-            <label className="text-sm font-semibold text-foreground mb-2 block">Floor count</label>
-            <SegmentedControl options={["1", "2", "2+"]} value={house.floorCount} onChange={(v) => update("floorCount", v)} />
-          </div>
-          <div className="border-t border-border pt-5 space-y-5">
-            <ToggleRow label="Renovation" checked={house.rainwater} onChange={(v) => update("rainwater", v)} />
-            <ToggleRow label="Solar Panels" checked={house.smartSensors} onChange={(v) => update("smartSensors", v)} />
-            <ToggleRow label="Heat pump" checked={house.heatPump} onChange={(v) => update("heatPump", v)} />
-          </div>
-          {testVersion !== "a" && (
-            <div className="border-t border-border pt-5">
-              <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
-              <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} />
-            </div>
-          )}
-        </div>
-      </SectionCard>
-    </div>
-  );
-
   const renderProductSelection = () => (
     <div className="flex min-h-screen bg-background">
       <FlowSwitcher currentFlowId="c" onSwitch={() => navigate("/?flow=a")} />
@@ -649,30 +243,65 @@ const HouseInsurance = () => {
       case "product-selection":
         return null;
       case "preset-verification":
-        return renderPresetVerification();
+        return (
+          <StepHousePreset
+            presetAnswer={presetAnswer}
+            onAnswer={handlePresetAnswer}
+            animateTaco={shouldAnimateTaco}
+            onAnimationComplete={markAnimated}
+          />
+        );
       case "role":
-        return renderRoleSelection();
+        return (
+          <StepHouseRole
+            role={house.role}
+            onSelect={handleRoleSelect}
+            animateTaco={shouldAnimateTaco}
+            onAnimationComplete={markAnimated}
+          />
+        );
       case "home-details":
-        return renderHomeDetails();
+        return (
+          <StepHouseDetails
+            house={house}
+            onUpdate={update}
+            showOwnRisk={testVersion !== "a"}
+            animateTaco={shouldAnimateTaco}
+            onAnimationComplete={markAnimated}
+          />
+        );
       case "coverage-path":
-        return renderCoveragePath();
+        return (
+          <StepHouseCoverage
+            coverageChoice={house.coverageChoice}
+            onSelect={handleCoverageSelect}
+            animateTaco={shouldAnimateTaco}
+            onAnimationComplete={markAnimated}
+          />
+        );
       case "contents":
-        return renderContentsInsurance();
+        return (
+          <StepHouseContents
+            house={house}
+            onUpdate={update}
+            showCoverageLevel={testVersion !== "a"}
+            animateTaco={shouldAnimateTaco}
+            onAnimationComplete={markAnimated}
+          />
+        );
       case "building":
-        return renderBuildingInsurance();
+        return (
+          <StepHouseBuilding
+            house={house}
+            onUpdate={update}
+            showCoverageLevel={testVersion !== "a"}
+            animateTaco={shouldAnimateTaco}
+            onAnimationComplete={markAnimated}
+          />
+        );
       default:
         return null;
     }
-  };
-
-  const stepLabels: Record<StepKey, string> = {
-    "product-selection": "Products",
-    "preset-verification": "Verify",
-    role: "Role",
-    "home-details": "Home Details",
-    "coverage-path": "Coverage",
-    contents: "Contents Insurance",
-    building: "Building Insurance",
   };
 
   if (currentStep === "product-selection") {
@@ -736,8 +365,6 @@ const HouseInsurance = () => {
           </p>
         </div>
       </div>
-
-      {/* Progress indicator hidden */}
 
       {/* Main content */}
       <div className="max-w-3xl mx-auto px-6 md:px-12 lg:px-16 py-8 md:py-12">
