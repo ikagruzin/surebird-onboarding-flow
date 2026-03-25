@@ -222,6 +222,8 @@ interface StepPreferencesProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  /** If true, skip the phone/email sub-step at the end (Flow D) */
+  skipContactStep?: boolean;
 }
 
 const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(({
@@ -238,6 +240,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   onNext,
   onBack,
   animateTaco,
+  skipContactStep = false,
 }, ref) => {
   const [activeTab, setActiveTab] = useState(selectedInsurances[0]);
   const [completedTabs, setCompletedTabs] = useState<string[]>([]);
