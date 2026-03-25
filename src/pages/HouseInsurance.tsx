@@ -542,7 +542,7 @@ const HouseInsurance = () => {
           {testVersion !== "a" && (
             <div>
               <label className="text-sm font-semibold text-foreground mb-2 block">Own Risk</label>
-              <SegmentedControl options={OWN_RISK_OPTIONS} value={house.ownRisk} onChange={(v) => update("ownRisk", v)} columns={4} />
+              <SegmentedControl options={OWN_RISK_OPTIONS} value={house.ownRisk} onChange={(v) => update("ownRisk", v)} />
             </div>
           )}
         </div>
