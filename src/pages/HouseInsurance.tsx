@@ -341,6 +341,7 @@ const HouseInsurance = () => {
     setHouse({ ...INITIAL_HOUSE });
     setCurrentStepIdx(0);
     setPresetAnswer("");
+    setAnimatedSteps(new Set());
   };
 
   const handleVersionSwitch = (v: "a" | "b") => {
