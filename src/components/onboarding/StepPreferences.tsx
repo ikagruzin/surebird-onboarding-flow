@@ -220,6 +220,7 @@ interface StepPreferencesProps {
   onAddInsurances: (ids: string[]) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(({
