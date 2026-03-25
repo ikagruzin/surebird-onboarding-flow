@@ -733,17 +733,13 @@ const DesignSystem = () => {
               </SubSection>
 
               <SubSection title="Select">
-                <Select>
-                  <SelectTrigger className="h-12 rounded-xl border-2 border-input bg-white px-4 text-sm font-medium">
-                    <SelectValue placeholder="Select building type..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="a">Detached house</SelectItem>
-                    <SelectItem value="b">Apartment</SelectItem>
-                    <SelectItem value="c">Studio</SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-muted-foreground mt-1">rounded-xl · border-2 · bg-white · flow-style</p>
+                <select className="flex h-14 w-full rounded-xl border-2 border-input bg-white px-4 py-2 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                  <option value="">Select building type...</option>
+                  <option value="a">Detached house</option>
+                  <option value="b">Apartment</option>
+                  <option value="c">Studio</option>
+                </select>
+                <p className="text-xs text-muted-foreground mt-1">h-14 · rounded-xl · border-2 · bg-white · native dropdown</p>
               </SubSection>
 
               <SubSection title="Checkbox">
