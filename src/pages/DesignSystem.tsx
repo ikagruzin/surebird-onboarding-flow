@@ -723,21 +723,9 @@ const DesignSystem = () => {
           {/* ── 5. FORM CONTROLS ── */}
           <Section title="Form Controls" id="forms">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <SubSection title="Input (Standard)">
-                <Input placeholder="Standard input" value={demoInput} onChange={(e) => setDemoInput(e.target.value)} />
-                <p className="text-xs text-muted-foreground mt-1">border-2 · bg-white · rounded-md</p>
-              </SubSection>
-
-              <SubSection title="Floating Label Input">
+              <SubSection title="Input">
                 <FloatingLabelInput label="Email address" value={demoFloat} onChange={(e) => setDemoFloat(e.target.value)} />
-              </SubSection>
-
-              <SubSection title="Custom Flow Input">
-                <input
-                  className="w-full rounded-xl border-2 border-input bg-white px-4 py-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                  placeholder="Flow-style input (rounded-xl)"
-                />
-                <p className="text-xs text-muted-foreground mt-1">Used in: HouseInsurance dropdowns & amount fields</p>
+                <p className="text-xs text-muted-foreground mt-1">floating-label · border-2 · bg-white · rounded-xl</p>
               </SubSection>
 
               <SubSection title="Textarea">
@@ -746,22 +734,16 @@ const DesignSystem = () => {
 
               <SubSection title="Select">
                 <Select>
-                  <SelectTrigger><SelectValue placeholder="Choose option" /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-xl border-2 border-input bg-white px-4 text-sm font-medium">
+                    <SelectValue placeholder="Select building type..." />
+                  </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="a">Option A</SelectItem>
-                    <SelectItem value="b">Option B</SelectItem>
-                    <SelectItem value="c">Option C</SelectItem>
+                    <SelectItem value="a">Detached house</SelectItem>
+                    <SelectItem value="b">Apartment</SelectItem>
+                    <SelectItem value="c">Studio</SelectItem>
                   </SelectContent>
                 </Select>
-              </SubSection>
-
-              <SubSection title="Custom Select (Flow-style)">
-                <select className="w-full rounded-xl border-2 border-input bg-white px-4 py-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 appearance-none">
-                  <option value="">Select building type...</option>
-                  <option value="a">Detached house</option>
-                  <option value="b">Apartment</option>
-                </select>
-                <p className="text-xs text-muted-foreground mt-1">Used in: HouseInsurance — native select with custom styling</p>
+                <p className="text-xs text-muted-foreground mt-1">rounded-xl · border-2 · bg-white · flow-style</p>
               </SubSection>
 
               <SubSection title="Checkbox">
