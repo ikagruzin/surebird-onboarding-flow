@@ -327,6 +327,7 @@ const Index = () => {
             onUpdate={(value) => setState((s) => ({ ...s, birthdate: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "family":
