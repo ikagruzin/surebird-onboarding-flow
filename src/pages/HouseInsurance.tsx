@@ -347,8 +347,9 @@ const HouseInsurance = () => {
   const handleVersionSwitch = (v: "a" | "b") => {
     setTestVersion(v);
     setHouse({ ...INITIAL_HOUSE });
-    setCurrentStepIdx(1); // stay past product-selection
+    setCurrentStepIdx(1);
     setPresetAnswer("");
+    setAnimatedSteps(new Set());
   };
 
   const handlePresetAnswer = (answer: "yes" | "no") => {
