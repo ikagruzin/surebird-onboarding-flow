@@ -17,7 +17,7 @@ const FloatingLabelInput = React.forwardRef<HTMLInputElement, FloatingLabelInput
           placeholder=" "
           className={cn(
             "peer flex h-14 w-full rounded-2xl border-2 bg-white px-4 pt-5 pb-1 text-base text-foreground transition-colors focus-visible:outline-none focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50",
-            hasValue ? "border-primary" : "border-input hover:border-foreground/30 focus-visible:hover:border-primary",
+            "border-input hover:border-foreground/30 focus-visible:hover:border-primary",
             className,
           )}
           {...props}
