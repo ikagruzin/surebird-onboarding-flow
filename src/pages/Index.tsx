@@ -64,6 +64,7 @@ const Index = () => {
   const flow = useMemo(() => getFlow(flowId), [flowId]);
 
   const [state, setState] = useState<WizardState>({ ...INITIAL_STATE });
+  const [offerUnlocked, setOfferUnlocked] = useState(false);
   const prefsRef = useRef<StepPreferencesHandle>(null);
   const seenStepsRef = useRef<Set<string>>(new Set());
 
