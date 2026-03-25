@@ -405,6 +405,7 @@ const Index = () => {
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+            skipContactStep={flow.steps.some((s) => s.id === "all-set")}
           />
         );
       case "loading":
