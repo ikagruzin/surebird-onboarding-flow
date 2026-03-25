@@ -26,6 +26,7 @@ import StepSuccess from "@/components/onboarding/StepSuccess";
 import Footer from "@/components/onboarding/Footer";
 import StickyFooter from "@/components/onboarding/StickyFooter";
 import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
+import DevSkipButton from "@/components/onboarding/DevSkipButton";
 import { Progress } from "@/components/ui/progress";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
 import type { WizardState } from "@/components/onboarding/types";
@@ -538,11 +539,17 @@ const Index = () => {
   if (isStandalone) {
     return (
       <div className="pb-0">
-        <FlowSwitcher currentFlowId={flowId} onSwitch={switchFlow} />
-        {renderStep()}
-        {showFooter && <div aria-hidden className="h-36 md:h-40" />}
-        {showFooter && (
-          <StickyFooter
+      <FlowSwitcher currentFlowId={flowId} onSwitch={switchFlow} />
+      <DevSkipButton
+        flow={flow}
+        onSkip={(data, idx) => {
+          setState((s) => ({ ...s, ...data, currentStep: idx }));
+        }}
+      />
+      {renderStep()}
+      {showFooter && <div aria-hidden className="h-36 md:h-40" />}
+      {showFooter && (
+        <StickyFooter
             savings={totalSavings}
             onNext={handleNext}
             disabled={!canProceed()}
@@ -560,6 +567,12 @@ const Index = () => {
     <div className="flex min-h-screen bg-background">
       <Sidebar currentStep={getSidebarStep()} visible={true} />
       <FlowSwitcher currentFlowId={flowId} onSwitch={switchFlow} />
+      <DevSkipButton
+        flow={flow}
+        onSkip={(data, idx) => {
+          setState((s) => ({ ...s, ...data, currentStep: idx }));
+        }}
+      />
 
       <main className={`flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 ${isFullWidth ? '' : 'max-w-3xl mx-auto'}`}>
         {phaseLabel && (
