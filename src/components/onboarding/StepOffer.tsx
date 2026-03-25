@@ -507,55 +507,61 @@ const StepOffer = ({
     );
   };
 
+  const [annualDiscount, setAnnualDiscount] = useState(false);
+
   // Sidebar calculations
   const renderCalculations = () => (
     <div className="space-y-6">
       {/* Offer calculations */}
       <div className="border border-border rounded-3xl p-6 bg-card">
-        <h3 className="text-lg font-bold text-foreground mb-1">Offer calculations</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Here you can see exactly how your new total price is structured and what discount you are getting!
-        </p>
+        <h3 className="text-xl font-bold text-foreground mb-4">Offer calculations</h3>
 
-        <div className="space-y-2 text-sm mb-4">
+        <div className="space-y-3 text-sm mb-4">
           {selectedInsurances.map(id => {
             const ins = INSURANCE_TYPES.find(t => t.id === id);
             const insurer = INSURER_DATA[id];
+            const original = insurer?.monthlyPrice || 5;
+            const discounted = original * (1 - discountPercent / 100);
             return (
-              <div key={id} className="flex justify-between">
+              <div key={id} className="flex justify-between items-center">
                 <span className="font-medium text-foreground">{ins?.label || id}</span>
-                <span className="text-foreground">€{(insurer?.monthlyPrice || 5).toFixed(2)}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-destructive line-through text-sm">€{original.toFixed(2)}</span>
+                  <span className="font-semibold text-foreground">€{discounted.toFixed(2)}</span>
+                </div>
               </div>
             );
           })}
         </div>
 
-        <div className="border-t border-border pt-3 space-y-3">
-          <div className="flex justify-between text-sm">
-            <span className="font-semibold text-foreground">Total before discount</span>
-            <span className="font-semibold text-destructive line-through">€{totalBeforeDiscount.toFixed(2)}</span>
-          </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="flex items-center gap-1.5 text-foreground font-medium">
-              <Check className="w-4 h-4 text-success" />
+        <div className="border-t border-border pt-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <CheckCircle2 className="w-5 h-5 text-success" />
               Discount:
             </span>
-            <span className="bg-success/10 text-success text-xs font-semibold px-2.5 py-1 rounded-full">
-              {discountPercent}% discount is applied
-            </span>
+            <span className="text-base font-semibold text-destructive">-{discountPercent}%</span>
           </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-foreground">Activate discount for annual payment</span>
-            <div className="w-10 h-6 bg-muted rounded-full relative cursor-pointer">
-              <div className="w-4 h-4 bg-white rounded-full absolute left-1 top-1 shadow-sm" />
-            </div>
+
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-foreground">Activate annual payment discount</span>
+            <button
+              type="button"
+              onClick={() => setAnnualDiscount(!annualDiscount)}
+              className={`w-11 h-6 rounded-full relative transition-colors ${annualDiscount ? "bg-success" : "bg-muted"}`}
+            >
+              <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 shadow-sm transition-transform ${annualDiscount ? "translate-x-5" : "translate-x-0.5"}`} />
+            </button>
           </div>
         </div>
 
         <div className="border-t border-border mt-4 pt-4">
-          <div className="flex justify-between items-baseline bg-primary/5 rounded-2xl px-4 py-3">
-            <span className="text-lg font-bold text-foreground">Total p/m</span>
-            <span className="text-2xl font-bold text-foreground">€{totalAfterDiscount.toFixed(1)}</span>
+          <div className="flex justify-between items-center bg-primary/5 rounded-2xl px-5 py-4">
+            <span className="text-xl font-bold text-foreground">Total p/m</span>
+            <div className="flex items-center gap-2">
+              <span className="text-base font-semibold text-destructive line-through">€{totalBeforeDiscount.toFixed(2)}</span>
+              <span className="text-2xl font-bold text-foreground">€{totalAfterDiscount.toFixed(1)}</span>
+            </div>
           </div>
           <div className="flex items-center justify-center gap-1.5 mt-3 text-sm font-semibold text-success">
             <Calendar className="w-4 h-4" />
@@ -577,7 +583,7 @@ const StepOffer = ({
 
         <button className="w-full mt-3 inline-flex items-center justify-center gap-2 border border-border rounded-full px-6 py-3 text-sm font-medium text-foreground hover:bg-muted transition-colors">
           <Lock className="w-4 h-4" />
-          Lock price for 24h
+          Lock discount for 24h
         </button>
 
         <div className="flex items-start gap-2 mt-4 text-xs text-muted-foreground">
