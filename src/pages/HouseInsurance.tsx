@@ -279,6 +279,7 @@ const HouseInsurance = () => {
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
   const [testVersion, setTestVersion] = useState<"a" | "b">("a");
   const [presetAnswer, setPresetAnswer] = useState<"yes" | "no" | "">("");
+  const [animatedSteps, setAnimatedSteps] = useState<Set<string>>(new Set());
 
   const update = useCallback(<K extends keyof HouseState>(key: K, val: HouseState[K]) => {
     setHouse((s) => ({ ...s, [key]: val }));
