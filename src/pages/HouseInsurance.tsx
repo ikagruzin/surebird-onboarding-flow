@@ -623,7 +623,7 @@ const HouseInsurance = () => {
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Outside Value</label>
             <Select value={house.outsideValue} onValueChange={(v) => update("outsideValue", v)}>
-              <SelectTrigger className="h-14 rounded-2xl border-2 border-input bg-background text-foreground hover:border-foreground/30 focus:border-primary focus:ring-0 data-[state=open]:border-primary">
+              <SelectTrigger>
                 <SelectValue placeholder="Select outside value" />
               </SelectTrigger>
               <SelectContent>
