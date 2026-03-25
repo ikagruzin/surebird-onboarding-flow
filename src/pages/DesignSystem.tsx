@@ -416,6 +416,7 @@ const DesignSystem = () => {
 
 
 
+
             <SubSection title="Spacing Scale">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
