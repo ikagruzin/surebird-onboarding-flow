@@ -1,27 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 
 interface TacoMessageProps {
+  /** The message — supports JSX for rich content */
   message: string;
+  /** Whether to animate word-by-word (false = render instantly) */
   animate?: boolean;
-  /** Delay in ms between each character (default 20) */
-  charDelay?: number;
+  /** Delay in ms between each word (default 50) */
+  wordDelay?: number;
+  /** Visual variant: "plain" (semibold text) or "bubble" (muted background bubble) */
   variant?: "plain" | "bubble";
+  /** Called when animation completes */
   onAnimationComplete?: () => void;
 }
 
 const TacoMessage = ({
   message,
   animate = false,
-  charDelay = 20,
+  wordDelay = 50,
   variant = "plain",
   onAnimationComplete,
 }: TacoMessageProps) => {
-  const [visibleCount, setVisibleCount] = useState(animate ? 0 : message.length);
+  const words = useMemo(() => {
+    return message.split(/(\s+)/).filter(Boolean);
+  }, [message]);
+
+  const [visibleCount, setVisibleCount] = useState(animate ? 0 : words.length);
 
   useEffect(() => {
     if (!animate) {
-      setVisibleCount(message.length);
+      setVisibleCount(words.length);
       return;
     }
 
@@ -30,22 +38,30 @@ const TacoMessage = ({
     const interval = setInterval(() => {
       i++;
       setVisibleCount(i);
-      if (i >= message.length) {
+      if (i >= words.length) {
         clearInterval(interval);
         onAnimationComplete?.();
       }
-    }, charDelay);
+    }, wordDelay);
 
     return () => clearInterval(interval);
-  }, [animate, message, charDelay, onAnimationComplete]);
-
-  const visibleText = message.slice(0, visibleCount);
-  const hasCursor = animate && visibleCount < message.length;
+  }, [animate, words, wordDelay, onAnimationComplete]);
 
   const textContent = (
     <>
-      {visibleText}
-      {hasCursor && <span className="inline-block w-[2px] h-[1em] bg-foreground/60 align-text-bottom animate-pulse ml-px" />}
+      {words.map((word, index) => {
+        if (index >= visibleCount) return null;
+        const isNewlyRevealed = animate && index >= visibleCount - 1;
+        return (
+          <span
+            key={index}
+            className={isNewlyRevealed ? "animate-fade-in-word" : ""}
+            style={isNewlyRevealed ? { animationDuration: "0.2s" } : undefined}
+          >
+            {word}
+          </span>
+        );
+      })}
     </>
   );
 
