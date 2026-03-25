@@ -125,21 +125,17 @@ const ChipSelect = ({
 }: {
   options: string[]; selected: string[]; onChange: (v: string[]) => void;
 }) => (
-  <div className="flex flex-wrap gap-2">
+  <div className="space-y-2">
     {options.map((opt) => {
       const isActive = selected.includes(opt);
       return (
-        <button
+        <SelectionCard
           key={opt}
+          label={opt}
+          selected={isActive}
           onClick={() => onChange(isActive ? selected.filter((s) => s !== opt) : [...selected, opt])}
-          className={`px-4 py-2.5 rounded-full border-2 text-sm font-medium transition-all ${
-            isActive
-              ? "border-primary bg-primary/10 text-foreground"
-              : "border-border text-foreground hover:border-foreground/30"
-          }`}
-        >
-          {opt}
-        </button>
+          indicator="checkbox"
+        />
       );
     })}
   </div>
