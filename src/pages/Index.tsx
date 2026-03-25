@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useMemo } from "react";
+import { useState, useCallback, useRef, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Sidebar from "@/components/onboarding/Sidebar";
 import StepOne from "@/components/onboarding/StepOne";
