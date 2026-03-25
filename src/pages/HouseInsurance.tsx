@@ -1,11 +1,12 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight, ChevronLeft, RotateCcw, Home, Info, Check } from "lucide-react";
 import StickyFooter from "@/components/onboarding/StickyFooter";
 import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
 import Sidebar from "@/components/onboarding/Sidebar";
+import TacoMessage from "@/components/onboarding/TacoMessage";
+import { Button } from "@/components/ui/button";
 import iconHome from "@/assets/icon-home.svg";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
 
 /* ─── Types ─── */
 interface HouseState {
