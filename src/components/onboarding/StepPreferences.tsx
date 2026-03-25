@@ -237,6 +237,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   onAddInsurances,
   onNext,
   onBack,
+  animateTaco,
 }, ref) => {
   const [activeTab, setActiveTab] = useState(selectedInsurances[0]);
   const [completedTabs, setCompletedTabs] = useState<string[]>([]);
