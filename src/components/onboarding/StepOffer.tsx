@@ -1,5 +1,9 @@
 import { useState, useRef, useMemo } from "react";
 import { Check, CheckCircle2, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play, Star, Gift, Award } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import InsuranceOfferCard from "./InsuranceOfferCard";
+import logoNN from "@/assets/logo-nationale-nederlanden.svg";
+import logoAllianz from "@/assets/logo-allianz.svg";
 import TacoMessage from "./TacoMessage";
 import LegalCoverageSelector from "./LegalCoverageSelector";
 import { INSURANCE_TYPES } from "./types";
@@ -25,81 +29,69 @@ const ICON_MAP: Record<string, string> = {
   Caravan: iconCaravan,
 };
 
-const INSURER_DATA: Record<string, { name: string; logo: string; badge: string; badgeColor: string; happyClients: string; deductible: string; priceQuality?: string; cancellable: boolean; monthlyPrice: number }> = {
+const INSURER_DATA: Record<string, { name: string; logoSrc?: string; happyClients: string; deductible: string; priceQuality?: string; cancellable: boolean; monthlyPrice: number; savingsPercent: number }> = {
   home: {
     name: "Nationale Nederlanden",
-    logo: "🔶",
-    badge: "Best and cheapest choice",
-    badgeColor: "bg-primary/5 text-primary",
-    happyClients: "+100 happy clients",
+    logoSrc: logoNN,
+    happyClients: "650+ happy clients",
     deductible: "€500",
     priceQuality: "Excellent",
     cancellable: true,
     monthlyPrice: 5.11,
+    savingsPercent: 5,
   },
   liability: {
-    name: "Anker Insurance",
-    logo: "⚓",
-    badge: "The most popular choice",
-    badgeColor: "bg-primary/5 text-primary",
-    happyClients: "+75 happy clients",
+    name: "Allianz",
+    logoSrc: logoAllianz,
+    happyClients: "150+ happy clients",
     deductible: "€100",
     cancellable: true,
     monthlyPrice: 2.11,
+    savingsPercent: 2,
   },
   travel: {
     name: "Allianz",
-    logo: "🛡️",
-    badge: "Best and cheapest choice",
-    badgeColor: "bg-primary/5 text-primary",
-    happyClients: "+50 happy clients",
+    logoSrc: logoAllianz,
+    happyClients: "50+ happy clients",
     deductible: "€50",
     cancellable: true,
     monthlyPrice: 4.20,
+    savingsPercent: 3,
   },
   car: {
     name: "FBTO",
-    logo: "🚗",
-    badge: "The most popular choice",
-    badgeColor: "bg-primary/5 text-primary",
-    happyClients: "+200 happy clients",
+    happyClients: "200+ happy clients",
     deductible: "€150",
     priceQuality: "Good",
     cancellable: true,
     monthlyPrice: 45.00,
+    savingsPercent: 4,
   },
   legal: {
     name: "DAS",
-    logo: "⚖️",
-    badge: "Best and cheapest choice",
-    badgeColor: "bg-primary/5 text-primary",
-    happyClients: "+80 happy clients",
+    happyClients: "80+ happy clients",
     deductible: "€250",
     cancellable: true,
     monthlyPrice: 12.40,
+    savingsPercent: 3,
   },
   accidents: {
     name: "Interpolis",
-    logo: "🏥",
-    badge: "The most popular choice",
-    badgeColor: "bg-primary/5 text-primary",
-    happyClients: "+60 happy clients",
+    happyClients: "60+ happy clients",
     deductible: "€0",
     cancellable: true,
     monthlyPrice: 3.20,
+    savingsPercent: 2,
   },
   caravan: {
     name: "Kamernet",
-    logo: "🏕️",
-    badge: "Best and cheapest choice",
-    badgeColor: "bg-primary/5 text-primary",
-    happyClients: "+30 happy clients",
+    happyClients: "30+ happy clients",
     deductible: "€100",
     cancellable: true,
     monthlyPrice: 9.80,
+    savingsPercent: 1,
   },
 };
-
 // Preference questions shown on offer page (per product)
 const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { value: string; label: string }[]; customComponent?: string }[]> = {
   liability: [
@@ -427,80 +419,30 @@ const StepOffer = ({
 
     return (
       <div key={id} className="mb-8">
-        {activeTab === "all" && (
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-            <button className="text-sm font-medium text-foreground border border-border rounded-full px-4 py-2 hover:bg-muted transition-colors">
-              Edit preferences
-            </button>
-          </div>
-        )}
-
-        {/* Badge + navigation */}
-        <div className="flex items-center justify-between mb-2">
-          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary bg-primary/10 rounded-full px-3 py-1.5">
-            <Shield className="w-4 h-4" />
-            {insurer.badge}
-          </span>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
           <div className="flex items-center gap-2">
-            <button className="w-8 h-8 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors">
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button className="w-8 h-8 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors">
-              <ChevronRight className="w-4 h-4" />
-            </button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setActiveTab(id)}
+            >
+              Edit
+            </Button>
+            <Button variant="outline" size="sm">
+              Compare
+            </Button>
           </div>
         </div>
 
-        {/* Card */}
-        <div className="border border-border rounded-3xl p-6 bg-card">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-md bg-success flex items-center justify-center">
-                <Check className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span className="text-lg font-bold text-foreground">{insurer.name}</span>
-            </div>
-            <span className="text-sm text-muted-foreground flex items-center gap-1">
-              😊 {insurer.happyClients}
-            </span>
-          </div>
-
-          <div className="border-t border-border pt-4 space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Deductible:</span>
-              <span className="font-semibold text-foreground">{insurer.deductible}</span>
-            </div>
-            {insurer.priceQuality && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Price/quality:</span>
-                <span className="font-semibold text-foreground">{insurer.priceQuality}</span>
-              </div>
-            )}
-            {insurer.cancellable && (
-              <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">Can be cancelled on daily basis:</span>
-                <Check className="w-4 h-4 text-success" />
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-end justify-between mt-4 pt-4 border-t border-border">
-            <button className="text-sm font-medium text-foreground underline underline-offset-2">
-              View details
-            </button>
-            <div className="text-right">
-              <span className="text-sm text-muted-foreground">per month </span>
-              <span className="text-2xl font-bold text-foreground">€{insurer.monthlyPrice.toFixed(2)}</span>
-            </div>
-          </div>
-          <div className="flex justify-end mt-1">
-            <span className="text-xs font-medium text-success flex items-center gap-1">
-              <Check className="w-3 h-3" />
-              Discount is available for you
-            </span>
-          </div>
-        </div>
+        <InsuranceOfferCard
+          insurerName={insurer.name}
+          logoSrc={insurer.logoSrc}
+          monthlyPrice={insurer.monthlyPrice}
+          savingsPercent={insurer.savingsPercent}
+          happyClients={insurer.happyClients}
+          onViewDetails={() => setActiveTab(id)}
+        />
       </div>
     );
   };
@@ -659,54 +601,8 @@ const StepOffer = ({
       <div className="grid gap-8 xl:grid-cols-[minmax(0,680px)_320px] justify-center items-start">
         {/* Main content */}
         <div className="min-w-0">
-          <h1 className="text-3xl font-bold text-foreground mb-6">Your personal offer</h1>
+           <h1 className="text-3xl font-bold text-foreground mb-8">Your personal offer</h1>
 
-          {/* Product tabs */}
-          <div className="flex flex-wrap items-center gap-2 mb-8">
-            <button
-              onClick={() => setActiveTab("all")}
-              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border ${
-                activeTab === "all"
-                  ? "bg-foreground text-background border-foreground"
-                  : "bg-white border-[hsl(0,0%,84%)] text-foreground"
-              }`}
-              style={{ borderWidth: "1px" }}
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={activeTab === "all" ? "text-background" : "text-foreground"}>
-                <rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                <rect x="10" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                <rect x="1" y="10" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                <rect x="10" y="10" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
-              </svg>
-              All offers
-            </button>
-            {selectedInsurances.map((id) => {
-              const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
-              const isActive = activeTab === id;
-              return (
-                <button
-                  key={id}
-                  onClick={() => setActiveTab(id)}
-                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border ${
-                    isActive
-                      ? "bg-foreground text-background border-foreground"
-                      : "bg-white border-[hsl(0,0%,84%)] text-foreground"
-                  }`}
-                  style={{ borderWidth: "1px" }}
-                >
-                  <img
-                    src={ICON_MAP[ins.icon]}
-                    alt={ins.label}
-                    className={`w-6 h-6 ${isActive ? "brightness-0 invert" : ""}`}
-                  />
-                  {ins.label}
-                </button>
-              );
-            })}
-            <button className="h-11 w-11 rounded-full border border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
-              <Plus className="w-4 h-4" />
-            </button>
-          </div>
           {activeTab === "all" ? (
             <>
               <div className="border border-border rounded-3xl p-6 bg-card mb-8">
@@ -729,11 +625,19 @@ const StepOffer = ({
             </>
           ) : (
             <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setActiveTab("all")}
+                className="mb-6"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Back to all offers
+              </Button>
               {renderOfferCard(activeTab)}
               {renderPreferences(activeTab)}
             </>
           )}
-
           <div className="mt-12 mb-8">
             <h2 className="text-xl font-bold text-foreground mb-6">Your benefits with Surebird</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
