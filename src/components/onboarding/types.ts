@@ -7,6 +7,102 @@ export interface InsuranceType {
   savings: number;
 }
 
+/* ─── House Insurance State ─── */
+export interface HouseState {
+  role: "tenant" | "homeowner" | "";
+  buildingType: string;
+  usage: string[];
+  constructionMaterial: string;
+  floorMaterial: string;
+  roofShape: string;
+  roofMaterial: string;
+  ownRisk: string;
+  coverageChoice: "household" | "building" | "both" | "";
+  highValueAV: boolean;
+  highValueAVAmount: string;
+  jewelry: boolean;
+  jewelryAmount: string;
+  specialAssets: boolean;
+  specialAssetsAmount: string;
+  ownerInterest: boolean;
+  ownerInterestAmount: string;
+  security: string;
+  netIncome: string;
+  outsideValue: string;
+  monumental: boolean;
+  quoted: boolean;
+  floorCount: string;
+  rainwater: boolean;
+  smartSensors: boolean;
+  heatPump: boolean;
+  basicCoverage: string;
+}
+
+export const INITIAL_HOUSE: HouseState = {
+  role: "",
+  buildingType: "",
+  usage: [],
+  constructionMaterial: "",
+  floorMaterial: "",
+  roofShape: "",
+  roofMaterial: "",
+  ownRisk: "",
+  coverageChoice: "",
+  highValueAV: false,
+  highValueAVAmount: "",
+  jewelry: false,
+  jewelryAmount: "",
+  specialAssets: false,
+  specialAssetsAmount: "",
+  ownerInterest: false,
+  ownerInterestAmount: "",
+  security: "None",
+  netIncome: "",
+  outsideValue: "€0",
+  monumental: false,
+  quoted: false,
+  floorCount: "",
+  rainwater: false,
+  smartSensors: false,
+  heatPump: false,
+  basicCoverage: "",
+};
+
+export const PRESET_HOUSE: Partial<HouseState> = {
+  buildingType: "Townhouse",
+  usage: ["I live there"],
+  constructionMaterial: "(Largely) stone",
+  floorMaterial: "Stone/concrete",
+  roofShape: "Sloping",
+  roofMaterial: "Pan roof",
+};
+
+/* ─── House Constants ─── */
+export const BUILDING_TYPES = [
+  "Detached house", "Apartment", "Canal house", "Corner house",
+  "Two-under-a-roof", "Townhouse", "Farmhouse",
+];
+export const USAGE_OPTIONS = [
+  "I live there", "Holiday home", "I rent it out",
+  "Rental company for rooms", "Different",
+];
+export const CONSTRUCTION_MATERIALS = [
+  "Wooden skeleton", "(Largely) stone", "Wooden frame with stone wall",
+];
+export const FLOOR_MATERIALS = ["No floors", "Wood", "Stone/concrete"];
+export const ROOF_SHAPES = ["Flat", "Sloping", "Special"];
+export const ROOF_MATERIALS = [
+  "Wood", "Artificial reeds", "Asphalt/bitumen",
+  "Pan roof", "(Largely) reed", "Shingles",
+];
+export const OWN_RISK_OPTIONS = ["€100", "€250", "€500", "No deductible"];
+export const SECURITY_OPTIONS = ["None", "BORG", "Police mark", "Both"];
+export const NET_INCOME_OPTIONS = [
+  "< €25,000", "€25,000 – €50,000", "€50,000 – €75,000",
+  "€75,000 – €100,000", "> €100,000",
+];
+export const OUTSIDE_VALUE_OPTIONS = ["€0", "€2,500", "€5,000", "€7,500", "€10,000"];
+
 export interface WizardState {
   currentStep: number;
   selectedInsurances: string[];
@@ -31,6 +127,9 @@ export interface WizardState {
   acceptanceAnswers: Record<string, string>;
   agreeTerms: boolean;
   agreeDebit: boolean;
+  // House insurance
+  house: HouseState;
+  housePresetAnswer: "yes" | "no" | "";
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [

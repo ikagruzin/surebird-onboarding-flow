@@ -68,6 +68,82 @@ const flowA: FlowConfig = {
       fullWidth: true,
       hideFooter: true,
     },
+    // ─── House Insurance Steps (shown only when "home" is selected) ───
+    {
+      id: "house-preset",
+      phase: "finalise",
+      hideSavings: true,
+      hideNextButton: true, // auto-advances on Yes/No
+      shouldSkip: (state) => !state.selectedInsurances?.includes("home"),
+    },
+    {
+      id: "house-details",
+      phase: "finalise",
+      hideSavings: true,
+      shouldSkip: (state) =>
+        !state.selectedInsurances?.includes("home") ||
+        state.housePresetAnswer === "yes" ||
+        state.housePresetAnswer === "",
+    },
+    {
+      id: "house-role",
+      phase: "finalise",
+      hideSavings: true,
+      hideNextButton: true, // auto-advances on selection
+      shouldSkip: (state) => !state.selectedInsurances?.includes("home"),
+      getNextStep: (state) => {
+        if (state.house?.role === "tenant") return "house-contents";
+        if (state.house?.role === "homeowner") return "house-coverage";
+        return null;
+      },
+    },
+    {
+      id: "house-coverage",
+      phase: "finalise",
+      hideSavings: true,
+      hideNextButton: true, // auto-advances on selection
+      shouldSkip: (state) =>
+        !state.selectedInsurances?.includes("home") ||
+        state.house?.role !== "homeowner",
+      getNextStep: (state) => {
+        if (state.house?.coverageChoice === "household") return "house-contents";
+        if (state.house?.coverageChoice === "building") return "house-building";
+        if (state.house?.coverageChoice === "both") return "house-contents";
+        return null;
+      },
+    },
+    {
+      id: "house-contents",
+      phase: "finalise",
+      hideSavings: true,
+      shouldSkip: (state) => {
+        if (!state.selectedInsurances?.includes("home")) return true;
+        const role = state.house?.role;
+        const choice = state.house?.coverageChoice;
+        if (role === "tenant") return false;
+        if (role === "homeowner" && (choice === "household" || choice === "both")) return false;
+        return true;
+      },
+      getNextStep: (state) => {
+        if (state.house?.role === "homeowner" && state.house?.coverageChoice === "both") {
+          return "house-building";
+        }
+        return "start-date";
+      },
+    },
+    {
+      id: "house-building",
+      phase: "finalise",
+      hideSavings: true,
+      shouldSkip: (state) => {
+        if (!state.selectedInsurances?.includes("home")) return true;
+        const role = state.house?.role;
+        const choice = state.house?.coverageChoice;
+        if (role === "homeowner" && (choice === "building" || choice === "both")) return false;
+        return true;
+      },
+    },
+    // ─── End House Insurance Steps ───
     {
       id: "start-date",
       phase: "finalise",
