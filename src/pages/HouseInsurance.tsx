@@ -5,6 +5,7 @@ import StickyFooter from "@/components/onboarding/StickyFooter";
 import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
 import TacoMessage from "@/components/onboarding/TacoMessage";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SelectionCard } from "@/components/ui/selection-card";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
