@@ -539,11 +539,17 @@ const Index = () => {
   if (isStandalone) {
     return (
       <div className="pb-0">
-        <FlowSwitcher currentFlowId={flowId} onSwitch={switchFlow} />
-        {renderStep()}
-        {showFooter && <div aria-hidden className="h-36 md:h-40" />}
-        {showFooter && (
-          <StickyFooter
+      <FlowSwitcher currentFlowId={flowId} onSwitch={switchFlow} />
+      <DevSkipButton
+        flow={flow}
+        onSkip={(data, idx) => {
+          setState((s) => ({ ...s, ...data, currentStep: idx }));
+        }}
+      />
+      {renderStep()}
+      {showFooter && <div aria-hidden className="h-36 md:h-40" />}
+      {showFooter && (
+        <StickyFooter
             savings={totalSavings}
             onNext={handleNext}
             disabled={!canProceed()}
