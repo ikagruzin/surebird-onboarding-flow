@@ -452,8 +452,8 @@ const HouseInsurance = () => {
         <CardContent className="pt-6">
           <SegmentedControl
             options={["Tenant", "Homeowner"]}
-            value={house.role}
-            onChange={(v) => handleRoleSelect(v as "tenant" | "homeowner")}
+            value={house.role === "tenant" ? "Tenant" : house.role === "homeowner" ? "Homeowner" : ""}
+            onChange={(v) => handleRoleSelect(v.toLowerCase() as "tenant" | "homeowner")}
           />
         </CardContent>
       </Card>
