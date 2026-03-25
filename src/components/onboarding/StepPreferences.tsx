@@ -36,7 +36,7 @@ interface PreferenceQuestion {
 }
 
 const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
-  home: [], // House preferences are now handled by dedicated Flow C steps
+  // home preferences are handled by dedicated house steps outside StepPreferences
   liability: [
     {
       id: "dog",
@@ -209,8 +209,13 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   onBack,
   animateTaco,
 }, ref) => {
-  const [activeTab, setActiveTab] = useState(selectedInsurances[0]);
-  const [completedTabs, setCompletedTabs] = useState<string[]>([]);
+  // Filter out products with no preference questions (e.g. "home" — handled by dedicated steps)
+  const prefInsurances = selectedInsurances.filter((id) => (QUESTIONS_BY_TYPE[id]?.length ?? 0) > 0);
+  const [activeTab, setActiveTab] = useState(prefInsurances[0] || selectedInsurances[0]);
+  const [completedTabs, setCompletedTabs] = useState<string[]>(
+    // Auto-mark products with no questions as completed
+    selectedInsurances.filter((id) => !(QUESTIONS_BY_TYPE[id]?.length))
+  );
   const [questionStep, setQuestionStep] = useState(0);
   const [showPhoneStep, setShowPhoneStep] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -241,8 +246,8 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   const allQuestionsAnswered = questions.every((q) => currentPrefs[q.id]);
 
   // Total progress across all products
-  const totalQuestions = selectedInsurances.reduce((sum, id) => sum + (QUESTIONS_BY_TYPE[id]?.length || 0), 0);
-  const answeredQuestions = selectedInsurances.reduce((sum, id) => {
+  const totalQuestions = prefInsurances.reduce((sum, id) => sum + (QUESTIONS_BY_TYPE[id]?.length || 0), 0);
+  const answeredQuestions = prefInsurances.reduce((sum, id) => {
     const qs = QUESTIONS_BY_TYPE[id] || [];
     return sum + qs.filter(q => (preferences[id] || {})[q.id]).length;
   }, 0);
@@ -259,9 +264,9 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
         setQuestionStep(questionStep - 1);
         return true;
       }
-      const currentIndex = selectedInsurances.indexOf(activeTab);
+      const currentIndex = prefInsurances.indexOf(activeTab);
       if (currentIndex > 0) {
-        const prevTab = selectedInsurances[currentIndex - 1];
+        const prevTab = prefInsurances[currentIndex - 1];
         animateTabSwitch(prevTab, "right");
         const prevQuestions = QUESTIONS_BY_TYPE[prevTab] || [];
         setQuestionStep(Math.max(0, prevQuestions.length - 1));
@@ -277,7 +282,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       handleNextStep();
       return true; // handled internally
     },
-  }), [showPhoneStep, questionStep, activeTab, selectedInsurances, preferences]);
+  }), [showPhoneStep, questionStep, activeTab, prefInsurances, preferences]);
 
   const animateTabSwitch = (newTab: string, direction: "left" | "right" = "left") => {
     setTransitionDirection(direction);
@@ -305,9 +310,9 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
     if (!completedTabs.includes(activeTab)) {
       setCompletedTabs((prev) => [...prev, activeTab]);
     }
-    const currentIndex = selectedInsurances.indexOf(activeTab);
-    if (currentIndex < selectedInsurances.length - 1) {
-      const nextTab = selectedInsurances[currentIndex + 1];
+    const currentIndex = prefInsurances.indexOf(activeTab);
+    if (currentIndex < prefInsurances.length - 1) {
+      const nextTab = prefInsurances[currentIndex + 1];
       animateTabSwitch(nextTab);
       setQuestionStep(0);
     } else {
@@ -333,9 +338,9 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   };
 
   const handleTabClick = (id: string) => {
-    if (id === activeTab) return;
-    const currentIndex = selectedInsurances.indexOf(activeTab);
-    const newIndex = selectedInsurances.indexOf(id);
+    if (id === activeTab || !prefInsurances.includes(id)) return;
+    const currentIndex = prefInsurances.indexOf(activeTab);
+    const newIndex = prefInsurances.indexOf(id);
     animateTabSwitch(id, newIndex > currentIndex ? "left" : "right");
     setQuestionStep(0);
     setShowPhoneStep(false);
