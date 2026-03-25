@@ -26,6 +26,7 @@ interface StepStartDateProps {
   onUpdateStartDate: (insuranceId: string, date: string) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 function formatDateInput(raw: string): string {
