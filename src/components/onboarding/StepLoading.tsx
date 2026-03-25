@@ -35,7 +35,7 @@ const CHECKMARK_STEPS = [
   "Preparing your offer",
 ];
 
-const INITIAL_DELAY = 1950; // 30% slower
+const INITIAL_DELAY = 4000; // 4s before first card
 
 const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
   const [visibleCards, setVisibleCards] = useState(0);
