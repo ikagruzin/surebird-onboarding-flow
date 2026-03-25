@@ -26,6 +26,7 @@ interface StepAddressProps {
   onUpdate: (field: "postcode" | "houseNumber" | "addition", value: string) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 // Mock address lookup
