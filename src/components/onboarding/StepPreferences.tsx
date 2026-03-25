@@ -338,9 +338,9 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   };
 
   const handleTabClick = (id: string) => {
-    if (id === activeTab) return;
-    const currentIndex = selectedInsurances.indexOf(activeTab);
-    const newIndex = selectedInsurances.indexOf(id);
+    if (id === activeTab || !prefInsurances.includes(id)) return;
+    const currentIndex = prefInsurances.indexOf(activeTab);
+    const newIndex = prefInsurances.indexOf(id);
     animateTabSwitch(id, newIndex > currentIndex ? "left" : "right");
     setQuestionStep(0);
     setShowPhoneStep(false);
