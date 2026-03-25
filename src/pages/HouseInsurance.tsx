@@ -573,26 +573,28 @@ const HouseInsurance = () => {
         onAnimationComplete={markAnimated}
       />
 
-      <div className="space-y-3">
-        <SelectionCard
-          label="Household Goods"
-          selected={house.coverageChoice === "household"}
-          onClick={() => handleCoverageSelect("household")}
-          indicator="radio"
-        />
-        <SelectionCard
-          label="Building"
-          selected={house.coverageChoice === "building"}
-          onClick={() => handleCoverageSelect("building")}
-          indicator="radio"
-        />
-        <SelectionCard
-          label="Both"
-          selected={house.coverageChoice === "both"}
-          onClick={() => handleCoverageSelect("both")}
-          indicator="radio"
-        />
-      </div>
+      <Card>
+        <CardContent className="pt-6 space-y-3">
+          <SelectionCard
+            label="Household Goods"
+            selected={house.coverageChoice === "household"}
+            onClick={() => handleCoverageSelect("household")}
+            indicator="radio"
+          />
+          <SelectionCard
+            label="Building"
+            selected={house.coverageChoice === "building"}
+            onClick={() => handleCoverageSelect("building")}
+            indicator="radio"
+          />
+          <SelectionCard
+            label="Both"
+            selected={house.coverageChoice === "both"}
+            onClick={() => handleCoverageSelect("both")}
+            indicator="radio"
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 
