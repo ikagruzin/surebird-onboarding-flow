@@ -103,22 +103,22 @@ const StepAddress = ({
 
   return (
     <div className="animate-fade-in">
-      <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
-        <div className="flex items-start gap-3 mb-12">
-          <img
-            src={tacoAvatar}
-            alt="Tako"
-            className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
-          />
-          <p className="text-base font-semibold text-foreground">
-            Hey {firstName} 👋 Nice to meet you!
-            <br />
-            I have some questions to you to find the best deal for you.
-            <br />
-            What is your address?
-          </p>
-        </div>
+      <div className="flex items-start gap-3 mb-6">
+        <img
+          src={tacoAvatar}
+          alt="Taco"
+          className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
+        />
+        <p className="text-base font-semibold text-foreground">
+          Hey {firstName} 👋 Nice to meet you!
+          <br />
+          I have some questions to you to find the best deal for you.
+          <br />
+          What is your address?
+        </p>
+      </div>
 
+      <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <FloatingLabelInput

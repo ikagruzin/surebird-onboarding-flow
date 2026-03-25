@@ -12,21 +12,22 @@ interface StepNameProps {
 const StepName = ({ firstName, lastName, onUpdate, onNext, onBack }: StepNameProps) => {
   return (
     <div className="animate-fade-in">
+      <div className="flex items-start gap-3 mb-6">
+        <img
+          src={tacoAvatar}
+          alt="Taco"
+          className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
+        />
+        <p className="text-base font-semibold text-foreground">
+          Welcome to Surebird✌️
+          <br />
+          I'm Taco - your personal assistance. I'm here to help you to find the best insurance deal based on your needs.
+          <br />
+          How should I address you?
+        </p>
+      </div>
+
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
-        <div className="flex items-start gap-3 mb-12">
-          <img
-            src={tacoAvatar}
-            alt="Tako"
-            className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
-          />
-          <p className="text-base font-semibold text-foreground">
-            Welcome to Surebird✌️
-            <br />
-            I'm Tako - your personal assistance. I'm here to help you to find the best insurance deal based on your needs.
-            <br />
-            How should I address you?
-          </p>
-        </div>
         <div className="grid grid-cols-2 gap-4">
           <FloatingLabelInput
             label="First name"
