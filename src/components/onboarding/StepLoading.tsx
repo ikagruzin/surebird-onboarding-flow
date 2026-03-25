@@ -77,12 +77,9 @@ const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
 
   return (
     <div className="animate-fade-in">
-      {/* Dynamic Taco message */}
       <TacoMessage
-        key={tacoMessageIndex}
-        message={TACO_MESSAGES[tacoMessageIndex]}
-        animate={animateTaco !== false}
-        wordDelay={30}
+        message="I am looking for the best offer for you..."
+        animate={animateTaco}
       />
 
       {/* Checkmark progress */}
