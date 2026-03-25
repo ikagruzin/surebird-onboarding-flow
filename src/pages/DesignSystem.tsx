@@ -817,46 +817,46 @@ const DesignSystem = () => {
 
           {/* ── 6. CARDS ── */}
           <Section title="Cards" id="cards">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Standard Card</CardTitle>
-                  <CardDescription>Default shadcn card with header and content.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">Card body content goes here.</p>
-                </CardContent>
-                <CardFooter>
-                  <Button size="sm">Action</Button>
-                </CardFooter>
-              </Card>
+            <SubSection title="Unified Card">
+              <p className="text-sm text-muted-foreground mb-4">
+                One <code className="text-xs font-mono bg-muted px-1.5 py-0.5 rounded">{"<Card>"}</code> component for all containers — questions, forms, verification, selections.
+                <br />
+                <span className="font-medium text-foreground">rounded-3xl · 1px border-border · bg-card · shadow-sm</span>
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Default */}
+                <Card className="p-6">
+                  <h4 className="text-base font-semibold text-foreground mb-1">Default</h4>
+                  <p className="text-sm text-muted-foreground">Base container for all content blocks — questions, forms, verification steps, info panels.</p>
+                </Card>
 
-              <div className="rounded-2xl border-2 border-border p-6 hover:shadow-md transition-shadow bg-card">
-                <h4 className="text-base font-semibold text-foreground mb-1">Product Card</h4>
-                <p className="text-sm text-muted-foreground">rounded-2xl · 2px stroke · hover:shadow-md</p>
-              </div>
+                {/* With header/footer */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">With Header & Footer</CardTitle>
+                    <CardDescription>Uses CardHeader, CardContent, CardFooter sub-components.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">Structured content area.</p>
+                  </CardContent>
+                  <CardFooter>
+                    <Button size="sm">Action</Button>
+                  </CardFooter>
+                </Card>
 
-              <div className="rounded-2xl border-2 border-primary bg-primary/10 p-6 shadow-sm">
-                <h4 className="text-base font-semibold text-foreground mb-1">Selected Card State</h4>
-                <p className="text-sm text-muted-foreground">border-primary · bg-primary/10 · shadow-sm</p>
-              </div>
+                {/* Selected state */}
+                <Card className="border-2 border-primary bg-primary/10 p-6">
+                  <h4 className="text-base font-semibold text-foreground mb-1">Selected State</h4>
+                  <p className="text-sm text-muted-foreground">Override with <code className="text-xs font-mono bg-muted px-1 py-0.5 rounded">border-2 border-primary bg-primary/10</code></p>
+                </Card>
 
-              <div className="rounded-3xl border border-border p-6 shadow-sm bg-card">
-                <h4 className="text-base font-semibold text-foreground mb-1">Question Container</h4>
-                <p className="text-sm text-muted-foreground">rounded-3xl · shadow-sm · 1px border</p>
+                {/* Hover state */}
+                <Card className="p-6 hover:shadow-md transition-shadow cursor-pointer">
+                  <h4 className="text-base font-semibold text-foreground mb-1">Hover State</h4>
+                  <p className="text-sm text-muted-foreground">Add <code className="text-xs font-mono bg-muted px-1 py-0.5 rounded">hover:shadow-md</code> for interactive cards.</p>
+                </Card>
               </div>
-
-              <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-4">
-                <h4 className="text-base font-semibold text-foreground mb-1">Form Card (Flow-style)</h4>
-                <p className="text-sm text-muted-foreground">rounded-3xl · border-2 border-input · bg-white</p>
-                <p className="text-xs text-muted-foreground">Used in: StepStartDate, StepPhoneVerification</p>
-              </div>
-
-              <div className="border border-border rounded-2xl bg-card p-6 shadow-sm">
-                <h4 className="text-base font-semibold text-foreground mb-1">Section Card (HouseInsurance)</h4>
-                <p className="text-sm text-muted-foreground">rounded-2xl · 1px border · bg-card · shadow-sm</p>
-              </div>
-            </div>
+            </SubSection>
           </Section>
 
           {/* ── 7. FEEDBACK & STATUS ── */}
