@@ -644,8 +644,15 @@ const StepOffer = ({
     </div>
   );
 
+  const isBlurred = gated && !gateUnlocked;
+
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in relative">
+      {/* Gate overlay */}
+      {isBlurred && gateOverlay}
+
+      {/* Content wrapper — blurred when gated */}
+      <div className={isBlurred ? "filter blur-md select-none pointer-events-none transition-all duration-700" : "transition-all duration-700"}>
       <h1 className="text-3xl font-bold text-foreground mb-6">Your personal offer</h1>
 
       {/* Product tabs */}
