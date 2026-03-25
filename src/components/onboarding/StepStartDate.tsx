@@ -132,7 +132,6 @@ const StepStartDate = ({
         <TacoMessage
           message={`When should your ${ins.label} protection begin?`}
           animate={animateTaco}
-          variant="bubble"
         />
 
         <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-4">
