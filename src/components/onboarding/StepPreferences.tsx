@@ -4,6 +4,7 @@ import { INSURANCE_TYPES } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import LegalCoverageSelector from "./LegalCoverageSelector";
+import TacoMessage from "./TacoMessage";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
@@ -220,6 +221,7 @@ interface StepPreferencesProps {
   onAddInsurances: (ids: string[]) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(({
@@ -235,6 +237,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   onAddInsurances,
   onNext,
   onBack,
+  animateTaco,
 }, ref) => {
   const [activeTab, setActiveTab] = useState(selectedInsurances[0]);
   const [completedTabs, setCompletedTabs] = useState<string[]>([]);
@@ -551,16 +554,10 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
         {renderProductTabs()}
         <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
-        <div className="flex items-start gap-3 mb-6">
-          <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-          <p className="text-base font-semibold text-foreground">
-            We are almost there, {firstName} 🙌
-            <br />
-            <span className="font-normal text-muted-foreground">
-              Just one more detail so we can send you your personal offer!
-            </span>
-          </p>
-        </div>
+        <TacoMessage
+          message={`We are almost there, ${firstName} 🙌 Just one more detail so we can send you your personal offer!`}
+          animate={false}
+        />
 
         <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
 
@@ -648,21 +645,11 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
 
       {/* Questions card with transition */}
         <div key={activeTab} className={getTransitionClass()}>
-          {showAllQuestions && (
-            <div className="flex items-start gap-3 mb-6">
-              <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-              <p className="text-base font-semibold text-foreground">
-                {introMessage}
-              </p>
-            </div>
+          {showAllQuestions && introMessage && (
+            <TacoMessage message={introMessage} animate={false} />
           )}
-          {!showAllQuestions && (
-            <div className="flex items-center gap-3 mb-6">
-              <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
-              <p className="text-base font-semibold text-foreground">
-                {currentQuestion?.label}
-              </p>
-            </div>
+          {!showAllQuestions && currentQuestion && (
+            <TacoMessage message={currentQuestion.label} animate={false} />
           )}
         <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
           {showAllQuestions ? (

@@ -1,14 +1,15 @@
 import { useState, useRef, useEffect } from "react";
-import { Shield, ArrowLeft, X } from "lucide-react";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import { Shield } from "lucide-react";
+import TacoMessage from "./TacoMessage";
 
 interface StepPhoneVerificationProps {
   phone: string;
   onVerified: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
-const StepPhoneVerification = ({ phone, onVerified, onBack }: StepPhoneVerificationProps) => {
+const StepPhoneVerification = ({ phone, onVerified, onBack, animateTaco }: StepPhoneVerificationProps) => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState("");
@@ -41,7 +42,6 @@ const StepPhoneVerification = ({ phone, onVerified, onBack }: StepPhoneVerificat
       inputRefs.current[index + 1]?.focus();
     }
 
-    // Auto-submit when all filled
     if (newCode.every(d => d !== "")) {
       setIsVerifying(true);
       setTimeout(() => {
@@ -66,17 +66,12 @@ const StepPhoneVerification = ({ phone, onVerified, onBack }: StepPhoneVerificat
 
   return (
     <div className="animate-fade-in space-y-8 pb-8">
-      {/* Taco message */}
-      <div className="flex items-center gap-3">
-        <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
-        <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
-          <p className="text-base text-foreground">
-            I just sent a verification code to your phone 📱
-          </p>
-        </div>
-      </div>
+      <TacoMessage
+        message="I just sent a verification code to your phone 📱"
+        animate={animateTaco}
+        variant="bubble"
+      />
 
-      {/* Verification card */}
       <div className="rounded-3xl border-2 border-input bg-white p-8 space-y-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
@@ -90,7 +85,6 @@ const StepPhoneVerification = ({ phone, onVerified, onBack }: StepPhoneVerificat
           </div>
         </div>
 
-        {/* OTP Input */}
         <div className="flex items-center justify-center gap-3">
           {code.map((digit, i) => (
             <input
@@ -123,7 +117,6 @@ const StepPhoneVerification = ({ phone, onVerified, onBack }: StepPhoneVerificat
           <p className="text-sm text-destructive text-center">{error}</p>
         )}
 
-        {/* Resend */}
         <div className="text-center">
           {resendTimer > 0 ? (
             <p className="text-sm text-muted-foreground">

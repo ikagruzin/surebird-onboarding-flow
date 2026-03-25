@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Check, Loader2 } from "lucide-react";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import TacoMessage from "./TacoMessage";
 
 interface StepLoadingProps {
   onComplete: () => void;
+  animateTaco?: boolean;
 }
 
 const STEPS = [
@@ -12,7 +13,7 @@ const STEPS = [
   "Preparing your offer",
 ];
 
-const StepLoading = ({ onComplete }: StepLoadingProps) => {
+const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
   useEffect(() => {
@@ -34,16 +35,10 @@ const StepLoading = ({ onComplete }: StepLoadingProps) => {
 
   return (
     <div className="animate-fade-in">
-      <div className="flex items-start gap-3 mb-6">
-        <img
-          src={tacoAvatar}
-          alt="Taco"
-          className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
-        />
-        <p className="text-base font-semibold text-foreground">
-          I am looking for the best offer for you...
-        </p>
-      </div>
+      <TacoMessage
+        message="I am looking for the best offer for you..."
+        animate={animateTaco}
+      />
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm max-w-lg">
         <div className="mb-4">

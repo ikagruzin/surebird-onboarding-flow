@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useMemo } from "react";
+import { useState, useCallback, useRef, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Sidebar from "@/components/onboarding/Sidebar";
 import StepOne from "@/components/onboarding/StepOne";
@@ -63,11 +63,19 @@ const Index = () => {
 
   const [state, setState] = useState<WizardState>({ ...INITIAL_STATE });
   const prefsRef = useRef<StepPreferencesHandle>(null);
+  const seenStepsRef = useRef<Set<string>>(new Set());
 
   // Current step index into flow.steps array
   const stepIndex = state.currentStep;
   const currentStepConfig = flow.steps[stepIndex] as StepConfig | undefined;
   const currentStepId = currentStepConfig?.id || "product-selection";
+
+  // Track whether Taco message should animate (only on first visit)
+  const shouldAnimateTaco = !seenStepsRef.current.has(currentStepId);
+
+  useEffect(() => {
+    seenStepsRef.current.add(currentStepId);
+  }, [currentStepId]);
 
   const switchFlow = (newFlowId: string) => {
     setSearchParams({ flow: newFlowId });
@@ -296,6 +304,7 @@ const Index = () => {
             onUpdate={(field, value) => setState((s) => ({ ...s, [field]: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "address":
@@ -308,6 +317,7 @@ const Index = () => {
             onUpdate={(field, value) => setState((s) => ({ ...s, [field]: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "birthdate":
@@ -317,6 +327,7 @@ const Index = () => {
             onUpdate={(value) => setState((s) => ({ ...s, birthdate: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "family":
@@ -325,7 +336,6 @@ const Index = () => {
             familyStatus={state.familyStatus}
             onSelect={(value) => {
               setState((s) => ({ ...s, familyStatus: value }));
-              // Use the step config's getNextStep if available
               const config = flow.steps[stepIndex];
               if (config?.getNextStep) {
                 const nextId = config.getNextStep({ ...state, familyStatus: value });
@@ -335,6 +345,7 @@ const Index = () => {
               }
             }}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "family-details":
@@ -362,6 +373,7 @@ const Index = () => {
             }}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "ready":
@@ -370,6 +382,7 @@ const Index = () => {
             selectedInsurances={state.selectedInsurances}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "preferences":
@@ -388,10 +401,11 @@ const Index = () => {
             onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "loading":
-        return <StepLoading onComplete={() => goToIndex(getNextIndex())} />;
+        return <StepLoading onComplete={() => goToIndex(getNextIndex())} animateTaco={shouldAnimateTaco} />;
       case "offer":
         return (
           <StepOffer
@@ -413,6 +427,7 @@ const Index = () => {
             }
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "confirm-details":
@@ -426,6 +441,7 @@ const Index = () => {
             onUpdateField={(field, value) => setState((s) => ({ ...s, [field]: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "phone-verification":
@@ -434,6 +450,7 @@ const Index = () => {
             phone={state.phone}
             onVerified={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "idin-verification":
@@ -443,6 +460,7 @@ const Index = () => {
             onUpdateIban={(value) => setState((s) => ({ ...s, iban: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "acceptance-questions":
@@ -457,6 +475,7 @@ const Index = () => {
             }
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "final-preview":
@@ -474,6 +493,7 @@ const Index = () => {
             onUpdateAgree={(field, value) => setState((s) => ({ ...s, [field]: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "success":

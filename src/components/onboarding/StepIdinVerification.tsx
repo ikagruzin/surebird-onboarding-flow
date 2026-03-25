@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ShieldCheck, X, QrCode, RefreshCw, Trash2 } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import TacoMessage from "./TacoMessage";
 import idinLogo from "@/assets/idin-logo.svg";
 
 interface StepIdinVerificationProps {
@@ -9,6 +9,7 @@ interface StepIdinVerificationProps {
   onUpdateIban: (value: string) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 type VerifyState = "idle" | "pending" | "verified" | "failed" | "manual";
@@ -16,6 +17,7 @@ type VerifyState = "idle" | "pending" | "verified" | "failed" | "manual";
 const StepIdinVerification = ({
   iban,
   onUpdateIban,
+  animateTaco,
 }: StepIdinVerificationProps) => {
   const [verifyState, setVerifyState] = useState<VerifyState>("idle");
   const [showQrModal, setShowQrModal] = useState(false);
@@ -58,15 +60,11 @@ const StepIdinVerification = ({
 
   return (
     <div className="animate-fade-in space-y-8 pb-8">
-      {/* Taco message */}
-      <div className="flex items-center gap-3">
-        <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
-        <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
-          <p className="text-base text-foreground">
-            Let's verify your identity securely 🔒
-          </p>
-        </div>
-      </div>
+      <TacoMessage
+        message="Let's verify your identity securely 🔒"
+        animate={animateTaco}
+        variant="bubble"
+      />
 
       {/* iDIN verification card */}
       <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-5">

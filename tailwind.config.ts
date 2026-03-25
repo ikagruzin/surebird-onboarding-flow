@@ -96,6 +96,10 @@ export default {
           "40%": { transform: "scale(1.18)" },
           "100%": { transform: "scale(1)" },
         },
+        "fade-in-word": {
+          from: { opacity: "0", filter: "blur(4px)" },
+          to: { opacity: "1", filter: "blur(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -103,6 +107,7 @@ export default {
         "fade-in": "fade-in 0.4s ease-out",
         "slide-in": "slide-in 0.3s ease-out",
         "savings-pop": "savings-pop 0.4s ease-out",
+        "fade-in-word": "fade-in-word 0.2s ease-out forwards",
       },
     },
   },

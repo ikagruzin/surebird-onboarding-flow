@@ -1,4 +1,4 @@
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import TacoMessage from "./TacoMessage";
 import familySingle from "@/assets/family-single.png";
 import familyPartner from "@/assets/family-partner.png";
 import familySingleChildren from "@/assets/family-single-children.png";
@@ -8,6 +8,7 @@ interface StepFamilyProps {
   familyStatus: string;
   onSelect: (value: string) => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 const OPTIONS = [
@@ -17,19 +18,10 @@ const OPTIONS = [
   { id: "partner-children", label: "Partner &\nChildren", image: familyPartnerChildren },
 ];
 
-const StepFamily = ({ familyStatus, onSelect }: StepFamilyProps) => {
+const StepFamily = ({ familyStatus, onSelect, animateTaco }: StepFamilyProps) => {
   return (
     <div className="animate-fade-in">
-      <div className="flex items-center gap-3 mb-6">
-        <img
-          src={tacoAvatar}
-          alt="Taco"
-          className="w-10 h-10 rounded-full object-cover shrink-0"
-        />
-        <p className="text-base font-semibold text-foreground">
-          What is your family status?
-        </p>
-      </div>
+      <TacoMessage message="What is your family status?" animate={animateTaco} />
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="grid grid-cols-4 gap-3">

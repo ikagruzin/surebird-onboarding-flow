@@ -1,6 +1,6 @@
 import { Info } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import TacoMessage from "./TacoMessage";
 import { ChangeEvent } from "react";
 
 interface StepBirthdateProps {
@@ -8,6 +8,7 @@ interface StepBirthdateProps {
   onUpdate: (value: string) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 function formatDateInput(raw: string, prevValue: string): string {
@@ -20,7 +21,7 @@ function formatDateInput(raw: string, prevValue: string): string {
   return result;
 }
 
-const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack }: StepBirthdateProps) => {
+const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack, animateTaco }: StepBirthdateProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const formatted = formatDateInput(e.target.value, birthdate);
     onUpdate(formatted);
@@ -28,16 +29,7 @@ const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack }: StepBirthdatePro
 
   return (
     <div className="animate-fade-in">
-      <div className="flex items-center gap-3 mb-6">
-        <img
-          src={tacoAvatar}
-          alt="Taco"
-          className="w-10 h-10 rounded-full object-cover shrink-0"
-        />
-        <p className="text-base font-semibold text-foreground">
-          How old are you? 🎂
-        </p>
-      </div>
+      <TacoMessage message="How old are you? 🎂" animate={animateTaco} />
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="max-w-xs">

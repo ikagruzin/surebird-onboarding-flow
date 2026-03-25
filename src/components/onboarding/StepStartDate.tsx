@@ -1,7 +1,7 @@
 import { useState, ChangeEvent } from "react";
 import { INSURANCE_TYPES } from "./types";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import TacoMessage from "./TacoMessage";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
 import iconCar from "@/assets/icon-car.svg";
@@ -26,6 +26,7 @@ interface StepStartDateProps {
   onUpdateStartDate: (insuranceId: string, date: string) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 function formatDateInput(raw: string): string {
@@ -89,6 +90,7 @@ const StepStartDate = ({
   onUpdateStartDate,
   onNext,
   onBack,
+  animateTaco,
 }: StepStartDateProps) => {
   const isSingle = selectedInsurances.length === 1;
   const [sameDate, setSameDate] = useState<"yes" | "no" | null>(null);
@@ -127,12 +129,11 @@ const StepStartDate = ({
 
     return (
       <div className="animate-fade-in space-y-8">
-        <div className="flex items-center gap-3">
-          <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
-          <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
-            <p className="text-base text-foreground">When should your <strong>{ins.label}</strong> protection begin?</p>
-          </div>
-        </div>
+        <TacoMessage
+          message={`When should your ${ins.label} protection begin?`}
+          animate={animateTaco}
+          variant="bubble"
+        />
 
         <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-4">
           <div className="flex items-center gap-3">
@@ -152,12 +153,11 @@ const StepStartDate = ({
   // Multi product scenario
   return (
     <div className="animate-fade-in space-y-8">
-      <div className="flex items-center gap-3">
-        <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
-        <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
-          <p className="text-base text-foreground">When should your protection begin?</p>
-        </div>
-      </div>
+      <TacoMessage
+        message="When should your protection begin?"
+        animate={animateTaco}
+        variant="bubble"
+      />
 
       <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-5">
         <p className="text-base font-semibold text-foreground">
