@@ -26,6 +26,7 @@ import StepSuccess from "@/components/onboarding/StepSuccess";
 import Footer from "@/components/onboarding/Footer";
 import StickyFooter from "@/components/onboarding/StickyFooter";
 import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
+import DevSkipButton from "@/components/onboarding/DevSkipButton";
 import { Progress } from "@/components/ui/progress";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
 import type { WizardState } from "@/components/onboarding/types";
