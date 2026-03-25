@@ -567,6 +567,12 @@ const Index = () => {
     <div className="flex min-h-screen bg-background">
       <Sidebar currentStep={getSidebarStep()} visible={true} />
       <FlowSwitcher currentFlowId={flowId} onSwitch={switchFlow} />
+      <DevSkipButton
+        flow={flow}
+        onSkip={(data, idx) => {
+          setState((s) => ({ ...s, ...data, currentStep: idx }));
+        }}
+      />
 
       <main className={`flex-1 px-6 md:px-12 lg:px-16 py-8 md:py-12 ${isFullWidth ? '' : 'max-w-3xl mx-auto'}`}>
         {phaseLabel && (
