@@ -585,6 +585,46 @@ const DesignSystem = () => {
               </div>
             </SubSection>
 
+
+            <SubSection title="Spacing Scale">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-left">
+                      <th className="py-2 pr-4 font-medium text-muted-foreground">Name</th>
+                      <th className="py-2 pr-4 font-medium text-muted-foreground">Size</th>
+                      <th className="py-2 pr-4 font-medium text-muted-foreground">Pixels</th>
+                      <th className="py-2 font-medium text-muted-foreground">Preview</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { name: "0.5", rem: "0.125rem", px: "2px" },
+                      { name: "1", rem: "0.25rem", px: "4px" },
+                      { name: "1.5", rem: "0.375rem", px: "6px" },
+                      { name: "2", rem: "0.5rem", px: "8px" },
+                      { name: "3", rem: "0.75rem", px: "12px" },
+                      { name: "4", rem: "1rem", px: "16px" },
+                      { name: "5", rem: "1.25rem", px: "20px" },
+                      { name: "6", rem: "1.5rem", px: "24px" },
+                      { name: "8", rem: "2rem", px: "32px" },
+                      { name: "10", rem: "2.5rem", px: "40px" },
+                      { name: "12", rem: "3rem", px: "48px" },
+                      { name: "16", rem: "4rem", px: "64px" },
+                      { name: "20", rem: "5rem", px: "80px" },
+                      { name: "24", rem: "6rem", px: "96px" },
+                    ].map((s) => (
+                      <tr key={s.name} className="border-b border-border/50">
+                        <td className="py-2 pr-4"><code className="text-xs bg-muted px-1.5 py-0.5 rounded">{s.name}</code></td>
+                        <td className="py-2 pr-4 text-muted-foreground">{s.rem}</td>
+                        <td className="py-2 pr-4 text-muted-foreground">{s.px}</td>
+                        <td className="py-2"><div className="h-3 rounded-sm bg-primary/20" style={{ width: s.px }} /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </SubSection>
           </Section>
 
           {/* ── 4. BUTTONS ── */}
