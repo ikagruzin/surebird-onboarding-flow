@@ -1,4 +1,5 @@
 import { Info } from "lucide-react";
+import TacoMessage from "./TacoMessage";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import {
   Tooltip,
