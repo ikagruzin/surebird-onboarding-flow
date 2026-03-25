@@ -4,7 +4,6 @@ import { INSURANCE_TYPES } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import LegalCoverageSelector from "./LegalCoverageSelector";
-import HomePreferencesFlow from "./HomePreferencesFlow";
 import TacoMessage from "./TacoMessage";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import iconLiability from "@/assets/icon-liability.svg";
@@ -39,10 +38,33 @@ interface PreferenceQuestion {
 const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
   home: [
     {
-      id: "house_flow_completed",
-      label: "Let’s set up your home insurance details",
-      options: [],
-      customComponent: "home_flow_c",
+      id: "owner_type",
+      label: "Are you a homeowner or tenant?",
+      options: [
+        { value: "homeowner", label: "Homeowner" },
+        { value: "tenant", label: "Tenant" },
+      ],
+      autoAdvance: true,
+    },
+    {
+      id: "house_info",
+      label: "Is this information correct?",
+      description: "My house has:\n• stone/concrete exterior walls\n• a sloping or mainly sloping roof without thatch\n• a kitchen or bathroom less than 10 years old\n• outbuildings of up to 100 m2",
+      options: [
+        { value: "yes", label: "Yes" },
+        { value: "no", label: "No" },
+      ],
+      autoAdvance: true,
+    },
+    {
+      id: "insure_type",
+      label: "What do you want to insure?",
+      options: [
+        { value: "household", label: "Household goods", badge: "My advice" },
+        { value: "building", label: "Building" },
+        { value: "both", label: "Household goods + Building" },
+      ],
+      infoText: "As you own an apartment, household goods insurance is sufficient. The homeowners' association (VvE) often already has building insurance.",
     },
   ],
   liability: [
@@ -217,13 +239,8 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   onBack,
   animateTaco,
 }, ref) => {
-  // Filter out products with no preference questions (e.g. "home" — handled by dedicated steps)
-  const prefInsurances = selectedInsurances.filter((id) => (QUESTIONS_BY_TYPE[id]?.length ?? 0) > 0);
-  const [activeTab, setActiveTab] = useState(prefInsurances[0] || selectedInsurances[0]);
-  const [completedTabs, setCompletedTabs] = useState<string[]>(
-    // Auto-mark products with no questions as completed
-    selectedInsurances.filter((id) => !(QUESTIONS_BY_TYPE[id]?.length))
-  );
+  const [activeTab, setActiveTab] = useState(selectedInsurances[0]);
+  const [completedTabs, setCompletedTabs] = useState<string[]>([]);
   const [questionStep, setQuestionStep] = useState(0);
   const [showPhoneStep, setShowPhoneStep] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -254,8 +271,8 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   const allQuestionsAnswered = questions.every((q) => currentPrefs[q.id]);
 
   // Total progress across all products
-  const totalQuestions = prefInsurances.reduce((sum, id) => sum + (QUESTIONS_BY_TYPE[id]?.length || 0), 0);
-  const answeredQuestions = prefInsurances.reduce((sum, id) => {
+  const totalQuestions = selectedInsurances.reduce((sum, id) => sum + (QUESTIONS_BY_TYPE[id]?.length || 0), 0);
+  const answeredQuestions = selectedInsurances.reduce((sum, id) => {
     const qs = QUESTIONS_BY_TYPE[id] || [];
     return sum + qs.filter(q => (preferences[id] || {})[q.id]).length;
   }, 0);
@@ -272,9 +289,9 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
         setQuestionStep(questionStep - 1);
         return true;
       }
-      const currentIndex = prefInsurances.indexOf(activeTab);
+      const currentIndex = selectedInsurances.indexOf(activeTab);
       if (currentIndex > 0) {
-        const prevTab = prefInsurances[currentIndex - 1];
+        const prevTab = selectedInsurances[currentIndex - 1];
         animateTabSwitch(prevTab, "right");
         const prevQuestions = QUESTIONS_BY_TYPE[prevTab] || [];
         setQuestionStep(Math.max(0, prevQuestions.length - 1));
@@ -290,7 +307,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       handleNextStep();
       return true; // handled internally
     },
-  }), [showPhoneStep, questionStep, activeTab, prefInsurances, preferences]);
+  }), [showPhoneStep, questionStep, activeTab, selectedInsurances, preferences]);
 
   const animateTabSwitch = (newTab: string, direction: "left" | "right" = "left") => {
     setTransitionDirection(direction);
@@ -318,9 +335,9 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
     if (!completedTabs.includes(activeTab)) {
       setCompletedTabs((prev) => [...prev, activeTab]);
     }
-    const currentIndex = prefInsurances.indexOf(activeTab);
-    if (currentIndex < prefInsurances.length - 1) {
-      const nextTab = prefInsurances[currentIndex + 1];
+    const currentIndex = selectedInsurances.indexOf(activeTab);
+    if (currentIndex < selectedInsurances.length - 1) {
+      const nextTab = selectedInsurances[currentIndex + 1];
       animateTabSwitch(nextTab);
       setQuestionStep(0);
     } else {
@@ -346,9 +363,9 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
   };
 
   const handleTabClick = (id: string) => {
-    if (id === activeTab || !prefInsurances.includes(id)) return;
-    const currentIndex = prefInsurances.indexOf(activeTab);
-    const newIndex = prefInsurances.indexOf(id);
+    if (id === activeTab) return;
+    const currentIndex = selectedInsurances.indexOf(activeTab);
+    const newIndex = selectedInsurances.indexOf(id);
     animateTabSwitch(id, newIndex > currentIndex ? "left" : "right");
     setQuestionStep(0);
     setShowPhoneStep(false);
@@ -652,12 +669,6 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
                       <LegalCoverageSelector
                         selected={(currentPrefs[q.id] || "consumer").split(",")}
                         onChange={(sel) => onUpdatePreference(activeTab, q.id, sel.join(","))}
-                      />
-                    ) : q.customComponent === "home_flow_c" ? (
-                      <HomePreferencesFlow
-                        initialData={currentPrefs.house_flow_data}
-                        onDataChange={(value) => onUpdatePreference(activeTab, "house_flow_data", value)}
-                        onCompleteChange={(done) => onUpdatePreference(activeTab, q.id, done ? "yes" : "")}
                       />
                     ) : (
                       <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>

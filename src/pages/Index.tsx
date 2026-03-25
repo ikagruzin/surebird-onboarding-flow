@@ -25,18 +25,10 @@ import Footer from "@/components/onboarding/Footer";
 import StickyFooter from "@/components/onboarding/StickyFooter";
 import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
 import { Progress } from "@/components/ui/progress";
-import { INSURANCE_TYPES, INITIAL_HOUSE, PRESET_HOUSE } from "@/components/onboarding/types";
-import type { WizardState, HouseState } from "@/components/onboarding/types";
+import { INSURANCE_TYPES } from "@/components/onboarding/types";
+import type { WizardState } from "@/components/onboarding/types";
 import type { StepId, StepConfig, FlowConfig } from "@/config/flowTypes";
 import { getFlow, DEFAULT_FLOW_ID } from "@/config/flows";
-
-// House step components
-import StepHousePreset from "@/components/onboarding/house/StepHousePreset";
-import StepHouseRole from "@/components/onboarding/house/StepHouseRole";
-import StepHouseDetails from "@/components/onboarding/house/StepHouseDetails";
-import StepHouseCoverage from "@/components/onboarding/house/StepHouseCoverage";
-import StepHouseContents from "@/components/onboarding/house/StepHouseContents";
-import StepHouseBuilding from "@/components/onboarding/house/StepHouseBuilding";
 
 const INITIAL_STATE: WizardState = {
   currentStep: 0,
@@ -62,8 +54,6 @@ const INITIAL_STATE: WizardState = {
   acceptanceAnswers: {},
   agreeTerms: false,
   agreeDebit: false,
-  house: { ...INITIAL_HOUSE },
-  housePresetAnswer: "",
 };
 
 const Index = () => {
@@ -163,11 +153,6 @@ const Index = () => {
     []
   );
 
-  // House state updater
-  const updateHouse = useCallback(<K extends keyof HouseState>(key: K, val: HouseState[K]) => {
-    setState((s) => ({ ...s, house: { ...s.house, [key]: val } }));
-  }, []);
-
   const totalSavings = INSURANCE_TYPES.filter((t) =>
     state.selectedInsurances.includes(t.id)
   ).reduce((sum, t) => sum + t.savings, 0);
@@ -193,23 +178,6 @@ const Index = () => {
         return true;
       case "preferences":
         return true;
-      // House steps
-      case "house-preset":
-        return state.housePresetAnswer !== "";
-      case "house-role":
-        return state.house.role !== "";
-      case "house-details":
-        return !!(
-          state.house.buildingType && state.house.usage.length > 0 &&
-          state.house.constructionMaterial && state.house.floorMaterial &&
-          state.house.roofShape && state.house.roofMaterial
-        );
-      case "house-coverage":
-        return state.house.coverageChoice !== "";
-      case "house-contents":
-        return !!(state.house.security && state.house.netIncome && state.house.outsideValue);
-      case "house-building":
-        return !!state.house.floorCount;
       case "start-date": {
         const products = INSURANCE_TYPES.filter((t) => state.selectedInsurances.includes(t.id));
         return products.every((p) => {
@@ -277,76 +245,6 @@ const Index = () => {
       if (handled) return;
     }
     goToIndex(getPrevIndex());
-  };
-
-  // House auto-advance handlers
-  const handleHousePresetAnswer = (answer: "yes" | "no") => {
-    setState((s) => ({
-      ...s,
-      housePresetAnswer: answer,
-      house: answer === "yes"
-        ? { ...s.house, ...PRESET_HOUSE }
-        : { ...s.house, ...PRESET_HOUSE }, // pre-fill for manual editing too
-    }));
-    // Auto-advance after short delay
-    setTimeout(() => {
-      // Recalculate next using updated state
-      const updatedState = {
-        ...state,
-        housePresetAnswer: answer,
-        house: { ...state.house, ...PRESET_HOUSE },
-      };
-      const config = flow.steps[stepIndex];
-      if (config?.getNextStep) {
-        const nextId = config.getNextStep(updatedState);
-        if (nextId) {
-          goToStepId(nextId);
-          return;
-        }
-      }
-      // Default: find next non-skipped step
-      let next = stepIndex + 1;
-      while (next < flow.steps.length && flow.steps[next].shouldSkip?.(updatedState)) {
-        next++;
-      }
-      if (next < flow.steps.length) {
-        goToIndex(next);
-      }
-    }, 400);
-  };
-
-  const handleHouseRoleSelect = (role: "tenant" | "homeowner") => {
-    const updatedHouse = { ...state.house, role };
-    setState((s) => ({ ...s, house: { ...s.house, role } }));
-    setTimeout(() => {
-      const updatedState = { ...state, house: updatedHouse };
-      const config = flow.steps[stepIndex];
-      if (config?.getNextStep) {
-        const nextId = config.getNextStep(updatedState);
-        if (nextId) {
-          goToStepId(nextId);
-          return;
-        }
-      }
-      goToIndex(stepIndex + 1);
-    }, 400);
-  };
-
-  const handleHouseCoverageSelect = (choice: "household" | "building" | "both") => {
-    const updatedHouse = { ...state.house, coverageChoice: choice };
-    setState((s) => ({ ...s, house: { ...s.house, coverageChoice: choice } }));
-    setTimeout(() => {
-      const updatedState = { ...state, house: updatedHouse };
-      const config = flow.steps[stepIndex];
-      if (config?.getNextStep) {
-        const nextId = config.getNextStep(updatedState);
-        if (nextId) {
-          goToStepId(nextId);
-          return;
-        }
-      }
-      goToIndex(stepIndex + 1);
-    }, 400);
   };
 
   const phaseLabel = currentStepConfig?.phase
@@ -519,56 +417,6 @@ const Index = () => {
             onBack={() => goToIndex(getPrevIndex())}
           />
         );
-      // ─── House Insurance Steps ───
-      case "house-preset":
-        return (
-          <StepHousePreset
-            presetAnswer={state.housePresetAnswer}
-            onAnswer={handleHousePresetAnswer}
-            animateTaco={shouldAnimateTaco}
-          />
-        );
-      case "house-role":
-        return (
-          <StepHouseRole
-            role={state.house.role}
-            onSelect={handleHouseRoleSelect}
-            animateTaco={shouldAnimateTaco}
-          />
-        );
-      case "house-details":
-        return (
-          <StepHouseDetails
-            house={state.house}
-            onUpdate={updateHouse}
-            animateTaco={shouldAnimateTaco}
-          />
-        );
-      case "house-coverage":
-        return (
-          <StepHouseCoverage
-            coverageChoice={state.house.coverageChoice}
-            onSelect={handleHouseCoverageSelect}
-            animateTaco={shouldAnimateTaco}
-          />
-        );
-      case "house-contents":
-        return (
-          <StepHouseContents
-            house={state.house}
-            onUpdate={updateHouse}
-            animateTaco={shouldAnimateTaco}
-          />
-        );
-      case "house-building":
-        return (
-          <StepHouseBuilding
-            house={state.house}
-            onUpdate={updateHouse}
-            animateTaco={shouldAnimateTaco}
-          />
-        );
-      // ─── End House Steps ───
       case "start-date":
         return (
           <StepStartDate
