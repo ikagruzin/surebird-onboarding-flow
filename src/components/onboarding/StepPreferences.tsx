@@ -36,7 +36,7 @@ interface PreferenceQuestion {
 }
 
 const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
-  home: [], // House preferences are now handled by dedicated Flow C steps
+  // home preferences are handled by dedicated house steps outside StepPreferences
   liability: [
     {
       id: "dog",
