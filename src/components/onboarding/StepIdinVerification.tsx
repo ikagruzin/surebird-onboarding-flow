@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ShieldCheck, X, QrCode, RefreshCw, Trash2 } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import TacoMessage from "./TacoMessage";
 import idinLogo from "@/assets/idin-logo.svg";
 
 interface StepIdinVerificationProps {
@@ -9,6 +9,7 @@ interface StepIdinVerificationProps {
   onUpdateIban: (value: string) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 type VerifyState = "idle" | "pending" | "verified" | "failed" | "manual";
