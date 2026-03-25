@@ -354,9 +354,8 @@ const HouseInsurance = () => {
 
   const handlePresetAnswer = (answer: "yes" | "no") => {
     setPresetAnswer(answer);
-    if (answer === "yes") {
-      setHouse((s) => ({ ...s, ...PRESET_HOUSE }));
-    }
+    // Apply preset values in both cases — "yes" uses them as-is, "no" pre-selects them for manual editing
+    setHouse((s) => ({ ...s, ...PRESET_HOUSE }));
     // Auto-advance to next step
     setTimeout(() => {
       const nextIdx = currentStepIdx + 1;
