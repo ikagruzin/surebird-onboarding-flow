@@ -482,16 +482,11 @@ const HouseInsurance = () => {
         <div className="space-y-6">
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Building Type</label>
-            <Select value={house.buildingType} onValueChange={(v) => update("buildingType", v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select building type" />
-              </SelectTrigger>
-              <SelectContent>
-                {BUILDING_TYPES.map((t) => (
-                  <SelectItem key={t} value={t}>{t}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <NativeSelect value={house.buildingType} onChange={(e) => update("buildingType", e.target.value)} placeholder="Select building type">
+              {BUILDING_TYPES.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </NativeSelect>
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Usage</label>
