@@ -730,9 +730,6 @@ const DesignSystem = () => {
                 <p className="text-xs text-muted-foreground mt-1">floating-label · border-2 · bg-white · rounded-xl</p>
               </SubSection>
 
-              <SubSection title="Textarea">
-                <Textarea placeholder="Enter your message..." />
-              </SubSection>
 
               <SubSection title="Select">
                 <div className="relative">
