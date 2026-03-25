@@ -51,10 +51,10 @@ const SelectionCard = React.forwardRef<HTMLButtonElement, SelectionCardProps>(
           <span
             className={cn(
               "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
-              selected ? "border-primary bg-primary" : "border-border bg-card"
+              selected ? "border-primary" : "border-muted-foreground/40"
             )}
           >
-            {selected && <span className="h-2 w-2 rounded-full bg-white" />}
+            {selected && <span className="h-2.5 w-2.5 rounded-full bg-primary" />}
           </span>
         )}
         {indicator === "checkbox" && (
