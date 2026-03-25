@@ -1,5 +1,5 @@
 import { Minus, Plus } from "lucide-react";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import TacoMessage from "./TacoMessage";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 
 interface StepFamilyDetailsProps {
@@ -12,6 +12,7 @@ interface StepFamilyDetailsProps {
   onUpdateChildAge: (index: number, age: number) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 const StepFamilyDetails = ({
@@ -22,6 +23,7 @@ const StepFamilyDetails = ({
   onUpdatePartner,
   onUpdateChildren,
   onUpdateChildAge,
+  animateTaco,
 }: StepFamilyDetailsProps) => {
   const showPartner = familyStatus === "partner" || familyStatus === "partner-children";
   const showChildren = familyStatus === "single-children" || familyStatus === "partner-children";
@@ -29,16 +31,7 @@ const StepFamilyDetails = ({
   return (
     <div className="animate-fade-in">
       {showPartner && (
-        <div className="flex items-center gap-3 mb-6">
-          <img
-            src={tacoAvatar}
-            alt="Taco"
-            className="w-10 h-10 rounded-full object-cover shrink-0"
-          />
-          <p className="text-base font-semibold text-foreground">
-            Do you want to insure your partner?
-          </p>
-        </div>
+        <TacoMessage message="Do you want to insure your partner?" animate={animateTaco} />
       )}
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">

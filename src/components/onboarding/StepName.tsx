@@ -1,5 +1,5 @@
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import TacoMessage from "./TacoMessage";
 
 interface StepNameProps {
   firstName: string;
@@ -7,25 +7,16 @@ interface StepNameProps {
   onUpdate: (field: "firstName" | "lastName", value: string) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
-const StepName = ({ firstName, lastName, onUpdate, onNext, onBack }: StepNameProps) => {
+const StepName = ({ firstName, lastName, onUpdate, onNext, onBack, animateTaco }: StepNameProps) => {
   return (
     <div className="animate-fade-in">
-      <div className="flex items-start gap-3 mb-6">
-        <img
-          src={tacoAvatar}
-          alt="Taco"
-          className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
-        />
-        <p className="text-base font-semibold text-foreground">
-          Welcome to Surebird✌️
-          <br />
-          I'm Taco - your personal assistance. I'm here to help you to find the best insurance deal based on your needs.
-          <br />
-          How should I address you?
-        </p>
-      </div>
+      <TacoMessage
+        message="Welcome to Surebird✌️ I'm Taco - your personal assistance. I'm here to help you to find the best insurance deal based on your needs. How should I address you?"
+        animate={animateTaco}
+      />
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="grid grid-cols-2 gap-4">
