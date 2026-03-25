@@ -475,6 +475,7 @@ const Index = () => {
             }
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "final-preview":
