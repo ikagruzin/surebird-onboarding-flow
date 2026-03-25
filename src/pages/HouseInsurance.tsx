@@ -395,10 +395,10 @@ const HouseInsurance = () => {
         <h3 className="text-lg font-bold text-foreground">Is this information correct?</h3>
         <ul className="space-y-3">
           {[
-            "Stone/concrete exterior walls",
-            "A sloping or mainly sloping roof without thatch",
-            "A kitchen or bathroom less than 10 years old",
-            "Outbuildings of up to 100 m²",
+            "Stone exterior walls",
+            "A sloping roof with tiles, pan, or shingles",
+            "Concrete or stone floors throughout",
+            "Used only for private residential living",
           ].map((item) => (
             <li key={item} className="flex items-start gap-3">
               <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
