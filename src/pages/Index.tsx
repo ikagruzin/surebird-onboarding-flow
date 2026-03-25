@@ -450,6 +450,7 @@ const Index = () => {
             phone={state.phone}
             onVerified={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "idin-verification":
