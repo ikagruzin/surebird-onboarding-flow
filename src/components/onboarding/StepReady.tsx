@@ -1,4 +1,4 @@
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import TacoMessage from "./TacoMessage";
 import { INSURANCE_TYPES } from "./types";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
@@ -22,27 +22,20 @@ interface StepReadyProps {
   selectedInsurances: string[];
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
-const StepReady = ({ selectedInsurances, onNext, onBack }: StepReadyProps) => {
+const StepReady = ({ selectedInsurances, onNext, onBack, animateTaco }: StepReadyProps) => {
   const selected = INSURANCE_TYPES.filter((t) =>
     selectedInsurances.includes(t.id)
   );
 
   return (
     <div className="animate-fade-in">
-      <div className="flex items-start gap-3 mb-6">
-        <img
-          src={tacoAvatar}
-          alt="Taco"
-          className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
-        />
-        <p className="text-base font-semibold text-foreground">
-          Amazing! 🙌 The first step has been completed successfully.
-          <br />
-          Now it's time to set your preferences about your selected insurances in order to find the best deal for you.
-        </p>
-      </div>
+      <TacoMessage
+        message="Amazing! 🙌 The first step has been completed successfully. Now it's time to set your preferences about your selected insurances in order to find the best deal for you."
+        animate={animateTaco}
+      />
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="flex flex-wrap gap-2 mb-6">
