@@ -716,12 +716,6 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
             </>
           ) : (
             <>
-              <div className="flex items-center gap-3 mb-8">
-                <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0" />
-                <p className="text-base font-semibold text-foreground">
-                  {currentQuestion?.label}
-                </p>
-              </div>
 
               {currentQuestion?.description && (
                 <div className="mb-6">
