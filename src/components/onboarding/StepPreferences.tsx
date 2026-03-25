@@ -551,17 +551,18 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
         {renderProductTabs()}
         <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
+        <div className="flex items-start gap-3 mb-6">
+          <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
+          <p className="text-base font-semibold text-foreground">
+            We are almost there, {firstName} 🙌
+            <br />
+            <span className="font-normal text-muted-foreground">
+              Just one more detail so we can send you your personal offer!
+            </span>
+          </p>
+        </div>
+
         <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
-          <div className="flex items-start gap-3 mb-6">
-            <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-            <p className="text-base font-semibold text-foreground">
-              We are almost there, {firstName} 🙌
-              <br />
-              <span className="font-normal text-muted-foreground">
-                Just one more detail so we can send you your personal offer!
-              </span>
-            </p>
-          </div>
 
           {/* Contact method toggle */}
           <div className="flex items-center gap-2 mb-5">
@@ -646,16 +647,26 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
       {/* Questions card with transition */}
-      <div key={activeTab} className={getTransitionClass()}>
+        <div key={activeTab} className={getTransitionClass()}>
+          {showAllQuestions && (
+            <div className="flex items-start gap-3 mb-6">
+              <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
+              <p className="text-base font-semibold text-foreground">
+                {introMessage}
+              </p>
+            </div>
+          )}
+          {!showAllQuestions && (
+            <div className="flex items-center gap-3 mb-6">
+              <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
+              <p className="text-base font-semibold text-foreground">
+                {currentQuestion?.label}
+              </p>
+            </div>
+          )}
         <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
           {showAllQuestions ? (
             <>
-              <div className="flex items-start gap-3 mb-6">
-                <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-                <p className="text-base font-semibold text-foreground">
-                  {introMessage}
-                </p>
-              </div>
 
               <div className="space-y-6">
                 {questions.map((q) => (
@@ -705,12 +716,6 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
             </>
           ) : (
             <>
-              <div className="flex items-center gap-3 mb-8">
-                <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0" />
-                <p className="text-base font-semibold text-foreground">
-                  {currentQuestion?.label}
-                </p>
-              </div>
 
               {currentQuestion?.description && (
                 <div className="mb-6">

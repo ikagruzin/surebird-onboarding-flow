@@ -28,19 +28,22 @@ const StepFamilyDetails = ({
 
   return (
     <div className="animate-fade-in">
+      {showPartner && (
+        <div className="flex items-center gap-3 mb-6">
+          <img
+            src={tacoAvatar}
+            alt="Taco"
+            className="w-10 h-10 rounded-full object-cover shrink-0"
+          />
+          <p className="text-base font-semibold text-foreground">
+            Do you want to insure your partner?
+          </p>
+        </div>
+      )}
+
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         {showPartner && (
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-6">
-              <img
-                src={tacoAvatar}
-                alt="Tako"
-                className="w-10 h-10 rounded-full object-cover shrink-0"
-              />
-              <p className="text-base font-semibold text-foreground">
-                Do you want to insure your partner?
-              </p>
-            </div>
+          <div className={showChildren ? "mb-8" : ""}>
             <div className="grid grid-cols-2 gap-3">
               {["yes", "no"].map((val) => (
                 <button

@@ -31,20 +31,20 @@ const StepReady = ({ selectedInsurances, onNext, onBack }: StepReadyProps) => {
 
   return (
     <div className="animate-fade-in">
-      <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
-        <div className="flex items-start gap-3 mb-6">
-          <img
-            src={tacoAvatar}
-            alt="Tako"
-            className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
-          />
-          <p className="text-base font-semibold text-foreground">
-            Amazing! 🙌 The first step has been completed successfully.
-            <br />
-            Now it's time to set your preferences about your selected insurances in order to find the best deal for you.
-          </p>
-        </div>
+      <div className="flex items-start gap-3 mb-6">
+        <img
+          src={tacoAvatar}
+          alt="Taco"
+          className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5"
+        />
+        <p className="text-base font-semibold text-foreground">
+          Amazing! 🙌 The first step has been completed successfully.
+          <br />
+          Now it's time to set your preferences about your selected insurances in order to find the best deal for you.
+        </p>
+      </div>
 
+      <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="flex flex-wrap gap-2 mb-6">
           {selected.map((ins) => (
             <div
