@@ -90,6 +90,7 @@ const StepStartDate = ({
   onUpdateStartDate,
   onNext,
   onBack,
+  animateTaco,
 }: StepStartDateProps) => {
   const isSingle = selectedInsurances.length === 1;
   const [sameDate, setSameDate] = useState<"yes" | "no" | null>(null);
