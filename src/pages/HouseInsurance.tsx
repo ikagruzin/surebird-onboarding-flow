@@ -449,18 +449,11 @@ const HouseInsurance = () => {
       />
 
       <Card>
-        <CardContent className="pt-6 space-y-3">
-          <SelectionCard
-            label="Tenant"
-            selected={house.role === "tenant"}
-            onClick={() => handleRoleSelect("tenant")}
-            indicator="radio"
-          />
-          <SelectionCard
-            label="Homeowner"
-            selected={house.role === "homeowner"}
-            onClick={() => handleRoleSelect("homeowner")}
-            indicator="radio"
+        <CardContent className="pt-6">
+          <SegmentedControl
+            options={["Tenant", "Homeowner"]}
+            value={house.role === "tenant" ? "Tenant" : house.role === "homeowner" ? "Homeowner" : ""}
+            onChange={(v) => handleRoleSelect(v.toLowerCase() as "tenant" | "homeowner")}
           />
         </CardContent>
       </Card>
@@ -491,45 +484,15 @@ const HouseInsurance = () => {
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Construction Materials</label>
-            <div className="space-y-2">
-              {CONSTRUCTION_MATERIALS.map((opt) => (
-                <SelectionCard
-                  key={opt}
-                  label={opt}
-                  selected={house.constructionMaterial === opt}
-                  onClick={() => update("constructionMaterial", opt)}
-                  indicator="radio"
-                />
-              ))}
-            </div>
+            <SegmentedControl options={CONSTRUCTION_MATERIALS} value={house.constructionMaterial} onChange={(v) => update("constructionMaterial", v)} />
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Floor Material</label>
-            <div className="space-y-2">
-              {FLOOR_MATERIALS.map((opt) => (
-                <SelectionCard
-                  key={opt}
-                  label={opt}
-                  selected={house.floorMaterial === opt}
-                  onClick={() => update("floorMaterial", opt)}
-                  indicator="radio"
-                />
-              ))}
-            </div>
+            <SegmentedControl options={FLOOR_MATERIALS} value={house.floorMaterial} onChange={(v) => update("floorMaterial", v)} />
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Roof Shape</label>
-            <div className="space-y-2">
-              {ROOF_SHAPES.map((opt) => (
-                <SelectionCard
-                  key={opt}
-                  label={opt}
-                  selected={house.roofShape === opt}
-                  onClick={() => update("roofShape", opt)}
-                  indicator="radio"
-                />
-              ))}
-            </div>
+            <SegmentedControl options={ROOF_SHAPES} value={house.roofShape} onChange={(v) => update("roofShape", v)} />
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Roof Material</label>
@@ -559,24 +522,23 @@ const HouseInsurance = () => {
       />
 
       <Card>
-        <CardContent className="pt-6 space-y-3">
-          <SelectionCard
-            label="Household Goods"
-            selected={house.coverageChoice === "household"}
-            onClick={() => handleCoverageSelect("household")}
-            indicator="radio"
-          />
-          <SelectionCard
-            label="Building"
-            selected={house.coverageChoice === "building"}
-            onClick={() => handleCoverageSelect("building")}
-            indicator="radio"
-          />
-          <SelectionCard
-            label="Both"
-            selected={house.coverageChoice === "both"}
-            onClick={() => handleCoverageSelect("both")}
-            indicator="radio"
+        <CardContent className="pt-6">
+          <SegmentedControl
+            options={["Household Goods", "Building", "Both"]}
+            value={
+              house.coverageChoice === "household" ? "Household Goods"
+              : house.coverageChoice === "building" ? "Building"
+              : house.coverageChoice === "both" ? "Both"
+              : ""
+            }
+            onChange={(v) => {
+              const map: Record<string, "household" | "building" | "both"> = {
+                "Household Goods": "household",
+                "Building": "building",
+                "Both": "both",
+              };
+              handleCoverageSelect(map[v]);
+            }}
           />
         </CardContent>
       </Card>
