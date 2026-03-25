@@ -135,6 +135,10 @@ interface StepOfferProps {
   onUpdatePreference: (insuranceId: string, questionId: string, value: string) => void;
   onNext: () => void;
   onBack: () => void;
+  /** Flow D: gated mode — blur offer until contact info provided */
+  gated?: boolean;
+  gateUnlocked?: boolean;
+  gateOverlay?: React.ReactNode;
 }
 
 const StepOffer = ({
@@ -144,6 +148,9 @@ const StepOffer = ({
   onUpdatePreference,
   onNext,
   onBack,
+  gated = false,
+  gateUnlocked = false,
+  gateOverlay,
 }: StepOfferProps) => {
   const [activeTab, setActiveTab] = useState("all");
   const [videoModal, setVideoModal] = useState<string | null>(null);
