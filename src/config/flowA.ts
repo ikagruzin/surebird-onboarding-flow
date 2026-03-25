@@ -57,28 +57,17 @@ const flowA: FlowConfig = {
       phase: null, // manages its own header
       hideSavings: true,
     },
-    {
-      id: "loading",
-      phase: null,
-      hideFooter: true,
-    },
-    {
-      id: "offer",
-      phase: null,
-      fullWidth: true,
-      hideFooter: true,
-    },
-    // ─── House Insurance Steps (shown only when "home" is selected) ───
+    // ─── House Insurance Steps (after preferences, before loading/offer) ───
     {
       id: "house-preset",
-      phase: "finalise",
+      phase: "preferences",
       hideSavings: true,
       hideNextButton: true, // auto-advances on Yes/No
       shouldSkip: (state) => !state.selectedInsurances?.includes("home"),
     },
     {
       id: "house-details",
-      phase: "finalise",
+      phase: "preferences",
       hideSavings: true,
       shouldSkip: (state) =>
         !state.selectedInsurances?.includes("home") ||
@@ -87,7 +76,7 @@ const flowA: FlowConfig = {
     },
     {
       id: "house-role",
-      phase: "finalise",
+      phase: "preferences",
       hideSavings: true,
       hideNextButton: true, // auto-advances on selection
       shouldSkip: (state) => !state.selectedInsurances?.includes("home"),
@@ -99,7 +88,7 @@ const flowA: FlowConfig = {
     },
     {
       id: "house-coverage",
-      phase: "finalise",
+      phase: "preferences",
       hideSavings: true,
       hideNextButton: true, // auto-advances on selection
       shouldSkip: (state) =>
@@ -114,7 +103,7 @@ const flowA: FlowConfig = {
     },
     {
       id: "house-contents",
-      phase: "finalise",
+      phase: "preferences",
       hideSavings: true,
       shouldSkip: (state) => {
         if (!state.selectedInsurances?.includes("home")) return true;
@@ -128,12 +117,12 @@ const flowA: FlowConfig = {
         if (state.house?.role === "homeowner" && state.house?.coverageChoice === "both") {
           return "house-building";
         }
-        return "start-date";
+        return "loading";
       },
     },
     {
       id: "house-building",
-      phase: "finalise",
+      phase: "preferences",
       hideSavings: true,
       shouldSkip: (state) => {
         if (!state.selectedInsurances?.includes("home")) return true;
@@ -144,6 +133,17 @@ const flowA: FlowConfig = {
       },
     },
     // ─── End House Insurance Steps ───
+    {
+      id: "loading",
+      phase: null,
+      hideFooter: true,
+    },
+    {
+      id: "offer",
+      phase: null,
+      fullWidth: true,
+      hideFooter: true,
+    },
     {
       id: "start-date",
       phase: "finalise",
