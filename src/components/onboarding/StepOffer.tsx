@@ -140,6 +140,7 @@ interface StepOfferProps {
   gated?: boolean;
   gateUnlocked?: boolean;
   gateOverlay?: React.ReactNode;
+  animateTaco?: boolean;
 }
 
 const StepOffer = ({
@@ -152,6 +153,7 @@ const StepOffer = ({
   gated = false,
   gateUnlocked = false,
   gateOverlay,
+  animateTaco,
 }: StepOfferProps) => {
   const [activeTab, setActiveTab] = useState("all");
   const [videoModal, setVideoModal] = useState<string | null>(null);
