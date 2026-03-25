@@ -46,35 +46,31 @@ const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
 
-    // Card 1 appears at 1.5s
-    timers.push(setTimeout(() => setVisibleCards(1), 1500));
-    // Checkmark 1 completes with card 1
-    timers.push(setTimeout(() => setCompletedChecks([0]), 1500));
+    // Card 1 + checkmark 1
+    timers.push(setTimeout(() => {
+      setVisibleCards(1);
+      setCompletedChecks([0]);
+    }, INITIAL_DELAY));
 
-    // Card 2 at ~4.2s
-    timers.push(setTimeout(() => setVisibleCards(2), 1500 + USP_INTERVAL));
-    // Taco message changes to mid-way
-    timers.push(setTimeout(() => setTacoMessageIndex(1), 1500 + USP_INTERVAL));
+    // Card 2
+    timers.push(setTimeout(() => setVisibleCards(2), INITIAL_DELAY + USP_INTERVAL));
 
-    // Card 3 at ~6.9s, checkmark 2
+    // Card 3 + checkmark 2
     timers.push(setTimeout(() => {
       setVisibleCards(3);
       setCompletedChecks([0, 1]);
-    }, 1500 + USP_INTERVAL * 2));
+    }, INITIAL_DELAY + USP_INTERVAL * 2));
 
-    // Card 4 at ~9.6s, checkmark 3
+    // Card 4 + checkmark 3
     timers.push(setTimeout(() => {
       setVisibleCards(4);
       setCompletedChecks([0, 1, 2]);
-    }, 1500 + USP_INTERVAL * 3));
+    }, INITIAL_DELAY + USP_INTERVAL * 3));
 
-    // Taco final message shortly after card 4
-    timers.push(setTimeout(() => setTacoMessageIndex(2), 1500 + USP_INTERVAL * 3 + 800));
-
-    // Navigate to offer after final pause
+    // Navigate to offer
     timers.push(setTimeout(() => {
       stableOnComplete();
-    }, 1500 + USP_INTERVAL * 3 + FINAL_CARD_PAUSE));
+    }, INITIAL_DELAY + USP_INTERVAL * 3 + FINAL_CARD_PAUSE));
 
     return () => timers.forEach(clearTimeout);
   }, [stableOnComplete]);
