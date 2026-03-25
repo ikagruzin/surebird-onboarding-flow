@@ -282,7 +282,7 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       handleNextStep();
       return true; // handled internally
     },
-  }), [showPhoneStep, questionStep, activeTab, selectedInsurances, preferences]);
+  }), [showPhoneStep, questionStep, activeTab, prefInsurances, preferences]);
 
   const animateTabSwitch = (newTab: string, direction: "left" | "right" = "left") => {
     setTransitionDirection(direction);
