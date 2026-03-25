@@ -536,16 +536,11 @@ const HouseInsurance = () => {
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Roof Material</label>
-            <Select value={house.roofMaterial} onValueChange={(v) => update("roofMaterial", v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select roof material" />
-              </SelectTrigger>
-              <SelectContent>
-                {ROOF_MATERIALS.map((m) => (
-                  <SelectItem key={m} value={m}>{m}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <NativeSelect value={house.roofMaterial} onChange={(e) => update("roofMaterial", e.target.value)} placeholder="Select roof material">
+              {ROOF_MATERIALS.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </NativeSelect>
           </div>
           {testVersion !== "a" && (
             <div>
