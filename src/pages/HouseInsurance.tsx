@@ -616,7 +616,7 @@ const HouseInsurance = () => {
           {testVersion !== "a" && (
             <div className="border-t border-border pt-5">
               <label className="text-sm font-semibold text-foreground mb-2 block">Coverage Level</label>
-              <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} columns={2} />
+              <SegmentedControl options={["Extra Extensive", "All Risk"]} value={house.basicCoverage} onChange={(v) => update("basicCoverage", v)} />
             </div>
           )}
         </div>
