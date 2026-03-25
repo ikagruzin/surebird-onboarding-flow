@@ -86,8 +86,8 @@ const ADVANTAGES = {
 const TRANSLATIONS = {
   en: {
     heading: "Choose your insurances",
-    subtitle: "Smartly insured: save up to ",
-    subtitleAmount: "€300",
+    subtitle: "Smartly insured: ",
+    subtitleAmount: "save up to €300",
     subtitleEnd: " a year on a package of 6 insurances!",
     savedOffer: "Have you already saved an offer? ",
     savedOfferLink: "See your offer",
