@@ -493,6 +493,7 @@ const Index = () => {
             onUpdateAgree={(field, value) => setState((s) => ({ ...s, [field]: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "success":
