@@ -525,8 +525,20 @@ const HouseInsurance = () => {
         <CardContent className="pt-6">
           <SegmentedControl
             options={["Household Goods", "Building", "Both"]}
-            value={house.coverageChoice}
-            onChange={(v) => handleCoverageSelect(v as "household" | "building" | "both")}
+            value={
+              house.coverageChoice === "household" ? "Household Goods"
+              : house.coverageChoice === "building" ? "Building"
+              : house.coverageChoice === "both" ? "Both"
+              : ""
+            }
+            onChange={(v) => {
+              const map: Record<string, "household" | "building" | "both"> = {
+                "Household Goods": "household",
+                "Building": "building",
+                "Both": "both",
+              };
+              handleCoverageSelect(map[v]);
+            }}
           />
         </CardContent>
       </Card>
