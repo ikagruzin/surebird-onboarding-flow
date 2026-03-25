@@ -17,6 +17,7 @@ type VerifyState = "idle" | "pending" | "verified" | "failed" | "manual";
 const StepIdinVerification = ({
   iban,
   onUpdateIban,
+  animateTaco,
 }: StepIdinVerificationProps) => {
   const [verifyState, setVerifyState] = useState<VerifyState>("idle");
   const [showQrModal, setShowQrModal] = useState(false);
