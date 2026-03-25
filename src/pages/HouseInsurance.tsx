@@ -610,16 +610,11 @@ const HouseInsurance = () => {
           </div>
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Outside Value</label>
-            <Select value={house.outsideValue} onValueChange={(v) => update("outsideValue", v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select outside value" />
-              </SelectTrigger>
-              <SelectContent>
-                {OUTSIDE_VALUE_OPTIONS.map((o) => (
-                  <SelectItem key={o} value={o}>{o}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <NativeSelect value={house.outsideValue} onChange={(e) => update("outsideValue", e.target.value)} placeholder="Select outside value">
+              {OUTSIDE_VALUE_OPTIONS.map((o) => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </NativeSelect>
           </div>
           {testVersion !== "a" && (
             <div className="border-t border-border pt-5">
