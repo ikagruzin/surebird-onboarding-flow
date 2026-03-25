@@ -401,10 +401,11 @@ const Index = () => {
             onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "loading":
-        return <StepLoading onComplete={() => goToIndex(getNextIndex())} />;
+        return <StepLoading onComplete={() => goToIndex(getNextIndex())} animateTaco={shouldAnimateTaco} />;
       case "offer":
         return (
           <StepOffer
