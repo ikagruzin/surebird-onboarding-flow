@@ -2,6 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { Check, Loader2 } from "lucide-react";
 import TacoMessage from "./TacoMessage";
 
+const USP_INTERVAL = 3500; // ~3.5s per card (30% slower)
+const FINAL_CARD_PAUSE = 2600; // 30% slower
+
 interface StepLoadingProps {
   onComplete: () => void;
   animateTaco?: boolean;
@@ -32,66 +35,51 @@ const CHECKMARK_STEPS = [
   "Preparing your offer",
 ];
 
-const TACO_MESSAGES = [
-  "I'm crunching the numbers to find your best deal...",
-  "Almost there! While I work, here's why our members love Surebird...",
-  "Everything is ready. Taking you to your personal offer now!",
-];
-
-const USP_INTERVAL = 2700; // ~2.7s per card
-const FINAL_CARD_PAUSE = 2000; // 2s after 4th card before navigating
+const INITIAL_DELAY = 1950; // 30% slower
 
 const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
   const [visibleCards, setVisibleCards] = useState(0);
   const [completedChecks, setCompletedChecks] = useState<number[]>([]);
-  const [tacoMessageIndex, setTacoMessageIndex] = useState(0);
 
   const stableOnComplete = useCallback(onComplete, []);
 
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
 
-    // Card 1 appears at 1.5s
-    timers.push(setTimeout(() => setVisibleCards(1), 1500));
-    // Checkmark 1 completes with card 1
-    timers.push(setTimeout(() => setCompletedChecks([0]), 1500));
+    // Card 1 + checkmark 1
+    timers.push(setTimeout(() => {
+      setVisibleCards(1);
+      setCompletedChecks([0]);
+    }, INITIAL_DELAY));
 
-    // Card 2 at ~4.2s
-    timers.push(setTimeout(() => setVisibleCards(2), 1500 + USP_INTERVAL));
-    // Taco message changes to mid-way
-    timers.push(setTimeout(() => setTacoMessageIndex(1), 1500 + USP_INTERVAL));
+    // Card 2
+    timers.push(setTimeout(() => setVisibleCards(2), INITIAL_DELAY + USP_INTERVAL));
 
-    // Card 3 at ~6.9s, checkmark 2
+    // Card 3 + checkmark 2
     timers.push(setTimeout(() => {
       setVisibleCards(3);
       setCompletedChecks([0, 1]);
-    }, 1500 + USP_INTERVAL * 2));
+    }, INITIAL_DELAY + USP_INTERVAL * 2));
 
-    // Card 4 at ~9.6s, checkmark 3
+    // Card 4 + checkmark 3
     timers.push(setTimeout(() => {
       setVisibleCards(4);
       setCompletedChecks([0, 1, 2]);
-    }, 1500 + USP_INTERVAL * 3));
+    }, INITIAL_DELAY + USP_INTERVAL * 3));
 
-    // Taco final message shortly after card 4
-    timers.push(setTimeout(() => setTacoMessageIndex(2), 1500 + USP_INTERVAL * 3 + 800));
-
-    // Navigate to offer after final pause
+    // Navigate to offer
     timers.push(setTimeout(() => {
       stableOnComplete();
-    }, 1500 + USP_INTERVAL * 3 + FINAL_CARD_PAUSE));
+    }, INITIAL_DELAY + USP_INTERVAL * 3 + FINAL_CARD_PAUSE));
 
     return () => timers.forEach(clearTimeout);
   }, [stableOnComplete]);
 
   return (
     <div className="animate-fade-in">
-      {/* Dynamic Taco message */}
       <TacoMessage
-        key={tacoMessageIndex}
-        message={TACO_MESSAGES[tacoMessageIndex]}
-        animate={animateTaco !== false}
-        wordDelay={30}
+        message="I am looking for the best offer for you..."
+        animate={animateTaco}
       />
 
       {/* Checkmark progress */}
