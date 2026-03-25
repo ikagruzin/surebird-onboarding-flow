@@ -451,9 +451,11 @@ const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: S
                 <>{t.subtitle}<span className="font-semibold text-success">{t.subtitleAmount}</span>{t.subtitleEnd}</>
               ) : t.bundleSubtitle}
             </p>
-            <p className="mt-2 mb-8 text-sm text-muted-foreground">
+            <p className="mt-1 mb-8 text-muted-foreground flex items-center gap-1">
               {t.savedOffer}
-              <a href="#" className="text-primary underline-offset-4 hover:underline">{t.savedOfferLink}</a>
+              <button className="inline-flex items-center justify-center text-sm font-medium text-foreground hover:bg-muted rounded-full px-3 py-1 transition-colors">
+                {t.savedOfferLink}
+              </button>
             </p>
 
             {onSmartAudit && (
