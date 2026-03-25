@@ -66,21 +66,6 @@ const TacoMessage = ({
     </>
   );
 
-  if (variant === "bubble") {
-    return (
-      <div className="flex items-center gap-3">
-        <img
-          src={tacoAvatar}
-          alt="Taco"
-          className="w-10 h-10 rounded-full object-cover shrink-0"
-        />
-        <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
-          <p className="text-base text-foreground">{textContent}</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex items-center gap-3 mb-6">
       <img
