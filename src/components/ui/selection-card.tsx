@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const selectionCardVariants = cva(
-  "relative flex items-center gap-3 rounded-2xl border-2 px-5 py-4 text-left transition-all cursor-pointer hover:shadow-md",
+  "relative flex items-center gap-3 rounded-2xl border-2 px-5 py-4 text-left transition-all cursor-pointer hover:border-muted-foreground/30",
   {
     variants: {
       selected: {
