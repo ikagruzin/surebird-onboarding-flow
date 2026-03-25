@@ -1,35 +1,27 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 
 interface TacoMessageProps {
-  /** The message — supports JSX for rich content */
   message: string;
-  /** Whether to animate word-by-word (false = render instantly) */
   animate?: boolean;
-  /** Delay in ms between each word (default 50) */
-  wordDelay?: number;
-  /** Visual variant: "plain" (semibold text) or "bubble" (muted background bubble) */
+  /** Delay in ms between each character (default 20) */
+  charDelay?: number;
   variant?: "plain" | "bubble";
-  /** Called when animation completes */
   onAnimationComplete?: () => void;
 }
 
 const TacoMessage = ({
   message,
   animate = false,
-  wordDelay = 50,
+  charDelay = 20,
   variant = "plain",
   onAnimationComplete,
 }: TacoMessageProps) => {
-  const words = useMemo(() => {
-    return message.split(/(\s+)/).filter(Boolean);
-  }, [message]);
-
-  const [visibleCount, setVisibleCount] = useState(animate ? 0 : words.length);
+  const [visibleCount, setVisibleCount] = useState(animate ? 0 : message.length);
 
   useEffect(() => {
     if (!animate) {
-      setVisibleCount(words.length);
+      setVisibleCount(message.length);
       return;
     }
 
@@ -38,30 +30,22 @@ const TacoMessage = ({
     const interval = setInterval(() => {
       i++;
       setVisibleCount(i);
-      if (i >= words.length) {
+      if (i >= message.length) {
         clearInterval(interval);
         onAnimationComplete?.();
       }
-    }, wordDelay);
+    }, charDelay);
 
     return () => clearInterval(interval);
-  }, [animate, words, wordDelay, onAnimationComplete]);
+  }, [animate, message, charDelay, onAnimationComplete]);
+
+  const visibleText = message.slice(0, visibleCount);
+  const hasCursor = animate && visibleCount < message.length;
 
   const textContent = (
     <>
-      {words.map((word, index) => {
-        if (index >= visibleCount) return null;
-        const isNewlyRevealed = animate && index >= visibleCount - 1;
-        return (
-          <span
-            key={index}
-            className={isNewlyRevealed ? "animate-fade-in-word" : ""}
-            style={isNewlyRevealed ? { animationDuration: "0.2s" } : undefined}
-          >
-            {word}
-          </span>
-        );
-      })}
+      {visibleText}
+      {hasCursor && <span className="inline-block w-[2px] h-[1em] bg-foreground/60 align-text-bottom animate-pulse ml-px" />}
     </>
   );
 
