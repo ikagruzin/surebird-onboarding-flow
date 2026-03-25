@@ -63,6 +63,7 @@ interface StepAcceptanceQuestionsProps {
 const StepAcceptanceQuestions = ({
   answers,
   onUpdateAnswer,
+  animateTaco,
 }: StepAcceptanceQuestionsProps) => {
   const hasYesAnswer = Object.values(answers).some((v) => v === "yes");
 
