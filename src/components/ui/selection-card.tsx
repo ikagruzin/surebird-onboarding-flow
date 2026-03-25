@@ -76,7 +76,7 @@ const SelectionCard = React.forwardRef<HTMLButtonElement, SelectionCardProps>(
         {icon && <span className="shrink-0">{icon}</span>}
 
         {/* Label */}
-        <span className="flex-1 font-medium text-foreground">{label}</span>
+        <span className="flex-1 text-sm font-medium text-foreground">{label}</span>
       </button>
     );
   },
