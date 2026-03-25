@@ -551,17 +551,18 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
         {renderProductTabs()}
         <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
+        <div className="flex items-start gap-3 mb-6">
+          <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
+          <p className="text-base font-semibold text-foreground">
+            We are almost there, {firstName} 🙌
+            <br />
+            <span className="font-normal text-muted-foreground">
+              Just one more detail so we can send you your personal offer!
+            </span>
+          </p>
+        </div>
+
         <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
-          <div className="flex items-start gap-3 mb-6">
-            <img src={tacoAvatar} alt="Tako" className="w-10 h-10 rounded-full object-cover shrink-0 mt-0.5" />
-            <p className="text-base font-semibold text-foreground">
-              We are almost there, {firstName} 🙌
-              <br />
-              <span className="font-normal text-muted-foreground">
-                Just one more detail so we can send you your personal offer!
-              </span>
-            </p>
-          </div>
 
           {/* Contact method toggle */}
           <div className="flex items-center gap-2 mb-5">
