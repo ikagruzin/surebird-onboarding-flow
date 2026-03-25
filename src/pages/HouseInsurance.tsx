@@ -126,7 +126,7 @@ const ChipSelect = ({
 }: {
   options: string[]; selected: string[]; onChange: (v: string[]) => void;
 }) => (
-  <div className="space-y-2">
+  <div className={getSelectionGridClass(options)}>
     {options.map((opt) => {
       const isActive = selected.includes(opt);
       return (
@@ -143,11 +143,11 @@ const ChipSelect = ({
 );
 
 const SegmentedControl = ({
-  options, value, onChange, columns = 3,
+  options, value, onChange,
 }: {
-  options: string[]; value: string; onChange: (v: string) => void; columns?: number;
+  options: string[]; value: string; onChange: (v: string) => void;
 }) => (
-  <div className={`grid gap-2 ${columns === 2 ? "grid-cols-2" : columns === 4 ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-1 sm:grid-cols-3"}`}>
+  <div className={getSelectionGridClass(options)}>
     {options.map((opt) => (
       <SelectionCard
         key={opt}
