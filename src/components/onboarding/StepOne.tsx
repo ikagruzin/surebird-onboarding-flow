@@ -128,8 +128,8 @@ const TRANSLATIONS = {
   },
   nl: {
     heading: "Kies uw verzekeringen",
-    subtitle: "Slim verzekerd: bespaar tot ",
-    subtitleAmount: "€300",
+    subtitle: "Slim verzekerd: ",
+    subtitleAmount: "bespaar tot €300",
     subtitleEnd: " per jaar op een pakket van 6 verzekeringen!",
     savedOffer: "Heeft u al een offerte opgeslagen? ",
     savedOfferLink: "Bekijk uw offerte",
