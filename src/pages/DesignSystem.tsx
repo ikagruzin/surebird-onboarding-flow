@@ -265,7 +265,7 @@ const DesignSystem = () => {
   const navigate = useNavigate();
   const [demoRadio, setDemoRadio] = useState("option-1");
   const [demoSwitch, setDemoSwitch] = useState(false);
-  const [demoSlider, setDemoSlider] = useState([50]);
+  
   const [demoCheck, setDemoCheck] = useState(false);
   const [demoInput, setDemoInput] = useState("");
   const [demoFloat, setDemoFloat] = useState("");
