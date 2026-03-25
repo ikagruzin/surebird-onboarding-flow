@@ -449,18 +449,11 @@ const HouseInsurance = () => {
       />
 
       <Card>
-        <CardContent className="pt-6 space-y-3">
-          <SelectionCard
-            label="Tenant"
-            selected={house.role === "tenant"}
-            onClick={() => handleRoleSelect("tenant")}
-            indicator="radio"
-          />
-          <SelectionCard
-            label="Homeowner"
-            selected={house.role === "homeowner"}
-            onClick={() => handleRoleSelect("homeowner")}
-            indicator="radio"
+        <CardContent className="pt-6">
+          <SegmentedControl
+            options={["Tenant", "Homeowner"]}
+            value={house.role}
+            onChange={(v) => handleRoleSelect(v as "tenant" | "homeowner")}
           />
         </CardContent>
       </Card>
