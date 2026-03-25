@@ -546,17 +546,6 @@ const DesignSystem = () => {
               </div>
             </SubSection>
 
-            <SubSection title="Key Conventions">
-              <ul className="text-sm text-muted-foreground space-y-1.5 list-disc list-inside">
-                <li>Question containers: <code className="bg-muted px-1 rounded text-xs">rounded-3xl</code> + <code className="bg-muted px-1 rounded text-xs">shadow-sm</code> + <code className="bg-muted px-1 rounded text-xs">border-2 border-input bg-white</code></li>
-                <li>Product cards: <code className="bg-muted px-1 rounded text-xs">rounded-2xl</code> + 2px stroke + <code className="bg-muted px-1 rounded text-xs">hover:shadow-md</code></li>
-                <li>CTA buttons: <code className="bg-muted px-1 rounded text-xs">rounded-full</code></li>
-                <li>Section cards: <code className="bg-muted px-1 rounded text-xs">rounded-2xl border border-border bg-card p-6 shadow-sm</code></li>
-                <li>Selected state: blue stroke <code className="bg-muted px-1 rounded text-xs">border-primary</code> + <code className="bg-muted px-1 rounded text-xs">bg-primary/10</code></li>
-                <li>Chat bubbles: <code className="bg-muted px-1 rounded text-xs">rounded-2xl rounded-tl-md</code></li>
-                <li>Input fields: <code className="bg-muted px-1 rounded text-xs">rounded-xl border-2 border-input bg-white</code></li>
-              </ul>
-            </SubSection>
           </Section>
 
           {/* ── 4. BUTTONS ── */}
