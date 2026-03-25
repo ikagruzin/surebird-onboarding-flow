@@ -3,17 +3,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const selectionCardVariants = cva(
-  "relative flex items-center gap-3 rounded-2xl border-2 px-5 h-14 text-left transition-all cursor-pointer",
+  "relative flex items-center gap-3 rounded-xl border-2 px-4 h-12 text-left transition-all cursor-pointer shadow-sm",
   {
     variants: {
       selected: {
-        true: "border-primary bg-primary/10",
-        false: "border-border bg-card hover:border-foreground/30",
+        true: "border-primary bg-primary/5",
+        false: "border-border bg-card hover:border-muted-foreground/30",
       },
       size: {
-        default: "px-5",
-        sm: "px-4",
-        lg: "px-6",
+        default: "px-4",
+        sm: "px-3",
+        lg: "px-5",
       },
     },
     defaultVariants: {
