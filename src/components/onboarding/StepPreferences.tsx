@@ -36,37 +36,7 @@ interface PreferenceQuestion {
 }
 
 const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
-  home: [
-    {
-      id: "owner_type",
-      label: "Are you a homeowner or tenant?",
-      options: [
-        { value: "homeowner", label: "Homeowner" },
-        { value: "tenant", label: "Tenant" },
-      ],
-      autoAdvance: true,
-    },
-    {
-      id: "house_info",
-      label: "Is this information correct?",
-      description: "My house has:\n• stone/concrete exterior walls\n• a sloping or mainly sloping roof without thatch\n• a kitchen or bathroom less than 10 years old\n• outbuildings of up to 100 m2",
-      options: [
-        { value: "yes", label: "Yes" },
-        { value: "no", label: "No" },
-      ],
-      autoAdvance: true,
-    },
-    {
-      id: "insure_type",
-      label: "What do you want to insure?",
-      options: [
-        { value: "household", label: "Household goods", badge: "My advice" },
-        { value: "building", label: "Building" },
-        { value: "both", label: "Household goods + Building" },
-      ],
-      infoText: "As you own an apartment, household goods insurance is sufficient. The homeowners' association (VvE) often already has building insurance.",
-    },
-  ],
+  home: [], // House preferences are now handled by dedicated Flow C steps
   liability: [
     {
       id: "dog",
