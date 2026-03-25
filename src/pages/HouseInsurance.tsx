@@ -597,7 +597,7 @@ const HouseInsurance = () => {
       <SectionCard title="Building Insurance">
         <div className="space-y-5">
           <ToggleRow label="Monumental status" checked={house.monumental} onChange={(v) => update("monumental", v)} />
-          <ToggleRow label="Quoted status" checked={house.quoted} onChange={(v) => update("quoted", v)} />
+          <ToggleRow label="Outbuilding" checked={house.quoted} onChange={(v) => update("quoted", v)} />
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Floor count</label>
             <SegmentedControl options={["1", "2", "2+"]} value={house.floorCount} onChange={(v) => update("floorCount", v)} />
