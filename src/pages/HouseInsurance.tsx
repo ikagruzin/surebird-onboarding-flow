@@ -378,24 +378,22 @@ const HouseInsurance = () => {
     setAnimatedSteps((prev) => new Set(prev).add(currentStep));
   }, [currentStep]);
 
+  const totalSavings = 45;
+
   /* ─── Step Renders ─── */
 
   const renderPresetVerification = () => (
     <div className="animate-fade-in space-y-6">
       {/* Taco message */}
-      <div className="flex items-start gap-3">
-        <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
-        <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
-          <p className="text-base text-foreground">
-            Based on your address, I've found some details about your home. Can you confirm this?
-          </p>
-        </div>
-      </div>
+      <TacoMessage
+        message="To save you time, I've pre-filled the standard details for a Dutch home. Can you confirm this?"
+        animate={shouldAnimateTaco}
+        onAnimationComplete={markAnimated}
+      />
 
       {/* Verification card */}
-      <div className="border-2 border-border rounded-2xl bg-card p-6 shadow-sm space-y-5">
+      <div className="border border-border rounded-3xl bg-card p-6 shadow-sm space-y-5">
         <h3 className="text-lg font-bold text-foreground">Is this information correct?</h3>
-        <p className="text-sm text-muted-foreground">My house has:</p>
         <ul className="space-y-3">
           {[
             "Stone/concrete exterior walls",
@@ -414,43 +412,22 @@ const HouseInsurance = () => {
 
         <div className="border-t border-border pt-5">
           <div className="grid grid-cols-2 gap-3">
-            <button
+            <Button
+              variant="outline"
               onClick={() => handlePresetAnswer("yes")}
-              className={`px-5 py-3.5 rounded-xl border-2 text-sm font-semibold transition-all ${
-                presetAnswer === "yes"
-                  ? "border-primary bg-primary/10 text-foreground"
-                  : "border-border text-foreground hover:border-muted-foreground/30"
-              }`}
+              className={presetAnswer === "yes" ? "border-primary bg-primary/10" : ""}
             >
-              Yes, that's correct
-            </button>
-            <button
+              Yes
+            </Button>
+            <Button
+              variant="outline"
               onClick={() => handlePresetAnswer("no")}
-              className={`px-5 py-3.5 rounded-xl border-2 text-sm font-semibold transition-all ${
-                presetAnswer === "no"
-                  ? "border-destructive bg-destructive/10 text-foreground"
-                  : "border-border text-foreground hover:border-muted-foreground/30"
-              }`}
+              className={presetAnswer === "no" ? "border-primary bg-primary/10" : ""}
             >
-              No, I'll fill it in
-            </button>
+              No
+            </Button>
           </div>
         </div>
-
-        {presetAnswer === "yes" && (
-          <div className="bg-success/10 border border-success/20 rounded-xl px-4 py-3 animate-fade-in">
-            <p className="text-sm text-success font-medium">
-              ✓ Great! We'll use these details. You can always edit them later from the offer page.
-            </p>
-          </div>
-        )}
-        {presetAnswer === "no" && (
-          <div className="bg-muted rounded-xl px-4 py-3 animate-fade-in">
-            <p className="text-sm text-muted-foreground">
-              No problem — you'll be able to enter your home details manually in the next steps.
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );
