@@ -60,7 +60,7 @@ const INITIAL_HOUSE: HouseState = {
   specialAssetsAmount: "",
   ownerInterest: false,
   ownerInterestAmount: "",
-  security: "",
+  security: "None",
   netIncome: "",
   outsideValue: "",
   monumental: false,
