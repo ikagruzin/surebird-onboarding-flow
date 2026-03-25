@@ -62,7 +62,7 @@ const INITIAL_HOUSE: HouseState = {
   ownerInterestAmount: "",
   security: "None",
   netIncome: "",
-  outsideValue: "",
+  outsideValue: "€0",
   monumental: false,
   quoted: false,
   floorCount: "",
