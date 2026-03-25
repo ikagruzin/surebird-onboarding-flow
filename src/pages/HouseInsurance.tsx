@@ -60,9 +60,9 @@ const INITIAL_HOUSE: HouseState = {
   specialAssetsAmount: "",
   ownerInterest: false,
   ownerInterestAmount: "",
-  security: "",
+  security: "None",
   netIncome: "",
-  outsideValue: "",
+  outsideValue: "€0",
   monumental: false,
   quoted: false,
   floorCount: "",
@@ -443,7 +443,7 @@ const HouseInsurance = () => {
   const renderRoleSelection = () => (
     <div className="animate-fade-in space-y-6">
       <TacoMessage
-        message="First things first—are you currently the tenant of this home, or do you own the property?"
+        message="Great. Now, what would you like to protect today?"
         animate={shouldAnimateTaco}
         onAnimationComplete={markAnimated}
       />
@@ -597,14 +597,14 @@ const HouseInsurance = () => {
       <SectionCard title="Building Insurance">
         <div className="space-y-5">
           <ToggleRow label="Monumental status" checked={house.monumental} onChange={(v) => update("monumental", v)} />
-          <ToggleRow label="Quoted status" checked={house.quoted} onChange={(v) => update("quoted", v)} />
+          <ToggleRow label="Outbuilding" checked={house.quoted} onChange={(v) => update("quoted", v)} />
           <div>
             <label className="text-sm font-semibold text-foreground mb-2 block">Floor count</label>
             <SegmentedControl options={["1", "2", "2+"]} value={house.floorCount} onChange={(v) => update("floorCount", v)} />
           </div>
           <div className="border-t border-border pt-5 space-y-5">
             <ToggleRow label="Rainwater collection" checked={house.rainwater} onChange={(v) => update("rainwater", v)} />
-            <ToggleRow label="Smart sensors" checked={house.smartSensors} onChange={(v) => update("smartSensors", v)} />
+            <ToggleRow label="Solar Panels" checked={house.smartSensors} onChange={(v) => update("smartSensors", v)} />
             <ToggleRow label="Heat pump" checked={house.heatPump} onChange={(v) => update("heatPump", v)} />
           </div>
           {testVersion !== "a" && (
