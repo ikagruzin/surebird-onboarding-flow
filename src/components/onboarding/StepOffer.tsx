@@ -770,6 +770,7 @@ const StepOffer = ({
           {renderCalculations()}
         </div>
       </div>
+      </div>
     </div>
   );
 };
