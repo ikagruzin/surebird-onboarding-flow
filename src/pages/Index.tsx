@@ -83,6 +83,7 @@ const Index = () => {
   const switchFlow = (newFlowId: string) => {
     setSearchParams({ flow: newFlowId });
     setState({ ...INITIAL_STATE });
+    setOfferUnlocked(false);
   };
 
   // Navigate to a step by its ID
