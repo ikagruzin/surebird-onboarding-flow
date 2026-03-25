@@ -653,6 +653,12 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
                         selected={(currentPrefs[q.id] || "consumer").split(",")}
                         onChange={(sel) => onUpdatePreference(activeTab, q.id, sel.join(","))}
                       />
+                    ) : q.customComponent === "home_flow_c" ? (
+                      <HomePreferencesFlow
+                        initialData={currentPrefs.house_flow_data}
+                        onDataChange={(value) => onUpdatePreference(activeTab, "house_flow_data", value)}
+                        onCompleteChange={(done) => onUpdatePreference(activeTab, q.id, done ? "yes" : "")}
+                      />
                     ) : (
                       <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
                         {q.options.map((opt) => {
