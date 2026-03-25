@@ -18,7 +18,7 @@ interface TacoMessageProps {
 const TacoMessage = ({
   message,
   animate = false,
-  wordDelay = 25,
+  wordDelay = 35,
   variant = "plain",
   onAnimationComplete,
 }: TacoMessageProps) => {
