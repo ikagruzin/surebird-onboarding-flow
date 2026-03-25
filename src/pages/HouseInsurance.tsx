@@ -110,10 +110,16 @@ const OUTSIDE_VALUE_OPTIONS = ["€0", "€2,500", "€5,000", "€7,500", "€1
 /* ─── Reusable UI Pieces ─── */
 
 const SectionCard = ({ title, children }: { title?: string; children: React.ReactNode }) => (
-  <div className="border border-border rounded-3xl bg-card p-6 shadow-sm">
-    {title && <h3 className="text-lg font-bold text-foreground mb-5">{title}</h3>}
-    {children}
-  </div>
+  <Card>
+    {title && (
+      <CardHeader>
+        <CardTitle className="text-lg">{title}</CardTitle>
+      </CardHeader>
+    )}
+    <CardContent className={title ? "" : "pt-6"}>
+      {children}
+    </CardContent>
+  </Card>
 );
 
 const ChipSelect = ({
