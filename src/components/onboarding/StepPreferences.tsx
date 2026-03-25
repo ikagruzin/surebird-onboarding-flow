@@ -343,6 +343,9 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
       const nextTab = selectedInsurances[currentIndex + 1];
       animateTabSwitch(nextTab);
       setQuestionStep(0);
+    } else if (skipContactStep) {
+      // Flow D: skip phone/email, go to next wizard step
+      onNext();
     } else {
       setShowPhoneStep(true);
     }
