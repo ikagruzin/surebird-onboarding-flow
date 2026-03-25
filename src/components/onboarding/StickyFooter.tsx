@@ -34,7 +34,7 @@ const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel =
     <div className={`pointer-events-none fixed bottom-4 z-50 ${hasSidebar ? 'left-0 lg:left-64 right-0' : 'left-0 right-0'}`}>
       <div className="pointer-events-auto max-w-3xl mx-auto px-6 py-4 flex items-center justify-between bg-card border border-border rounded-3xl shadow-lg">
         {showSavings ? (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <Gift className="w-5 h-5 text-foreground" />
             <span className="text-sm font-semibold text-foreground">You save:</span>
             <span className={`inline-flex items-center gap-1 bg-success/10 border border-success/20 rounded-full px-3 py-1 ${animateSavings ? 'animate-savings-pop' : ''}`}>
