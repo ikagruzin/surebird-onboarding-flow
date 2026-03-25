@@ -7,7 +7,7 @@ const selectionCardVariants = cva(
   {
     variants: {
       selected: {
-        true: "border-primary bg-card",
+        true: "border-primary bg-primary/10",
         false: "border-border bg-card hover:border-foreground/30",
       },
       size: {
