@@ -740,8 +740,10 @@ const DesignSystem = () => {
                     value={demoSelectVal}
                     onChange={(e) => setDemoSelectVal(e.target.value)}
                     className={cn(
-                      "flex h-14 w-full appearance-none rounded-2xl border-2 border-input bg-white px-4 py-2 pr-10 text-sm font-medium text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-                      !demoSelectVal && "hover:border-foreground/30"
+                      "flex h-14 w-full appearance-none rounded-2xl border-2 bg-white px-4 py-2 pr-10 text-sm font-medium text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                      demoSelectVal
+                        ? "border-primary bg-primary/10"
+                        : "border-input hover:border-foreground/30"
                     )}
                   >
                     <option value="">Select building type...</option>
