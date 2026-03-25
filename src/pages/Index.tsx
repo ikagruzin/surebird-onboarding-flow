@@ -460,6 +460,7 @@ const Index = () => {
             onUpdateIban={(value) => setState((s) => ({ ...s, iban: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
           />
         );
       case "acceptance-questions":
