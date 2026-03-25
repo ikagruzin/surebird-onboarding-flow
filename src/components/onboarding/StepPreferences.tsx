@@ -4,6 +4,7 @@ import { INSURANCE_TYPES } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import LegalCoverageSelector from "./LegalCoverageSelector";
+import HomePreferencesFlow from "./HomePreferencesFlow";
 import TacoMessage from "./TacoMessage";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import iconLiability from "@/assets/icon-liability.svg";
@@ -36,7 +37,14 @@ interface PreferenceQuestion {
 }
 
 const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
-  // home preferences are handled by dedicated house steps outside StepPreferences
+  home: [
+    {
+      id: "house_flow_completed",
+      label: "Let’s set up your home insurance details",
+      options: [],
+      customComponent: "home_flow_c",
+    },
+  ],
   liability: [
     {
       id: "dog",
@@ -644,6 +652,12 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
                       <LegalCoverageSelector
                         selected={(currentPrefs[q.id] || "consumer").split(",")}
                         onChange={(sel) => onUpdatePreference(activeTab, q.id, sel.join(","))}
+                      />
+                    ) : q.customComponent === "home_flow_c" ? (
+                      <HomePreferencesFlow
+                        initialData={currentPrefs.house_flow_data}
+                        onDataChange={(value) => onUpdatePreference(activeTab, "house_flow_data", value)}
+                        onCompleteChange={(done) => onUpdatePreference(activeTab, q.id, done ? "yes" : "")}
                       />
                     ) : (
                       <div className={`grid gap-3 ${q.options.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
