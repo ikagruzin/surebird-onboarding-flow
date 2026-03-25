@@ -70,18 +70,11 @@ const StepAcceptanceQuestions = ({
   return (
     <div className="animate-fade-in space-y-8 pb-8">
       {/* Taco message */}
-      <div className="flex items-center gap-3">
-        <img
-          src={tacoAvatar}
-          alt="Taco"
-          className="w-10 h-10 rounded-full object-cover shrink-0"
-        />
-        <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
-          <p className="text-base text-foreground">
-            Almost there! Just a few final checks 📋 We need to confirm a few standard legal details required by all Dutch insurers.
-          </p>
-        </div>
-      </div>
+      <TacoMessage
+        message="Almost there! Just a few final checks 📋 We need to confirm a few standard legal details required by all Dutch insurers."
+        animate={animateTaco}
+        variant="bubble"
+      />
 
       {/* Why we ask card */}
       <div className="space-y-4">

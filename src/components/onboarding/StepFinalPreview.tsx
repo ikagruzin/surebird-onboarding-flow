@@ -1,7 +1,7 @@
 import { Check } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import TacoMessage from "./TacoMessage";
 
 interface StepFinalPreviewProps {
   selectedInsurances: string[];
@@ -16,6 +16,7 @@ interface StepFinalPreviewProps {
   onUpdateAgree: (field: "agreeTerms" | "agreeDebit", value: boolean) => void;
   onNext: () => void;
   onBack: () => void;
+  animateTaco?: boolean;
 }
 
 const StepFinalPreview = ({
@@ -29,31 +30,25 @@ const StepFinalPreview = ({
   agreeTerms,
   agreeDebit,
   onUpdateAgree,
+  animateTaco,
 }: StepFinalPreviewProps) => {
   const products = INSURANCE_TYPES.filter((t) => selectedInsurances.includes(t.id));
   const totalMonthly = products.reduce((sum, p) => sum + p.savings, 0);
   const fullName = [firstName, infix, lastName].filter(Boolean).join(" ");
-
-  // Use the first product's start date or fallback
   const firstDate = Object.values(startDates)[0] || "—";
 
   return (
     <div className="animate-fade-in space-y-8 pb-8">
-      {/* Taco message */}
-      <div className="flex items-center gap-3">
-        <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
-        <div className="bg-muted rounded-2xl rounded-tl-md px-5 py-3">
-          <p className="text-base text-foreground">
-            Everything looks good! 🎉 Let's confirm and get you insured.
-          </p>
-        </div>
-      </div>
+      <TacoMessage
+        message="Everything looks good! 🎉 Let's confirm and get you insured."
+        animate={animateTaco}
+        variant="bubble"
+      />
 
       {/* Summary card */}
       <div className="rounded-3xl border-2 border-input bg-card p-6 space-y-5">
         <h3 className="text-lg font-semibold text-foreground">Your Insurance Summary</h3>
 
-        {/* Products */}
         <div className="space-y-3">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Selected Products</p>
           <div className="space-y-2">
@@ -77,13 +72,11 @@ const StepFinalPreview = ({
           </div>
         </div>
 
-        {/* Start Date */}
         <div className="space-y-1">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Start Date</p>
           <p className="text-sm font-medium text-foreground">{firstDate}</p>
         </div>
 
-        {/* Personal Info */}
         <div className="space-y-1">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Verified Details</p>
           <p className="text-sm font-medium text-foreground">{fullName}</p>
@@ -91,7 +84,6 @@ const StepFinalPreview = ({
         </div>
       </div>
 
-      {/* Checkboxes */}
       <div className="space-y-4">
         <label className="flex items-start gap-3 cursor-pointer group">
           <Checkbox
