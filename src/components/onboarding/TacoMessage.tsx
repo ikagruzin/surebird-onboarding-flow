@@ -7,6 +7,7 @@ interface TacoMessageProps {
   /** Whether to animate word-by-word (false = render instantly) */
   animate?: boolean;
   /** Delay in ms between each word (default 50) */
+  /** Delay in ms between each word (default 25) */
   wordDelay?: number;
   /** Visual variant: "plain" (semibold text) or "bubble" (muted background bubble) */
   variant?: "plain" | "bubble";
