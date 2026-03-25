@@ -7,9 +7,7 @@ import TacoMessage from "@/components/onboarding/TacoMessage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SelectionCard } from "@/components/ui/selection-card";
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
+import { NativeSelect } from "@/components/ui/native-select";
 import iconHome from "@/assets/icon-home.svg";
 
 /* ─── Types ─── */
