@@ -716,12 +716,12 @@ const StepOffer = ({
                   animate={animateTaco}
                 />
                 <div className="flex flex-wrap items-center gap-2 mt-4">
-                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-success bg-success/10 border border-success/20 rounded-full px-3 py-1.5">
-                    <Gift className="w-4 h-4" />
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-success bg-success/10 border border-success/20 rounded-full px-4 py-3">
+                    <Gift className="w-5 h-5" />
                     You save with Surebird: €{annualSavings.toFixed(2)}
                   </span>
-                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-3 py-1.5">
-                    <Award className="w-4 h-4" />
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-4 py-3">
+                    <Award className="w-5 h-5" />
                     Best and cheapest choices
                   </span>
                 </div>
