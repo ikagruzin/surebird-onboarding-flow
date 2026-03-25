@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { NativeSelect } from "@/components/ui/native-select";
+import { getSelectionGridClass } from "@/lib/grid-layout";
 import iconHome from "@/assets/icon-home.svg";
 
 /* ─── Types ─── */
