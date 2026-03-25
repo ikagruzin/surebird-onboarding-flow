@@ -734,22 +734,16 @@ const DesignSystem = () => {
 
               <SubSection title="Select">
                 <Select>
-                  <SelectTrigger><SelectValue placeholder="Choose option" /></SelectTrigger>
+                  <SelectTrigger className="h-12 rounded-xl border-2 border-input bg-white px-4 text-sm font-medium">
+                    <SelectValue placeholder="Select building type..." />
+                  </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="a">Option A</SelectItem>
-                    <SelectItem value="b">Option B</SelectItem>
-                    <SelectItem value="c">Option C</SelectItem>
+                    <SelectItem value="a">Detached house</SelectItem>
+                    <SelectItem value="b">Apartment</SelectItem>
+                    <SelectItem value="c">Studio</SelectItem>
                   </SelectContent>
                 </Select>
-              </SubSection>
-
-              <SubSection title="Custom Select (Flow-style)">
-                <select className="w-full rounded-xl border-2 border-input bg-white px-4 py-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 appearance-none">
-                  <option value="">Select building type...</option>
-                  <option value="a">Detached house</option>
-                  <option value="b">Apartment</option>
-                </select>
-                <p className="text-xs text-muted-foreground mt-1">Used in: HouseInsurance — native select with custom styling</p>
+                <p className="text-xs text-muted-foreground mt-1">rounded-xl · border-2 · bg-white · flow-style</p>
               </SubSection>
 
               <SubSection title="Checkbox">
