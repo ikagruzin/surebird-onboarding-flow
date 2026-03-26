@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Shield } from "lucide-react";
-import TacoMessage from "./TacoMessage";
+import TacoMessage from "./taco-message";
 
 interface StepPhoneVerificationProps {
   phone: string;

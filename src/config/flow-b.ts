@@ -1,4 +1,4 @@
-import type { FlowConfig } from "./flowTypes";
+import type { FlowConfig } from "./flow-types";
 
 const flowB: FlowConfig = {
   id: "b",

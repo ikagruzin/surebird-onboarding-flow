@@ -1,4 +1,4 @@
-import TacoMessage from "./TacoMessage";
+import TacoMessage from "./taco-message";
 import { INSURANCE_TYPES } from "./types";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";

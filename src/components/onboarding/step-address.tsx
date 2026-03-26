@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
-import TacoMessage from "./TacoMessage";
+import TacoMessage from "./taco-message";
 import { Info } from "lucide-react";
 import {
   Select,

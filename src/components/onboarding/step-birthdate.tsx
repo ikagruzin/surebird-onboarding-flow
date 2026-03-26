@@ -1,6 +1,6 @@
 import { Info } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
-import TacoMessage from "./TacoMessage";
+import TacoMessage from "./taco-message";
 import { ChangeEvent } from "react";
 
 interface StepBirthdateProps {

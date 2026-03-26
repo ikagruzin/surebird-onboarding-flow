@@ -1,5 +1,5 @@
 import { Minus, Plus } from "lucide-react";
-import TacoMessage from "./TacoMessage";
+import TacoMessage from "./taco-message";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 
 interface StepFamilyDetailsProps {

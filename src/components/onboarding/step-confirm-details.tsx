@@ -1,5 +1,5 @@
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
-import TacoMessage from "./TacoMessage";
+import TacoMessage from "./taco-message";
 
 interface StepConfirmDetailsProps {
   firstName: string;
