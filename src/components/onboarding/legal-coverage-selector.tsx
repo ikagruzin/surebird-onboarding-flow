@@ -161,5 +161,4 @@ export const LegalCoverageSelector = ({ selected, onChange }: LegalCoverageSelec
   );
 };
 
-export default LegalCoverageSelector;
 export { LEGAL_OPTIONS };
