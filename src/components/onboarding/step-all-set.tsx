@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { INSURANCE_TYPES } from "./types";
-import TacoMessage from "./taco-message";
+import { TacoMessage } from "./taco-message";
 
 interface StepAllSetProps {
   selectedInsurances: string[];

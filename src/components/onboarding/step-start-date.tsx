@@ -1,7 +1,7 @@
 import { useState, ChangeEvent } from "react";
 import { INSURANCE_TYPES } from "./types";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
-import TacoMessage from "./taco-message";
+import { TacoMessage } from "./taco-message";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
 import iconCar from "@/assets/icon-car.svg";

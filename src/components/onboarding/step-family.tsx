@@ -1,4 +1,4 @@
-import TacoMessage from "./taco-message";
+import { TacoMessage } from "./taco-message";
 import familySingle from "@/assets/family-single.png";
 import familyPartner from "@/assets/family-partner.png";
 import familySingleChildren from "@/assets/family-single-children.png";

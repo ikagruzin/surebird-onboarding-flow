@@ -1,7 +1,7 @@
 import { Check } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
-import TacoMessage from "./taco-message";
+import { TacoMessage } from "./taco-message";
 
 interface StepFinalPreviewProps {
   selectedInsurances: string[];

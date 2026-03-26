@@ -45,7 +45,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 // ── Custom components ──
-import FlowSwitcher from "@/components/onboarding/flow-switcher";
+import { FlowSwitcher } from "@/components/onboarding/flow-switcher";
 import { getAllFlows } from "@/config/flows";
 
 /* ─────────────────────────── COLOR TOKENS ─────────────────────────── */

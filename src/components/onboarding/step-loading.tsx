@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Check, Loader2 } from "lucide-react";
-import TacoMessage from "./taco-message";
+import { TacoMessage } from "./taco-message";
 
 const USP_INTERVAL = 4500; // ~4.5s per card
 const FINAL_CARD_PAUSE = 3000; // 3s after last card
