@@ -70,7 +70,7 @@ interface LegalCoverageSelectorProps {
   onChange: (selected: string[]) => void;
 }
 
-const LegalCoverageSelector = ({ selected, onChange }: LegalCoverageSelectorProps) => {
+export const LegalCoverageSelector = ({ selected, onChange }: LegalCoverageSelectorProps) => {
   const [showAll, setShowAll] = useState(false);
 
   const visibleOptions = showAll ? LEGAL_OPTIONS : LEGAL_OPTIONS.slice(0, INITIAL_VISIBLE);
@@ -161,5 +161,4 @@ const LegalCoverageSelector = ({ selected, onChange }: LegalCoverageSelectorProp
   );
 };
 
-export default LegalCoverageSelector;
 export { LEGAL_OPTIONS };
