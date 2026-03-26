@@ -1,8 +1,8 @@
-import type { FlowConfig } from "./flowTypes";
-import flowA from "./flowA";
-import flowB from "./flowB";
-import flowC from "./flowC";
-import flowD from "./flowD";
+import type { FlowConfig } from "./flow-types";
+import flowA from "./flow-a";
+import flowB from "./flow-b";
+import flowC from "./flow-c";
+import flowD from "./flow-d";
 
 const designSystemEntry: FlowConfig = {
   id: "design-system",
