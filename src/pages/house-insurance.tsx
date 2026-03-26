@@ -1,9 +1,9 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight, ChevronLeft, RotateCcw, Home, Check } from "lucide-react";
-import StickyFooter from "@/components/onboarding/StickyFooter";
-import FlowSwitcher from "@/components/onboarding/FlowSwitcher";
-import TacoMessage from "@/components/onboarding/TacoMessage";
+import StickyFooter from "@/components/onboarding/sticky-footer";
+import FlowSwitcher from "@/components/onboarding/flow-switcher";
+import TacoMessage from "@/components/onboarding/taco-message";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SelectionCard } from "@/components/ui/selection-card";

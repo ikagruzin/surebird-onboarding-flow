@@ -1,7 +1,7 @@
 import { Bug } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { WizardState } from "./types";
-import type { FlowConfig } from "@/config/flowTypes";
+import type { FlowConfig } from "@/config/flow-types";
 
 const DUMMY_DATA: Partial<WizardState> = {
   selectedInsurances: ["liability"],
