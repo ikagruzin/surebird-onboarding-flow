@@ -37,7 +37,7 @@ const CHECKMARK_STEPS = [
 
 const INITIAL_DELAY = 4000; // 4s before first card
 
-const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
+export const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
   const [visibleCards, setVisibleCards] = useState(0);
   const [completedChecks, setCompletedChecks] = useState<number[]>([]);
 
@@ -168,4 +168,3 @@ const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
   );
 };
 
-export default StepLoading;

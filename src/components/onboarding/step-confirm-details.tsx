@@ -13,7 +13,7 @@ interface StepConfirmDetailsProps {
   animateTaco?: boolean;
 }
 
-const StepConfirmDetails = ({
+export const StepConfirmDetails = ({
   firstName,
   infix,
   lastName,
@@ -76,4 +76,3 @@ const StepConfirmDetails = ({
   );
 };
 
-export default StepConfirmDetails;

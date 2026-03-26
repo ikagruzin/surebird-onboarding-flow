@@ -18,7 +18,7 @@ interface StepUpsellProps {
   onBack: () => void;
 }
 
-const StepUpsell = ({ selectedInsurances, onToggle, onNext, onBack }: StepUpsellProps) => {
+export const StepUpsell = ({ selectedInsurances, onToggle, onNext, onBack }: StepUpsellProps) => {
   const unselected = INSURANCE_TYPES.filter((t) => !selectedInsurances.includes(t.id));
   const totalExtraSavings = unselected.reduce((s, t) => s + t.savings, 0);
 
@@ -90,4 +90,3 @@ const StepUpsell = ({ selectedInsurances, onToggle, onNext, onBack }: StepUpsell
   );
 };
 
-export default StepUpsell;

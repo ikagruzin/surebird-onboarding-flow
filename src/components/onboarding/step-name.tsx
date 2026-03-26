@@ -10,7 +10,7 @@ interface StepNameProps {
   animateTaco?: boolean;
 }
 
-const StepName = ({ firstName, lastName, onUpdate, onNext, onBack, animateTaco }: StepNameProps) => {
+export const StepName = ({ firstName, lastName, onUpdate, onNext, onBack, animateTaco }: StepNameProps) => {
   return (
     <div className="animate-fade-in">
       <TacoMessage
@@ -39,4 +39,3 @@ const StepName = ({ firstName, lastName, onUpdate, onNext, onBack, animateTaco }
   );
 };
 
-export default StepName;

@@ -32,7 +32,7 @@ interface StepPackageProps {
   onBack: () => void;
 }
 
-const StepPackage = ({
+export const StepPackage = ({
   selectedInsurances,
   email,
   emailSubmitted,
@@ -236,4 +236,3 @@ const StepPackage = ({
   );
 };
 
-export default StepPackage;

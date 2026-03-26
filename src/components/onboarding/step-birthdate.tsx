@@ -21,7 +21,7 @@ function formatDateInput(raw: string, prevValue: string): string {
   return result;
 }
 
-const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack, animateTaco }: StepBirthdateProps) => {
+export const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack, animateTaco }: StepBirthdateProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const formatted = formatDateInput(e.target.value, birthdate);
     onUpdate(formatted);
@@ -54,4 +54,3 @@ const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack, animateTaco }: Ste
   );
 };
 
-export default StepBirthdate;

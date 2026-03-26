@@ -10,7 +10,7 @@ interface StepAllSetProps {
   animateTaco?: boolean;
 }
 
-const StepAllSet = ({
+export const StepAllSet = ({
   selectedInsurances,
   firstName,
   animateTaco,
@@ -51,4 +51,3 @@ const StepAllSet = ({
   );
 };
 
-export default StepAllSet;

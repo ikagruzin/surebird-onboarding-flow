@@ -9,7 +9,7 @@ interface StepPhoneVerificationProps {
   animateTaco?: boolean;
 }
 
-const StepPhoneVerification = ({ phone, onVerified, onBack, animateTaco }: StepPhoneVerificationProps) => {
+export const StepPhoneVerification = ({ phone, onVerified, onBack, animateTaco }: StepPhoneVerificationProps) => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState("");
@@ -135,4 +135,3 @@ const StepPhoneVerification = ({ phone, onVerified, onBack, animateTaco }: StepP
   );
 };
 
-export default StepPhoneVerification;

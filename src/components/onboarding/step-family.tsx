@@ -18,7 +18,7 @@ const OPTIONS = [
   { id: "partner-children", label: "Partner &\nChildren", image: familyPartnerChildren },
 ];
 
-const StepFamily = ({ familyStatus, onSelect, animateTaco }: StepFamilyProps) => {
+export const StepFamily = ({ familyStatus, onSelect, animateTaco }: StepFamilyProps) => {
   return (
     <div className="animate-fade-in">
       <TacoMessage message="What is your family status?" animate={animateTaco} />
@@ -51,4 +51,3 @@ const StepFamily = ({ familyStatus, onSelect, animateTaco }: StepFamilyProps) =>
   );
 };
 
-export default StepFamily;

@@ -25,7 +25,7 @@ interface StepReadyProps {
   animateTaco?: boolean;
 }
 
-const StepReady = ({ selectedInsurances, onNext, onBack, animateTaco }: StepReadyProps) => {
+export const StepReady = ({ selectedInsurances, onNext, onBack, animateTaco }: StepReadyProps) => {
   const selected = INSURANCE_TYPES.filter((t) =>
     selectedInsurances.includes(t.id)
   );
@@ -64,4 +64,3 @@ const StepReady = ({ selectedInsurances, onNext, onBack, animateTaco }: StepRead
   );
 };
 
-export default StepReady;

@@ -59,7 +59,7 @@ const INITIAL_STATE: WizardState = {
   agreeDebit: false,
 };
 
-const Index = () => {
+export const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const flowId = searchParams.get("flow") || DEFAULT_FLOW_ID;
   const flow = useMemo(() => getFlow(flowId), [flowId]);
@@ -602,4 +602,3 @@ const Index = () => {
   );
 };
 
-export default Index;

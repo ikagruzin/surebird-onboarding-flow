@@ -14,7 +14,7 @@ const FLOW_ROUTES: Record<string, string> = {
   "design-system": "/design-system",
 };
 
-const FlowSwitcher = ({ currentFlowId, onSwitch }: FlowSwitcherProps) => {
+export const FlowSwitcher = ({ currentFlowId, onSwitch }: FlowSwitcherProps) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const flows = getAllFlows();
@@ -73,4 +73,3 @@ const FlowSwitcher = ({ currentFlowId, onSwitch }: FlowSwitcherProps) => {
   );
 };
 
-export default FlowSwitcher;

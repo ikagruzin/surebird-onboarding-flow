@@ -1,6 +1,6 @@
 import type { FlowConfig } from "./flow-types";
 
-const flowB: FlowConfig = {
+export const flowB: FlowConfig = {
   id: "b",
   name: "Flow B — Smart Audit",
   description: "Fast-track: upload existing policy → skip to offer",
@@ -122,4 +122,3 @@ const flowB: FlowConfig = {
   ],
 };
 
-export default flowB;

@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 
-const Footer = () => (
+export const Footer = () => (
   <div className="border-t border-border mt-12 pt-6 pb-8">
     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
@@ -23,4 +23,3 @@ const Footer = () => (
   </div>
 );
 
-export default Footer;

@@ -135,7 +135,7 @@ interface StepOfferProps {
   animateTaco?: boolean;
 }
 
-const StepOffer = ({
+export const StepOffer = ({
   selectedInsurances,
   preferences,
   firstName,
@@ -731,4 +731,3 @@ const StepOffer = ({
   );
 };
 
-export default StepOffer;

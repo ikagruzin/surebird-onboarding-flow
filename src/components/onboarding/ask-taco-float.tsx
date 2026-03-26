@@ -1,7 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 
-const AskTacoFloat = () => (
+export const AskTacoFloat = () => (
   <div className="fixed bottom-24 left-6 z-40 hidden lg:block">
     <div className="bg-card border border-border rounded-xl p-4 shadow-lg w-56">
       <div className="flex items-center gap-3 mb-3">
@@ -23,4 +23,3 @@ const AskTacoFloat = () => (
   </div>
 );
 
-export default AskTacoFloat;

@@ -14,7 +14,7 @@ interface StepIdinVerificationProps {
 
 type VerifyState = "idle" | "pending" | "verified" | "failed" | "manual";
 
-const StepIdinVerification = ({
+export const StepIdinVerification = ({
   iban,
   onUpdateIban,
   animateTaco,
@@ -257,4 +257,3 @@ const StepIdinVerification = ({
   );
 };
 
-export default StepIdinVerification;

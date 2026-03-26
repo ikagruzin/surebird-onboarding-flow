@@ -1,6 +1,6 @@
 import type { FlowConfig } from "./flow-types";
 
-const flowC: FlowConfig = {
+export const flowC: FlowConfig = {
   id: "c",
   name: "Flow C — Only Products",
   description: "Test individual product flows (e.g. House Insurance)",
@@ -8,4 +8,3 @@ const flowC: FlowConfig = {
   steps: [],
 };
 
-export default flowC;

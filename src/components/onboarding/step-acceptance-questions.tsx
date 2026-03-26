@@ -60,7 +60,7 @@ interface StepAcceptanceQuestionsProps {
   animateTaco?: boolean;
 }
 
-const StepAcceptanceQuestions = ({
+export const StepAcceptanceQuestions = ({
   answers,
   onUpdateAnswer,
   animateTaco,
@@ -174,4 +174,3 @@ const StepAcceptanceQuestions = ({
   );
 };
 
-export default StepAcceptanceQuestions;

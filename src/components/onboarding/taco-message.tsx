@@ -15,7 +15,7 @@ interface TacoMessageProps {
   onAnimationComplete?: () => void;
 }
 
-const TacoMessage = ({
+export const TacoMessage = ({
   message,
   animate = false,
   wordDelay = 35,
@@ -78,4 +78,3 @@ const TacoMessage = ({
   );
 };
 
-export default TacoMessage;

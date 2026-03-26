@@ -1,6 +1,6 @@
 import type { FlowConfig } from "./flow-types";
 
-const flowD: FlowConfig = {
+export const flowD: FlowConfig = {
   id: "d",
   name: "Flow D — Gated Offer",
   description: "Collect contact info on the offer page: preferences → all-set → loading → gated offer",
@@ -119,4 +119,3 @@ const flowD: FlowConfig = {
   ],
 };
 
-export default flowD;

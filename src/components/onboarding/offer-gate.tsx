@@ -12,7 +12,7 @@ interface OfferGateProps {
   onUnlock: () => void;
 }
 
-const OfferGate = ({
+export const OfferGate = ({
   firstName,
   phone,
   email,
@@ -119,4 +119,3 @@ const OfferGate = ({
   );
 };
 
-export default OfferGate;

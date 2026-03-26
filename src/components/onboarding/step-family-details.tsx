@@ -15,7 +15,7 @@ interface StepFamilyDetailsProps {
   animateTaco?: boolean;
 }
 
-const StepFamilyDetails = ({
+export const StepFamilyDetails = ({
   familyStatus,
   insurePartner,
   childrenCount,
@@ -116,4 +116,3 @@ const StepFamilyDetails = ({
   );
 };
 
-export default StepFamilyDetails;

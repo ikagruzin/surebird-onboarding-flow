@@ -4,7 +4,7 @@ interface StepSuccessProps {
   email: string;
 }
 
-const StepSuccess = ({ email }: StepSuccessProps) => {
+export const StepSuccess = ({ email }: StepSuccessProps) => {
   return (
     <div className="animate-fade-in flex flex-col items-center justify-center text-center py-16 space-y-8">
       {/* Animated checkmark */}
@@ -46,4 +46,3 @@ const StepSuccess = ({ email }: StepSuccessProps) => {
   );
 };
 
-export default StepSuccess;

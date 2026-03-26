@@ -84,7 +84,7 @@ const DateInput = ({
   </div>
 );
 
-const StepStartDate = ({
+export const StepStartDate = ({
   selectedInsurances,
   startDates,
   onUpdateStartDate,
@@ -214,4 +214,3 @@ const StepStartDate = ({
   );
 };
 
-export default StepStartDate;

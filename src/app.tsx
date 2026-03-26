@@ -10,7 +10,7 @@ import NotFound from "./pages/not-found";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+export const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
@@ -28,4 +28,3 @@ const App = () => (
   </QueryClientProvider>
 );
 
-export default App;

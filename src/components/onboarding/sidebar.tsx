@@ -10,7 +10,7 @@ interface SidebarProps {
   showAvatar?: boolean;
 }
 
-const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, showAvatar = false }: SidebarProps) => {
+export const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, showAvatar = false }: SidebarProps) => {
   if (!visible) return null;
 
   return (
@@ -88,4 +88,3 @@ const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, showAva
   );
 };
 
-export default Sidebar;

@@ -261,7 +261,7 @@ const SubSection = ({ title, children }: { title: string; children: React.ReactN
 
 /* ═══════════════════════════ MAIN PAGE ═══════════════════════════ */
 
-const DesignSystem = () => {
+export const DesignSystem = () => {
   const navigate = useNavigate();
   const [demoRadio, setDemoRadio] = useState("option-1");
   const [demoSwitch, setDemoSwitch] = useState(false);
@@ -1249,4 +1249,3 @@ const DesignSystem = () => {
   );
 };
 
-export default DesignSystem;

@@ -226,7 +226,7 @@ interface StepPreferencesProps {
   skipContactStep?: boolean;
 }
 
-const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(({
+export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(({
   selectedInsurances,
   preferences,
   firstName,
@@ -825,4 +825,3 @@ const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(
 
 StepPreferences.displayName = "StepPreferences";
 
-export default StepPreferences;

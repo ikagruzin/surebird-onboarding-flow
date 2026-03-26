@@ -25,7 +25,7 @@ interface DevSkipButtonProps {
   onSkip: (state: Partial<WizardState>, stepIndex: number) => void;
 }
 
-const DevSkipButton = ({ flow, onSkip }: DevSkipButtonProps) => {
+export const DevSkipButton = ({ flow, onSkip }: DevSkipButtonProps) => {
   // Find the step right before "loading"
   const loadingIndex = flow.steps.findIndex((s) => s.id === "loading");
   if (loadingIndex <= 0) return null;
@@ -46,4 +46,3 @@ const DevSkipButton = ({ flow, onSkip }: DevSkipButtonProps) => {
   );
 };
 
-export default DevSkipButton;

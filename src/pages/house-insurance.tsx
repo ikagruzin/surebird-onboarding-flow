@@ -253,7 +253,7 @@ function getStepSequence(
 }
 
 /* ─── Page ─── */
-const HouseInsurance = () => {
+export const HouseInsurance = () => {
   const navigate = useNavigate();
   const [house, setHouse] = useState<HouseState>({ ...INITIAL_HOUSE });
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
@@ -759,4 +759,3 @@ const HouseInsurance = () => {
   );
 };
 
-export default HouseInsurance;

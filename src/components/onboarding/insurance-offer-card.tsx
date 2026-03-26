@@ -9,7 +9,7 @@ interface InsuranceOfferCardProps {
   onViewDetails?: () => void;
 }
 
-const InsuranceOfferCard = ({
+export const InsuranceOfferCard = ({
   insurerName,
   logoSrc,
   monthlyPrice,
@@ -61,4 +61,3 @@ const InsuranceOfferCard = ({
   );
 };
 
-export default InsuranceOfferCard;

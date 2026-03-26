@@ -39,7 +39,7 @@ const AUDIT_STEPS = [
   { label: "Calculating your Surebird offer…", duration: 800 },
 ];
 
-const StepPolicyUpload = ({ onParsed, onBack }: StepPolicyUploadProps) => {
+export const StepPolicyUpload = ({ onParsed, onBack }: StepPolicyUploadProps) => {
   const [stage, setStage] = useState<"upload" | "parsing" | "done">("upload");
   const [dragOver, setDragOver] = useState(false);
   const [fileName, setFileName] = useState("");
@@ -326,4 +326,3 @@ const StepPolicyUpload = ({ onParsed, onBack }: StepPolicyUploadProps) => {
   );
 };
 
-export default StepPolicyUpload;

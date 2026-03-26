@@ -1,6 +1,6 @@
 import type { FlowConfig } from "./flow-types";
 
-const flowA: FlowConfig = {
+export const flowA: FlowConfig = {
   id: "a",
   name: "Flow A — Standard",
   description: "Default onboarding: About you → Preferences → Offer → Finalise",
@@ -113,4 +113,3 @@ const flowA: FlowConfig = {
   ],
 };
 
-export default flowA;

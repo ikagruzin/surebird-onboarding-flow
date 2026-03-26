@@ -19,7 +19,7 @@ interface StepFinalPreviewProps {
   animateTaco?: boolean;
 }
 
-const StepFinalPreview = ({
+export const StepFinalPreview = ({
   selectedInsurances,
   startDates,
   firstName,
@@ -114,4 +114,3 @@ const StepFinalPreview = ({
   );
 };
 
-export default StepFinalPreview;

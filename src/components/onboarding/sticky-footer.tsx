@@ -12,7 +12,7 @@ interface StickyFooterProps {
   showNextButton?: boolean;
 }
 
-const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel = "Next", hasSidebar = false, showSavings = true, showNextButton = true }: StickyFooterProps) => {
+export const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel = "Next", hasSidebar = false, showSavings = true, showNextButton = true }: StickyFooterProps) => {
   const formattedSavings = savings.toLocaleString("nl-NL", {
     style: "currency",
     currency: "EUR",
@@ -69,4 +69,3 @@ const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel =
   );
 };
 
-export default StickyFooter;

@@ -57,7 +57,7 @@ async function lookupAddress(
   return DB[pc]?.[houseNumber] ?? null;
 }
 
-const StepAddress = ({
+export const StepAddress = ({
   firstName,
   postcode,
   houseNumber,
@@ -177,4 +177,3 @@ const StepAddress = ({
   );
 };
 
-export default StepAddress;
