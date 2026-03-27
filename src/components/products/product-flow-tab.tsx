@@ -5,16 +5,7 @@
 import { forwardRef, useImperativeHandle } from "react";
 import { useProductFlow } from "@/hooks/use-product-flow";
 import { getProductConfig } from "@/config/products";
-import { HOME_STEP_COMPONENTS } from "./home-steps";
-import { LIABILITY_STEP_COMPONENTS } from "./liability-steps";
-import type { ProductStepProps } from "@/config/products/types";
-import type { ComponentType } from "react";
-
-/** Component maps per product. Add new products here. */
-const COMPONENT_MAPS: Record<string, Record<string, ComponentType<ProductStepProps>>> = {
-  home: HOME_STEP_COMPONENTS,
-  liability: LIABILITY_STEP_COMPONENTS,
-};
+import { PRODUCT_STEP_COMPONENT_MAPS } from "./component-maps";
 
 export interface ProductFlowTabHandle {
   /** Returns true if handled internally, false if flow is complete */
