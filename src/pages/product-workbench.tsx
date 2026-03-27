@@ -8,18 +8,21 @@ import { getAllProductConfigs, getProductConfig } from "@/config/products";
 import { HOME_STEP_COMPONENTS } from "@/components/products/home-steps";
 import { LIABILITY_STEP_COMPONENTS } from "@/components/products/liability-steps";
 import { LEGAL_STEP_COMPONENTS } from "@/components/products/legal-steps";
+import { ACCIDENT_STEP_COMPONENTS } from "@/components/products/accident-steps";
 import type { ProductStepProps } from "@/config/products/types";
 import type { ComponentType } from "react";
 
 import iconHome from "@/assets/icon-home.svg";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconLegal from "@/assets/icon-legal.svg";
+import iconAccidents from "@/assets/icon-accidents.svg";
 
 /* ─── Icon map ─── */
 const ICON_MAP: Record<string, string> = {
   "icon-home": iconHome,
   "icon-liability": iconLiability,
   "icon-legal": iconLegal,
+  "icon-accidents": iconAccidents,
 };
 
 /* ─── Component maps per product ─── */
@@ -27,6 +30,7 @@ const COMPONENT_MAPS: Record<string, Record<string, ComponentType<ProductStepPro
   home: HOME_STEP_COMPONENTS,
   liability: LIABILITY_STEP_COMPONENTS,
   legal: LEGAL_STEP_COMPONENTS,
+  accidents: ACCIDENT_STEP_COMPONENTS,
 };
 
 /* ─── Flow C: Product Workbench ─── */
