@@ -254,6 +254,10 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionDirection, setTransitionDirection] = useState<"left" | "right">("left");
 
+  // Product flow refs for products with full configs (e.g. Home)
+  const productFlowRefs = useRef<Record<string, ProductFlowTabHandle | null>>({});
+  const isProductFlow = hasProductConfig(activeTab);
+
   // Apply default preferences on mount
   useEffect(() => {
     selectedInsurances.forEach((id) => {
