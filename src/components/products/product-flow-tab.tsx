@@ -27,7 +27,7 @@ export const ProductFlowTab = forwardRef<ProductFlowTabHandle, ProductFlowTabPro
   ({ productId }, ref) => {
     const config = getProductConfig(productId)!;
     const flow = useProductFlow(config);
-    const componentMap = COMPONENT_MAPS[productId] || {};
+    const componentMap = PRODUCT_STEP_COMPONENT_MAPS[productId] || {};
     const StepComponent = componentMap[flow.currentStepId];
 
     useImperativeHandle(ref, () => ({
