@@ -214,6 +214,10 @@ const DEFAULT_PREFERENCES: Record<string, Record<string, string>> = {
   legal: {
     coverage_modules: "consumer",
   },
+  accidents: {
+    coverage: "death_5k_disability_25k",
+    own_risk: "100",
+  },
 };
 
 export interface StepPreferencesHandle {
