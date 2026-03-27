@@ -10,7 +10,7 @@ interface FlowSwitcherProps {
 
 /** Flow IDs that redirect to dedicated routes instead of the main wizard */
 const FLOW_ROUTES: Record<string, string> = {
-  c: "/test-flows/house",
+  c: "/test-flows/products",
   "design-system": "/design-system",
 };
 

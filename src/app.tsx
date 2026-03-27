@@ -18,7 +18,7 @@ export const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/test-flows/house" element={<HouseInsurance />} />
+          <Route path="/test-flows/products" element={<ProductWorkbench />} />
           <Route path="/design-system" element={<DesignSystem />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
