@@ -5,10 +5,7 @@ import { StickyFooter } from "@/components/onboarding/sticky-footer";
 import { FlowSwitcher } from "@/components/onboarding/flow-switcher";
 import { useProductFlow } from "@/hooks/use-product-flow";
 import { getAllProductConfigs, getProductConfig } from "@/config/products";
-import { HOME_STEP_COMPONENTS } from "@/components/products/home-steps";
-import { LIABILITY_STEP_COMPONENTS } from "@/components/products/liability-steps";
-import { LEGAL_STEP_COMPONENTS } from "@/components/products/legal-steps";
-import { ACCIDENT_STEP_COMPONENTS } from "@/components/products/accident-steps";
+import { PRODUCT_STEP_COMPONENT_MAPS } from "@/components/products/component-maps";
 import type { ProductStepProps } from "@/config/products/types";
 import type { ComponentType } from "react";
 
@@ -26,12 +23,7 @@ const ICON_MAP: Record<string, string> = {
 };
 
 /* ─── Component maps per product ─── */
-const COMPONENT_MAPS: Record<string, Record<string, ComponentType<ProductStepProps>>> = {
-  home: HOME_STEP_COMPONENTS,
-  liability: LIABILITY_STEP_COMPONENTS,
-  legal: LEGAL_STEP_COMPONENTS,
-  accidents: ACCIDENT_STEP_COMPONENTS,
-};
+const COMPONENT_MAPS = PRODUCT_STEP_COMPONENT_MAPS;
 
 /* ─── Flow C: Product Workbench ─── */
 

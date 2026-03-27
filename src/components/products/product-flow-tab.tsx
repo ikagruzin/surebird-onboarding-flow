@@ -5,16 +5,7 @@
 import { forwardRef, useImperativeHandle } from "react";
 import { useProductFlow } from "@/hooks/use-product-flow";
 import { getProductConfig } from "@/config/products";
-import { HOME_STEP_COMPONENTS } from "./home-steps";
-import { LIABILITY_STEP_COMPONENTS } from "./liability-steps";
-import type { ProductStepProps } from "@/config/products/types";
-import type { ComponentType } from "react";
-
-/** Component maps per product. Add new products here. */
-const COMPONENT_MAPS: Record<string, Record<string, ComponentType<ProductStepProps>>> = {
-  home: HOME_STEP_COMPONENTS,
-  liability: LIABILITY_STEP_COMPONENTS,
-};
+import { PRODUCT_STEP_COMPONENT_MAPS } from "./component-maps";
 
 export interface ProductFlowTabHandle {
   /** Returns true if handled internally, false if flow is complete */
@@ -36,7 +27,7 @@ export const ProductFlowTab = forwardRef<ProductFlowTabHandle, ProductFlowTabPro
   ({ productId }, ref) => {
     const config = getProductConfig(productId)!;
     const flow = useProductFlow(config);
-    const componentMap = COMPONENT_MAPS[productId] || {};
+    const componentMap = PRODUCT_STEP_COMPONENT_MAPS[productId] || {};
     const StepComponent = componentMap[flow.currentStepId];
 
     useImperativeHandle(ref, () => ({
@@ -62,7 +53,13 @@ export const ProductFlowTab = forwardRef<ProductFlowTabHandle, ProductFlowTabPro
       },
     }), [flow.isLastStep, flow.isValid, flow.stepIdx, flow.steps.length, flow.goNext, flow.goBack]);
 
-    if (!StepComponent) return null;
+    if (!StepComponent) {
+      return (
+        <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
+          No step component found for product "{productId}" and step "{flow.currentStepId}".
+        </div>
+      );
+    }
 
     return (
       <StepComponent
