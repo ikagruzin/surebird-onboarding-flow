@@ -1,9 +1,11 @@
 import type { ProductConfig } from "./types";
 import { homeProduct } from "./home";
+import { liabilityProduct } from "./liability";
 
 /** Registry of all product configs. Add new products here. */
 const PRODUCT_CONFIGS: Record<string, ProductConfig> = {
   home: homeProduct,
+  liability: liabilityProduct,
 };
 
 /** Get a single product config by id. Returns undefined if not found. */
