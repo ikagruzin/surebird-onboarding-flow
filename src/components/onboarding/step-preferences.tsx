@@ -159,12 +159,23 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
   accidents: [
     {
       id: "coverage",
-      label: "Who do you want to insure?",
+      label: "Choose your coverage level",
       options: [
-        { value: "self", label: "Just me" },
-        { value: "family", label: "My family" },
+        { value: "death_5k_disability_25k", label: "Death: €5,000 | Disability: €25,000" },
+        { value: "death_10k_disability_50k", label: "Death: €10,000 | Disability: €50,000" },
+        { value: "death_15k_disability_100k", label: "Death: €15,000 | Disability: €100,000" },
+        { value: "death_20k_disability_150k", label: "Death: €20,000 | Disability: €150,000" },
       ],
-      autoAdvance: true,
+    },
+    {
+      id: "own_risk",
+      label: "What do you want to be your own risk?",
+      options: [
+        { value: "100", label: "€100" },
+        { value: "250", label: "€250" },
+        { value: "500", label: "€500" },
+        { value: "no_excess", label: "No excess" },
+      ],
     },
   ],
   caravan: [
@@ -202,6 +213,10 @@ const DEFAULT_PREFERENCES: Record<string, Record<string, string>> = {
   },
   legal: {
     coverage_modules: "consumer",
+  },
+  accidents: {
+    coverage: "death_5k_disability_25k",
+    own_risk: "100",
   },
 };
 
