@@ -6,6 +6,8 @@ import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { LegalCoverageSelector } from "./legal-coverage-selector";
 import { TacoMessage } from "./taco-message";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
+import { hasProductConfig, getProductConfig } from "@/config/products";
+import { ProductFlowTab, type ProductFlowTabHandle } from "@/components/products/product-flow-tab";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
 import iconCar from "@/assets/icon-car.svg";
