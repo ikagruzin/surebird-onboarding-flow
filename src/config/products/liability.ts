@@ -24,9 +24,9 @@ export const liabilityProduct: ProductConfig = {
   icon: "icon-liability",
 
   initialState: {
-    dog: "",
-    damageLimit: "",
-    ownRisk: "",
+    dog: "No",
+    damageLimit: "€2,250,000",
+    ownRisk: "€100",
   } satisfies LiabilityState as Record<string, any>,
 
   presetState: {
@@ -36,25 +36,17 @@ export const liabilityProduct: ProductConfig = {
   },
 
   stepDefs: [
-    { id: "dog", label: "Dog" },
-    { id: "damage-limit", label: "Damage Limit" },
-    { id: "own-risk", label: "Own Risk" },
+    { id: "liability-all", label: "Liability" },
   ],
 
   getStepSequence(_state) {
-    return ["dog", "damage-limit", "own-risk"];
+    return ["liability-all"];
   },
 
   validateStep(stepId, state) {
-    switch (stepId) {
-      case "dog":
-        return state.dog !== "";
-      case "damage-limit":
-        return state.damageLimit !== "";
-      case "own-risk":
-        return state.ownRisk !== "";
-      default:
-        return false;
+    if (stepId === "liability-all") {
+      return state.dog !== "" && state.damageLimit !== "" && state.ownRisk !== "";
     }
+    return false;
   },
 };
