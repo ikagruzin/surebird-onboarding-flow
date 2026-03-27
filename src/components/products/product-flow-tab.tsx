@@ -53,7 +53,13 @@ export const ProductFlowTab = forwardRef<ProductFlowTabHandle, ProductFlowTabPro
       },
     }), [flow.isLastStep, flow.isValid, flow.stepIdx, flow.steps.length, flow.goNext, flow.goBack]);
 
-    if (!StepComponent) return null;
+    if (!StepComponent) {
+      return (
+        <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
+          No step component found for product "{productId}" and step "{flow.currentStepId}".
+        </div>
+      );
+    }
 
     return (
       <StepComponent
