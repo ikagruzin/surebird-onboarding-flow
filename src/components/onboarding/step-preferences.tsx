@@ -294,6 +294,24 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
         setShowPhoneStep(false);
         return true;
       }
+
+      // Delegate to product flow tab if active
+      if (isProductFlow) {
+        const flowRef = productFlowRefs.current[activeTab];
+        if (flowRef) {
+          const handled = flowRef.handleBack();
+          if (handled) return true;
+        }
+        // At first step of product flow → go to previous tab
+        const currentIndex = selectedInsurances.indexOf(activeTab);
+        if (currentIndex > 0) {
+          const prevTab = selectedInsurances[currentIndex - 1];
+          animateTabSwitch(prevTab, "right");
+          return true;
+        }
+        return false;
+      }
+
       if (questionStep > 0) {
         setQuestionStep(questionStep - 1);
         return true;
@@ -313,10 +331,23 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
         // Phone/email step done → proceed to next wizard step
         return false;
       }
+
+      // Delegate to product flow tab if active
+      if (isProductFlow) {
+        const flowRef = productFlowRefs.current[activeTab];
+        if (flowRef) {
+          const handled = flowRef.handleNext();
+          if (handled) return true;
+          // handleNext returned false → flow is complete, complete the tab
+          completeCurrentTab();
+          return true;
+        }
+      }
+
       handleNextStep();
       return true; // handled internally
     },
-  }), [showPhoneStep, questionStep, activeTab, selectedInsurances, preferences]);
+  }), [showPhoneStep, questionStep, activeTab, selectedInsurances, preferences, isProductFlow]);
 
   const animateTabSwitch = (newTab: string, direction: "left" | "right" = "left") => {
     setTransitionDirection(direction);
