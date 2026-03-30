@@ -17,6 +17,7 @@ import { SelectionCard } from "@/components/ui/selection-card";
 import { cn } from "@/lib/utils";
 
 type Phase = "steps" | "add-prompt" | "done";
+type AddPromptAnswer = "" | "yes" | "no";
 
 export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: string }>(
   ({ productId }, ref) => {
@@ -29,6 +30,8 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
     const [stepIdxMap, setStepIdxMap] = useState<Record<string, number>>({});
     const [animatedSteps, setAnimatedSteps] = useState<Set<string>>(new Set());
     const [phase, setPhase] = useState<Phase>("steps");
+    const [addPromptAnswer, setAddPromptAnswer] = useState<AddPromptAnswer>("");
+    const [hasAskedAddPrompt, setHasAskedAddPrompt] = useState(false);
 
     const stateRef = useRef(instances);
     stateRef.current = instances;
@@ -110,6 +113,8 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
       setInstances((prev) => [...prev, newInst]);
       setActiveIdx(instances.length);
       setPhase("steps");
+      setHasAskedAddPrompt(true);
+      setAddPromptAnswer("");
     }, [instances.length]);
 
     // Remove a car instance
@@ -135,8 +140,13 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
         }
 
         if (isLastStep && isValid) {
-          // Show "add another?" prompt
-          setPhase("add-prompt");
+          if (!hasAskedAddPrompt) {
+            // First car completed → show "add another?" prompt
+            setPhase("add-prompt");
+          } else {
+            // Subsequent cars → go straight to done
+            setPhase("done");
+          }
           return true;
         }
 
@@ -250,27 +260,36 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
 
         {/* Phase: add-prompt (Taco asks "want another car?") */}
         {phase === "add-prompt" && (
-          <div className="space-y-6">
+          <>
             <TacoMessage
               message="Nice one! Want to insure another car?"
               animate={!animatedSteps.has("add-prompt")}
               onAnimationComplete={() => setAnimatedSteps((prev) => new Set(prev).add("add-prompt"))}
             />
-            <div className="grid grid-cols-2 gap-3">
-              <SelectionCard
-                label="Yes, add another car"
-                selected={false}
-                indicator="none"
-                onClick={addCarInstance}
-              />
-              <SelectionCard
-                label="No, I'm done"
-                selected={false}
-                indicator="none"
-                onClick={() => setPhase("done")}
-              />
+            <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
+              <p className="text-base font-semibold text-foreground mb-3">Add another car?</p>
+              <div className="grid grid-cols-2 gap-3">
+                <SelectionCard
+                  label="Yes"
+                  selected={addPromptAnswer === "yes"}
+                  indicator="radio"
+                  onClick={() => {
+                    setAddPromptAnswer("yes");
+                    setTimeout(() => addCarInstance(), 400);
+                  }}
+                />
+                <SelectionCard
+                  label="No"
+                  selected={addPromptAnswer === "no"}
+                  indicator="radio"
+                  onClick={() => {
+                    setAddPromptAnswer("no");
+                    setTimeout(() => setPhase("done"), 400);
+                  }}
+                />
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     );
