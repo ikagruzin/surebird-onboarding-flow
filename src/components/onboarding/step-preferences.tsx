@@ -731,11 +731,18 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
         <div key={activeTab} className={getTransitionClass()}>
           {isProductFlow ? (
             /* ─── Product flow tab (real product steps from shared config) ─── */
-            <ProductFlowTab
-              ref={(r) => { productFlowRefs.current[activeTab] = r; }}
-              productId={activeTab}
-              animateTaco={animateTaco}
-            />
+            activeTab === "car" ? (
+              <MultiCarFlowTab
+                ref={(r) => { productFlowRefs.current[activeTab] = r; }}
+                productId={activeTab}
+              />
+            ) : (
+              <ProductFlowTab
+                ref={(r) => { productFlowRefs.current[activeTab] = r; }}
+                productId={activeTab}
+                animateTaco={animateTaco}
+              />
+            )
           ) : (
             /* ─── Legacy question-based UI (for products without full configs) ─── */
             <>
