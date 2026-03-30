@@ -14,6 +14,7 @@ export const InsuranceOfferCard = ({
   insurerName,
   logoSrc,
   monthlyPrice,
+  originalPrice,
   savingsPercent,
   happyClients,
   onViewDetails,
