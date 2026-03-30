@@ -8,6 +8,7 @@ import { TacoMessage } from "./taco-message";
 import { LegalCoverageSelector } from "./legal-coverage-selector";
 import { INSURANCE_TYPES } from "./types";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
+import trustpilotLogo from "@/assets/trustpilot-logo.svg";
 import person1 from "@/assets/person-1.png";
 import person2 from "@/assets/person-2.png";
 import person3 from "@/assets/person-3.png";
@@ -438,7 +439,8 @@ export const StepOffer = ({
         <InsuranceOfferCard
           insurerName={insurer.name}
           logoSrc={insurer.logoSrc}
-          monthlyPrice={insurer.monthlyPrice}
+          originalPrice={insurer.monthlyPrice}
+          monthlyPrice={insurer.monthlyPrice * (1 - discountPercent / 100)}
           savingsPercent={insurer.savingsPercent}
           happyClients={insurer.happyClients}
           onViewDetails={() => setActiveTab(id)}
@@ -592,6 +594,32 @@ export const StepOffer = ({
           <div className="flex items-start gap-2 mt-4 text-xs text-muted-foreground">
             <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
             <p>All prices include 21% insurance tax and service costs. <span className="underline cursor-pointer">Check the price breakdown</span></p>
+          </div>
+        </div>
+      </div>
+
+      {/* USP Card */}
+      <div className="border border-border rounded-3xl p-6 bg-card">
+        <h3 className="text-lg font-bold text-foreground mb-4">With Surebird you have:</h3>
+        <ul className="space-y-3 mb-6">
+          {[
+            "14 days cooling off period",
+            "The best price & quality",
+            "All insurances in once place",
+            "A personal assistance",
+          ].map((item) => (
+            <li key={item} className="flex items-center gap-3 text-base text-foreground">
+              <Check className="w-5 h-5 text-primary shrink-0" />
+              {item}
+            </li>
+          ))}
+        </ul>
+        <div className="flex items-center gap-3 pt-2 border-t border-border">
+          <img src={trustpilotLogo} alt="Trustpilot" className="h-5 object-contain" />
+          <div className="w-px h-6 bg-border" />
+          <div className="flex items-center gap-1">
+            <span className="text-2xl font-bold text-foreground">4.6</span>
+            <span className="text-sm text-muted-foreground">Excellent</span>
           </div>
         </div>
       </div>

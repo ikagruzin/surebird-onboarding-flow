@@ -4,6 +4,7 @@ interface InsuranceOfferCardProps {
   insurerName: string;
   logoSrc?: string;
   monthlyPrice: number;
+  originalPrice?: number;
   savingsPercent?: number;
   happyClients: string;
   onViewDetails?: () => void;
@@ -13,6 +14,7 @@ export const InsuranceOfferCard = ({
   insurerName,
   logoSrc,
   monthlyPrice,
+  originalPrice,
   savingsPercent,
   happyClients,
   onViewDetails,
@@ -31,8 +33,11 @@ export const InsuranceOfferCard = ({
 
         {/* Right: Price + savings */}
         <div className="text-right">
-          <div>
-            <span className="text-sm text-muted-foreground">per month </span>
+          <div className="flex items-baseline gap-2">
+            <span className="text-sm text-muted-foreground">per month</span>
+            {originalPrice != null && originalPrice > monthlyPrice && (
+              <span className="text-base text-muted-foreground line-through">€{originalPrice.toFixed(2)}</span>
+            )}
             <span className="text-2xl font-bold text-foreground">€{monthlyPrice.toFixed(2)}</span>
           </div>
           {savingsPercent != null && savingsPercent > 0 && (
