@@ -373,7 +373,7 @@ export const HomeContentsStep = ({
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="Let's look at your belongings. This covers everything that would fall out if you turned your house upside down—like your furniture, electronics, and jewelry."
+      message="Let's make sure your belongings are properly covered. Contents insurance protects what's inside your home — from furniture and electronics to clothing and valuables."
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
