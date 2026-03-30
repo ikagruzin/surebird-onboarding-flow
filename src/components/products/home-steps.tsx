@@ -144,9 +144,12 @@ export const HomeDetailsStep = ({
     <SectionCard title="Home Details">
       <div className="space-y-6">
         <div>
-          <label className="text-sm font-semibold text-foreground mb-2 block">
-            Building Type
-          </label>
+          <div className="flex items-center gap-2 mb-2">
+            <label className="text-sm font-semibold text-foreground">
+              Building Type
+            </label>
+            <InfoTip text="Two-under-a-roof = a semi-detached home sharing one wall with a neighbour. Canal house = a traditional narrow Dutch city house, typically along a canal." />
+          </div>
           <NativeSelect
             value={state.buildingType}
             onChange={(e) => onUpdate("buildingType", e.target.value)}
@@ -173,36 +176,77 @@ export const HomeDetailsStep = ({
           <label className="text-sm font-semibold text-foreground mb-2 block">
             Construction Materials
           </label>
-          <SegmentedControl
-            options={[...HOME_OPTIONS.constructionMaterials]}
-            value={state.constructionMaterial}
-            onChange={(v) => onUpdate("constructionMaterial", v)}
-          />
+          <div className="space-y-2">
+            {HOME_OPTIONS.constructionMaterials.map((opt) => {
+              const tooltips: Record<string, string> = {
+                "Wooden skeleton": "A timber-frame structure where wood carries the load.",
+                "(Largely) stone": "Exterior walls are mostly brick or stone masonry.",
+                "Wooden frame with stone wall": "Timber frame with a stone or brick outer cladding.",
+              };
+              return (
+                <SelectionCard
+                  key={opt}
+                  label={opt}
+                  selected={state.constructionMaterial === opt}
+                  indicator="radio"
+                  rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
+                  onClick={() => onUpdate("constructionMaterial", opt)}
+                />
+              );
+            })}
+          </div>
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
             Floor Material
           </label>
-          <SegmentedControl
-            options={[...HOME_OPTIONS.floorMaterials]}
-            value={state.floorMaterial}
-            onChange={(v) => onUpdate("floorMaterial", v)}
-          />
+          <div className="space-y-2">
+            {HOME_OPTIONS.floorMaterials.map((opt) => {
+              const tooltips: Record<string, string> = {
+                "No floors": "Ground-level only, with a slab-on-grade foundation.",
+              };
+              return (
+                <SelectionCard
+                  key={opt}
+                  label={opt}
+                  selected={state.floorMaterial === opt}
+                  indicator="radio"
+                  rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
+                  onClick={() => onUpdate("floorMaterial", opt)}
+                />
+              );
+            })}
+          </div>
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
             Roof Shape
           </label>
-          <SegmentedControl
-            options={[...HOME_OPTIONS.roofShapes]}
-            value={state.roofShape}
-            onChange={(v) => onUpdate("roofShape", v)}
-          />
+          <div className="space-y-2">
+            {HOME_OPTIONS.roofShapes.map((opt) => {
+              const tooltips: Record<string, string> = {
+                "Special": "An unconventional roof shape like a dome, saw-tooth, or mansard.",
+              };
+              return (
+                <SelectionCard
+                  key={opt}
+                  label={opt}
+                  selected={state.roofShape === opt}
+                  indicator="radio"
+                  rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
+                  onClick={() => onUpdate("roofShape", opt)}
+                />
+              );
+            })}
+          </div>
         </div>
         <div>
-          <label className="text-sm font-semibold text-foreground mb-2 block">
-            Roof Material
-          </label>
+          <div className="flex items-center gap-2 mb-2">
+            <label className="text-sm font-semibold text-foreground">
+              Roof Material
+            </label>
+            <InfoTip text="Artificial reeds = synthetic thatch imitation. (Largely) reed = natural thatched roof." />
+          </div>
           <NativeSelect
             value={state.roofMaterial}
             onChange={(e) => onUpdate("roofMaterial", e.target.value)}
