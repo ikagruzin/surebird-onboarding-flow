@@ -439,7 +439,8 @@ export const StepOffer = ({
         <InsuranceOfferCard
           insurerName={insurer.name}
           logoSrc={insurer.logoSrc}
-          monthlyPrice={insurer.monthlyPrice}
+          originalPrice={insurer.monthlyPrice}
+          monthlyPrice={insurer.monthlyPrice * (1 - discountPercent / 100)}
           savingsPercent={insurer.savingsPercent}
           happyClients={insurer.happyClients}
           onViewDetails={() => setActiveTab(id)}
