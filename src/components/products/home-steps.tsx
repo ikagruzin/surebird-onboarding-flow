@@ -201,7 +201,7 @@ export const HomeDetailsStep = ({
           <label className="text-sm font-semibold text-foreground mb-2 block">
             Floor Material
           </label>
-          <div className="space-y-2">
+          <div className={getSelectionGridClass(HOME_OPTIONS.floorMaterials)}>
             {HOME_OPTIONS.floorMaterials.map((opt) => {
               const tooltips: Record<string, string> = {
                 "No floors": "Ground-level only, with no additional story floors above (e.g., concrete slab on grade).",
