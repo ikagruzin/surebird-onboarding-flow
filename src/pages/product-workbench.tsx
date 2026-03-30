@@ -14,6 +14,7 @@ import iconLiability from "@/assets/icon-liability.svg";
 import iconLegal from "@/assets/icon-legal.svg";
 import iconAccidents from "@/assets/icon-accidents.svg";
 import iconCaravan from "@/assets/icon-caravan.svg";
+import iconCar from "@/assets/icon-car.svg";
 
 /* ─── Icon map ─── */
 const ICON_MAP: Record<string, string> = {
@@ -22,6 +23,7 @@ const ICON_MAP: Record<string, string> = {
   "icon-legal": iconLegal,
   "icon-accidents": iconAccidents,
   "icon-caravan": iconCaravan,
+  "icon-car": iconCar,
 };
 
 /* ─── Component maps per product ─── */
