@@ -26,6 +26,7 @@ export const HOME_OPTIONS = {
     "up to €1,000", "€1,000 - €2,000", "€2,000 - €3,000",
     "€3,000 - €4,850",
   ],
+  floorCountOptions: ["1", "2", "3", "3+"],
   outsideValueOptions: ["€0", "€2,500", "€5,000", "€7,500", "€15,000", "€25,000"],
 } as const;
 
@@ -88,7 +89,7 @@ export const homeProduct: ProductConfig = {
     ownerInterest: false,
     ownerInterestAmount: "",
     security: "None",
-    netIncome: "",
+    netIncome: "€2,000 - €3,000",
     outsideValue: "€0",
     monumental: false,
     quoted: false,
@@ -99,7 +100,7 @@ export const homeProduct: ProductConfig = {
   } satisfies HomeState as Record<string, any>,
 
   presetState: {
-    buildingType: "Townhouse",
+    buildingType: "Apartment",
     usage: ["I live there"],
     constructionMaterial: "(Largely) stone",
     floorMaterial: "Stone/concrete",

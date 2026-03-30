@@ -64,7 +64,7 @@ export const HomePresetStep = ({
         ))}
       </ul>
 
-      <div className="mt-5 space-y-2">
+      <div className="mt-5 grid grid-cols-2 gap-2">
         <SelectionCard
           label="Yes"
           selected={state.presetAnswer === "yes"}
@@ -447,42 +447,52 @@ export const HomeBuildingStep = ({
 
     <SectionCard title="Building Insurance">
       <div className="space-y-5">
-        <ToggleRow
-          label="Monumental status"
-          checked={state.monumental}
-          onChange={(v) => onUpdate("monumental", v)}
-        />
-        <ToggleRow
-          label="Outbuilding"
-          checked={state.quoted}
-          onChange={(v) => onUpdate("quoted", v)}
-        />
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-foreground">Monumental status</span>
+            <InfoTip text="A monumental building is officially designated as a cultural heritage site. This affects coverage requirements and premiums." />
+          </div>
+          <button onClick={() => onUpdate("monumental", !state.monumental)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.monumental ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.monumental ? "translate-x-5" : "translate-x-0"}`} /></button>
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-foreground">More than 25m² outbuildings</span>
+            <InfoTip text="Outbuildings larger than 25m² such as sheds, garages, or garden houses that are separate from the main building." />
+          </div>
+          <button onClick={() => onUpdate("quoted", !state.quoted)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.quoted ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.quoted ? "translate-x-5" : "translate-x-0"}`} /></button>
+        </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
             Floor count
           </label>
           <SegmentedControl
-            options={["1", "2", "2+"]}
+            options={[...HOME_OPTIONS.floorCountOptions]}
             value={state.floorCount}
             onChange={(v) => onUpdate("floorCount", v)}
           />
         </div>
         <div className="border-t border-border pt-5 space-y-5">
-          <ToggleRow
-            label="Renovation"
-            checked={state.rainwater}
-            onChange={(v) => onUpdate("rainwater", v)}
-          />
-          <ToggleRow
-            label="Solar Panels"
-            checked={state.smartSensors}
-            onChange={(v) => onUpdate("smartSensors", v)}
-          />
-          <ToggleRow
-            label="Heat pump"
-            checked={state.heatPump}
-            onChange={(v) => onUpdate("heatPump", v)}
-          />
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-foreground">Renovation in the last 10 years</span>
+              <InfoTip text="Any major renovation work done in the last 10 years, such as kitchen or bathroom remodels, extensions, or structural changes." />
+            </div>
+            <button onClick={() => onUpdate("rainwater", !state.rainwater)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.rainwater ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.rainwater ? "translate-x-5" : "translate-x-0"}`} /></button>
+          </div>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-foreground">Solar Panels</span>
+              <InfoTip text="Solar panels installed on the roof or property. These may affect the insured building value." />
+            </div>
+            <button onClick={() => onUpdate("smartSensors", !state.smartSensors)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.smartSensors ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.smartSensors ? "translate-x-5" : "translate-x-0"}`} /></button>
+          </div>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-foreground">Heat pump</span>
+              <InfoTip text="A heat pump system installed for heating or cooling. This increases the building's insured value." />
+            </div>
+            <button onClick={() => onUpdate("heatPump", !state.heatPump)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.heatPump ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.heatPump ? "translate-x-5" : "translate-x-0"}`} /></button>
+          </div>
         </div>
       </div>
     </SectionCard>
