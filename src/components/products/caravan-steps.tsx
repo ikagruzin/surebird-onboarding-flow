@@ -9,6 +9,7 @@ import { TacoMessage } from "@/components/onboarding/taco-message";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { Input } from "@/components/ui/input";
+import { DutchPlateInput } from "@/components/ui/dutch-plate-input";
 import { CARAVAN_OPTIONS } from "@/config/products/caravan";
 import { getSelectionGridClass } from "@/lib/grid-layout";
 
@@ -104,8 +105,9 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
 const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
   const [autoFilled, setAutoFilled] = useState(false);
 
-  const simulateAutoFill = useCallback(() => {
-    if (state.identificationMethod === "License plate" && state.licensePlate.length >= 6 && !autoFilled) {
+  const simulateAutoFill = useCallback((raw?: string) => {
+    const plate = raw || state.licensePlate || "";
+    if (state.identificationMethod === "License plate" && plate.length >= 6 && !autoFilled) {
       onUpdate("specsLoading", true);
       setTimeout(() => {
         onUpdate("brand", "Hobby");
@@ -120,13 +122,6 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
   useEffect(() => {
     setAutoFilled(false);
   }, [state.licensePlate]);
-
-  const formatDutchPlate = (value: string) => {
-    const clean = value.replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 6);
-    if (clean.length <= 2) return clean;
-    if (clean.length <= 4) return `${clean.slice(0, 2)}-${clean.slice(2)}`;
-    return `${clean.slice(0, 2)}-${clean.slice(2, 4)}-${clean.slice(4)}`;
-  };
 
   return (
     <div className="space-y-6">
@@ -157,22 +152,11 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
           {state.identificationMethod === "License plate" && (
             <div className="space-y-2">
               <p className="text-sm font-medium text-foreground">License plate</p>
-              <div className="flex gap-2">
-                <Input
-                  value={state.licensePlate}
-                  onChange={(e) => onUpdate("licensePlate", formatDutchPlate(e.target.value))}
-                  placeholder="AB-12-CD"
-                  className="h-12 rounded-xl font-mono tracking-wider uppercase"
-                />
-                <button
-                  type="button"
-                  onClick={simulateAutoFill}
-                  disabled={state.licensePlate.length < 6 || state.specsLoading}
-                  className="h-12 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-40 shrink-0"
-                >
-                  {state.specsLoading ? "Loading…" : "Look up"}
-                </button>
-              </div>
+              <DutchPlateInput
+                value={state.licensePlate}
+                onChange={(raw) => onUpdate("licensePlate", raw)}
+                onComplete={(raw) => simulateAutoFill(raw)}
+              />
             </div>
           )}
 
