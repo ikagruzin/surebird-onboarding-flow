@@ -105,8 +105,9 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
 const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
   const [autoFilled, setAutoFilled] = useState(false);
 
-  const simulateAutoFill = useCallback(() => {
-    if (state.identificationMethod === "License plate" && state.licensePlate.length >= 6 && !autoFilled) {
+  const simulateAutoFill = useCallback((raw?: string) => {
+    const plate = raw || state.licensePlate || "";
+    if (state.identificationMethod === "License plate" && plate.length >= 6 && !autoFilled) {
       onUpdate("specsLoading", true);
       setTimeout(() => {
         onUpdate("brand", "Hobby");
