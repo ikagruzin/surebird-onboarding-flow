@@ -100,7 +100,7 @@ export const homeProduct: ProductConfig = {
   } satisfies HomeState as Record<string, any>,
 
   presetState: {
-    buildingType: "Townhouse",
+    buildingType: "Apartment",
     usage: ["I live there"],
     constructionMaterial: "(Largely) stone",
     floorMaterial: "Stone/concrete",
