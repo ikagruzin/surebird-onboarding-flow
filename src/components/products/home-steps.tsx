@@ -459,7 +459,7 @@ export const HomeBuildingStep = ({
             <span className="text-sm font-medium text-foreground">More than 25m² outbuildings</span>
             <InfoTip text="Outbuildings larger than 25m² such as sheds, garages, or garden houses that are separate from the main building." />
           </div>
-          <ToggleSwitch checked={state.quoted} onChange={(v) => onUpdate("quoted", v)} />
+          <button onClick={() => onUpdate("quoted", !state.quoted)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.quoted ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.quoted ? "translate-x-5" : "translate-x-0"}`} /></button>
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
