@@ -914,7 +914,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
                 )}
               </div>
             </>
-          )}
+          ) : null}
         </div>
       {renderAddModal()}
     </div>
