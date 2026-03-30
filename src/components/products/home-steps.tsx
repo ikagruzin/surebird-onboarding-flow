@@ -477,7 +477,7 @@ export const HomeBuildingStep = ({
               <span className="text-sm font-medium text-foreground">Renovation in the last 10 years</span>
               <InfoTip text="Any major renovation work done in the last 10 years, such as kitchen or bathroom remodels, extensions, or structural changes." />
             </div>
-            <ToggleSwitch checked={state.rainwater} onChange={(v) => onUpdate("rainwater", v)} />
+            <button onClick={() => onUpdate("rainwater", !state.rainwater)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.rainwater ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.rainwater ? "translate-x-5" : "translate-x-0"}`} /></button>
           </div>
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
