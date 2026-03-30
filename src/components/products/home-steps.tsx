@@ -245,7 +245,7 @@ export const HomeDetailsStep = ({
             <label className="text-sm font-semibold text-foreground">
               Roof Material
             </label>
-            <InfoTip text="Artificial reeds = synthetic thatch imitation. (Largely) reed = natural thatched roof." />
+            <InfoTip text="Artificial reeds = synthetic thatching material that mimics the look of natural reed. (Largely) reed = the roof is primarily covered with natural reed thatching." />
           </div>
           <NativeSelect
             value={state.roofMaterial}
