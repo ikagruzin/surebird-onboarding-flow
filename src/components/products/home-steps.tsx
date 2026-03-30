@@ -203,7 +203,7 @@ export const HomeDetailsStep = ({
           <div className="space-y-2">
             {HOME_OPTIONS.floorMaterials.map((opt) => {
               const tooltips: Record<string, string> = {
-                "No floors": "Ground-level only, with a slab-on-grade foundation.",
+                "No floors": "Ground-level only, with no additional story floors above (e.g., concrete slab on grade).",
               };
               return (
                 <SelectionCard
