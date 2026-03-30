@@ -1,37 +1,34 @@
 
 
-## Add InfoTip Explanations to Home Details Options
+## Apply Adaptive Grid Layout to All Home SelectionCard Groups
 
-### Approach
+### What Changes
 
-- **SelectionCard options** (Building Type, Construction, Floor, Roof Shape): Add `rightIcon={<InfoTip>}` to individual confusing options using the existing `rightIcon` prop.
-- **NativeSelect fields** (Roof Material): Add a single InfoTip next to the field **label** that explains the less obvious options in one tooltip.
+Import `getSelectionGridClass` from `@/lib/grid-layout` and replace every hardcoded grid/stack wrapper around `SelectionCard` groups with a dynamic call.
 
-### Changes
+### Affected Groups
 
-**File: `src/components/products/home-steps.tsx`**
+| Group | Current wrapper | Labels for calculation |
+|-------|----------------|----------------------|
+| **Preset Yes/No** (line 67) | `grid grid-cols-2 gap-2` | `["Yes", "No"]` → 2 cols (correct, but should use utility) |
+| **Construction Materials** (line 179) | `space-y-2` (vertical stack) | `["(Largely) stone", "Wooden frame with stone wall", "Wooden skeleton"]` |
+| **Floor Material** (line 203) | `space-y-2` | `["Stone/concrete", "Wood", "No floors"]` |
+| **Roof Shape** (line 225) | `space-y-2` | `["Sloping", "Flat", "Special"]` |
+| **Coverage Path** (line 307) | `space-y-2` | `["Household goods + Building", "Household goods", "Building"]` |
 
-For SelectionCard-based fields, we need to switch from `SegmentedControl` (which doesn't support per-item `rightIcon`) to manually rendering `SelectionCard` components for the options that need tooltips. Options without tooltips remain as-is.
+**Not affected** (correctly excluded):
+- SegmentedControl groups (Role, Security, Net Income, Floor Count) — these are a different component, not SelectionCards
+- Toggle rows (Building step) — not SelectionCards
+- NativeSelect dropdowns — not SelectionCards
+- ChipSelect (Usage) — not SelectionCards
 
-**Options getting individual InfoTips (via rightIcon on SelectionCard):**
-1. **Two-under-a-roof** — "A semi-detached home sharing one wall with a neighbour"
-2. **Canal house** — "A traditional narrow Dutch city house, typically along a canal"
-3. **Wooden skeleton** — "A timber-frame structure where wood carries the load"
-4. **(Largely) stone** — "Exterior walls are mostly brick or stone masonry"
-5. **Wooden frame with stone wall** — "Timber frame with a stone or brick outer cladding"
-6. **No floors** — "Ground-level only, with a slab-on-grade foundation"
-7. **Special** (roof shape) — "An unconventional roof shape like a dome, saw-tooth, or mansard"
-
-**Options getting a label-level InfoTip (NativeSelect):**
-8. **Roof material label** — Tooltip: "Artificial reeds = synthetic thatch imitation. (Largely) reed = natural thatched roof"
-
-### Implementation Detail
-
-For Construction Materials, Floor Materials, and Roof Shape — currently using `SegmentedControl` — we'll replace with manually mapped `SelectionCard` components so we can selectively pass `rightIcon` only to the options that need it. Options without tooltips will render identically but without the prop.
-
-### Files Changed
+### File Changed
 
 | File | Change |
 |------|--------|
-| `src/components/products/home-steps.tsx` | Replace SegmentedControl with SelectionCard mapping for 4 fields; add InfoTips to 7 individual options + 1 label-level tooltip |
+| `src/components/products/home-steps.tsx` | Add import for `getSelectionGridClass`; replace 5 hardcoded wrappers with `className={getSelectionGridClass(labels)}` |
+
+### Technical Note
+
+For Coverage Path options that have `rightIcon` (InfoTip), the grid utility doesn't account for icon width. The longest label "Household goods + Building" (26 chars) estimates ~276px, so the utility will likely compute 2 cols. With the icon adding ~24px, these may wrap. If so, we can keep Coverage Path as 1-col stacked since all 3 have rightIcon and long labels. Will verify at implementation.
 
