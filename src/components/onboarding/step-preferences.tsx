@@ -180,11 +180,31 @@ const QUESTIONS_BY_TYPE: Record<string, PreferenceQuestion[]> = {
   ],
   caravan: [
     {
-      id: "type",
-      label: "What type of caravan do you have?",
+      id: "caravanType",
+      label: "What kind of caravan is it?",
       options: [
+        { value: "mobile_home", label: "Mobile home" },
         { value: "touring", label: "Touring caravan" },
-        { value: "static", label: "Static caravan" },
+        { value: "folding", label: "Folding trailer" },
+      ],
+      autoAdvance: true,
+    },
+    {
+      id: "usage",
+      label: "How do you use it?",
+      options: [
+        { value: "personal", label: "Recreational, personal use only" },
+        { value: "occasional_rental", label: "Recreational, occasional rental" },
+        { value: "permanent", label: "Permanently inhabited by you" },
+        { value: "business", label: "Business, rental to third parties" },
+      ],
+    },
+    {
+      id: "condition",
+      label: "Was it bought second-hand?",
+      options: [
+        { value: "new", label: "Brand New" },
+        { value: "used", label: "Used" },
       ],
       autoAdvance: true,
     },
@@ -217,6 +237,11 @@ const DEFAULT_PREFERENCES: Record<string, Record<string, string>> = {
   accidents: {
     coverage: "death_5k_disability_25k",
     own_risk: "100",
+  },
+  caravan: {
+    caravanType: "touring",
+    usage: "personal",
+    condition: "new",
   },
 };
 

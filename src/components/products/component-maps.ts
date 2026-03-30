@@ -4,6 +4,7 @@ import { HOME_STEP_COMPONENTS } from "./home-steps";
 import { LIABILITY_STEP_COMPONENTS } from "./liability-steps";
 import { LEGAL_STEP_COMPONENTS } from "./legal-steps";
 import { ACCIDENT_STEP_COMPONENTS } from "./accident-steps";
+import { CARAVAN_STEP_COMPONENTS } from "./caravan-steps";
 
 /**
  * Shared product step-component registry used by Flow A and Flow C.
@@ -14,4 +15,5 @@ export const PRODUCT_STEP_COMPONENT_MAPS: Record<string, Record<string, Componen
   liability: LIABILITY_STEP_COMPONENTS,
   legal: LEGAL_STEP_COMPONENTS,
   accidents: ACCIDENT_STEP_COMPONENTS,
+  caravan: CARAVAN_STEP_COMPONENTS,
 };
