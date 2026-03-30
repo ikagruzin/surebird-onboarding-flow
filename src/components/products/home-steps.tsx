@@ -223,7 +223,7 @@ export const HomeDetailsStep = ({
           <label className="text-sm font-semibold text-foreground mb-2 block">
             Roof Shape
           </label>
-          <div className="space-y-2">
+          <div className={getSelectionGridClass(HOME_OPTIONS.roofShapes)}>
             {HOME_OPTIONS.roofShapes.map((opt) => {
               const tooltips: Record<string, string> = {
                 "Special": "An unconventional roof shape such as a dome, mansard, or multi-angled design.",
