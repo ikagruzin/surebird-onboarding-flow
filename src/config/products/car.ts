@@ -29,6 +29,31 @@ export interface CarState {
   kmPerYear: string;
 }
 
+/* ─── Multi-instance helpers ─── */
+
+let _carInstanceCounter = 0;
+
+export interface CarInstance {
+  id: string;
+  state: Record<string, any>;
+}
+
+export function createCarInstance(): CarInstance {
+  _carInstanceCounter++;
+  return {
+    id: `car-${Date.now()}-${_carInstanceCounter}`,
+    state: { ...carProduct.initialState },
+  };
+}
+
+/** Human-readable label for a car instance pill */
+export function getCarInstanceLabel(instance: CarInstance, index: number): string {
+  if (instance.state.carBrand && instance.state.plateConfirmed) {
+    return instance.state.carModel?.split(" ")[0] || instance.state.carBrand;
+  }
+  return `Car ${index + 1}`;
+}
+
 /* ─── Simulated plate lookup ─── */
 
 const PLATE_DB: Record<string, { brand: string; model: string }> = {
