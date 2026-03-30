@@ -452,7 +452,7 @@ export const HomeBuildingStep = ({
             <span className="text-sm font-medium text-foreground">Monumental status</span>
             <InfoTip text="A monumental building is officially designated as a cultural heritage site. This affects coverage requirements and premiums." />
           </div>
-          <ToggleSwitch checked={state.monumental} onChange={(v) => onUpdate("monumental", v)} />
+          <button onClick={() => onUpdate("monumental", !state.monumental)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.monumental ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.monumental ? "translate-x-5" : "translate-x-0"}`} /></button>
         </div>
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
