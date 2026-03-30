@@ -148,7 +148,7 @@ export const HomeDetailsStep = ({
             <label className="text-sm font-semibold text-foreground">
               Building Type
             </label>
-            <InfoTip text="Two-under-a-roof = a semi-detached home sharing one wall with a neighbour. Canal house = a traditional narrow Dutch city house, typically along a canal." />
+            <InfoTip text="Two-under-a-roof = a semi-detached house sharing one roof with a neighboring property. Canal house = a traditional narrow, multi-story house along a canal, typical of Dutch city centers." />
           </div>
           <NativeSelect
             value={state.buildingType}
@@ -179,9 +179,9 @@ export const HomeDetailsStep = ({
           <div className="space-y-2">
             {HOME_OPTIONS.constructionMaterials.map((opt) => {
               const tooltips: Record<string, string> = {
-                "Wooden skeleton": "A timber-frame structure where wood carries the load.",
-                "(Largely) stone": "Exterior walls are mostly brick or stone masonry.",
-                "Wooden frame with stone wall": "Timber frame with a stone or brick outer cladding.",
+                "Wooden skeleton": "The main structural frame is made of wood (timber-frame construction).",
+                "(Largely) stone": "The exterior walls are mostly built with brick, stone, or concrete blocks.",
+                "Wooden frame with stone wall": "A timber structural frame with an outer layer of brick or stone cladding.",
               };
               return (
                 <SelectionCard
@@ -203,7 +203,7 @@ export const HomeDetailsStep = ({
           <div className="space-y-2">
             {HOME_OPTIONS.floorMaterials.map((opt) => {
               const tooltips: Record<string, string> = {
-                "No floors": "Ground-level only, with a slab-on-grade foundation.",
+                "No floors": "Ground-level only, with no additional story floors above (e.g., concrete slab on grade).",
               };
               return (
                 <SelectionCard
@@ -225,7 +225,7 @@ export const HomeDetailsStep = ({
           <div className="space-y-2">
             {HOME_OPTIONS.roofShapes.map((opt) => {
               const tooltips: Record<string, string> = {
-                "Special": "An unconventional roof shape like a dome, saw-tooth, or mansard.",
+                "Special": "An unconventional roof shape such as a dome, mansard, or multi-angled design.",
               };
               return (
                 <SelectionCard
@@ -245,7 +245,7 @@ export const HomeDetailsStep = ({
             <label className="text-sm font-semibold text-foreground">
               Roof Material
             </label>
-            <InfoTip text="Artificial reeds = synthetic thatch imitation. (Largely) reed = natural thatched roof." />
+            <InfoTip text="Artificial reeds = synthetic thatching material that mimics the look of natural reed. (Largely) reed = the roof is primarily covered with natural reed thatching." />
           </div>
           <NativeSelect
             value={state.roofMaterial}
