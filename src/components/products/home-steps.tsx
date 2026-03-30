@@ -305,7 +305,7 @@ export const HomeCoveragePathStep = ({
       onAnimationComplete={onAnimationComplete}
     />
     <Card>
-      <CardContent className="pt-6 space-y-2">
+      <CardContent className={`pt-6 ${getSelectionGridClass(COVERAGE_OPTIONS.map(o => o.label))}`}>
         {COVERAGE_OPTIONS.map((opt) => (
           <SelectionCard
             key={opt.key}
