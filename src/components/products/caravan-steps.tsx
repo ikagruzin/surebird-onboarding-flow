@@ -15,7 +15,7 @@ import { getSelectionGridClass } from "@/lib/grid-layout";
 /* ─── Step 1: Context & Usage ─── */
 
 const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
-  const showMobileHomeQ = state.caravanType === "Touring caravan" || state.caravanType === "Folding trailer";
+  const showMobileHomeQ = state.caravanType === "Touring caravan";
   const showFloodQ = state.caravanType === "Mobile home" || state.usedAsMobileHome === "Yes";
 
   return (
@@ -38,10 +38,15 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
                   selected={state.caravanType === opt}
                   onClick={() => {
                     onUpdate("caravanType", opt);
-                    // Reset conditional fields
                     if (opt === "Mobile home") {
                       onUpdate("usedAsMobileHome", "");
+                      onUpdate("nearFloodRiver", "No");
+                    } else if (opt === "Touring caravan") {
+                      onUpdate("usedAsMobileHome", "No");
+                      onUpdate("nearFloodRiver", "No");
                     } else {
+                      // Folding trailer - hide mobile home Q, reset flood
+                      onUpdate("usedAsMobileHome", "");
                       onUpdate("nearFloodRiver", "");
                     }
                   }}
@@ -105,7 +110,6 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
       setTimeout(() => {
         onUpdate("brand", "Hobby");
         onUpdate("yearOfConstruction", "2019");
-        onUpdate("length", "5-7m");
         onUpdate("specsLoading", false);
         setAutoFilled(true);
       }, 1000);
@@ -184,46 +188,49 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
             </div>
           )}
 
-          {/* Permanent spec fields */}
+          {/* Brand & Year in one row */}
           <div className={`space-y-6 transition-opacity ${state.specsLoading ? "opacity-50 animate-pulse" : ""}`}>
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">Brand</p>
-              <NativeSelect
-                value={state.brand}
-                onChange={(e) => onUpdate("brand", e.target.value)}
-                placeholder="Select brand"
-              >
-                {CARAVAN_OPTIONS.brandOptions.map((b) => (
-                  <option key={b} value={b}>{b}</option>
-                ))}
-              </NativeSelect>
-            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-foreground">Brand</p>
+                <NativeSelect
+                  value={state.brand}
+                  onChange={(e) => onUpdate("brand", e.target.value)}
+                  placeholder="Select brand"
+                >
+                  {CARAVAN_OPTIONS.brandOptions.map((b) => (
+                    <option key={b} value={b}>{b}</option>
+                  ))}
+                </NativeSelect>
+              </div>
 
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">Year of construction</p>
-              <Input
-                type="number"
-                value={state.yearOfConstruction}
-                onChange={(e) => onUpdate("yearOfConstruction", e.target.value)}
-                placeholder="e.g. 2020"
-                className="h-12 rounded-xl"
-                min={1970}
-                max={new Date().getFullYear()}
-              />
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-foreground">Year of construction</p>
+                <Input
+                  type="number"
+                  value={state.yearOfConstruction}
+                  onChange={(e) => onUpdate("yearOfConstruction", e.target.value)}
+                  placeholder="e.g. 2020"
+                  className="h-12 rounded-xl"
+                  min={1970}
+                  max={new Date().getFullYear()}
+                />
+              </div>
             </div>
+          </div>
 
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">Length</p>
-              <NativeSelect
-                value={state.length}
-                onChange={(e) => onUpdate("length", e.target.value)}
-                placeholder="Select length"
-              >
-                {CARAVAN_OPTIONS.lengthOptions.map((l) => (
-                  <option key={l} value={l}>{l}</option>
-                ))}
-              </NativeSelect>
-            </div>
+          {/* Length - always independent */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">Length</p>
+            <NativeSelect
+              value={state.length}
+              onChange={(e) => onUpdate("length", e.target.value)}
+              placeholder="Select length"
+            >
+              {CARAVAN_OPTIONS.lengthOptions.map((l) => (
+                <option key={l} value={l}>{l}</option>
+              ))}
+            </NativeSelect>
           </div>
         </div>
       </SectionCard>
@@ -263,7 +270,7 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
         <div className="space-y-6">
           {/* Condition */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Was it bought second-hand?</p>
+            <p className="text-sm font-medium text-foreground">You bought it as:</p>
             <SegmentedControl
               options={[...CARAVAN_OPTIONS.conditionOptions]}
               value={state.condition}
