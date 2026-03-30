@@ -84,7 +84,7 @@ export const carProduct: ProductConfig = {
 
   validateStep(stepId, state) {
     if (stepId === "car-identity") {
-      return state.licensePlate !== "" && state.plateConfirmed === true;
+      return (state.licensePlate || "").length === 6 && state.plateConfirmed === true;
     }
     if (stepId === "car-risk") {
       const baseValid =
