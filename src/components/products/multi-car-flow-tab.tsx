@@ -238,7 +238,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
         )}
 
         {/* Phase: steps (normal car flow) */}
-        {phase === "steps" && StepComponent && (
+        {(phase === "steps" || phase === "done") && StepComponent && (
           <StepComponent
             state={active.state}
             onUpdate={update}
