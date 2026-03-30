@@ -167,7 +167,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
         }
         return false; // at very beginning → parent handles
       },
-      isComplete: allComplete && phase !== "add-prompt",
+      isComplete: phase === "done",
       progress: {
         completed: instances.reduce((sum, inst, i) => {
           const s = config.getStepSequence(inst.state);
