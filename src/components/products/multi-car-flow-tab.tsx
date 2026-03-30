@@ -113,6 +113,8 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
       setInstances((prev) => [...prev, newInst]);
       setActiveIdx(instances.length);
       setPhase("steps");
+      setHasAskedAddPrompt(true);
+      setAddPromptAnswer("");
     }, [instances.length]);
 
     // Remove a car instance
