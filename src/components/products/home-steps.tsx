@@ -272,6 +272,12 @@ const COVERAGE_OPTIONS: {
   tooltip: string;
 }[] = [
   {
+    key: "both",
+    label: "Household goods + Building",
+    tooltip:
+      "Full protection for both your belongings and the building itself — the most comprehensive option.",
+  },
+  {
     key: "household",
     label: "Household goods",
     tooltip:
@@ -282,12 +288,6 @@ const COVERAGE_OPTIONS: {
     label: "Building",
     tooltip:
       "Covers the physical structure of your home — walls, roof, floors, fitted kitchen, and bathroom installations.",
-  },
-  {
-    key: "both",
-    label: "Household goods + Building",
-    tooltip:
-      "Full protection for both your belongings and the building itself — the most comprehensive option.",
   },
 ];
 
