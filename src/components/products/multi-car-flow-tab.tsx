@@ -267,10 +267,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
                 label="No, I'm done"
                 selected={false}
                 indicator="none"
-                onClick={() => {
-                  setPhase("steps");
-                  // Signal completion — parent will pick up isComplete = true on next handleNext
-                }}
+                onClick={() => setPhase("done")}
               />
             </div>
           </div>
