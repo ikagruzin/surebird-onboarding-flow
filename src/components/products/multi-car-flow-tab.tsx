@@ -17,6 +17,7 @@ import { SelectionCard } from "@/components/ui/selection-card";
 import { cn } from "@/lib/utils";
 
 type Phase = "steps" | "add-prompt" | "done";
+type AddPromptAnswer = "" | "yes" | "no";
 
 export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: string }>(
   ({ productId }, ref) => {
