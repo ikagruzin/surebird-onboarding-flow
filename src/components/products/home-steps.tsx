@@ -447,42 +447,52 @@ export const HomeBuildingStep = ({
 
     <SectionCard title="Building Insurance">
       <div className="space-y-5">
-        <ToggleRow
-          label="Monumental status"
-          checked={state.monumental}
-          onChange={(v) => onUpdate("monumental", v)}
-        />
-        <ToggleRow
-          label="Outbuilding"
-          checked={state.quoted}
-          onChange={(v) => onUpdate("quoted", v)}
-        />
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-foreground">Monumental status</span>
+            <InfoTip text="A monumental building is officially designated as a cultural heritage site. This affects coverage requirements and premiums." />
+          </div>
+          <ToggleSwitch checked={state.monumental} onChange={(v) => onUpdate("monumental", v)} />
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-foreground">More than 25m² outbuildings</span>
+            <InfoTip text="Outbuildings larger than 25m² such as sheds, garages, or garden houses that are separate from the main building." />
+          </div>
+          <ToggleSwitch checked={state.quoted} onChange={(v) => onUpdate("quoted", v)} />
+        </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
             Floor count
           </label>
           <SegmentedControl
-            options={["1", "2", "2+"]}
+            options={[...HOME_OPTIONS.floorCountOptions]}
             value={state.floorCount}
             onChange={(v) => onUpdate("floorCount", v)}
           />
         </div>
         <div className="border-t border-border pt-5 space-y-5">
-          <ToggleRow
-            label="Renovation"
-            checked={state.rainwater}
-            onChange={(v) => onUpdate("rainwater", v)}
-          />
-          <ToggleRow
-            label="Solar Panels"
-            checked={state.smartSensors}
-            onChange={(v) => onUpdate("smartSensors", v)}
-          />
-          <ToggleRow
-            label="Heat pump"
-            checked={state.heatPump}
-            onChange={(v) => onUpdate("heatPump", v)}
-          />
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-foreground">Renovation in the last 10 years</span>
+              <InfoTip text="Any major renovation work done in the last 10 years, such as kitchen or bathroom remodels, extensions, or structural changes." />
+            </div>
+            <ToggleSwitch checked={state.rainwater} onChange={(v) => onUpdate("rainwater", v)} />
+          </div>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-foreground">Solar Panels</span>
+              <InfoTip text="Solar panels installed on the roof or property. These may affect the insured building value." />
+            </div>
+            <ToggleSwitch checked={state.smartSensors} onChange={(v) => onUpdate("smartSensors", v)} />
+          </div>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-foreground">Heat pump</span>
+              <InfoTip text="A heat pump system installed for heating or cooling. This increases the building's insured value." />
+            </div>
+            <ToggleSwitch checked={state.heatPump} onChange={(v) => onUpdate("heatPump", v)} />
+          </div>
         </div>
       </div>
     </SectionCard>
