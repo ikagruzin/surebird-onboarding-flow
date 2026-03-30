@@ -484,7 +484,7 @@ export const HomeBuildingStep = ({
               <span className="text-sm font-medium text-foreground">Solar Panels</span>
               <InfoTip text="Solar panels installed on the roof or property. These may affect the insured building value." />
             </div>
-            <ToggleSwitch checked={state.smartSensors} onChange={(v) => onUpdate("smartSensors", v)} />
+            <button onClick={() => onUpdate("smartSensors", !state.smartSensors)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.smartSensors ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.smartSensors ? "translate-x-5" : "translate-x-0"}`} /></button>
           </div>
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
