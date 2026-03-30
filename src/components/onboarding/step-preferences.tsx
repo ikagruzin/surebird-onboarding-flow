@@ -728,22 +728,25 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
       <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
       {/* Questions card with transition */}
+        {/* Always-mounted MultiCarFlowTab for car (preserves state across tab switches) */}
+        {selectedInsurances.includes("car") && (
+          <div className={activeTab === "car" && !isTransitioning ? "" : "hidden"}>
+            <MultiCarFlowTab
+              ref={(r) => { productFlowRefs.current["car"] = r; }}
+              productId="car"
+            />
+          </div>
+        )}
+
         <div key={activeTab} className={getTransitionClass()}>
-          {isProductFlow ? (
+          {isProductFlow && activeTab !== "car" ? (
             /* ─── Product flow tab (real product steps from shared config) ─── */
-            activeTab === "car" ? (
-              <MultiCarFlowTab
-                ref={(r) => { productFlowRefs.current[activeTab] = r; }}
-                productId={activeTab}
-              />
-            ) : (
-              <ProductFlowTab
-                ref={(r) => { productFlowRefs.current[activeTab] = r; }}
-                productId={activeTab}
-                animateTaco={animateTaco}
-              />
-            )
-          ) : (
+            <ProductFlowTab
+              ref={(r) => { productFlowRefs.current[activeTab] = r; }}
+              productId={activeTab}
+              animateTaco={animateTaco}
+            />
+          ) : !isProductFlow ? (
             /* ─── Legacy question-based UI (for products without full configs) ─── */
             <>
               {showAllQuestions && introMessage && (
