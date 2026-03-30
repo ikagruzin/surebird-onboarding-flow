@@ -1,0 +1,200 @@
+/**
+ * Car insurance — 2-step "High-Velocity" flow.
+ * Step 1: Identity (license plate lookup)
+ * Step 2: Risk & Usage
+ */
+import { useState, useCallback } from "react";
+import type { ProductStepProps } from "@/config/products/types";
+import type { ComponentType } from "react";
+import { TacoMessage } from "@/components/onboarding/taco-message";
+import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
+import { SelectionCard } from "@/components/ui/selection-card";
+import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import { CAR_OPTIONS, lookupPlate } from "@/config/products/car";
+import { getSelectionGridClass } from "@/lib/grid-layout";
+import { Car, Check } from "lucide-react";
+
+/* ─── Step 1: Identity ─── */
+
+const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimationComplete }: ProductStepProps) => {
+  const [lookupDone, setLookupDone] = useState(state.plateConfirmed === true);
+
+  const handleLookup = useCallback(() => {
+    const plate = state.licensePlate?.trim();
+    if (!plate) return;
+
+    const result = lookupPlate(plate);
+    if (result) {
+      onUpdate("carBrand", result.brand);
+      onUpdate("carModel", result.model);
+      onUpdate("plateConfirmed", true);
+      setLookupDone(true);
+    }
+  }, [state.licensePlate, onUpdate]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleLookup();
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <TacoMessage
+        message="Let's see what you're driving! Pop in your license plate and I'll pull the car details for you automatically."
+        animate={animateTaco}
+        onAnimationComplete={onAnimationComplete}
+      />
+      <SectionCard>
+        <div className="space-y-6">
+          {/* License plate input */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">License plate number</p>
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <FloatingLabelInput
+                  label="e.g. AB-123-C"
+                  value={state.licensePlate || ""}
+                  onChange={(e) => {
+                    onUpdate("licensePlate", e.target.value.toUpperCase());
+                    if (lookupDone) {
+                      setLookupDone(false);
+                      onUpdate("plateConfirmed", false);
+                      onUpdate("carBrand", "");
+                      onUpdate("carModel", "");
+                    }
+                  }}
+                  onKeyDown={handleKeyDown}
+                  className="uppercase tracking-widest font-semibold"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleLookup}
+                disabled={!state.licensePlate?.trim()}
+                className="h-14 px-6 rounded-2xl bg-primary text-primary-foreground font-medium text-sm disabled:opacity-40 transition-colors hover:bg-primary/90"
+              >
+                Look up
+              </button>
+            </div>
+          </div>
+
+          {/* Confirmation card */}
+          {lookupDone && state.carBrand && (
+            <div className="flex items-center gap-4 rounded-xl border-2 border-primary bg-primary/5 px-4 py-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <Car className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-foreground">{state.carBrand}</p>
+                <p className="text-sm text-muted-foreground">{state.carModel}</p>
+              </div>
+              <Check className="h-5 w-5 text-primary" />
+            </div>
+          )}
+        </div>
+      </SectionCard>
+    </div>
+  );
+};
+
+/* ─── Step 2: Risk & Usage ─── */
+
+const StepCarRisk = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+  const showDriverDetails = state.mainDriver === "No";
+
+  return (
+    <div className="space-y-6">
+      <TacoMessage
+        message="Perfect. Now, just a few quick details about your driving habits to calculate your personal discount."
+        animate={animateTaco}
+        onAnimationComplete={onAnimationComplete}
+      />
+      <SectionCard>
+        <div className="space-y-6">
+          {/* Main driver */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">Are you the main driver and legal owner?</p>
+            <SegmentedControl
+              options={[...CAR_OPTIONS.mainDriverOptions]}
+              value={state.mainDriver || ""}
+              onChange={(v) => {
+                onUpdate("mainDriver", v);
+                if (v === "Yes") {
+                  onUpdate("driverRelationship", "");
+                  onUpdate("driverAge", "");
+                }
+              }}
+            />
+          </div>
+
+          {/* Conditional: driver details */}
+          {showDriverDetails && (
+            <>
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-foreground">What is the driver's relationship to you?</p>
+                <div className={getSelectionGridClass([...CAR_OPTIONS.driverRelationshipOptions])}>
+                  {CAR_OPTIONS.driverRelationshipOptions.map((opt) => (
+                    <SelectionCard
+                      key={opt}
+                      label={opt}
+                      selected={state.driverRelationship === opt}
+                      onClick={() => onUpdate("driverRelationship", opt)}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-foreground">How old is the main driver?</p>
+                <FloatingLabelInput
+                  label="Age"
+                  type="number"
+                  value={state.driverAge || ""}
+                  onChange={(e) => onUpdate("driverAge", e.target.value)}
+                  min={18}
+                  max={99}
+                />
+              </div>
+            </>
+          )}
+
+          {/* Damage-free years */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">How many damage-free years do you have?</p>
+            <FloatingLabelInput
+              label="Number of years"
+              type="number"
+              value={state.damageFreeYears || ""}
+              onChange={(e) => onUpdate("damageFreeYears", e.target.value)}
+              min={0}
+              max={30}
+            />
+          </div>
+
+          {/* KM per year */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">How many kilometers do you drive per year?</p>
+            <NativeSelect
+              value={state.kmPerYear || ""}
+              placeholder="Select km range"
+              onChange={(e) => onUpdate("kmPerYear", e.target.value)}
+            >
+              {CAR_OPTIONS.kmBrackets.map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </NativeSelect>
+          </div>
+        </div>
+      </SectionCard>
+    </div>
+  );
+};
+
+/* ─── Component map ─── */
+
+export const CAR_STEP_COMPONENTS: Record<string, ComponentType<ProductStepProps>> = {
+  "car-identity": StepCarIdentity,
+  "car-risk": StepCarRisk,
+};
