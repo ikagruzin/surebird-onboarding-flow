@@ -267,7 +267,6 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
               onAnimationComplete={() => setAnimatedSteps((prev) => new Set(prev).add("add-prompt"))}
             />
             <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
-              <p className="text-base font-semibold text-foreground mb-3">Add another car?</p>
               <div className="grid grid-cols-2 gap-3">
                 <SelectionCard
                   label="Yes"
