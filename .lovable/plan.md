@@ -1,47 +1,46 @@
 
 
-## Multi-Car Instance System -- Set Preferences Phase
+## Generate Product Data Template Spreadsheet
 
 ### What We're Building
 
-Inside the Car tab in Flow A's "Set Preferences," users complete the 2-step car flow, then Taco asks "Want to insure another car?" After confirming, a new car instance is added with sub-navigation pills to switch between them.
+An Excel spreadsheet template that lists all product data across two sections — **Set Preferences** (data collected during the preferences phase) and **Offer Preferences** (data shown/editable on the offer page). You fill in missing offer preferences and return the file.
+
+### Spreadsheet Structure
+
+Each product gets its own sheet tab (Home, Liability, Travel, Car, Legal, Accidents, Caravan). Each sheet has:
+
+| Column | Description |
+|--------|-------------|
+| **Phase** | "Set Preferences" or "Offer Page" |
+| **Field ID** | Technical key (e.g. `ownRisk`, `dog`) |
+| **Question (EN)** | English label shown to user |
+| **Question (NL)** | Empty — for business to translate |
+| **Type** | `select`, `radio`, `toggle`, `number`, `text`, `checklist` |
+| **Options (EN)** | Pipe-separated values (e.g. `€100 \| €250 \| €500`) |
+| **Options (NL)** | Empty — for translation |
+| **Default Value** | Pre-selected value |
+| **Conditional On** | Parent field + value that triggers visibility (e.g. `mainDriver = No`) |
+| **Notes** | Any extra context |
+
+### What's Pre-filled
+
+- **Set Preferences rows**: Extracted from each product's `initialState`, `stepDefs`, and step components (field IDs, labels, options, defaults, conditions)
+- **Offer Preferences rows**: The 4 products that already have data (liability, home, travel, legal) are pre-filled from `OFFER_PREFERENCES`
+- **Missing products** (car, accidents, caravan): Offer Preferences section left with placeholder rows highlighted in yellow for you to complete
+
+### Your Workflow
+
+1. I generate the Excel file with all current data pre-filled
+2. You (or business) fill in the yellow-highlighted rows for missing offer preferences
+3. You add Dutch translations in the NL columns
+4. Upload the completed file back
+5. I update the codebase from the spreadsheet data
 
 ### Plan of Actions
 
-**1. Extend Car product config to support multi-instance state**
-
-- In `src/config/products/car.ts`, add a helper to create a fresh `CarState` instance with a unique ID
-- Export `createCarInstance()` factory function
-
-**2. Create a `MultiCarFlowTab` wrapper component**
-
-- New file: `src/components/products/multi-car-flow-tab.tsx`
-- Manages an array of car instances (each with its own state + step index)
-- Renders sub-navigation pills: `Car 1 | Car 2 | + Add car` (pill labels update to brand/model after plate lookup, e.g. "Golf")
-- Each pill shows a checkmark when that instance's flow is complete
-- Trash icon on pills (except when only 1 car) to remove an instance
-- After completing the last step of an instance, Taco asks: "Want to insure another car?" with Yes/No selection cards
-- "Yes" creates a new instance and switches to it; "No" signals completion to parent
-- Exposes the same `ProductFlowTabHandle` interface (handleNext, handleBack, isComplete, progress) so the parent orchestrator needs zero changes
-
-**3. Wire it into `step-preferences.tsx`**
-
-- When `activeTab === "car"`, render `MultiCarFlowTab` instead of `ProductFlowTab`
-- The `MultiCarFlowTab` uses the same ref interface, so all existing back/next/completion logic in the orchestrator works unchanged
-- Progress aggregates across all car instances (e.g., 2 instances x 2 steps = 4 total)
-
-**4. Files changed**
-
-| File | Change |
-|------|--------|
-| `src/config/products/car.ts` | Add `createCarInstance()` factory |
-| `src/components/products/multi-car-flow-tab.tsx` | New -- multi-instance wrapper with sub-nav pills + "add another" prompt |
-| `src/components/onboarding/step-preferences.tsx` | Swap `ProductFlowTab` for `MultiCarFlowTab` when product is "car" |
-
-### UX Details
-
-- Sub-nav pills sit between the product tabs and the step content, styled as smaller rounded pills
-- Active pill: dark fill; completed pill: green checkmark; default: outline
-- The "add another" prompt appears as a Taco message + two selection cards after the last step validates
-- Deleting a car instance shows a brief confirmation, then renumbers remaining pills
+1. **Read all product configs and step components** to extract field IDs, labels, options, defaults, and conditional logic
+2. **Read existing `OFFER_PREFERENCES`** from step-offer.tsx
+3. **Generate the Excel file** using openpyxl with one sheet per product, pre-filled data, and yellow-highlighted empty cells
+4. **Deliver** as a downloadable file
 
