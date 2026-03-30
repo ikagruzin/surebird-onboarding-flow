@@ -21,12 +21,12 @@ export const HOME_OPTIONS = {
     "Pan roof", "(Largely) reed", "Shingles",
   ],
   ownRiskOptions: ["€100", "€250", "€500", "No deductible"],
-  securityOptions: ["None", "BORG", "Police mark", "Both"],
+  securityOptions: ["None", "BORG", "Police mark"],
   netIncomeOptions: [
-    "< €25,000", "€25,000 – €50,000", "€50,000 – €75,000",
-    "€75,000 – €100,000", "> €100,000",
+    "up to €1,000", "€1,000 - €2,000", "€2,000 - €3,000",
+    "€3,000 - €4,850",
   ],
-  outsideValueOptions: ["€0", "€2,500", "€5,000", "€7,500", "€10,000"],
+  outsideValueOptions: ["€0", "€2,500", "€5,000", "€7,500", "€15,000", "€25,000"],
 } as const;
 
 /* ─── State shape ─── */
