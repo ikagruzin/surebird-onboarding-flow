@@ -110,7 +110,6 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
       setTimeout(() => {
         onUpdate("brand", "Hobby");
         onUpdate("yearOfConstruction", "2019");
-        onUpdate("length", "5-7m");
         onUpdate("specsLoading", false);
         setAutoFilled(true);
       }, 1000);

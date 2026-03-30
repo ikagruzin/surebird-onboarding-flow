@@ -51,8 +51,8 @@ export const caravanProduct: ProductConfig = {
   initialState: {
     caravanType: "",
     usage: "",
-    usedAsMobileHome: "",
-    nearFloodRiver: "",
+    usedAsMobileHome: "No",
+    nearFloodRiver: "No",
     identificationMethod: "License plate",
     licensePlate: "",
     chassisNumber: "",
