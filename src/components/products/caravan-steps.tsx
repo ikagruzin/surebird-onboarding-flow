@@ -9,6 +9,7 @@ import { TacoMessage } from "@/components/onboarding/taco-message";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { Input } from "@/components/ui/input";
+import { DutchPlateInput } from "@/components/ui/dutch-plate-input";
 import { CARAVAN_OPTIONS } from "@/config/products/caravan";
 import { getSelectionGridClass } from "@/lib/grid-layout";
 

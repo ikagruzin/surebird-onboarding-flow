@@ -20,8 +20,8 @@ import { Car, Check } from "lucide-react";
 const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimationComplete }: ProductStepProps) => {
   const [lookupDone, setLookupDone] = useState(state.plateConfirmed === true);
 
-  const handleLookup = useCallback(() => {
-    const plate = state.licensePlate?.trim();
+  const handleLookup = useCallback((raw?: string) => {
+    const plate = (raw || state.licensePlate || "").trim();
     if (!plate) return;
 
     const result = lookupPlate(plate);
@@ -33,11 +33,18 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
     }
   }, [state.licensePlate, onUpdate]);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleLookup();
+  const handlePlateChange = (raw: string) => {
+    onUpdate("licensePlate", raw);
+    if (lookupDone) {
+      setLookupDone(false);
+      onUpdate("plateConfirmed", false);
+      onUpdate("carBrand", "");
+      onUpdate("carModel", "");
     }
+  };
+
+  const handlePlateComplete = (raw: string) => {
+    handleLookup(raw);
   };
 
   return (
@@ -52,33 +59,11 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
           {/* License plate input */}
           <div className="space-y-2">
             <p className="text-sm font-medium text-foreground">License plate number</p>
-            <div className="flex gap-3">
-              <div className="flex-1">
-                <FloatingLabelInput
-                  label="e.g. AB-123-C"
-                  value={state.licensePlate || ""}
-                  onChange={(e) => {
-                    onUpdate("licensePlate", e.target.value.toUpperCase());
-                    if (lookupDone) {
-                      setLookupDone(false);
-                      onUpdate("plateConfirmed", false);
-                      onUpdate("carBrand", "");
-                      onUpdate("carModel", "");
-                    }
-                  }}
-                  onKeyDown={handleKeyDown}
-                  className="uppercase tracking-widest font-semibold"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={handleLookup}
-                disabled={!state.licensePlate?.trim()}
-                className="h-14 px-6 rounded-2xl bg-primary text-primary-foreground font-medium text-sm disabled:opacity-40 transition-colors hover:bg-primary/90"
-              >
-                Look up
-              </button>
-            </div>
+            <DutchPlateInput
+              value={state.licensePlate || ""}
+              onChange={handlePlateChange}
+              onComplete={handlePlateComplete}
+            />
           </div>
 
           {/* Confirmation card */}
