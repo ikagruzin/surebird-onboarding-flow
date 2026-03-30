@@ -381,7 +381,7 @@ export const HomeContentsStep = ({
     <SectionCard title="Contents Insurance">
       <div className="space-y-5">
         <p className="text-sm text-muted-foreground">
-          Select if it's worth more than the stated amount
+          Select if your belongings worth more than the stated amount
         </p>
 
         {CONTENTS_ITEMS.map((item) => (

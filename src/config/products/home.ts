@@ -12,10 +12,10 @@ export const HOME_OPTIONS = {
     "Rental company for rooms", "Different",
   ],
   constructionMaterials: [
-    "Wooden skeleton", "(Largely) stone", "Wooden frame with stone wall",
+    "(Largely) stone", "Wooden frame with stone wall", "Wooden skeleton",
   ],
-  floorMaterials: ["No floors", "Wood", "Stone/concrete"],
-  roofShapes: ["Flat", "Sloping", "Special"],
+  floorMaterials: ["Stone/concrete", "Wood", "No floors"],
+  roofShapes: ["Sloping", "Flat", "Special"],
   roofMaterials: [
     "Wood", "Artificial reeds", "Asphalt/bitumen",
     "Pan roof", "(Largely) reed", "Shingles",
