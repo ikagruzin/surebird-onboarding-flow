@@ -18,7 +18,7 @@ function estimateCardWidth(label: string): number {
   return label.length * CHAR_WIDTH + CARD_OVERHEAD;
 }
 
-export function getSelectionGridClass(labels: string[]): string {
+export function getSelectionGridClass(labels: readonly string[]): string {
   const count = labels.length;
   if (count <= 1) return "grid grid-cols-1 gap-2";
 
