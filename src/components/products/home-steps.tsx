@@ -81,7 +81,7 @@ export const HomePresetStep = ({
           selected={state.presetAnswer === "no"}
           indicator="radio"
           onClick={() =>
-            onAutoAdvance({ presetAnswer: "no" }, "preset-verification")
+            onAutoAdvance({ presetAnswer: "no", ...homeProduct.presetState }, "preset-verification")
           }
         />
       </div>
