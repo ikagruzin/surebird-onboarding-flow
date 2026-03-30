@@ -238,6 +238,11 @@ const DEFAULT_PREFERENCES: Record<string, Record<string, string>> = {
     coverage: "death_5k_disability_25k",
     own_risk: "100",
   },
+  caravan: {
+    caravanType: "touring",
+    usage: "personal",
+    condition: "new",
+  },
 };
 
 export interface StepPreferencesHandle {
