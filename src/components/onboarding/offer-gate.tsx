@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Phone, Mail, ChevronRight, Lock } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import { SelectionCard } from "@/components/ui/selection-card";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 
 interface OfferGateProps {
@@ -20,63 +21,45 @@ export const OfferGate = ({
   onUpdateEmail,
   onUnlock,
 }: OfferGateProps) => {
-  const [contactMethod, setContactMethod] = useState<"phone" | "email">("phone");
-
-  const canSubmit =
-    contactMethod === "phone"
-      ? phone.replace(/\s/g, "").length > 4
-      : email.includes("@");
+  const [contactMethod, setContactMethod] = useState<"phone" | "email" | "both">("phone");
 
   return (
     <div className="absolute inset-0 z-30 flex items-start justify-center pt-24">
-      {/* The blurred backdrop is handled by the parent */}
       <div className="relative z-10 w-full max-w-lg mx-4">
         <div className="bg-card border border-border rounded-3xl p-8 shadow-2xl animate-scale-in">
-          <div className="flex items-start gap-3 mb-6">
+          <div className="flex items-center gap-3 mb-6">
             <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
             <p className="text-base text-foreground">
-              {firstName || "Hi"}, I have selected the best insurance policies for you based on your set preferences!
+              Great news! Your personal offer is ready. Where do you want me to send it?
             </p>
           </div>
 
-          {/* Savings + best choices badges */}
-          <div className="flex flex-wrap items-center gap-2 mb-6">
-            <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-success bg-success/10 border border-success/20 rounded-full px-3 py-1.5">
-              🎁 You save with Surebird: €20.11
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary bg-primary/10 rounded-full px-3 py-1.5">
-              🛡️ Best and cheapest choices
-            </span>
-          </div>
-
-          {/* Contact method toggle */}
-          <div className="flex items-center gap-2 mb-5">
-            <button
+          {/* Contact method selection */}
+          <div className="grid grid-cols-3 gap-2 mb-5">
+            <SelectionCard
+              label="Phone"
+              icon={<Phone className="w-4 h-4" />}
+              selected={contactMethod === "phone"}
               onClick={() => setContactMethod("phone")}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all border ${
-                contactMethod === "phone"
-                  ? "bg-foreground text-background border-foreground"
-                  : "bg-card border-border text-foreground hover:bg-muted"
-              }`}
-            >
-              <Phone className="w-4 h-4" />
-              Phone number
-            </button>
-            <button
+              indicator="radio"
+            />
+            <SelectionCard
+              label="Email"
+              icon={<Mail className="w-4 h-4" />}
+              selected={contactMethod === "email"}
               onClick={() => setContactMethod("email")}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all border ${
-                contactMethod === "email"
-                  ? "bg-foreground text-background border-foreground"
-                  : "bg-card border-border text-foreground hover:bg-muted"
-              }`}
-            >
-              <Mail className="w-4 h-4" />
-              Email address
-            </button>
+              indicator="radio"
+            />
+            <SelectionCard
+              label="Both"
+              selected={contactMethod === "both"}
+              onClick={() => setContactMethod("both")}
+              indicator="radio"
+            />
           </div>
 
-          <div className="mb-6">
-            {contactMethod === "phone" ? (
+          <div className="space-y-3 mb-6">
+            {(contactMethod === "phone" || contactMethod === "both") && (
               <FloatingLabelInput
                 label="Phone number (+31)"
                 value={phone}
@@ -84,7 +67,8 @@ export const OfferGate = ({
                 maxLength={15}
                 inputMode="tel"
               />
-            ) : (
+            )}
+            {(contactMethod === "email" || contactMethod === "both") && (
               <FloatingLabelInput
                 label="Email address"
                 value={email}
@@ -96,8 +80,7 @@ export const OfferGate = ({
 
           <button
             onClick={onUnlock}
-            disabled={!canSubmit}
-            className="inline-flex items-center gap-2 text-success-foreground px-7 py-3 rounded-full font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            className="inline-flex items-center gap-2 text-success-foreground px-7 py-3 rounded-full font-semibold text-base transition-all"
             style={{
               background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
               boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
@@ -110,7 +93,7 @@ export const OfferGate = ({
           <div className="flex items-start gap-2 mt-5 text-xs text-muted-foreground">
             <Lock className="w-3.5 h-3.5 shrink-0 mt-0.5" />
             <p>
-              Enter your email address below to save your personal offer. This way you always have it at hand when you need it. No spam, no obligations: just store your overview safely!
+              Enter your details to save your personal offer. No spam, no obligations: just store your overview safely!
             </p>
           </div>
         </div>
