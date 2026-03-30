@@ -123,13 +123,6 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
     setAutoFilled(false);
   }, [state.licensePlate]);
 
-  const formatDutchPlate = (value: string) => {
-    const clean = value.replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 6);
-    if (clean.length <= 2) return clean;
-    if (clean.length <= 4) return `${clean.slice(0, 2)}-${clean.slice(2)}`;
-    return `${clean.slice(0, 2)}-${clean.slice(2, 4)}-${clean.slice(4)}`;
-  };
-
   return (
     <div className="space-y-6">
       <TacoMessage
@@ -159,22 +152,11 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
           {state.identificationMethod === "License plate" && (
             <div className="space-y-2">
               <p className="text-sm font-medium text-foreground">License plate</p>
-              <div className="flex gap-2">
-                <Input
-                  value={state.licensePlate}
-                  onChange={(e) => onUpdate("licensePlate", formatDutchPlate(e.target.value))}
-                  placeholder="AB-12-CD"
-                  className="h-12 rounded-xl font-mono tracking-wider uppercase"
-                />
-                <button
-                  type="button"
-                  onClick={simulateAutoFill}
-                  disabled={state.licensePlate.length < 6 || state.specsLoading}
-                  className="h-12 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-40 shrink-0"
-                >
-                  {state.specsLoading ? "Loading…" : "Look up"}
-                </button>
-              </div>
+              <DutchPlateInput
+                value={state.licensePlate}
+                onChange={(raw) => onUpdate("licensePlate", raw)}
+                onComplete={(raw) => simulateAutoFill(raw)}
+              />
             </div>
           )}
 
