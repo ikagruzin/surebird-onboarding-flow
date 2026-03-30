@@ -64,7 +64,7 @@ export const HomePresetStep = ({
         ))}
       </ul>
 
-      <div className="mt-5 space-y-2">
+      <div className="mt-5 grid grid-cols-2 gap-2">
         <SelectionCard
           label="Yes"
           selected={state.presetAnswer === "yes"}
