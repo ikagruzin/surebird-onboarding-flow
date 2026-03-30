@@ -271,7 +271,7 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
         <div className="space-y-6">
           {/* Condition */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Was it bought second-hand?</p>
+            <p className="text-sm font-medium text-foreground">You bought it as:</p>
             <SegmentedControl
               options={[...CARAVAN_OPTIONS.conditionOptions]}
               value={state.condition}

@@ -79,7 +79,7 @@ export const caravanProduct: ProductConfig = {
     switch (stepId) {
       case "caravan-context": {
         if (!state.caravanType || !state.usage) return false;
-        const showMobileQ = state.caravanType === "Touring caravan" || state.caravanType === "Folding trailer";
+        const showMobileQ = state.caravanType === "Touring caravan";
         if (showMobileQ && !state.usedAsMobileHome) return false;
         const showFloodQ = state.caravanType === "Mobile home" || state.usedAsMobileHome === "Yes";
         if (showFloodQ && !state.nearFloodRiver) return false;
