@@ -179,9 +179,9 @@ export const HomeDetailsStep = ({
           <div className="space-y-2">
             {HOME_OPTIONS.constructionMaterials.map((opt) => {
               const tooltips: Record<string, string> = {
-                "Wooden skeleton": "A timber-frame structure where wood carries the load.",
-                "(Largely) stone": "Exterior walls are mostly brick or stone masonry.",
-                "Wooden frame with stone wall": "Timber frame with a stone or brick outer cladding.",
+                "Wooden skeleton": "The main structural frame is made of wood (timber-frame construction).",
+                "(Largely) stone": "The exterior walls are mostly built with brick, stone, or concrete blocks.",
+                "Wooden frame with stone wall": "A timber structural frame with an outer layer of brick or stone cladding.",
               };
               return (
                 <SelectionCard
