@@ -93,7 +93,7 @@ export const homeProduct: ProductConfig = {
     outsideValue: "€0",
     monumental: false,
     quoted: false,
-    floorCount: "",
+    floorCount: "1",
     rainwater: false,
     smartSensors: false,
     heatPump: false,
