@@ -8,6 +8,7 @@ import { TacoMessage } from "./taco-message";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import { hasProductConfig, getProductConfig } from "@/config/products";
 import { ProductFlowTab, type ProductFlowTabHandle } from "@/components/products/product-flow-tab";
+import { MultiCarFlowTab } from "@/components/products/multi-car-flow-tab";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
 import iconCar from "@/assets/icon-car.svg";
@@ -730,11 +731,18 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
         <div key={activeTab} className={getTransitionClass()}>
           {isProductFlow ? (
             /* ─── Product flow tab (real product steps from shared config) ─── */
-            <ProductFlowTab
-              ref={(r) => { productFlowRefs.current[activeTab] = r; }}
-              productId={activeTab}
-              animateTaco={animateTaco}
-            />
+            activeTab === "car" ? (
+              <MultiCarFlowTab
+                ref={(r) => { productFlowRefs.current[activeTab] = r; }}
+                productId={activeTab}
+              />
+            ) : (
+              <ProductFlowTab
+                ref={(r) => { productFlowRefs.current[activeTab] = r; }}
+                productId={activeTab}
+                animateTaco={animateTaco}
+              />
+            )
           ) : (
             /* ─── Legacy question-based UI (for products without full configs) ─── */
             <>
