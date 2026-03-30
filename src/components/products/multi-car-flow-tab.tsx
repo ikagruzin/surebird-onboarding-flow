@@ -125,6 +125,10 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
     // Expose handle
     useImperativeHandle(ref, () => ({
       handleNext: () => {
+        if (phase === "done") {
+          return false; // all done → parent handles tab transition
+        }
+
         if (phase === "add-prompt") {
           // User is on the "add another?" prompt — they should pick Yes/No
           return true;
