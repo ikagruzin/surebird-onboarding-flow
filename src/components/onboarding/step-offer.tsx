@@ -596,8 +596,6 @@ export const StepOffer = ({
         </div>
       </div>
 
-    </div>
-
       {/* USP Card */}
       <div className="border border-border rounded-3xl p-6 bg-card">
         <h3 className="text-lg font-bold text-foreground mb-4">With Surebird you have:</h3>
