@@ -168,7 +168,7 @@ export const Index = () => {
       case "product-selection":
         return state.selectedInsurances.length > 0;
       case "name":
-        return state.firstName.trim().length > 0 && state.lastName.trim().length > 0;
+        return state.firstName.trim().length > 0;
       case "address": {
         const pc = state.postcode.replace(/\s/g, "");
         return pc.length >= 6 && state.houseNumber.trim().length > 0;
