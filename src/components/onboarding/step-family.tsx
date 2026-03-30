@@ -14,8 +14,8 @@ interface StepFamilyProps {
 const OPTIONS = [
   { id: "single", label: "Single", image: familySingle },
   { id: "partner", label: "Partner", image: familyPartner },
-  { id: "single-children", label: "Single &\nChildren", image: familySingleChildren },
   { id: "partner-children", label: "Partner &\nChildren", image: familyPartnerChildren },
+  { id: "single-children", label: "Single &\nChildren", image: familySingleChildren },
 ];
 
 export const StepFamily = ({ familyStatus, onSelect, animateTaco }: StepFamilyProps) => {

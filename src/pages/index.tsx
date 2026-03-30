@@ -307,7 +307,6 @@ export const Index = () => {
         return (
           <StepName
             firstName={state.firstName}
-            lastName={state.lastName}
             onUpdate={(field, value) => setState((s) => ({ ...s, [field]: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}

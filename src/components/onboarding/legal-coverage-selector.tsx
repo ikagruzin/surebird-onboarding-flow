@@ -124,16 +124,23 @@ export const LegalCoverageSelector = ({ selected, onChange }: LegalCoverageSelec
               <p className="text-xs text-muted-foreground leading-relaxed">{opt.description}</p>
             </div>
 
-            {/* Badge */}
-            <span
-              className={`absolute top-3 right-3 text-2xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${
-                opt.badgeHighlight
-                  ? "bg-success/10 text-success"
-                  : "bg-muted text-muted-foreground"
-              }`}
-            >
-              {opt.badge}
-            </span>
+            {/* Badge — only show if percentage >= 50% */}
+            {(() => {
+              const match = opt.badge.match(/(\d+)%/);
+              const pct = match ? parseInt(match[1], 10) : 0;
+              if (pct < 50) return null;
+              return (
+                <span
+                  className={`absolute top-3 right-3 text-2xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${
+                    opt.badgeHighlight
+                      ? "bg-success/10 text-success"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {opt.badge}
+                </span>
+              );
+            })()}
           </button>
         );
       })}
