@@ -25,13 +25,13 @@ export const liabilityProduct: ProductConfig = {
 
   initialState: {
     dog: "No",
-    damageLimit: "€2,250,000",
+    damageLimit: "€1,250,000",
     ownRisk: "€100",
   } satisfies LiabilityState as Record<string, any>,
 
   presetState: {
     dog: "No",
-    damageLimit: "€2,250,000",
+    damageLimit: "€1,250,000",
     ownRisk: "€100",
   },
 

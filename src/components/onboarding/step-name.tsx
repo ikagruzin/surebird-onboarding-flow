@@ -3,14 +3,13 @@ import { TacoMessage } from "./taco-message";
 
 interface StepNameProps {
   firstName: string;
-  lastName: string;
   onUpdate: (field: "firstName" | "lastName", value: string) => void;
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
 }
 
-export const StepName = ({ firstName, lastName, onUpdate, onNext, onBack, animateTaco }: StepNameProps) => {
+export const StepName = ({ firstName, onUpdate, onNext, onBack, animateTaco }: StepNameProps) => {
   return (
     <div className="animate-fade-in">
       <TacoMessage
@@ -19,21 +18,13 @@ export const StepName = ({ firstName, lastName, onUpdate, onNext, onBack, animat
       />
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
-        <div className="grid grid-cols-2 gap-4">
-          <FloatingLabelInput
-            label="First name"
-            value={firstName}
-            onChange={(e) => onUpdate("firstName", e.target.value)}
-            maxLength={100}
-            autoFocus={!firstName}
-          />
-          <FloatingLabelInput
-            label="Last name"
-            value={lastName}
-            onChange={(e) => onUpdate("lastName", e.target.value)}
-            maxLength={100}
-          />
-        </div>
+        <FloatingLabelInput
+          label="First name"
+          value={firstName}
+          onChange={(e) => onUpdate("firstName", e.target.value)}
+          maxLength={100}
+          autoFocus={!firstName}
+        />
       </div>
     </div>
   );

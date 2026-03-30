@@ -1,7 +1,12 @@
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { INSURANCE_TYPES } from "./types";
-import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { TacoMessage } from "./taco-message";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
 import iconCar from "@/assets/icon-car.svg";
@@ -29,67 +34,63 @@ interface StepStartDateProps {
   animateTaco?: boolean;
 }
 
-function formatDateInput(raw: string): string {
-  const digits = raw.replace(/\D/g, "").slice(0, 8);
-  let result = "";
-  for (let i = 0; i < digits.length; i++) {
-    if (i === 2 || i === 4) result += "-";
-    result += digits[i];
-  }
-  return result;
+/** Convert dd-mm-yyyy to Date */
+function parseStoredDate(val: string): Date | undefined {
+  if (!val || val.length !== 10) return undefined;
+  const [dd, mm, yyyy] = val.split("-").map(Number);
+  if (!dd || !mm || !yyyy) return undefined;
+  return new Date(yyyy, mm - 1, dd);
 }
 
-const getTodayFormatted = (): string => {
-  const d = new Date();
-  const dd = String(d.getDate()).padStart(2, "0");
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const yyyy = d.getFullYear();
+/** Convert Date to dd-mm-yyyy */
+function formatToStored(date: Date): string {
+  const dd = String(date.getDate()).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const yyyy = date.getFullYear();
   return `${dd}-${mm}-${yyyy}`;
-};
+}
 
-const isValidDate = (val: string): boolean => {
-  if (val.length !== 10) return false;
-  const [dd, mm, yyyy] = val.split("-").map(Number);
-  if (!dd || !mm || !yyyy) return false;
-  const date = new Date(yyyy, mm - 1, dd);
-  return date.getFullYear() === yyyy && date.getMonth() === mm - 1 && date.getDate() === dd;
-};
-
-const DateInput = ({
+const DatePickerField = ({
   value,
   onChange,
-  onToday,
 }: {
   value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onToday: () => void;
-}) => (
-  <div className="flex gap-3">
-    <div className="flex-1">
-      <FloatingLabelInput
-        label="dd-mm-yyyy"
-        value={value}
-        onChange={onChange}
-        maxLength={10}
-        inputMode="numeric"
-      />
-    </div>
-    <button
-      type="button"
-      onClick={onToday}
-      className="h-14 px-5 rounded-xl border-2 border-input bg-white text-sm font-semibold text-foreground hover:bg-muted transition-colors whitespace-nowrap"
-    >
-      Today
-    </button>
-  </div>
-);
+  onChange: (date: string) => void;
+}) => {
+  const selectedDate = parseStoredDate(value);
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className={cn(
+            "w-full h-14 justify-start text-left font-normal rounded-2xl border-2 border-input bg-white px-4",
+            !selectedDate && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon className="mr-3 h-5 w-5 text-muted-foreground" />
+          {selectedDate ? format(selectedDate, "dd-MM-yyyy") : <span>Pick a start date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={(date) => date && onChange(formatToStored(date))}
+          disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+          initialFocus
+          className={cn("p-3 pointer-events-auto")}
+        />
+      </PopoverContent>
+    </Popover>
+  );
+};
 
 export const StepStartDate = ({
   selectedInsurances,
   startDates,
   onUpdateStartDate,
-  onNext,
-  onBack,
   animateTaco,
 }: StepStartDateProps) => {
   const isSingle = selectedInsurances.length === 1;
@@ -100,31 +101,14 @@ export const StepStartDate = ({
 
   const unifiedDate = startDates["__unified"] || "";
 
-  const handleChange = (id: string) => (e: ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatDateInput(e.target.value);
-    onUpdateStartDate(id, formatted);
+  const handleUnifiedChange = (date: string) => {
+    onUpdateStartDate("__unified", date);
+    products.forEach((p) => onUpdateStartDate(p.id, date));
   };
 
-  const handleUnifiedChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatDateInput(e.target.value);
-    onUpdateStartDate("__unified", formatted);
-    products.forEach((p) => onUpdateStartDate(p.id, formatted));
-  };
-
-  const handleUnifiedToday = () => {
-    const today = getTodayFormatted();
-    onUpdateStartDate("__unified", today);
-    products.forEach((p) => onUpdateStartDate(p.id, today));
-  };
-
-  const handleIndividualToday = (id: string) => {
-    onUpdateStartDate(id, getTodayFormatted());
-  };
-
-  // Single product scenario
+  // Single product
   if (isSingle) {
-    const product = singleProduct;
-    const ins = INSURANCE_TYPES.find((t) => t.id === product.id)!;
+    const ins = INSURANCE_TYPES.find((t) => t.id === singleProduct.id)!;
     const iconSrc = ICON_MAP[ins.icon];
 
     return (
@@ -133,29 +117,24 @@ export const StepStartDate = ({
           message={`When should your ${ins.label} protection begin?`}
           animate={animateTaco}
         />
-
         <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-4">
           <div className="flex items-center gap-3">
             {iconSrc && <img src={iconSrc} alt={ins.label} className="w-8 h-8" />}
             <h3 className="text-lg font-semibold text-foreground">{ins.label} Insurance</h3>
           </div>
-          <DateInput
-            value={startDates[product.id] || ""}
-            onChange={handleChange(product.id)}
-            onToday={() => handleIndividualToday(product.id)}
+          <DatePickerField
+            value={startDates[singleProduct.id] || ""}
+            onChange={(date) => onUpdateStartDate(singleProduct.id, date)}
           />
         </div>
       </div>
     );
   }
 
-  // Multi product scenario
+  // Multi product
   return (
     <div className="animate-fade-in space-y-8">
-      <TacoMessage
-        message="When should your protection begin?"
-        animate={animateTaco}
-      />
+      <TacoMessage message="When should your protection begin?" animate={animateTaco} />
 
       <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-5">
         <p className="text-base font-semibold text-foreground">
@@ -180,11 +159,7 @@ export const StepStartDate = ({
 
         {sameDate === "yes" && (
           <div className="pt-2">
-            <DateInput
-              value={unifiedDate}
-              onChange={handleUnifiedChange}
-              onToday={handleUnifiedToday}
-            />
+            <DatePickerField value={unifiedDate} onChange={handleUnifiedChange} />
           </div>
         )}
       </div>
@@ -200,10 +175,9 @@ export const StepStartDate = ({
                   {iconSrc && <img src={iconSrc} alt={ins.label} className="w-8 h-8" />}
                   <h3 className="text-lg font-semibold text-foreground">{ins.label} Insurance</h3>
                 </div>
-                <DateInput
+                <DatePickerField
                   value={startDates[product.id] || ""}
-                  onChange={handleChange(product.id)}
-                  onToday={() => handleIndividualToday(product.id)}
+                  onChange={(date) => onUpdateStartDate(product.id, date)}
                 />
               </div>
             );
@@ -213,4 +187,3 @@ export const StepStartDate = ({
     </div>
   );
 };
-
