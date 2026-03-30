@@ -38,10 +38,15 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
                   selected={state.caravanType === opt}
                   onClick={() => {
                     onUpdate("caravanType", opt);
-                    // Reset conditional fields
                     if (opt === "Mobile home") {
                       onUpdate("usedAsMobileHome", "");
+                      onUpdate("nearFloodRiver", "No");
+                    } else if (opt === "Touring caravan") {
+                      onUpdate("usedAsMobileHome", "No");
+                      onUpdate("nearFloodRiver", "No");
                     } else {
+                      // Folding trailer - hide mobile home Q, reset flood
+                      onUpdate("usedAsMobileHome", "");
                       onUpdate("nearFloodRiver", "");
                     }
                   }}
