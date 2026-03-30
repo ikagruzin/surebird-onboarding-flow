@@ -140,8 +140,13 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
         }
 
         if (isLastStep && isValid) {
-          // Show "add another?" prompt
-          setPhase("add-prompt");
+          if (!hasAskedAddPrompt) {
+            // First car completed → show "add another?" prompt
+            setPhase("add-prompt");
+          } else {
+            // Subsequent cars → go straight to done
+            setPhase("done");
+          }
           return true;
         }
 
