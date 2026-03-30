@@ -4,6 +4,7 @@ interface InsuranceOfferCardProps {
   insurerName: string;
   logoSrc?: string;
   monthlyPrice: number;
+  originalPrice?: number;
   savingsPercent?: number;
   happyClients: string;
   onViewDetails?: () => void;

@@ -597,6 +597,34 @@ export const StepOffer = ({
       </div>
 
     </div>
+
+      {/* USP Card */}
+      <div className="border border-border rounded-3xl p-6 bg-card">
+        <h3 className="text-lg font-bold text-foreground mb-4">With Surebird you have:</h3>
+        <ul className="space-y-3 mb-6">
+          {[
+            "14 days cooling off period",
+            "The best price & quality",
+            "All insurances in once place",
+            "A personal assistance",
+          ].map((item) => (
+            <li key={item} className="flex items-center gap-3 text-base text-foreground">
+              <Check className="w-5 h-5 text-primary shrink-0" />
+              {item}
+            </li>
+          ))}
+        </ul>
+        <div className="flex items-center gap-3 pt-2 border-t border-border">
+          <img src={trustpilotLogo} alt="Trustpilot" className="h-5 object-contain" />
+          <div className="w-px h-6 bg-border" />
+          <div className="flex items-center gap-1">
+            <span className="text-2xl font-bold text-foreground">4.6</span>
+            <span className="text-sm text-muted-foreground">Excellent</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
   );
 
   const isBlurred = gated && !gateUnlocked;
