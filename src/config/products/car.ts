@@ -32,13 +32,13 @@ export interface CarState {
 /* ─── Simulated plate lookup ─── */
 
 const PLATE_DB: Record<string, { brand: string; model: string }> = {
-  "AB-123-C": { brand: "Volkswagen", model: "Golf 1.5 TSI" },
-  "XY-456-Z": { brand: "Toyota", model: "Corolla 1.8 Hybrid" },
-  "NL-789-D": { brand: "BMW", model: "320i Sedan" },
+  "AB123C": { brand: "Volkswagen", model: "Golf 1.5 TSI" },
+  "XY456Z": { brand: "Toyota", model: "Corolla 1.8 Hybrid" },
+  "NL789D": { brand: "BMW", model: "320i Sedan" },
 };
 
 export function lookupPlate(plate: string): { brand: string; model: string } | null {
-  const normalised = plate.toUpperCase().replace(/\s+/g, "");
+  const normalised = plate.toUpperCase().replace(/[^A-Z0-9]/g, "");
   return PLATE_DB[normalised] ?? { brand: "Volkswagen", model: "Golf 1.5 TSI" };
 }
 
