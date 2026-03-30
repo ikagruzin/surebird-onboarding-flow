@@ -262,19 +262,16 @@ export const HomeCoveragePathStep = ({
     <Card>
       <CardContent className="pt-6 space-y-2">
         {COVERAGE_OPTIONS.map((opt) => (
-          <div key={opt.key} className="relative">
-            <SelectionCard
-              label={opt.label}
-              selected={state.coverageChoice === opt.key}
-              indicator="radio"
-              onClick={() =>
-                onAutoAdvance({ coverageChoice: opt.key }, "coverage-path")
-              }
-            />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2">
-              <InfoTip text={opt.tooltip} />
-            </div>
-          </div>
+          <SelectionCard
+            key={opt.key}
+            label={opt.label}
+            selected={state.coverageChoice === opt.key}
+            indicator="radio"
+            rightIcon={<InfoTip text={opt.tooltip} />}
+            onClick={() =>
+              onAutoAdvance({ coverageChoice: opt.key }, "coverage-path")
+            }
+          />
         ))}
       </CardContent>
     </Card>

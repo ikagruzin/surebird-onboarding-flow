@@ -38,7 +38,7 @@ export interface SelectionCardProps
 }
 
 const SelectionCard = React.forwardRef<HTMLButtonElement, SelectionCardProps>(
-  ({ className, selected = false, size, label, icon, indicator = "radio", ...props }, ref) => {
+  ({ className, selected = false, size, label, icon, rightIcon, indicator = "radio", ...props }, ref) => {
     return (
       <button
         ref={ref}
@@ -48,7 +48,6 @@ const SelectionCard = React.forwardRef<HTMLButtonElement, SelectionCardProps>(
         className={cn(selectionCardVariants({ selected, size, className }))}
         {...props}
       >
-        {/* Indicator */}
         {indicator === "radio" && (
           <span
             className={cn(
@@ -73,12 +72,13 @@ const SelectionCard = React.forwardRef<HTMLButtonElement, SelectionCardProps>(
             )}
           </span>
         )}
-
-        {/* Icon */}
         {icon && <span className="shrink-0">{icon}</span>}
-
-        {/* Label */}
         <span className="flex-1 text-sm font-medium text-foreground">{label}</span>
+        {rightIcon && (
+          <span className="shrink-0" onClick={(e) => e.stopPropagation()}>
+            {rightIcon}
+          </span>
+        )}
       </button>
     );
   },
