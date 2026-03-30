@@ -491,7 +491,7 @@ export const HomeBuildingStep = ({
               <span className="text-sm font-medium text-foreground">Heat pump</span>
               <InfoTip text="A heat pump system installed for heating or cooling. This increases the building's insured value." />
             </div>
-            <ToggleSwitch checked={state.heatPump} onChange={(v) => onUpdate("heatPump", v)} />
+            <button onClick={() => onUpdate("heatPump", !state.heatPump)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.heatPump ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.heatPump ? "translate-x-5" : "translate-x-0"}`} /></button>
           </div>
         </div>
       </div>
