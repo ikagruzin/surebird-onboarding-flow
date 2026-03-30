@@ -177,7 +177,7 @@ export const HomeDetailsStep = ({
           <label className="text-sm font-semibold text-foreground mb-2 block">
             Construction Materials
           </label>
-          <div className="space-y-2">
+           <div className={getSelectionGridClass(HOME_OPTIONS.constructionMaterials)}>
             {HOME_OPTIONS.constructionMaterials.map((opt) => {
               const tooltips: Record<string, string> = {
                 "Wooden skeleton": "The main structural frame is made of wood (timber-frame construction).",
