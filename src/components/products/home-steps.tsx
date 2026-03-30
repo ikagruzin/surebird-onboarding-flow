@@ -148,7 +148,7 @@ export const HomeDetailsStep = ({
             <label className="text-sm font-semibold text-foreground">
               Building Type
             </label>
-            <InfoTip text="Two-under-a-roof = a semi-detached home sharing one wall with a neighbour. Canal house = a traditional narrow Dutch city house, typically along a canal." />
+            <InfoTip text="Two-under-a-roof = a semi-detached house sharing one roof with a neighboring property. Canal house = a traditional narrow, multi-story house along a canal, typical of Dutch city centers." />
           </div>
           <NativeSelect
             value={state.buildingType}
