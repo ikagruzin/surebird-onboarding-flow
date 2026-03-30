@@ -136,7 +136,7 @@ export const HomeDetailsStep = ({
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="No problem! You can manually adjust the details of your home below to make sure everything is 100% accurate."
+      message="No problem! You can manually adjust the details of your home below to make sure everything is accurate."
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
