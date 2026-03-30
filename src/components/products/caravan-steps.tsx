@@ -15,7 +15,7 @@ import { getSelectionGridClass } from "@/lib/grid-layout";
 /* ─── Step 1: Context & Usage ─── */
 
 const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
-  const showMobileHomeQ = state.caravanType === "Touring caravan" || state.caravanType === "Folding trailer";
+  const showMobileHomeQ = state.caravanType === "Touring caravan";
   const showFloodQ = state.caravanType === "Mobile home" || state.usedAsMobileHome === "Yes";
 
   return (
