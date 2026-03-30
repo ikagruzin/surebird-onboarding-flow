@@ -15,6 +15,7 @@ import {
 } from "./shared-ui";
 import { homeProduct, HOME_OPTIONS } from "@/config/products/home";
 import type { ProductStepProps } from "@/config/products/types";
+import { getSelectionGridClass } from "@/lib/grid-layout";
 import {
   Tooltip,
   TooltipContent,
