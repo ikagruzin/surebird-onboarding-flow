@@ -31,6 +31,8 @@ export interface SelectionCardProps
   label: string;
   /** Optional icon rendered before the label */
   icon?: React.ReactNode;
+  /** Optional icon rendered after the label (e.g. info tooltip) */
+  rightIcon?: React.ReactNode;
   /** Whether to show a radio indicator (circle) or checkbox indicator */
   indicator?: "radio" | "checkbox" | "none";
 }
