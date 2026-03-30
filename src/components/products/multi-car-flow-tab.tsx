@@ -16,7 +16,7 @@ import { TacoMessage } from "@/components/onboarding/taco-message";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { cn } from "@/lib/utils";
 
-type Phase = "steps" | "add-prompt";
+type Phase = "steps" | "add-prompt" | "done";
 
 export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: string }>(
   ({ productId }, ref) => {
