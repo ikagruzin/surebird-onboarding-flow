@@ -15,6 +15,7 @@ import {
 } from "./shared-ui";
 import { homeProduct, HOME_OPTIONS } from "@/config/products/home";
 import type { ProductStepProps } from "@/config/products/types";
+import { getSelectionGridClass } from "@/lib/grid-layout";
 import {
   Tooltip,
   TooltipContent,
@@ -64,7 +65,7 @@ export const HomePresetStep = ({
         ))}
       </ul>
 
-      <div className="mt-5 grid grid-cols-2 gap-2">
+      <div className={`mt-5 ${getSelectionGridClass(["Yes", "No"])}`}>
         <SelectionCard
           label="Yes"
           selected={state.presetAnswer === "yes"}
@@ -176,7 +177,7 @@ export const HomeDetailsStep = ({
           <label className="text-sm font-semibold text-foreground mb-2 block">
             Construction Materials
           </label>
-          <div className="space-y-2">
+           <div className={getSelectionGridClass(HOME_OPTIONS.constructionMaterials)}>
             {HOME_OPTIONS.constructionMaterials.map((opt) => {
               const tooltips: Record<string, string> = {
                 "Wooden skeleton": "The main structural frame is made of wood (timber-frame construction).",
@@ -200,7 +201,7 @@ export const HomeDetailsStep = ({
           <label className="text-sm font-semibold text-foreground mb-2 block">
             Floor Material
           </label>
-          <div className="space-y-2">
+          <div className={getSelectionGridClass(HOME_OPTIONS.floorMaterials)}>
             {HOME_OPTIONS.floorMaterials.map((opt) => {
               const tooltips: Record<string, string> = {
                 "No floors": "Ground-level only, with no additional story floors above (e.g., concrete slab on grade).",
@@ -222,7 +223,7 @@ export const HomeDetailsStep = ({
           <label className="text-sm font-semibold text-foreground mb-2 block">
             Roof Shape
           </label>
-          <div className="space-y-2">
+          <div className={getSelectionGridClass(HOME_OPTIONS.roofShapes)}>
             {HOME_OPTIONS.roofShapes.map((opt) => {
               const tooltips: Record<string, string> = {
                 "Special": "An unconventional roof shape such as a dome, mansard, or multi-angled design.",
@@ -304,7 +305,7 @@ export const HomeCoveragePathStep = ({
       onAnimationComplete={onAnimationComplete}
     />
     <Card>
-      <CardContent className="pt-6 space-y-2">
+      <CardContent className={`pt-6 ${getSelectionGridClass(COVERAGE_OPTIONS.map(o => o.label))}`}>
         {COVERAGE_OPTIONS.map((opt) => (
           <SelectionCard
             key={opt.key}
