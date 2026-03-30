@@ -2,9 +2,9 @@
  * Step components for the Home insurance product.
  * Each component implements ProductStepProps.
  */
-import { Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Check, Info } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { SelectionCard } from "@/components/ui/selection-card";
 import { TacoMessage } from "@/components/onboarding/taco-message";
 import {
   SectionCard,
@@ -15,6 +15,27 @@ import {
 } from "./shared-ui";
 import { homeProduct, HOME_OPTIONS } from "@/config/products/home";
 import type { ProductStepProps } from "@/config/products/types";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+/* ─── Reusable info tooltip ─── */
+
+const InfoTip = ({ text }: { text: string }) => (
+  <TooltipProvider delayDuration={200}>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Info className="w-4 h-4 text-muted-foreground shrink-0 cursor-help" />
+      </TooltipTrigger>
+      <TooltipContent side="top" className="max-w-xs text-xs">
+        {text}
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+);
 
 /* ─── Step: Preset Verification ─── */
 
@@ -31,7 +52,7 @@ export const HomePresetStep = ({
       onAnimationComplete={onAnimationComplete}
     />
 
-    <SectionCard title="Is this information correct?">
+    <SectionCard title="My house is/has:">
       <ul className="space-y-3 mb-5">
         {homeProduct.presetChecklist!.map((item) => (
           <li key={item} className="flex items-start gap-3">
@@ -43,28 +64,26 @@ export const HomePresetStep = ({
         ))}
       </ul>
 
-      <div className="mt-5 grid grid-cols-2 gap-3">
-        <Button
-          variant="outline"
+      <div className="mt-5 space-y-2">
+        <SelectionCard
+          label="Yes"
+          selected={state.presetAnswer === "yes"}
+          indicator="radio"
           onClick={() =>
             onAutoAdvance(
               { presetAnswer: "yes", ...homeProduct.presetState },
               "preset-verification",
             )
           }
-          className={state.presetAnswer === "yes" ? "border-primary bg-primary/10" : ""}
-        >
-          Yes
-        </Button>
-        <Button
-          variant="outline"
+        />
+        <SelectionCard
+          label="No"
+          selected={state.presetAnswer === "no"}
+          indicator="radio"
           onClick={() =>
             onAutoAdvance({ presetAnswer: "no" }, "preset-verification")
           }
-          className={state.presetAnswer === "no" ? "border-primary bg-primary/10" : ""}
-        >
-          No
-        </Button>
+        />
       </div>
     </SectionCard>
   </div>
@@ -203,6 +222,31 @@ export const HomeDetailsStep = ({
 
 /* ─── Step: Coverage Path ─── */
 
+const COVERAGE_OPTIONS: {
+  key: string;
+  label: string;
+  tooltip: string;
+}[] = [
+  {
+    key: "household",
+    label: "Household goods",
+    tooltip:
+      "Covers everything inside your home — furniture, electronics, clothing, and personal belongings.",
+  },
+  {
+    key: "building",
+    label: "Building",
+    tooltip:
+      "Covers the physical structure of your home — walls, roof, floors, fitted kitchen, and bathroom installations.",
+  },
+  {
+    key: "both",
+    label: "Household goods + Building",
+    tooltip:
+      "Full protection for both your belongings and the building itself — the most comprehensive option.",
+  },
+];
+
 export const HomeCoveragePathStep = ({
   state,
   onAutoAdvance,
@@ -211,38 +255,74 @@ export const HomeCoveragePathStep = ({
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="Great. Now, what would you like to protect today? You can insure your belongings, the building itself, or both for full peace of mind."
+      message="What would you like to insure?"
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
     <Card>
-      <CardContent className="pt-6">
-        <SegmentedControl
-          options={["Household Goods", "Building", "Both"]}
-          value={
-            state.coverageChoice === "household"
-              ? "Household Goods"
-              : state.coverageChoice === "building"
-                ? "Building"
-                : state.coverageChoice === "both"
-                  ? "Both"
-                  : ""
-          }
-          onChange={(v) => {
-            const map: Record<string, string> = {
-              "Household Goods": "household",
-              Building: "building",
-              Both: "both",
-            };
-            onAutoAdvance({ coverageChoice: map[v] }, "coverage-path");
-          }}
-        />
+      <CardContent className="pt-6 space-y-2">
+        {COVERAGE_OPTIONS.map((opt) => (
+          <div key={opt.key} className="relative">
+            <SelectionCard
+              label={opt.label}
+              selected={state.coverageChoice === opt.key}
+              indicator="radio"
+              onClick={() =>
+                onAutoAdvance({ coverageChoice: opt.key }, "coverage-path")
+              }
+            />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2">
+              <InfoTip text={opt.tooltip} />
+            </div>
+          </div>
+        ))}
       </CardContent>
     </Card>
   </div>
 );
 
 /* ─── Step: Contents Insurance ─── */
+
+const CONTENTS_ITEMS: {
+  field: string;
+  amountField: string;
+  label: string;
+  threshold: string;
+  tooltip: string;
+}[] = [
+  {
+    field: "highValueAV",
+    amountField: "highValueAVAmount",
+    label: "High-value Audiovisual",
+    threshold: "€12,000",
+    tooltip:
+      "Covers high-end audio and video equipment like home cinema systems, premium speakers, and professional-grade TVs.",
+  },
+  {
+    field: "jewelry",
+    amountField: "jewelryAmount",
+    label: "Jewelry",
+    threshold: "€6,000",
+    tooltip:
+      "Covers valuable jewelry items such as watches, rings, necklaces, and other precious accessories.",
+  },
+  {
+    field: "specialAssets",
+    amountField: "specialAssetsAmount",
+    label: "Special assets",
+    threshold: "€15,000",
+    tooltip:
+      "Covers art, antiques, collections, and other high-value possessions that exceed standard coverage limits.",
+  },
+  {
+    field: "ownerInterest",
+    amountField: "ownerInterestAmount",
+    label: "Owner interest",
+    threshold: "€6,000",
+    tooltip:
+      "Covers improvements you've made to a rented property — like a new kitchen or bathroom — that aren't part of the building insurance.",
+  },
+];
 
 export const HomeContentsStep = ({
   state,
@@ -259,46 +339,54 @@ export const HomeContentsStep = ({
 
     <SectionCard title="Contents Insurance">
       <div className="space-y-5">
-        <ToggleRow
-          label="High-value Audiovisual"
-          sublabel=">€12k"
-          checked={state.highValueAV}
-          onChange={(v) => onUpdate("highValueAV", v)}
-          showAmount
-          amount={state.highValueAVAmount}
-          onAmountChange={(v) => onUpdate("highValueAVAmount", v)}
-        />
-        <ToggleRow
-          label="Jewelry"
-          sublabel=">€6k"
-          checked={state.jewelry}
-          onChange={(v) => onUpdate("jewelry", v)}
-          showAmount
-          amount={state.jewelryAmount}
-          onAmountChange={(v) => onUpdate("jewelryAmount", v)}
-        />
-        <ToggleRow
-          label="Special assets"
-          sublabel=">€15k"
-          checked={state.specialAssets}
-          onChange={(v) => onUpdate("specialAssets", v)}
-          showAmount
-          amount={state.specialAssetsAmount}
-          onAmountChange={(v) => onUpdate("specialAssetsAmount", v)}
-        />
-        <ToggleRow
-          label="Owner interest"
-          sublabel=">€6k"
-          checked={state.ownerInterest}
-          onChange={(v) => onUpdate("ownerInterest", v)}
-          showAmount
-          amount={state.ownerInterestAmount}
-          onAmountChange={(v) => onUpdate("ownerInterestAmount", v)}
-        />
+        <p className="text-sm text-muted-foreground">
+          Select if it's worth more than the stated amount
+        </p>
+
+        {CONTENTS_ITEMS.map((item) => (
+          <div key={item.field} className="space-y-2">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-foreground">
+                  {item.label}
+                </span>
+                <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                  {item.threshold}
+                </span>
+                <InfoTip text={item.tooltip} />
+              </div>
+              <button
+                onClick={() => onUpdate(item.field, !state[item.field])}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${
+                  state[item.field] ? "bg-primary" : "bg-input"
+                }`}
+              >
+                <span
+                  className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${
+                    state[item.field] ? "translate-x-5" : "translate-x-0"
+                  }`}
+                />
+              </button>
+            </div>
+            {state[item.field] && (
+              <input
+                type="text"
+                placeholder="Enter amount (€)"
+                value={state[item.amountField] || ""}
+                onChange={(e) => onUpdate(item.amountField, e.target.value)}
+                className="w-full rounded-2xl border-2 border-input bg-background h-14 px-4 text-sm text-foreground focus:outline-none focus:border-primary"
+              />
+            )}
+          </div>
+        ))}
+
         <div className="border-t border-border pt-5">
-          <label className="text-sm font-semibold text-foreground mb-2 block">
-            Security
-          </label>
+          <div className="flex items-center gap-2 mb-2">
+            <label className="text-sm font-semibold text-foreground">
+              Any house security?
+            </label>
+            <InfoTip text="Security measures installed in your home, such as BORG-certified locks or police-marked valuables." />
+          </div>
           <SegmentedControl
             options={[...HOME_OPTIONS.securityOptions]}
             value={state.security}
@@ -306,9 +394,12 @@ export const HomeContentsStep = ({
           />
         </div>
         <div>
-          <label className="text-sm font-semibold text-foreground mb-2 block">
-            Net Income
-          </label>
+          <div className="flex items-center gap-2 mb-2">
+            <label className="text-sm font-semibold text-foreground">
+              Monthly net income (highest earner in your household)
+            </label>
+            <InfoTip text="We use this to estimate the replacement value of your household contents. Choose the monthly net income of the highest earner." />
+          </div>
           <SegmentedControl
             options={[...HOME_OPTIONS.netIncomeOptions]}
             value={state.netIncome}
@@ -316,9 +407,12 @@ export const HomeContentsStep = ({
           />
         </div>
         <div>
-          <label className="text-sm font-semibold text-foreground mb-2 block">
-            Outside Value
-          </label>
+          <div className="flex items-center gap-2 mb-2">
+            <label className="text-sm font-semibold text-foreground">
+              How much value do you take with you outside?
+            </label>
+            <InfoTip text="Items you regularly carry outside your home, like a laptop, phone, bicycle, or sports equipment." />
+          </div>
           <NativeSelect
             value={state.outsideValue}
             onChange={(e) => onUpdate("outsideValue", e.target.value)}
