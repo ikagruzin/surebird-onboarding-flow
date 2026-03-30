@@ -136,7 +136,7 @@ export const HomeDetailsStep = ({
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="No problem! You can manually adjust the details of your home below to make sure everything is 100% accurate."
+      message="No problem! You can manually adjust the details of your home below to make sure everything is accurate."
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
@@ -272,6 +272,12 @@ const COVERAGE_OPTIONS: {
   tooltip: string;
 }[] = [
   {
+    key: "both",
+    label: "Household goods + Building",
+    tooltip:
+      "Full protection for both your belongings and the building itself — the most comprehensive option.",
+  },
+  {
     key: "household",
     label: "Household goods",
     tooltip:
@@ -282,12 +288,6 @@ const COVERAGE_OPTIONS: {
     label: "Building",
     tooltip:
       "Covers the physical structure of your home — walls, roof, floors, fitted kitchen, and bathroom installations.",
-  },
-  {
-    key: "both",
-    label: "Household goods + Building",
-    tooltip:
-      "Full protection for both your belongings and the building itself — the most comprehensive option.",
   },
 ];
 
@@ -373,7 +373,7 @@ export const HomeContentsStep = ({
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="Let's look at your belongings. This covers everything that would fall out if you turned your house upside down—like your furniture, electronics, and jewelry."
+      message="Let's make sure your belongings are properly covered. Contents insurance protects what's inside your home — from furniture and electronics to clothing and valuables."
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
@@ -381,7 +381,7 @@ export const HomeContentsStep = ({
     <SectionCard title="Contents Insurance">
       <div className="space-y-5">
         <p className="text-sm text-muted-foreground">
-          Select if it's worth more than the stated amount
+          Select if your belongings worth more than the stated amount
         </p>
 
         {CONTENTS_ITEMS.map((item) => (
