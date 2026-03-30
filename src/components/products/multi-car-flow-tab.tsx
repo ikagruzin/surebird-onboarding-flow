@@ -47,7 +47,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
       return config.validateStep(lastStep, inst.state);
     }, [config]);
 
-    const allComplete = instances.every(isInstanceComplete);
+    const allComplete = instances.every(isInstanceComplete) && phase !== "add-prompt";
 
     // Taco animation
     const tacoKey = `${active?.id}-${currentStepId}`;
