@@ -89,7 +89,7 @@ export const homeProduct: ProductConfig = {
     ownerInterest: false,
     ownerInterestAmount: "",
     security: "None",
-    netIncome: "",
+    netIncome: "€2,000 - €3,000",
     outsideValue: "€0",
     monumental: false,
     quoted: false,
