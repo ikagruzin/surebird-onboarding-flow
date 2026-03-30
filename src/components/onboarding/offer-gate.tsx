@@ -29,7 +29,7 @@ export const OfferGate = ({
         <div className="bg-card border border-border rounded-3xl p-8 shadow-2xl animate-scale-in">
           <div className="flex items-center gap-3 mb-6">
             <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
-            <p className="text-base text-foreground">
+            <p className="text-base font-medium text-foreground">
               Great news! Your personal offer is ready. Where do you want me to send it?
             </p>
           </div>
