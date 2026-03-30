@@ -5,6 +5,7 @@ import { legalProduct } from "./legal";
 import { accidentsProduct } from "./accidents";
 import { caravanProduct } from "./caravan";
 import { carProduct } from "./car";
+import { travelProduct } from "./travel";
 
 /** Registry of all product configs. Add new products here. */
 const PRODUCT_CONFIGS: Record<string, ProductConfig> = {
@@ -14,6 +15,7 @@ const PRODUCT_CONFIGS: Record<string, ProductConfig> = {
   accidents: accidentsProduct,
   caravan: caravanProduct,
   car: carProduct,
+  travel: travelProduct,
 };
 
 /** Get a single product config by id. Returns undefined if not found. */
