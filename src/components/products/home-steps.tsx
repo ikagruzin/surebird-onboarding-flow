@@ -225,7 +225,7 @@ export const HomeDetailsStep = ({
           <div className="space-y-2">
             {HOME_OPTIONS.roofShapes.map((opt) => {
               const tooltips: Record<string, string> = {
-                "Special": "An unconventional roof shape like a dome, saw-tooth, or mansard.",
+                "Special": "An unconventional roof shape such as a dome, mansard, or multi-angled design.",
               };
               return (
                 <SelectionCard
