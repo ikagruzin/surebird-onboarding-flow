@@ -10,6 +10,7 @@ import { TacoMessage } from "@/components/onboarding/taco-message";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import { DutchPlateInput } from "@/components/ui/dutch-plate-input";
 import { CAR_OPTIONS, lookupPlate } from "@/config/products/car";
 import { getSelectionGridClass } from "@/lib/grid-layout";
 import { Car, Check } from "lucide-react";
