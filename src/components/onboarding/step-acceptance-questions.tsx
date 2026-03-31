@@ -58,12 +58,16 @@ interface StepAcceptanceQuestionsProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 export const StepAcceptanceQuestions = ({
   answers,
   onUpdateAnswer,
   animateTaco,
+  errors,
+  onClearError,
 }: StepAcceptanceQuestionsProps) => {
   const hasYesAnswer = Object.values(answers).some((v) => v === "yes");
 

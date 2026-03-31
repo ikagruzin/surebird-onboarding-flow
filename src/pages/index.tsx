@@ -201,7 +201,9 @@ export const Index = () => {
         });
       }
       case "confirm-details":
-        return !!(state.firstName && state.lastName && state.email.includes("@"));
+        return !!(state.firstName && state.lastName && state.email.includes("@") && state.phone.replace(/\D/g, "").length >= 10);
+      case "acceptance-questions":
+        return Object.keys(state.acceptanceAnswers).length >= 7;
       case "phone-verification":
         return false; // auto-submits
       case "idin-verification":
