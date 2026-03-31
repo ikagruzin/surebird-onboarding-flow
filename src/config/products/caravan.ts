@@ -16,7 +16,7 @@ export const CARAVAN_OPTIONS = {
     "Hobby", "Fendt", "Knaus", "Dethleffs", "Adria",
     "Bürstner", "Hymer", "Caravelair", "Eriba", "Other",
   ],
-  conditionOptions: ["Brand New", "Used"],
+  conditionOptions: ["New", "Second hand"],
 } as const;
 
 /* ─── State shape ─── */
