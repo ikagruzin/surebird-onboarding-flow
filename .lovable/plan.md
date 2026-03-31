@@ -1,32 +1,37 @@
 
 
-## Fix Product Workbench: Add Validation & Error Support
+## Dynamic Progress Bar for Set Preferences
 
-### Root Cause
+### What You Want
 
-The Product Workbench (`product-workbench.tsx`) was never updated when the "always-enabled CTA with validation on click" pattern was added. Two problems:
+One single progress bar that reflects total completion across **all selected products**, accounting for each product's internal steps. When every product's steps are fully filled, the bar reaches 100%.
 
-1. **`handleNext` skips validation** — it calls `flow.goNext()` directly without calling `flow.tryNext()` first. So on the last step, if `isValid` is true (which can happen with default/prefilled values), it immediately completes. On intermediate steps it advances without checking.
+### How It Works Today
 
-2. **Step components don't receive `errors` or `onClearError`** — the `StepComponent` render (line 173-179) passes no error props, so even if validation ran, fields wouldn't show red messages.
+The progress bar counts answered questions from `QUESTIONS_BY_TYPE` — a legacy system that most products no longer use. Products like Home, Car, Caravan, Travel, Legal, and Accidents use `ProductFlowTab` with multi-step flows, but their progress is **not counted** at all.
 
-3. **Footer still uses old `disabled` pattern** — passing `disabled={!flow.isValid}` instead of always-enabled with shake.
+### Solution
 
-### Fix
+Replace the static `QUESTIONS_BY_TYPE`-based calculation with one that reads each product's actual progress from `productFlowRefs`:
 
-**File: `src/pages/product-workbench.tsx`**
+```text
+For each selected product:
+  - If completed (in completedTabs) → count as total/total
+  - If has a productFlowRef → read ref.progress { completed, total }
+  - Fallback (legacy) → count answered QUESTIONS_BY_TYPE
 
-1. Update `handleNext` to validate before advancing:
-   - Call `flow.tryNext()` first; if it returns `false`, stop (errors are set).
-   - Only proceed with `goNext()` or completion if validation passes.
+Sum all completed / Sum all totals → progressPercent
+```
 
-2. Pass `errors={flow.validationErrors}` and `onClearError={flow.clearError}` to `StepComponent`.
+**Re-render trigger**: Refs don't cause re-renders, so we add a `progressTick` counter that increments whenever a tab completes or internal navigation happens (via a polling interval or callback).
 
-3. Remove `disabled` from `StickyFooter`, add `shake={flow.shakeFooter}`.
+### Key Detail
 
-### Files Changed
+`ProductFlowTabHandle` already exposes `progress: { completed: number; total: number }` — this data is available, just not being read.
+
+### File Changes
 
 | File | Change |
 |------|--------|
-| `src/pages/product-workbench.tsx` | Add validation to handleNext, pass error props to steps, update footer |
+| `src/components/onboarding/step-preferences.tsx` | Replace lines 323-329 with dynamic calculation that reads from `productFlowRefs.current[id]?.progress` for product-flow products, marks completed tabs as 100%, and falls back to `QUESTIONS_BY_TYPE` for legacy. Add a `useEffect` interval (every 300ms) to poll ref progress and update a state variable, ensuring the bar re-renders as users fill steps. |
 
