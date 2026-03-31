@@ -121,7 +121,7 @@ export const carProduct: ProductConfig = {
         state.damageFreeYears !== "" &&
         state.kmPerYear !== "";
       if (state.mainDriver === "No") {
-        return baseValid && state.driverRelationship !== "" && state.driverAge !== "";
+        return baseValid && state.driverRelationship !== "" && state.driverAge !== "" && state.legalOwner !== "";
       }
       return baseValid;
     }
