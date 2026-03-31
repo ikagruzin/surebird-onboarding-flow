@@ -108,6 +108,7 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
               <Check className="h-5 w-5 text-primary" />
             </div>
           )}
+          <ValidationError message={errors?.plateConfirmed} />
         </div>
       </SectionCard>
     </div>
