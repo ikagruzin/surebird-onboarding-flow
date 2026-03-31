@@ -139,6 +139,8 @@ export const HomeDetailsStep = ({
   onUpdate,
   animateTaco,
   onAnimationComplete,
+  errors,
+  onClearError,
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
