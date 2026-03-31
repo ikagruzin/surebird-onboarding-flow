@@ -191,7 +191,6 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
                 />
               ))}
             </div>
-            </div>
           </div>
 
           {/* Input for plate or chassis */}
