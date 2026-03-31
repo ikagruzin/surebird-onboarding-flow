@@ -91,6 +91,7 @@ interface DutchPlateInputProps {
   onComplete?: (raw: string) => void;
   className?: string;
   disabled?: boolean;
+  autoFocus?: boolean;
 }
 
 export const DutchPlateInput = ({
