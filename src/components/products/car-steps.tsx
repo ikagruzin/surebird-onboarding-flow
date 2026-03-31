@@ -179,10 +179,12 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
                     label="Age"
                     type="number"
                     value={state.driverAge || ""}
-                    onChange={(e) => onUpdate("driverAge", e.target.value)}
+                    onChange={(e) => { onUpdate("driverAge", e.target.value); onClearError?.("driverAge"); }}
                     min={18}
                     max={99}
+                    className={errors?.driverAge ? "border-destructive" : ""}
                   />
+                  <ValidationError message={errors?.driverAge} />
                 </div>
               )}
 
