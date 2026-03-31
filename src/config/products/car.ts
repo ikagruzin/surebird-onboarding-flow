@@ -4,7 +4,7 @@ import type { ProductConfig } from "./types";
 
 export const CAR_OPTIONS = {
   mainDriverOptions: ["Yes", "No"],
-  driverRelationshipOptions: ["My partner", "My child"],
+  driverRelationshipOptions: ["Myself", "My partner", "My child"],
   legalOwnerOptions: ["Myself", "My partner"],
   kmBrackets: [
     "0 – 7,500 km",
@@ -119,7 +119,8 @@ export const carProduct: ProductConfig = {
     if (stepId === "car-driver") {
       if (state.mainDriver === "") return false;
       if (state.mainDriver === "No") {
-        return state.driverRelationship !== "" && state.driverAge !== "" && state.legalOwner !== "";
+        const needsAge = state.driverRelationship !== "Myself";
+        return state.driverRelationship !== "" && (!needsAge || state.driverAge !== "") && state.legalOwner !== "";
       }
       return true;
     }
