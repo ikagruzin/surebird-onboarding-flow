@@ -20,7 +20,7 @@ const OPTIONS = [
   { id: "single-children", label: "Single &\nChildren", image: familySingleChildren },
 ];
 
-export const StepFamily = ({ familyStatus, onSelect, animateTaco }: StepFamilyProps) => {
+export const StepFamily = ({ familyStatus, onSelect, animateTaco, errors, onClearError }: StepFamilyProps) => {
   return (
     <div className="animate-fade-in">
       <TacoMessage message="What is your family status?" animate={animateTaco} />
