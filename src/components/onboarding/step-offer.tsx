@@ -615,7 +615,7 @@ export const StepOffer = ({
             </li>
           ))}
         </ul>
-        <div className="pt-4 border-t border-border">
+        <div className="pt-4">
           <img src={trustpilotReview} alt="Trustpilot 4.6 Excellent" className="h-9" />
         </div>
       </div>
