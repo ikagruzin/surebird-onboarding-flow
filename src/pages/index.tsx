@@ -672,7 +672,7 @@ export const Index = () => {
   if (isStandalone) {
     return (
       <div className="pb-0">
-      <FlowSwitcher currentFlowId={flowId} onSwitch={switchFlow} />
+      {flowId !== "final" && <FlowSwitcher currentFlowId={flowId} onSwitch={switchFlow} />}
       <DevSkipButton
         flow={flow}
         onSkip={(data, idx) => {
