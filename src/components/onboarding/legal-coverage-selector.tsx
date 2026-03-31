@@ -103,18 +103,14 @@ export const LegalCoverageSelector = ({ selected, onChange }: LegalCoverageSelec
                 : "border-border hover:border-muted-foreground/30"
             } ${isLocked ? "cursor-default" : "cursor-pointer"}`}
           >
-            {/* Checkbox — hidden for locked items */}
-            {!isLocked ? (
-              <div
-                className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 mt-0.5 ${
-                  isSelected ? "border-primary bg-primary" : "border-muted-foreground/40"
-                }`}
-              >
-                {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
-              </div>
-            ) : (
-              <div className="w-5 h-5 shrink-0 mt-0.5" />
-            )}
+            {/* Checkbox */}
+            <div
+              className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 mt-0.5 ${
+                isSelected ? "border-primary bg-primary" : "border-muted-foreground/40"
+              }`}
+            >
+              {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
+            </div>
 
             {/* Icon */}
             <div
@@ -136,11 +132,7 @@ export const LegalCoverageSelector = ({ selected, onChange }: LegalCoverageSelec
             {/* Badge */}
             {opt.badge && (
               <span
-                className={`absolute top-3 right-3 text-2xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${
-                  isSelected
-                    ? "bg-primary/15 text-primary"
-                    : "bg-muted text-muted-foreground"
-                }`}
+              className="absolute top-3 right-3 text-2xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap bg-primary/10 text-primary"
               >
                 {opt.badge}
               </span>
