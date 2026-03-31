@@ -782,7 +782,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
             <ProductFlowTab
               ref={(r) => { productFlowRefs.current[id] = r; }}
               productId={id}
-              animateTaco={animateTaco}
+              isActive={activeTab === id && !isTransitioning}
             />
           </div>
         ))}
