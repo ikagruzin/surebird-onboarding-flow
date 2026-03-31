@@ -106,6 +106,7 @@ const ProductFlowView = ({ config, componentMap, onBack }: ProductFlowViewProps)
   const flow = useProductFlow(config);
 
   const handleNext = () => {
+    if (!flow.tryNext()) return;
     if (flow.isLastStep) {
       flow.reset();
       onBack();
@@ -172,10 +173,15 @@ const ProductFlowView = ({ config, componentMap, onBack }: ProductFlowViewProps)
       <div className="max-w-3xl mx-auto px-6 md:px-12 lg:px-16 py-8 md:py-12">
         <StepComponent
           state={flow.state}
-          onUpdate={flow.update}
+          onUpdate={(key, value) => {
+            flow.update(key, value);
+            flow.clearError(key);
+          }}
           onAutoAdvance={flow.autoAdvance}
           animateTaco={flow.shouldAnimateTaco}
           onAnimationComplete={flow.markAnimated}
+          errors={flow.validationErrors}
+          onClearError={flow.clearError}
         />
       </div>
 
@@ -185,10 +191,10 @@ const ProductFlowView = ({ config, componentMap, onBack }: ProductFlowViewProps)
         savings={45}
         onNext={handleNext}
         onBack={flow.stepIdx > 0 ? handleBack : undefined}
-        disabled={!flow.isValid}
         buttonLabel={flow.isLastStep ? "Complete" : "Next"}
         showSavings={false}
         showNextButton
+        shake={flow.shakeFooter}
       />
     </>
   );
