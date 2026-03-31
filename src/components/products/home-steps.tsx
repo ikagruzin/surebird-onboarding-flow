@@ -179,8 +179,9 @@ export const HomeDetailsStep = ({
           <ChipSelect
             options={[...HOME_OPTIONS.usageOptions]}
             selected={state.usage}
-            onChange={(v) => onUpdate("usage", v)}
+            onChange={(v) => { onUpdate("usage", v); onClearError?.("usage"); }}
           />
+          <ValidationError message={errors?.usage} />
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
