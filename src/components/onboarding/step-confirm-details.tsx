@@ -24,6 +24,8 @@ export const StepConfirmDetails = ({
   email,
   onUpdateField,
   animateTaco,
+  errors,
+  onClearError,
 }: StepConfirmDetailsProps) => {
   return (
     <div className="animate-fade-in space-y-8 pb-8">
