@@ -245,7 +245,10 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
 
           {/* Length - always independent */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Length</p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium text-foreground">Length</p>
+              <InfoTip text="Measure the body only. Please enter the length of the caravan's living area. Do not include the drawbar (the metal V-shaped part at the front that attaches to your car)." />
+            </div>
             <NativeSelect
               value={state.length}
               onChange={(e) => onUpdate("length", e.target.value)}
