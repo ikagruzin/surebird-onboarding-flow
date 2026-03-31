@@ -5,6 +5,7 @@ export interface InsuranceType {
   label: string;
   icon: string; // lucide icon name mapped in component
   savings: number;
+  tooltip: string;
 }
 
 export interface WizardState {
