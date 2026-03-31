@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Phone, Mail, ChevronRight, Lock } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { SelectionCard } from "@/components/ui/selection-card";
+import { TacoMessage } from "./taco-message";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 
 interface OfferGateProps {
