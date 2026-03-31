@@ -132,6 +132,7 @@ export const TravelSportStep = ({
               value={state.playsSport}
               onChange={(v) => {
                 onUpdate("playsSport", v);
+                onClearError?.("playsSport");
                 if (v === "No") {
                   onAutoAdvance(
                     {
@@ -146,6 +147,7 @@ export const TravelSportStep = ({
                 }
               }}
             />
+            <ValidationError message={errors?.playsSport} />
           </div>
 
           {showSportDetails && (
