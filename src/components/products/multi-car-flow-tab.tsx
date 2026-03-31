@@ -210,7 +210,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
         return false; // at very beginning → parent handles
       },
       isComplete: phase === "done",
-      shakeFooter: false,
+      shakeFooter: shakeFooterState,
       progress: {
         completed: instances.reduce((sum, inst, i) => {
           const s = config.getStepSequence(inst.state);
