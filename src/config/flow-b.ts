@@ -45,7 +45,7 @@ export const flowB: FlowConfig = {
       id: "family",
       phase: "about-you",
       hideSavings: true,
-      hideNextButton: true,
+      buttonLabel: "Next",
       getNextStep: (state) => (state.familyStatus === "single" ? "ready" : "family-details"),
     },
     {

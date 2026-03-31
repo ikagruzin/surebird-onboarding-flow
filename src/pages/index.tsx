@@ -300,8 +300,17 @@ export const Index = () => {
   }, []);
 
   const handleNext = () => {
-    // Family step auto-advances via onSelect
-    if (currentStepId === "family" && state.familyStatus) return;
+    // Family step: if already selected, auto-advance on Next click
+    if (currentStepId === "family" && state.familyStatus) {
+      setValidationErrors({});
+      const config = flow.steps[stepIndex];
+      if (config?.getNextStep) {
+        const nextId = config.getNextStep(state);
+        if (nextId) { goToStepId(nextId); return; }
+      }
+      goToIndex(getNextIndex());
+      return;
+    }
 
     // Preferences delegates internally
     if (currentStepId === "preferences" && prefsRef.current) {
@@ -341,7 +350,7 @@ export const Index = () => {
       if (overlay) return;
 
       // Skip steps that auto-advance or have no footer
-      const noEnterSteps: StepId[] = ["family", "phone-verification", "loading", "offer", "success", "product-selection"];
+      const noEnterSteps: StepId[] = ["phone-verification", "loading", "offer", "success", "product-selection"];
       if (noEnterSteps.includes(currentStepId as StepId)) return;
 
       // Don't trigger if user is in a textarea
@@ -450,6 +459,7 @@ export const Index = () => {
             familyStatus={state.familyStatus}
             onSelect={(value) => {
               setState((s) => ({ ...s, familyStatus: value }));
+              setValidationErrors({});
               const config = flow.steps[stepIndex];
               if (config?.getNextStep) {
                 const nextId = config.getNextStep({ ...state, familyStatus: value });
@@ -460,6 +470,8 @@ export const Index = () => {
             }}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         );
       case "family-details":

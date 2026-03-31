@@ -1,4 +1,5 @@
 import { TacoMessage } from "./taco-message";
+import { ValidationError } from "./validation-error";
 import familySingle from "@/assets/family-single.png";
 import familyPartner from "@/assets/family-partner.png";
 import familySingleChildren from "@/assets/family-single-children.png";
@@ -9,6 +10,8 @@ interface StepFamilyProps {
   onSelect: (value: string) => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 const OPTIONS = [
@@ -18,7 +21,7 @@ const OPTIONS = [
   { id: "single-children", label: "Single &\nChildren", image: familySingleChildren },
 ];
 
-export const StepFamily = ({ familyStatus, onSelect, animateTaco }: StepFamilyProps) => {
+export const StepFamily = ({ familyStatus, onSelect, animateTaco, errors, onClearError }: StepFamilyProps) => {
   return (
     <div className="animate-fade-in">
       <TacoMessage message="What is your family status?" animate={animateTaco} />
@@ -28,7 +31,7 @@ export const StepFamily = ({ familyStatus, onSelect, animateTaco }: StepFamilyPr
           {OPTIONS.map((option) => (
             <button
               key={option.id}
-              onClick={() => onSelect(option.id)}
+              onClick={() => { onClearError?.("familyStatus"); onSelect(option.id); }}
               className={`flex flex-col items-center gap-3 rounded-xl border-2 p-4 pt-6 pb-5 transition-all ${
                 familyStatus === option.id
                   ? "border-primary bg-primary/5"
@@ -46,6 +49,7 @@ export const StepFamily = ({ familyStatus, onSelect, animateTaco }: StepFamilyPr
             </button>
           ))}
         </div>
+        <ValidationError message={errors?.familyStatus} />
       </div>
     </div>
   );

@@ -32,6 +32,8 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
     const [phase, setPhase] = useState<Phase>("steps");
     const [addPromptAnswer, setAddPromptAnswer] = useState<AddPromptAnswer>("");
     const [hasAskedAddPrompt, setHasAskedAddPrompt] = useState(false);
+    const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+    const [shakeFooterState, setShakeFooterState] = useState(false);
 
     const stateRef = useRef(instances);
     stateRef.current = instances;
@@ -91,10 +93,35 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
       }, 400);
     }, [activeIdx, config]);
 
+    // Clear a single validation error
+    const clearError = useCallback((field: string) => {
+      setValidationErrors((prev) => {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      });
+    }, []);
+
+    // Validate current step and show errors
+    const tryValidate = useCallback((): boolean => {
+      if (config.getValidationErrors) {
+        const errs = config.getValidationErrors(currentStepId, active?.state || {});
+        if (Object.keys(errs).length > 0) {
+          setValidationErrors(errs);
+          setShakeFooterState(true);
+          setTimeout(() => setShakeFooterState(false), 500);
+          return false;
+        }
+      }
+      setValidationErrors({});
+      return true;
+    }, [config, currentStepId, active?.state]);
+
     // Navigation
     const goNextStep = useCallback(() => {
       const nextIdx = activeStepIdx + 1;
       if (nextIdx < steps.length) {
+        setValidationErrors({});
         setStepIdxMap((prev) => ({ ...prev, [active.id]: nextIdx }));
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
@@ -141,23 +168,26 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
 
         if (isLastStep && isValid) {
           if (!hasAskedAddPrompt) {
-            // First car completed → show "add another?" prompt
             setPhase("add-prompt");
             return true;
           } else {
-            // Subsequent cars → done, let parent advance
             setPhase("done");
             onComplete?.();
             return true;
           }
         }
 
-        if (!isLastStep && isValid) {
+        // Not valid or not last step — validate first
+        if (!tryValidate()) {
+          return true; // consume event, errors shown
+        }
+
+        if (!isLastStep) {
           goNextStep();
           return true;
         }
 
-        return true; // not valid yet, consume event
+        return true;
       },
       handleBack: () => {
         if (phase === "add-prompt") {
@@ -180,7 +210,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
         return false; // at very beginning → parent handles
       },
       isComplete: phase === "done",
-      shakeFooter: false,
+      shakeFooter: shakeFooterState,
       progress: {
         completed: instances.reduce((sum, inst, i) => {
           const s = config.getStepSequence(inst.state);
@@ -254,10 +284,12 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
         {(phase === "steps" || phase === "done") && StepComponent && (
           <StepComponent
             state={active.state}
-            onUpdate={update}
+            onUpdate={(key, value) => { update(key, value); clearError(key); }}
             onAutoAdvance={autoAdvance}
             animateTaco={shouldAnimateTaco}
             onAnimationComplete={markAnimated}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         )}
 
