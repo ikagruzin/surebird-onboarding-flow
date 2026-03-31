@@ -42,7 +42,7 @@ const InfoTip = ({ text }: { text: string }) => (
 
 /* ─── Step 1: Identity ─── */
 
-const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   const [lookupDone, setLookupDone] = useState(state.plateConfirmed === true);
 
   const handleLookup = useCallback((raw?: string) => {
