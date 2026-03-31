@@ -117,7 +117,7 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
 
 /* ─── Step 2: Driver ─── */
 
-const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   const showDriverDetails = state.mainDriver === "No";
   const showAgeField = showDriverDetails && state.driverRelationship !== "" && state.driverRelationship !== "Myself";
 
