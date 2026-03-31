@@ -320,7 +320,34 @@ export const Index = () => {
     goToIndex(getPrevIndex());
   };
 
-  const phaseLabel = currentStepConfig?.phase
+  // Enter key to advance steps
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Enter") return;
+
+      // Skip if a popover, dialog, dropdown, or select menu is open
+      const overlay = document.querySelector(
+        "[data-radix-popper-content-wrapper], [role='dialog'], [data-state='open'][role='listbox']"
+      );
+      if (overlay) return;
+
+      // Skip steps that auto-advance or have no footer
+      const noEnterSteps: StepId[] = ["family", "phone-verification", "loading", "offer", "success", "product-selection"];
+      if (noEnterSteps.includes(currentStepId as StepId)) return;
+
+      // Don't trigger if user is in a textarea
+      const active = document.activeElement;
+      if (active instanceof HTMLTextAreaElement) return;
+
+      e.preventDefault();
+      handleNext();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentStepId, handleNext]);
+
+
     ? flow.phases.find((p) => p.id === currentStepConfig.phase)?.label
     : null;
 
