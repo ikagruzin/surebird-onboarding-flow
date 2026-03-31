@@ -1,37 +1,52 @@
 
 
-## Dynamic Progress Bar for Set Preferences
+## Sidebar Info Card on Product Hover
 
-### What You Want
+### What
 
-One single progress bar that reflects total completion across **all selected products**, accounting for each product's internal steps. When every product's steps are fully filled, the bar reaches 100%.
+When the user hovers over any product on the first page, an info card instantly appears in the sidebar (above the "Ask Taco" section) with a short explanation of that insurance type. When the mouse leaves, the card disappears.
 
-### How It Works Today
+### How
 
-The progress bar counts answered questions from `QUESTIONS_BY_TYPE` — a legacy system that most products no longer use. Products like Home, Car, Caravan, Travel, Legal, and Accidents use `ProductFlowTab` with multi-step flows, but their progress is **not counted** at all.
+1. **Add tooltip descriptions to data** (`src/components/onboarding/types.ts`)
+   - Add a `tooltip` field to `InsuranceType` and populate each product with a short plain-language description
 
-### Solution
+2. **Add `hoveredProduct` prop to Sidebar** (`src/components/onboarding/sidebar.tsx`)
+   - Accept an optional `hoveredProduct: InsuranceType | null` prop
+   - When set, render an info card above the "Ask Taco" section showing the product icon, name, and description
+   - Use `animate-fade-in` for a smooth appearance
 
-Replace the static `QUESTIONS_BY_TYPE`-based calculation with one that reads each product's actual progress from `productFlowRefs`:
+3. **Wire hover events in StepOne** (`src/components/onboarding/step-one.tsx`)
+   - Add `hoveredProduct` state
+   - On each product button: `onMouseEnter` → set hovered product, `onMouseLeave` → clear it
+   - Pass `hoveredProduct` to `<Sidebar>`
 
-```text
-For each selected product:
-  - If completed (in completedTabs) → count as total/total
-  - If has a productFlowRef → read ref.progress { completed, total }
-  - Fallback (legacy) → count answered QUESTIONS_BY_TYPE
+### Info Card Design
 
-Sum all completed / Sum all totals → progressPercent
-```
+Positioned in the sidebar between the progress/logo area and the "Ask Taco" section. Shows:
+- Product icon (small)
+- Product name (bold)
+- 1-2 sentence description
 
-**Re-render trigger**: Refs don't cause re-renders, so we add a `progressTick` counter that increments whenever a tab completes or internal navigation happens (via a polling interval or callback).
+Styled as a bordered card with `rounded-xl`, `bg-muted/50`, matching the existing design system.
 
-### Key Detail
+### Tooltip Copy
 
-`ProductFlowTabHandle` already exposes `progress: { completed: number; total: number }` — this data is available, just not being read.
+| Product | Text |
+|---------|------|
+| Liability | "Covers damage you accidentally cause to others or their property — one of the most essential insurances." |
+| Home | "Protects your house, belongings, and valuables against fire, theft, water damage, and storms." |
+| Travel | "Covers medical emergencies, trip cancellations, lost luggage, and other costs while abroad." |
+| Car | "Mandatory vehicle insurance covering damage to others, your own car, or both." |
+| Legal expenses | "Provides legal assistance and covers attorney fees when you face a legal dispute." |
+| Accidents | "Pays out a lump sum in case of permanent disability or death caused by an accident." |
+| Caravan | "Covers your caravan or mobile home against damage, theft, and liability." |
 
-### File Changes
+### Files Changed
 
 | File | Change |
 |------|--------|
-| `src/components/onboarding/step-preferences.tsx` | Replace lines 323-329 with dynamic calculation that reads from `productFlowRefs.current[id]?.progress` for product-flow products, marks completed tabs as 100%, and falls back to `QUESTIONS_BY_TYPE` for legacy. Add a `useEffect` interval (every 300ms) to poll ref progress and update a state variable, ensuring the bar re-renders as users fill steps. |
+| `src/components/onboarding/types.ts` | Add `tooltip` field to `InsuranceType` + data |
+| `src/components/onboarding/sidebar.tsx` | Accept `hoveredProduct` prop, render info card |
+| `src/components/onboarding/step-one.tsx` | Add hover state, pass to Sidebar |
 
