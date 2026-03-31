@@ -200,7 +200,10 @@ const StepCarRisk = ({ state, onUpdate, animateTaco, onAnimationComplete }: Prod
 
           {/* Damage-free years */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">How many damage-free years do you have?</p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium text-foreground">How many damage-free years do you have?</p>
+              <InfoTip text="The number of years you have had car insurance without claiming damage. The higher this is, the more discount you get. Insurance companies have a central database in which they keep track of everyone's claim-free years, but they still want you to tell them the number." />
+            </div>
             <FloatingLabelInput
               label="Number of years"
               type="number"
