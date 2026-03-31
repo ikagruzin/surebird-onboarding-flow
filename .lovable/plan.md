@@ -1,91 +1,82 @@
 
 
-## Always-Enabled CTA with Inline Validation Errors
+## Add Validation Errors to Product Steps & Finalise Phase (Excluding Defaults)
 
-### Approach: "Validate on Click" with Field-Level Error Messages
+### Scope
 
-Instead of disabling the Next button, it stays **always enabled**. When clicked with incomplete/invalid data, it:
-1. Scrolls to the first invalid field
-2. Shows a red error message below the problematic input
-3. Optionally shakes the button briefly for tactile feedback
+Add inline validation errors only for fields that **start empty and require user action**. Fields with defaults/preselected values are excluded since they're always valid.
 
-This is the best UX pattern because:
-- Users always know the button is interactive (no confusion about why it's greyed out)
-- Error messages are contextual and specific (not a generic toast)
-- It follows established form patterns (similar to how banks/government forms work)
+### Fields That Need Errors
 
-### Validation Rules & Error Messages Per Step
+**Home**
+- `presetAnswer` (empty) → "Please confirm whether your house matches"
+- `role` (empty) → "Please select tenant or homeowner"
+- `coverageChoice` (empty) → "Please select your coverage type"
+- `home-details` step: `buildingType`, `usage`, `constructionMaterial`, `floorMaterial`, `roofShape`, `roofMaterial` (all empty) → specific messages per field
+- Contents/Building steps: all have defaults → **no errors needed**
 
-| Step | Field | Error Message (EN) |
-|------|-------|--------------------|
-| product-selection | No insurance selected | "Please select at least one insurance" |
-| name | firstName empty | "Please enter your first name" |
-| address | postcode empty/short | "Please enter a valid postcode" |
-| address | houseNumber empty | "Please enter your house number" |
-| birthdate | empty or incomplete | "Please enter your date of birth (dd-mm-yyyy)" |
-| family | no selection | "Please select your family status" |
-| start-date | missing date for a product | "Please select a start date for all products" |
-| confirm-details | firstName empty | "First name is required" |
-| confirm-details | lastName empty | "Surname is required" |
-| confirm-details | email invalid | "Please enter a valid email address" |
-| idin-verification | iban too short | "Please complete iDIN verification" |
-| final-preview | terms unchecked | "You must agree to the terms" |
-| final-preview | debit unchecked | "You must give debit permission" |
+**Car**
+- `licensePlate` (empty) → "Please enter a valid license plate"
+- `plateConfirmed` (false) → "Please confirm your vehicle details"
+- `mainDriver` (empty) → "Please indicate if you are the main driver"
+- `driverRelationship` (empty, conditional) → "Please select the driver's relationship"
+- `driverAge` (empty, conditional) → "Please select the driver's age"
+- `legalOwner` (empty, conditional) → "Please indicate the legal owner"
+- `damageFreeYears` (empty) → "Please select your damage-free years"
+- `kmPerYear` (empty) → "Please select your annual mileage"
+
+**Caravan**
+- `caravanType` (empty) → "Please select your caravan type"
+- `usage` (empty) → "Please select how you use your caravan"
+- `brand` (empty) → "Please select the brand"
+- `yearOfConstruction` (empty) → "Please enter the year of construction"
+- `length` (empty) → "Please select the length"
+- `condition` (empty) → "Please select the condition"
+- `catalogueValue` (empty) → "Please enter the catalogue value"
+- `purchaseValue` (empty, conditional) → "Please enter the purchase value"
+
+**Travel**
+- `playsSport` (empty) → "Please indicate if you play sports while travelling"
+- All other fields have defaults → **no errors needed**
+
+**Liability** → all fields have defaults → **no errors needed**
+**Legal** → has defaults → **no errors needed**
+**Accidents** → has defaults → **no errors needed**
+
+**Finalise Phase**
+- `phone` (currently not validated) → "Please enter your phone number"
+- `acceptance-questions` (unanswered) → "Please answer all questions before continuing"
 
 ### Implementation
 
-**1. Add validation error state to `index.tsx`**
+1. **Add `getValidationErrors(stepId, state)` to `ProductConfig`** — returns `Record<string, string>` (empty = valid). Only Home, Car, Caravan, Travel implement it.
 
-- Add `validationErrors: Record<string, string>` state
-- Create a `validate()` function that returns field-error pairs for the current step
-- Modify `handleNext()`: if `validate()` returns errors, set them in state and scroll to the first error field instead of advancing
-- Clear errors when the user changes step or updates a field
+2. **Update `useProductFlow`** — add `validationErrors` and `shakeFooter` state. On next, call `getValidationErrors`; if non-empty, set errors + shake instead of advancing.
 
-**2. Create `ValidationError` component**
+3. **Update `ProductFlowTab`** — pass `errors` and `onClearError` to step components via extended `ProductStepProps`.
 
-A small reusable component: red text below a field with a fade-in animation.
+4. **Update product step components** — show `ValidationError` below fields with errors, apply `border-destructive` styling. Add `onClearError` calls on user interaction.
 
-```text
-<ValidationError message="Please enter your first name" />
-```
+5. **Update `index.tsx`** — add phone validation to `confirm-details` and acceptance-questions validation.
 
-**3. Update step components to accept and display errors**
-
-Each step component receives an optional `errors?: Record<string, string>` prop. Fields that have an error key show the `ValidationError` below them. The field's border turns red (`border-destructive`).
-
-Affected step components:
-- `step-name.tsx` — firstName error
-- `step-address.tsx` — postcode, houseNumber errors
-- `step-birthdate.tsx` — birthdate error
-- `step-one.tsx` — product selection error (shown as alert above grid)
-- `step-start-date.tsx` — per-product date errors
-- `step-confirm-details.tsx` — firstName, lastName, email errors
-- `step-idin-verification.tsx` — iban error
-- `step-final-preview.tsx` — terms/debit errors
-
-**4. Update `StickyFooter`**
-
-- Remove `disabled` prop usage — button is always clickable
-- Add a subtle shake animation (`animate-shake`) on invalid click via a `triggerShake` state
-
-**5. Clear errors on field change**
-
-Pass an `onClearError(fieldId)` callback to step components. When the user types or selects, the specific error is cleared immediately so the red state disappears as they fix it.
+6. **Update `step-confirm-details.tsx`** and **`step-acceptance-questions.tsx`** — display errors.
 
 ### Files Changed
 
 | File | Change |
 |------|--------|
-| `src/pages/index.tsx` | Add validation logic, error state, modify handleNext |
-| `src/components/onboarding/validation-error.tsx` | New — reusable error message component |
-| `src/components/onboarding/sticky-footer.tsx` | Remove disabled styling, add shake animation |
-| `src/components/onboarding/step-name.tsx` | Accept & display errors |
-| `src/components/onboarding/step-address.tsx` | Accept & display errors |
-| `src/components/onboarding/step-birthdate.tsx` | Accept & display errors |
-| `src/components/onboarding/step-one.tsx` | Accept & display errors |
-| `src/components/onboarding/step-start-date.tsx` | Accept & display errors |
-| `src/components/onboarding/step-confirm-details.tsx` | Accept & display errors |
-| `src/components/onboarding/step-idin-verification.tsx` | Accept & display errors |
-| `src/components/onboarding/step-final-preview.tsx` | Accept & display errors |
-| `src/index.css` | Add shake keyframe animation |
+| `src/config/products/types.ts` | Add optional `getValidationErrors` to ProductConfig |
+| `src/config/products/home.ts` | Add `getValidationErrors` for preset, role, home-details, coverage-path |
+| `src/config/products/car.ts` | Add `getValidationErrors` for identity, driver, usage |
+| `src/config/products/caravan.ts` | Add `getValidationErrors` for context, specs, financial |
+| `src/config/products/travel.ts` | Add `getValidationErrors` for sport step |
+| `src/hooks/use-product-flow.ts` | Add error state, shake, validate-on-next |
+| `src/components/products/product-flow-tab.tsx` | Pass errors + onClearError to step components |
+| `src/components/products/home-steps.tsx` | Show errors on applicable fields |
+| `src/components/products/car-steps.tsx` | Show errors on applicable fields |
+| `src/components/products/caravan-steps.tsx` | Show errors on applicable fields |
+| `src/components/products/travel-steps.tsx` | Show error on playsSport |
+| `src/pages/index.tsx` | Add phone + acceptance-questions validation |
+| `src/components/onboarding/step-confirm-details.tsx` | Show phone error |
+| `src/components/onboarding/step-acceptance-questions.tsx` | Accept + show errors |
 
