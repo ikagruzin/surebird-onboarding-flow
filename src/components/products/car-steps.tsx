@@ -129,10 +129,6 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
         <div className="space-y-6">
           {/* Main driver */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <p className="text-sm font-medium text-foreground">Are you the main driver and legal owner?</p>
-              <InfoTip text="The main driver is the one who drives the most in the car. This is not necessarily the legal owner, it can also be, for example, a child or partner of the owner." />
-            </div>
             <SegmentedControl
               options={[...CAR_OPTIONS.mainDriverOptions]}
               value={state.mainDriver || ""}
