@@ -259,13 +259,15 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
             </div>
             <NativeSelect
               value={state.length}
-              onChange={(e) => onUpdate("length", e.target.value)}
+              onChange={(e) => { onUpdate("length", e.target.value); onClearError?.("length"); }}
               placeholder="Select length"
+              className={errors?.length ? "border-destructive" : ""}
             >
               {CARAVAN_OPTIONS.lengthOptions.map((l) => (
                 <option key={l} value={l}>{l}</option>
               ))}
             </NativeSelect>
+            <ValidationError message={errors?.length} />
           </div>
         </div>
       </SectionCard>
