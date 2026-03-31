@@ -157,6 +157,7 @@ export const StepAcceptanceQuestions = ({
             </div>
           ))}
         </div>
+        <ValidationError message={errors?.acceptanceQuestions} />
       </TooltipProvider>
 
       {/* Taco review message for "Yes" answers */}
