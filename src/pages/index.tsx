@@ -459,6 +459,7 @@ export const Index = () => {
             familyStatus={state.familyStatus}
             onSelect={(value) => {
               setState((s) => ({ ...s, familyStatus: value }));
+              setValidationErrors({});
               const config = flow.steps[stepIndex];
               if (config?.getNextStep) {
                 const nextId = config.getNextStep({ ...state, familyStatus: value });
@@ -469,6 +470,8 @@ export const Index = () => {
             }}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         );
       case "family-details":
