@@ -13,7 +13,30 @@ import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { DutchPlateInput } from "@/components/ui/dutch-plate-input";
 import { CAR_OPTIONS, lookupPlate } from "@/config/products/car";
 import { getSelectionGridClass } from "@/lib/grid-layout";
-import { Car, Check } from "lucide-react";
+import { Car, Check, Info } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+/* ─── Shared InfoTip ─── */
+
+const InfoTip = ({ text }: { text: string }) => (
+  <TooltipProvider delayDuration={150}>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button type="button" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="More info">
+          <Info className="h-4 w-4" />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="top" className="max-w-xs text-sm">
+        {text}
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+);
 
 /* ─── Step 1: Identity ─── */
 
@@ -58,7 +81,10 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
         <div className="space-y-6">
           {/* License plate input */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">License plate number</p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium text-foreground">License plate number</p>
+              <InfoTip text="We use the license plate of your car to retrieve the details of your car from the RDW, among others. You can only take out car insurance for vehicles with a Dutch license plate." />
+            </div>
             <DutchPlateInput
               value={state.licensePlate || ""}
               onChange={handlePlateChange}
@@ -101,7 +127,10 @@ const StepCarRisk = ({ state, onUpdate, animateTaco, onAnimationComplete }: Prod
         <div className="space-y-6">
           {/* Main driver */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Are you the main driver and legal owner?</p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium text-foreground">Are you the main driver and legal owner?</p>
+              <InfoTip text="The main driver is the one who drives the most in the car. This is not necessarily the legal owner, it can also be, for example, a child or partner of the owner." />
+            </div>
             <SegmentedControl
               options={[...CAR_OPTIONS.mainDriverOptions]}
               value={state.mainDriver || ""}
@@ -110,6 +139,12 @@ const StepCarRisk = ({ state, onUpdate, animateTaco, onAnimationComplete }: Prod
                 if (v === "Yes") {
                   onUpdate("driverRelationship", "");
                   onUpdate("driverAge", "");
+                  onUpdate("legalOwner", "");
+                } else {
+                  // Default legal owner to "Myself" when selecting No
+                  if (!state.legalOwner) {
+                    onUpdate("legalOwner", "Myself");
+                  }
                 }
               }}
             />
@@ -119,7 +154,7 @@ const StepCarRisk = ({ state, onUpdate, animateTaco, onAnimationComplete }: Prod
           {showDriverDetails && (
             <>
               <div className="space-y-2">
-                <p className="text-sm font-medium text-foreground">What is the driver's relationship to you?</p>
+                <p className="text-sm font-medium text-foreground">Who is the main driver?</p>
                 <div className={getSelectionGridClass([...CAR_OPTIONS.driverRelationshipOptions])}>
                   {CAR_OPTIONS.driverRelationshipOptions.map((opt) => (
                     <SelectionCard
@@ -142,6 +177,20 @@ const StepCarRisk = ({ state, onUpdate, animateTaco, onAnimationComplete }: Prod
                   min={18}
                   max={99}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-foreground">Who is the legal owner?</p>
+                <div className={getSelectionGridClass([...CAR_OPTIONS.legalOwnerOptions])}>
+                  {CAR_OPTIONS.legalOwnerOptions.map((opt) => (
+                    <SelectionCard
+                      key={opt}
+                      label={opt}
+                      selected={state.legalOwner === opt}
+                      onClick={() => onUpdate("legalOwner", opt)}
+                    />
+                  ))}
+                </div>
               </div>
             </>
           )}
