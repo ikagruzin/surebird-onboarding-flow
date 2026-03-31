@@ -4,8 +4,7 @@
  */
 import { useState } from "react";
 import { TacoMessage } from "@/components/onboarding/taco-message";
-import { SelectionCard } from "@/components/ui/selection-card";
-import { SectionCard } from "./shared-ui";
+import { SectionCard, SegmentedControl } from "./shared-ui";
 import {
   Tooltip,
   TooltipContent,
@@ -17,7 +16,6 @@ import {
   Stethoscope,
   XCircle,
   Briefcase,
-  ShieldCheck,
   Luggage,
   AlertTriangle,
   Scale,
@@ -38,10 +36,10 @@ const InfoTip = ({ text }: { text: string }) => (
       <TooltipTrigger asChild>
         <button
           type="button"
-          className="inline-flex items-center justify-center"
+          className="text-muted-foreground hover:text-foreground transition-colors"
           onClick={(e) => e.stopPropagation()}
         >
-          <Info className="h-4 w-4 text-muted-foreground" />
+          <Info className="h-4 w-4" />
         </button>
       </TooltipTrigger>
       <TooltipContent side="top" className="max-w-xs text-xs">
@@ -69,35 +67,32 @@ export const TravelFoundationsStep = ({
       onAnimationComplete={onAnimationComplete}
     />
 
-    <SectionCard title="Up to how many days do you travel per year?">
-      <div className="space-y-2">
-        {TRAVEL_DAY_OPTIONS.map((opt) => (
-          <SelectionCard
-            key={opt}
-            label={opt}
-            selected={state.travelDays === opt}
-            indicator="radio"
-            onClick={() => onUpdate("travelDays", opt)}
-          />
-        ))}
-      </div>
-    </SectionCard>
-
     <SectionCard>
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-sm font-medium text-foreground">Coverage Area</span>
-        <InfoTip text="'Europe' includes Morocco, Israel, Egypt, and Tunisia. If you're in doubt, we recommend 'Worldwide' so you can travel anywhere without a second thought!" />
-      </div>
-      <div className="space-y-2">
-        {COVERAGE_OPTIONS.map((opt) => (
-          <SelectionCard
-            key={opt}
-            label={opt}
-            selected={state.coverageArea === opt}
-            indicator="radio"
-            onClick={() => onUpdate("coverageArea", opt)}
+      <div className="space-y-6">
+        {/* Travel Days */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-foreground">
+            Up to how many days do you travel per year?
+          </p>
+          <SegmentedControl
+            options={[...TRAVEL_DAY_OPTIONS]}
+            value={state.travelDays}
+            onChange={(v) => onUpdate("travelDays", v)}
           />
-        ))}
+        </div>
+
+        {/* Coverage Area */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-foreground">Coverage Area</p>
+            <InfoTip text="'Europe' includes Morocco, Israel, Egypt, and Tunisia. If you're in doubt, we recommend 'Worldwide' so you can travel anywhere without a second thought!" />
+          </div>
+          <SegmentedControl
+            options={[...COVERAGE_OPTIONS]}
+            value={state.coverageArea}
+            onChange={(v) => onUpdate("coverageArea", v)}
+          />
+        </div>
       </div>
     </SectionCard>
   </div>
@@ -105,9 +100,12 @@ export const TravelFoundationsStep = ({
 
 /* ─── Step 2: Sport & Equipment ─── */
 
+const YES_NO = ["Yes", "No"];
+
 export const TravelSportStep = ({
   state,
   onUpdate,
+  onAutoAdvance,
   animateTaco,
   onAnimationComplete,
 }: ProductStepProps) => {
@@ -123,100 +121,96 @@ export const TravelSportStep = ({
       />
 
       <SectionCard>
-        <div className="space-y-2">
-          {["Yes", "No"].map((opt) => (
-            <SelectionCard
-              key={opt}
-              label={opt}
-              selected={state.playsSport === opt}
-              indicator="radio"
-              onClick={() => {
-                onUpdate("playsSport", opt);
-                if (opt === "No") {
-                  onUpdate("adventureSports", "No");
-                  onUpdate("bringsEquipment", "No");
-                  onUpdate("golfEquipment", "No");
-                  onUpdate("divingEquipment", "No");
+        <div className="space-y-6">
+          {/* Play sport? */}
+          <div className="space-y-2">
+            <SegmentedControl
+              options={[...YES_NO]}
+              value={state.playsSport}
+              onChange={(v) => {
+                onUpdate("playsSport", v);
+                if (v === "No") {
+                  onAutoAdvance(
+                    {
+                      playsSport: "No",
+                      adventureSports: "No",
+                      bringsEquipment: "No",
+                      golfEquipment: "No",
+                      divingEquipment: "No",
+                    },
+                    "sport",
+                  );
                 }
               }}
             />
-          ))}
-        </div>
-      </SectionCard>
+          </div>
 
-      {showSportDetails && (
-        <>
-          <SectionCard>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-sm font-medium text-foreground">Do you practice adventure sports?</span>
-              <InfoTip text="Includes abseiling, rafting, climbing, diving, and parasailing." />
-            </div>
-            <div className="space-y-2">
-              {["Yes", "No"].map((opt) => (
-                <SelectionCard
-                  key={opt}
-                  label={opt}
-                  selected={state.adventureSports === opt}
-                  indicator="radio"
-                  onClick={() => onUpdate("adventureSports", opt)}
+          {showSportDetails && (
+            <>
+              {/* Adventure sports */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-foreground">
+                    Do you practice adventure sports?
+                  </p>
+                  <InfoTip text="Includes abseiling, rafting, climbing, diving, and parasailing." />
+                </div>
+                <SegmentedControl
+                  options={[...YES_NO]}
+                  value={state.adventureSports}
+                  onChange={(v) => onUpdate("adventureSports", v)}
                 />
-              ))}
-            </div>
-          </SectionCard>
+              </div>
 
-          <SectionCard title="Do you bring any other sports equipment?">
-            <div className="space-y-2">
-              {["Yes", "No"].map((opt) => (
-                <SelectionCard
-                  key={opt}
-                  label={opt}
-                  selected={state.bringsEquipment === opt}
-                  indicator="radio"
-                  onClick={() => {
-                    onUpdate("bringsEquipment", opt);
-                    if (opt === "No") {
+              {/* Brings equipment */}
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-foreground">
+                  Do you bring any other sports equipment?
+                </p>
+                <SegmentedControl
+                  options={[...YES_NO]}
+                  value={state.bringsEquipment}
+                  onChange={(v) => {
+                    onUpdate("bringsEquipment", v);
+                    if (v === "No") {
                       onUpdate("golfEquipment", "No");
                       onUpdate("divingEquipment", "No");
                     }
                   }}
                 />
-              ))}
-            </div>
-          </SectionCard>
+              </div>
 
-          {showEquipmentDetails && (
-            <>
-              <SectionCard title="Do you bring Golf equipment?">
-                <div className="space-y-2">
-                  {["Yes", "No"].map((opt) => (
-                    <SelectionCard
-                      key={opt}
-                      label={opt}
-                      selected={state.golfEquipment === opt}
-                      indicator="radio"
-                      onClick={() => onUpdate("golfEquipment", opt)}
+              {showEquipmentDetails && (
+                <>
+                  {/* Golf */}
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-foreground">
+                      Do you bring Golf equipment?
+                    </p>
+                    <SegmentedControl
+                      options={[...YES_NO]}
+                      value={state.golfEquipment}
+                      onChange={(v) => onUpdate("golfEquipment", v)}
                     />
-                  ))}
-                </div>
-              </SectionCard>
+                  </div>
 
-              <SectionCard title="Do you bring Diving equipment?">
-                <div className="space-y-2">
-                  {["Yes", "No"].map((opt) => (
-                    <SelectionCard
-                      key={opt}
-                      label={opt}
-                      selected={state.divingEquipment === opt}
-                      indicator="radio"
-                      onClick={() => onUpdate("divingEquipment", opt)}
+                  {/* Diving */}
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-foreground">
+                      Do you bring Diving equipment?
+                    </p>
+                    <SegmentedControl
+                      options={[...YES_NO]}
+                      value={state.divingEquipment}
+                      onChange={(v) => onUpdate("divingEquipment", v)}
                     />
-                  ))}
-                </div>
-              </SectionCard>
+                  </div>
+                </>
+              )}
             </>
           )}
-        </>
-      )}
+        </div>
+      </SectionCard>
     </div>
   );
 };
@@ -229,9 +223,7 @@ interface SupplementOption {
   description: string;
   icon: React.ElementType;
   badge?: string;
-  /** If set, badge uses this style variant */
   badgeVariant?: "recommended" | "warning" | "info";
-  /** Cross-product: show badge only when condition is met */
   crossProductBadge?: {
     productId: string;
     label: string;
@@ -353,7 +345,6 @@ export const TravelSupplementsStep = ({
   };
 
   const resolveBadge = (opt: SupplementOption) => {
-    // Cross-product badge takes priority
     if (opt.crossProductBadge && selectedInsurances.includes(opt.crossProductBadge.productId)) {
       return { label: opt.crossProductBadge.label, variant: opt.crossProductBadge.variant };
     }
