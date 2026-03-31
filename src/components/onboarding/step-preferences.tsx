@@ -320,13 +320,49 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
   const showAllQuestions = questions.every(q => !q.autoAdvance);
   const allQuestionsAnswered = questions.every((q) => currentPrefs[q.id]);
 
-  // Total progress across all products
-  const totalQuestions = selectedInsurances.reduce((sum, id) => sum + (QUESTIONS_BY_TYPE[id]?.length || 0), 0);
-  const answeredQuestions = selectedInsurances.reduce((sum, id) => {
-    const qs = QUESTIONS_BY_TYPE[id] || [];
-    return sum + qs.filter(q => (preferences[id] || {})[q.id]).length;
-  }, 0);
-  const progressPercent = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
+  // Poll product flow refs for progress updates (refs don't trigger re-renders)
+  const [progressTick, setProgressTick] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setProgressTick((t) => t + 1), 300);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Total progress across all products (dynamic, reads from product flow refs)
+  const { progressPercent } = (() => {
+    // Reference progressTick to ensure recalculation
+    void progressTick;
+    let totalSteps = 0;
+    let completedSteps = 0;
+
+    selectedInsurances.forEach((id) => {
+      if (hasProductConfig(id)) {
+        // Product uses ProductFlowTab / MultiCarFlowTab
+        const flowRef = productFlowRefs.current[id];
+        if (completedTabs.includes(id)) {
+          const t = flowRef?.progress?.total || getProductConfig(id)!.stepDefs.length;
+          totalSteps += t;
+          completedSteps += t;
+        } else if (flowRef?.progress) {
+          totalSteps += flowRef.progress.total;
+          completedSteps += flowRef.progress.completed;
+        } else {
+          // Ref not mounted yet — use config step count
+          totalSteps += getProductConfig(id)!.stepDefs.length;
+        }
+      } else {
+        // Legacy question-based product
+        const qs = QUESTIONS_BY_TYPE[id] || [];
+        totalSteps += qs.length;
+        if (completedTabs.includes(id)) {
+          completedSteps += qs.length;
+        } else {
+          completedSteps += qs.filter((q) => (preferences[id] || {})[q.id]).length;
+        }
+      }
+    });
+
+    return { progressPercent: totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0 };
+  })();
 
   // Expose back/next handlers to parent
   useImperativeHandle(ref, () => ({
