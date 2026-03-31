@@ -100,6 +100,7 @@ export const DutchPlateInput = ({
   onComplete,
   className,
   disabled,
+  autoFocus,
 }: DutchPlateInputProps) => {
   const displayValue = formatDutchPlate(value);
 
