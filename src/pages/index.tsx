@@ -54,7 +54,8 @@ const INITIAL_STATE: WizardState = {
   phone: "+31",
   startDates: {},
   iban: "",
-  acceptanceAnswers: {},
+  acceptanceAnswers: { cancelled: "no", criminal: "no", claims: "no", bankrupt: "no", fraud: "no", bailiff: "no", healthy: "no" },
+  acceptanceConfirmed: false,
   agreeTerms: false,
   agreeDebit: false,
 };
@@ -299,6 +300,7 @@ export const Index = () => {
         const totalQs = 7;
         const answered = Object.keys(state.acceptanceAnswers).length;
         if (answered < totalQs) errs.acceptanceQuestions = "Please answer all questions before continuing";
+        if (!state.acceptanceConfirmed) errs.acceptanceConfirmed = "Please confirm that you have reviewed all answers";
         break;
       }
       case "idin-verification":
@@ -635,6 +637,11 @@ export const Index = () => {
                 acceptanceAnswers: { ...s.acceptanceAnswers, [qId]: val },
               }))
             }
+            confirmed={state.acceptanceConfirmed}
+            onToggleConfirmed={(val) => {
+              setState((s) => ({ ...s, acceptanceConfirmed: val }));
+              clearError("acceptanceConfirmed");
+            }}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}

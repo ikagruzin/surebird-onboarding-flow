@@ -1,6 +1,7 @@
 import { Info } from "lucide-react";
 import { TacoMessage } from "./taco-message";
 import { ValidationError } from "./validation-error";
+import { Checkbox } from "@/components/ui/checkbox";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import {
   Tooltip,
@@ -56,6 +57,8 @@ const QUESTIONS: AcceptanceQuestion[] = [
 interface StepAcceptanceQuestionsProps {
   answers: Record<string, string>;
   onUpdateAnswer: (questionId: string, value: string) => void;
+  confirmed: boolean;
+  onToggleConfirmed: (value: boolean) => void;
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
@@ -66,6 +69,8 @@ interface StepAcceptanceQuestionsProps {
 export const StepAcceptanceQuestions = ({
   answers,
   onUpdateAnswer,
+  confirmed,
+  onToggleConfirmed,
   animateTaco,
   errors,
   onClearError,
@@ -76,14 +81,12 @@ export const StepAcceptanceQuestions = ({
     <div className="animate-fade-in space-y-8 pb-8">
       {/* Taco message */}
       <TacoMessage
-        message="Almost there! Just a few final checks 📋 We need to confirm a few standard legal details required by all Dutch insurers."
+        message="Almost there! Just a few final checks 📋 We need to confirm a few standard legal details required by all Dutch insurers. Review and correct where necessary. You are responsible for providing accurate and complete information."
         animate={animateTaco}
       />
 
       {/* Why we ask card */}
       <div className="space-y-4">
-
-        {/* Why we ask card */}
         <div className="rounded-2xl border-2 border-input bg-primary/5 p-5 flex gap-3">
           <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
           <div>
@@ -176,7 +179,26 @@ export const StepAcceptanceQuestions = ({
           </div>
         </div>
       )}
+
+      {/* Confirmation checkbox */}
+      <div className="space-y-2">
+        <label
+          className="flex items-start gap-3 cursor-pointer"
+          onClick={() => {
+            onToggleConfirmed(!confirmed);
+          }}
+        >
+          <Checkbox
+            checked={confirmed}
+            onCheckedChange={(val) => onToggleConfirmed(!!val)}
+            className="mt-0.5"
+          />
+          <span className="text-sm text-foreground leading-snug">
+            I have reviewed all prefilled answers and confirmed that they are complete and accurate to the best of my knowledge
+          </span>
+        </label>
+        <ValidationError message={errors?.acceptanceConfirmed} />
+      </div>
     </div>
   );
 };
-
