@@ -32,6 +32,8 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
     const [phase, setPhase] = useState<Phase>("steps");
     const [addPromptAnswer, setAddPromptAnswer] = useState<AddPromptAnswer>("");
     const [hasAskedAddPrompt, setHasAskedAddPrompt] = useState(false);
+    const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+    const [shakeFooterState, setShakeFooterState] = useState(false);
 
     const stateRef = useRef(instances);
     stateRef.current = instances;
