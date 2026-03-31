@@ -36,13 +36,13 @@ export interface WizardState {
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [
-  { id: "liability", label: "Liability", icon: "Umbrella", savings: 45 },
-  { id: "home", label: "Home", icon: "Home", savings: 45 },
-  { id: "travel", label: "Travel", icon: "Plane", savings: 45 },
-  { id: "car", label: "Car", icon: "Car", savings: 45 },
-  { id: "legal", label: "Legal expenses", icon: "Scale", savings: 45 },
-  { id: "accidents", label: "Accidents", icon: "Zap", savings: 45 },
-  { id: "caravan", label: "Caravan", icon: "Caravan", savings: 30 },
+  { id: "liability", label: "Liability", icon: "Umbrella", savings: 45, tooltip: "Covers damage you accidentally cause to others or their property — one of the most essential insurances." },
+  { id: "home", label: "Home", icon: "Home", savings: 45, tooltip: "Protects your house, belongings, and valuables against fire, theft, water damage, and storms." },
+  { id: "travel", label: "Travel", icon: "Plane", savings: 45, tooltip: "Covers medical emergencies, trip cancellations, lost luggage, and other costs while abroad." },
+  { id: "car", label: "Car", icon: "Car", savings: 45, tooltip: "Mandatory vehicle insurance covering damage to others, your own car, or both." },
+  { id: "legal", label: "Legal expenses", icon: "Scale", savings: 45, tooltip: "Provides legal assistance and covers attorney fees when you face a legal dispute." },
+  { id: "accidents", label: "Accidents", icon: "Zap", savings: 45, tooltip: "Pays out a lump sum in case of permanent disability or death caused by an accident." },
+  { id: "caravan", label: "Caravan", icon: "Caravan", savings: 30, tooltip: "Covers your caravan or mobile home against damage, theft, and liability." },
 ];
 
 export const STEP_LABELS = [

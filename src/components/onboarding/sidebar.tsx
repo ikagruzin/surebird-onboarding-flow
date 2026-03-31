@@ -80,8 +80,17 @@ export const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, 
         )}
       </div>
 
-      {/* Ask Taco */}
+      {/* Info card + Ask Taco */}
       <div className="p-4">
+        {hoveredProduct && (
+          <div className="animate-fade-in mb-4 p-4 rounded-xl bg-muted/50 border border-border">
+            <div className="flex items-center gap-2 mb-2">
+              <img src={SIDEBAR_ICON_MAP[hoveredProduct.icon]} alt={hoveredProduct.label} className="w-7 h-7" />
+              <span className="text-sm font-bold text-foreground">{hoveredProduct.label}</span>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">{hoveredProduct.tooltip}</p>
+          </div>
+        )}
         {showAvatar && (
           <div className="flex items-center gap-3 mb-3">
             <img

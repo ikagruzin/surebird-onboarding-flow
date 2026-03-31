@@ -396,7 +396,7 @@ export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAud
 
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar showProgress={false} showAvatar={true} />
+      <Sidebar showProgress={false} showAvatar={true} hoveredProduct={hoveredProduct} />
 
       {/* Main content */}
       <div className="flex-1 flex flex-col items-center">
