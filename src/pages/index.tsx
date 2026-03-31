@@ -392,25 +392,7 @@ export const Index = () => {
           />
         );
       case "preferences":
-        return (
-          <StepPreferences
-            ref={prefsRef}
-            selectedInsurances={state.selectedInsurances}
-            preferences={state.preferences}
-            firstName={state.firstName}
-            phone={state.phone}
-            email={state.email}
-            savings={totalSavings}
-            onUpdatePreference={updatePreference}
-            onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
-            onUpdateEmail={(value) => setState((s) => ({ ...s, email: value }))}
-            onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
-            onNext={() => goToIndex(getNextIndex())}
-            onBack={() => goToIndex(getPrevIndex())}
-            animateTaco={shouldAnimateTaco}
-            skipContactStep={flow.steps.some((s) => s.id === "all-set")}
-          />
-        );
+        return null; // rendered always-mounted outside switch
       case "loading":
         return <StepLoading onComplete={() => goToIndex(getNextIndex())} animateTaco={shouldAnimateTaco} />;
       case "all-set":
@@ -581,7 +563,27 @@ export const Index = () => {
             <Progress value={getPhaseProgress()} className="h-2 [&>div]:bg-success" />
           </div>
         )}
-        {renderStep()}
+        {/* Keep StepPreferences always mounted to preserve state */}
+        <div className={currentStepId === "preferences" ? "" : "hidden"}>
+          <StepPreferences
+            ref={prefsRef}
+            selectedInsurances={state.selectedInsurances}
+            preferences={state.preferences}
+            firstName={state.firstName}
+            phone={state.phone}
+            email={state.email}
+            savings={totalSavings}
+            onUpdatePreference={updatePreference}
+            onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
+            onUpdateEmail={(value) => setState((s) => ({ ...s, email: value }))}
+            onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+            skipContactStep={flow.steps.some((s) => s.id === "all-set")}
+          />
+        </div>
+        {currentStepId !== "preferences" && renderStep()}
         {showFooter && <div aria-hidden className="h-36 md:h-40" />}
       </main>
 

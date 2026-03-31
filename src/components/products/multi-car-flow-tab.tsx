@@ -208,12 +208,12 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
                       setPhase("steps");
                     }}
                     className={cn(
-                      "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
+                      "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold transition-all border",
                       isActive
                         ? "bg-foreground text-background border-foreground"
                         : complete
-                          ? "bg-white border-success text-foreground"
-                          : "bg-white border-border text-foreground hover:border-muted-foreground/30"
+                          ? "bg-background border-success text-foreground hover:bg-muted/50"
+                          : "bg-background border-border text-foreground hover:bg-muted/50"
                     )}
                   >
                     {complete && (
@@ -239,7 +239,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
             {/* + Add car pill */}
             <button
               onClick={addCarInstance}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium border border-border bg-white text-muted-foreground hover:bg-muted transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border border-dashed border-border bg-background text-muted-foreground hover:bg-muted/50 transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
               Add car
