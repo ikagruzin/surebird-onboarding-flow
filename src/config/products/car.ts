@@ -50,12 +50,8 @@ export function createCarInstance(): CarInstance {
 
 /** Human-readable label for a car instance pill */
 export function getCarInstanceLabel(instance: CarInstance, index: number): string {
-  if (instance.state.licensePlate && instance.state.plateConfirmed) {
-    const raw = instance.state.licensePlate.toUpperCase().replace(/[^A-Z0-9]/g, "");
-    if (raw.length === 6) {
-      return `${raw.slice(0, 2)}-${raw.slice(2, 4)}-${raw.slice(4, 6)}`;
-    }
-    return raw;
+  if (instance.state.carBrand && instance.state.plateConfirmed) {
+    return instance.state.carModel?.split(" ")[0] || instance.state.carBrand;
   }
   return `Car ${index + 1}`;
 }
