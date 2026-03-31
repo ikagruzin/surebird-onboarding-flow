@@ -300,6 +300,7 @@ export const Index = () => {
         const totalQs = 7;
         const answered = Object.keys(state.acceptanceAnswers).length;
         if (answered < totalQs) errs.acceptanceQuestions = "Please answer all questions before continuing";
+        if (!state.acceptanceConfirmed) errs.acceptanceConfirmed = "Please confirm that you have reviewed all answers";
         break;
       }
       case "idin-verification":
