@@ -1,7 +1,8 @@
 /**
- * Car insurance — 2-step "High-Velocity" flow.
+ * Car insurance — 3-step "High-Velocity" flow.
  * Step 1: Identity (license plate lookup)
- * Step 2: Risk & Usage
+ * Step 2: Driver (main driver & legal owner)
+ * Step 3: Usage (damage-free years & km)
  */
 import { useState, useCallback } from "react";
 import type { ProductStepProps } from "@/config/products/types";
@@ -111,15 +112,15 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
   );
 };
 
-/* ─── Step 2: Risk & Usage ─── */
+/* ─── Step 2: Driver ─── */
 
-const StepCarRisk = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCarDriver = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
   const showDriverDetails = state.mainDriver === "No";
 
   return (
     <div className="space-y-6">
       <TacoMessage
-        message="Perfect. Now, just a few quick details about your driving habits to calculate your personal discount."
+        message="Are you the main driver and legal owner?"
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />
@@ -141,7 +142,6 @@ const StepCarRisk = ({ state, onUpdate, animateTaco, onAnimationComplete }: Prod
                   onUpdate("driverAge", "");
                   onUpdate("legalOwner", "");
                 } else {
-                  // Default legal owner to "Myself" when selecting No
                   if (!state.legalOwner) {
                     onUpdate("legalOwner", "Myself");
                   }
@@ -197,7 +197,24 @@ const StepCarRisk = ({ state, onUpdate, animateTaco, onAnimationComplete }: Prod
               </div>
             </>
           )}
+        </div>
+      </SectionCard>
+    </div>
+  );
+};
 
+/* ─── Step 3: Usage ─── */
+
+const StepCarUsage = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+  return (
+    <div className="space-y-6">
+      <TacoMessage
+        message="Perfect. Now, just a few quick details about your driving habits to calculate your personal discount."
+        animate={animateTaco}
+        onAnimationComplete={onAnimationComplete}
+      />
+      <SectionCard>
+        <div className="space-y-6">
           {/* Damage-free years */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
@@ -237,5 +254,6 @@ const StepCarRisk = ({ state, onUpdate, animateTaco, onAnimationComplete }: Prod
 
 export const CAR_STEP_COMPONENTS: Record<string, ComponentType<ProductStepProps>> = {
   "car-identity": StepCarIdentity,
-  "car-risk": StepCarRisk,
+  "car-driver": StepCarDriver,
+  "car-usage": StepCarUsage,
 };
