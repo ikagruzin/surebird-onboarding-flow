@@ -270,7 +270,14 @@ export const Index = () => {
         if (!state.firstName.trim()) errs.firstName = "First name is required";
         if (!state.lastName.trim()) errs.lastName = "Surname is required";
         if (!state.email.includes("@")) errs.email = "Please enter a valid email address";
+        if (state.phone.replace(/\D/g, "").length < 10) errs.phone = "Please enter your phone number";
         break;
+      case "acceptance-questions": {
+        const totalQs = 7;
+        const answered = Object.keys(state.acceptanceAnswers).length;
+        if (answered < totalQs) errs.acceptanceQuestions = "Please answer all questions before continuing";
+        break;
+      }
       case "idin-verification":
         if (state.iban.length < 5) errs.iban = "Please complete iDIN verification";
         break;
