@@ -399,42 +399,43 @@ export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAud
       <div className="flex-1 flex flex-col items-center">
         {/* Header */}
         <header className="w-full max-w-3xl flex items-center justify-end gap-3 px-6 py-4">
-          {/* Version switcher */}
-          <div className="flex items-center bg-muted rounded-lg p-0.5 mr-auto">
-            <button
-              onClick={() => setVersion("A")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                version === "A"
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-             <LayoutGrid className="w-3.5 h-3.5" />
-              {t.versionA}
-            </button>
-            <button
-              onClick={() => setVersion("B")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                version === "B"
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-             <Layers className="w-3.5 h-3.5" />
-              {t.versionB}
-            </button>
-            <button
-              onClick={() => setVersion("C")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                version === "C"
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-             <GalleryHorizontal className="w-3.5 h-3.5" />
-              {t.versionC}
-            </button>
-          </div>
+          {!hideVersionSwitcher && (
+            <div className="flex items-center bg-muted rounded-lg p-0.5 mr-auto">
+              <button
+                onClick={() => setVersion("A")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                  version === "A"
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+               <LayoutGrid className="w-3.5 h-3.5" />
+                {t.versionA}
+              </button>
+              <button
+                onClick={() => setVersion("B")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                  version === "B"
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+               <Layers className="w-3.5 h-3.5" />
+                {t.versionB}
+              </button>
+              <button
+                onClick={() => setVersion("C")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                  version === "C"
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+               <GalleryHorizontal className="w-3.5 h-3.5" />
+                {t.versionC}
+              </button>
+            </div>
+          )}
 
           {/* Language switcher */}
           <div className="flex items-center gap-1 bg-muted rounded-lg p-0.5">
