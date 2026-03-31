@@ -89,9 +89,10 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
             </div>
             <DutchPlateInput
               value={state.licensePlate || ""}
-              onChange={handlePlateChange}
+              onChange={(raw) => { handlePlateChange(raw); onClearError?.("licensePlate"); }}
               onComplete={handlePlateComplete}
             />
+            <ValidationError message={errors?.licensePlate} />
           </div>
 
           {/* Confirmation card */}
