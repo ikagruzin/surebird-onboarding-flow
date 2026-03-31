@@ -106,6 +106,7 @@ const ProductFlowView = ({ config, componentMap, onBack }: ProductFlowViewProps)
   const flow = useProductFlow(config);
 
   const handleNext = () => {
+    if (!flow.tryNext()) return;
     if (flow.isLastStep) {
       flow.reset();
       onBack();
