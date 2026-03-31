@@ -22,6 +22,10 @@ export interface ProductStepProps {
   animateTaco?: boolean;
   /** Called after the Taco animation finishes */
   onAnimationComplete?: () => void;
+  /** Validation errors keyed by field ID */
+  errors?: Record<string, string>;
+  /** Clear a specific validation error when user interacts with a field */
+  onClearError?: (field: string) => void;
 }
 
 /* ─── Product configuration ─── */

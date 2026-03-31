@@ -16,6 +16,8 @@ export interface ProductFlowTabHandle {
   isComplete: boolean;
   /** Progress info for the parent's progress bar */
   progress: { completed: number; total: number };
+  /** Whether the footer should shake */
+  shakeFooter: boolean;
 }
 
 interface ProductFlowTabProps {
@@ -34,9 +36,15 @@ export const ProductFlowTab = forwardRef<ProductFlowTabHandle, ProductFlowTabPro
       handleNext: () => {
         if (flow.isLastStep) {
           if (flow.isValid) return false; // complete → parent handles tab transition
-          return true; // not valid yet, consume event
+          // Not valid — try to show errors
+          flow.tryNext();
+          return true; // consume event
         }
-        if (flow.isValid) flow.goNext();
+        if (flow.isValid) {
+          flow.goNext();
+        } else {
+          flow.tryNext();
+        }
         return true; // handled internally
       },
       handleBack: () => {
@@ -51,7 +59,8 @@ export const ProductFlowTab = forwardRef<ProductFlowTabHandle, ProductFlowTabPro
         completed: Math.min(flow.stepIdx + (flow.isValid ? 1 : 0), flow.steps.length),
         total: flow.steps.length,
       },
-    }), [flow.isLastStep, flow.isValid, flow.stepIdx, flow.steps.length, flow.goNext, flow.goBack]);
+      shakeFooter: flow.shakeFooter,
+    }), [flow.isLastStep, flow.isValid, flow.stepIdx, flow.steps.length, flow.goNext, flow.goBack, flow.tryNext, flow.shakeFooter]);
 
     if (!StepComponent) {
       return (
@@ -64,10 +73,15 @@ export const ProductFlowTab = forwardRef<ProductFlowTabHandle, ProductFlowTabPro
     return (
       <StepComponent
         state={flow.state}
-        onUpdate={flow.update}
+        onUpdate={(key, value) => {
+          flow.update(key, value);
+          flow.clearError(key);
+        }}
         onAutoAdvance={flow.autoAdvance}
         animateTaco={flow.shouldAnimateTaco}
         onAnimationComplete={flow.markAnimated}
+        errors={flow.validationErrors}
+        onClearError={flow.clearError}
       />
     );
   },
