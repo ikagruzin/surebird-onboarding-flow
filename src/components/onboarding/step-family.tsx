@@ -9,6 +9,8 @@ interface StepFamilyProps {
   onSelect: (value: string) => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 const OPTIONS = [
