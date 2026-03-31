@@ -173,10 +173,15 @@ const ProductFlowView = ({ config, componentMap, onBack }: ProductFlowViewProps)
       <div className="max-w-3xl mx-auto px-6 md:px-12 lg:px-16 py-8 md:py-12">
         <StepComponent
           state={flow.state}
-          onUpdate={flow.update}
+          onUpdate={(key, value) => {
+            flow.update(key, value);
+            flow.clearError(key);
+          }}
           onAutoAdvance={flow.autoAdvance}
           animateTaco={flow.shouldAnimateTaco}
           onAnimationComplete={flow.markAnimated}
+          errors={flow.validationErrors}
+          onClearError={flow.clearError}
         />
       </div>
 
