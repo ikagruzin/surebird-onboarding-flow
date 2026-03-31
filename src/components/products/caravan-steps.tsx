@@ -42,7 +42,7 @@ const InfoTip = ({ text }: { text: string }) => (
 
 /* ─── Step 1: Context & Usage ─── */
 
-const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   const showMobileHomeQ = state.caravanType === "Touring caravan";
   const showFloodQ = state.caravanType === "Mobile home" || state.usedAsMobileHome === "Yes";
 
