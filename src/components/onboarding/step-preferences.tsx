@@ -770,6 +770,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
             <MultiCarFlowTab
               ref={(r) => { productFlowRefs.current["car"] = r; }}
               productId="car"
+              isActive={activeTab === "car" && !isTransitioning}
               onComplete={() => completeCurrentTab()}
             />
           </div>

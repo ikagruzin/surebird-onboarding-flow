@@ -6,7 +6,7 @@
  * Exposes the same ProductFlowTabHandle interface so the parent orchestrator
  * needs zero changes.
  */
-import { forwardRef, useImperativeHandle, useState, useCallback, useRef } from "react";
+import { forwardRef, useImperativeHandle, useState, useCallback, useRef, useEffect } from "react";
 import { Check, Plus, Trash2 } from "lucide-react";
 import type { ProductFlowTabHandle } from "./product-flow-tab";
 import { getProductConfig } from "@/config/products";
@@ -19,8 +19,14 @@ import { cn } from "@/lib/utils";
 type Phase = "steps" | "add-prompt" | "done";
 type AddPromptAnswer = "" | "yes" | "no";
 
-export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: string; onComplete?: () => void }>(
-  ({ productId, onComplete }, ref) => {
+interface MultiCarFlowTabProps {
+  productId: string;
+  onComplete?: () => void;
+  isActive?: boolean;
+}
+
+export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, MultiCarFlowTabProps>(
+  ({ productId, onComplete, isActive = false }, ref) => {
     const config = getProductConfig(productId)!;
     const componentMap = PRODUCT_STEP_COMPONENT_MAPS[productId] || {};
 
@@ -37,6 +43,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
 
     const stateRef = useRef(instances);
     stateRef.current = instances;
+    const stepContentRef = useRef<HTMLDivElement | null>(null);
 
     const active = instances[activeIdx];
     const activeStepIdx = stepIdxMap[active?.id] || 0;
@@ -60,6 +67,25 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
     const markAnimated = useCallback(() => {
       setAnimatedSteps((prev) => new Set(prev).add(tacoKey));
     }, [tacoKey]);
+
+    // Focus the plate input when the hidden car tab becomes visible again.
+    useEffect(() => {
+      if (
+        !isActive ||
+        phase !== "steps" ||
+        currentStepId !== "car-identity" ||
+        !!active?.state?.licensePlate
+      ) {
+        return;
+      }
+
+      const frame = window.requestAnimationFrame(() => {
+        const input = stepContentRef.current?.querySelector<HTMLInputElement>("input:not([disabled])");
+        input?.focus();
+      });
+
+      return () => window.cancelAnimationFrame(frame);
+    }, [isActive, phase, currentStepId, active?.id, active?.state?.licensePlate]);
 
     // Update a field in the active instance
     const update = useCallback((key: string, value: any) => {
@@ -231,7 +257,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
           <div className="flex flex-wrap items-center gap-2">
             {instances.map((inst, i) => {
               const complete = isInstanceComplete(inst);
-              const isActive = i === activeIdx && (phase === "steps" || phase === "done");
+              const isActivePill = i === activeIdx && (phase === "steps" || phase === "done");
               const label = getCarInstanceLabel(inst, i);
               return (
                 <div key={inst.id} className="relative group">
@@ -242,7 +268,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
                     }}
                     className={cn(
                       "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
-                      isActive
+                      isActivePill
                         ? "bg-foreground text-background border-foreground"
                         : complete
                           ? "bg-white border-success text-foreground"
@@ -250,7 +276,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
                     )}
                   >
                     {complete && (
-                      <Check className={cn("w-4 h-4", isActive ? "text-background" : "text-success")} />
+                      <Check className={cn("w-4 h-4", isActivePill ? "text-background" : "text-success")} />
                     )}
                     {label}
                   </button>
@@ -282,15 +308,17 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
 
         {/* Phase: steps (normal car flow) */}
         {(phase === "steps" || phase === "done") && StepComponent && (
-          <StepComponent
-            state={active.state}
-            onUpdate={(key, value) => { update(key, value); clearError(key); }}
-            onAutoAdvance={autoAdvance}
-            animateTaco={shouldAnimateTaco}
-            onAnimationComplete={markAnimated}
-            errors={validationErrors}
-            onClearError={clearError}
-          />
+          <div ref={stepContentRef}>
+            <StepComponent
+              state={active.state}
+              onUpdate={(key, value) => { update(key, value); clearError(key); }}
+              onAutoAdvance={autoAdvance}
+              animateTaco={shouldAnimateTaco}
+              onAnimationComplete={markAnimated}
+              errors={validationErrors}
+              onClearError={clearError}
+            />
+          </div>
         )}
 
         {/* Phase: add-prompt (Taco asks "want another car?") */}
