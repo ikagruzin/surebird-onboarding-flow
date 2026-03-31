@@ -142,7 +142,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
                   onUpdate("driverRelationship", "");
                   onUpdate("driverAge", "");
                   onUpdate("legalOwner", "");
-                  onAutoAdvance?.();
+                  onAutoAdvance({ mainDriver: "Yes", driverRelationship: "", driverAge: "", legalOwner: "" }, "car-driver");
                 }
               }}
             />
