@@ -240,12 +240,13 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
                 <Input
                   type="number"
                   value={state.yearOfConstruction}
-                  onChange={(e) => onUpdate("yearOfConstruction", e.target.value)}
+                  onChange={(e) => { onUpdate("yearOfConstruction", e.target.value); onClearError?.("yearOfConstruction"); }}
                   placeholder="e.g. 2020"
-                  className="h-12 rounded-xl"
+                  className={`h-12 rounded-xl ${errors?.yearOfConstruction ? "border-destructive" : ""}`}
                   min={1970}
                   max={new Date().getFullYear()}
                 />
+                <ValidationError message={errors?.yearOfConstruction} />
               </div>
             </div>
           </div>
