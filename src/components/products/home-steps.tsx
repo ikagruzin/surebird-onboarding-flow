@@ -334,6 +334,7 @@ export const HomeCoveragePathStep = ({
             }
           />
         ))}
+        <ValidationError message={errors?.coverageChoice} />
       </CardContent>
     </Card>
   </div>
