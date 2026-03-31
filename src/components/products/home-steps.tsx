@@ -100,6 +100,7 @@ export const HomeRoleStep = ({
   onAutoAdvance,
   animateTaco,
   onAnimationComplete,
+  errors,
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
@@ -125,6 +126,7 @@ export const HomeRoleStep = ({
             )
           }
         />
+        <ValidationError message={errors?.role} />
       </CardContent>
     </Card>
   </div>
