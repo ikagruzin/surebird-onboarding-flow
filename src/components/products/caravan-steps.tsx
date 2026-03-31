@@ -324,10 +324,11 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
             <p className="text-sm font-medium text-foreground">Original price when new? (Catalogue Value)</p>
             <Input
               value={state.catalogueValue}
-              onChange={(e) => onUpdate("catalogueValue", formatCurrency(e.target.value))}
+              onChange={(e) => { onUpdate("catalogueValue", formatCurrency(e.target.value)); onClearError?.("catalogueValue"); }}
               placeholder="€0"
-              className="h-12 rounded-xl"
+              className={`h-12 rounded-xl ${errors?.catalogueValue ? "border-destructive" : ""}`}
             />
+            <ValidationError message={errors?.catalogueValue} />
           </div>
 
           {/* Purchase value (conditional) */}
