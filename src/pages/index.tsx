@@ -375,6 +375,8 @@ export const Index = () => {
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         );
       case "address":
@@ -388,6 +390,8 @@ export const Index = () => {
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         );
       case "birthdate":
@@ -398,6 +402,8 @@ export const Index = () => {
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         );
       case "family":
