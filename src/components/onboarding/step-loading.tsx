@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Check, Loader2 } from "lucide-react";
+import { Check, Loader2, SkipForward } from "lucide-react";
 import { TacoMessage } from "./taco-message";
 import trustpilotReview from "@/assets/trustpilot-review.svg";
 
