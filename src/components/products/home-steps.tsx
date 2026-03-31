@@ -6,6 +6,7 @@ import { Check, Info } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { TacoMessage } from "@/components/onboarding/taco-message";
+import { ValidationError } from "@/components/onboarding/validation-error";
 import {
   SectionCard,
   ChipSelect,
