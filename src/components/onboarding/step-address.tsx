@@ -69,6 +69,8 @@ export const StepAddress = ({
   onNext,
   onBack,
   animateTaco,
+  errors,
+  onClearError,
 }: StepAddressProps) => {
   const [addressResult, setAddressResult] = useState<AddressResult | null>(null);
   const [loading, setLoading] = useState(false);
