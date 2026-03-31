@@ -44,8 +44,13 @@ export const StepConfirmDetails = ({
               <FloatingLabelInput
                 label="First name"
                 value={firstName}
-                onChange={(e) => onUpdateField("firstName", e.target.value)}
+                onChange={(e) => {
+                  onUpdateField("firstName", e.target.value);
+                  onClearError?.("firstName");
+                }}
+                className={errors?.firstName ? "border-destructive" : ""}
               />
+              <ValidationError message={errors?.firstName} />
             </div>
             <div className="w-24">
               <FloatingLabelInput
@@ -58,23 +63,37 @@ export const StepConfirmDetails = ({
               <FloatingLabelInput
                 label="Surname"
                 value={lastName}
-                onChange={(e) => onUpdateField("lastName", e.target.value)}
+                onChange={(e) => {
+                  onUpdateField("lastName", e.target.value);
+                  onClearError?.("lastName");
+                }}
+                className={errors?.lastName ? "border-destructive" : ""}
               />
+              <ValidationError message={errors?.lastName} />
             </div>
           </div>
 
-          <FloatingLabelInput
-            label="Phone number"
-            value={phone}
-            onChange={(e) => onUpdateField("phone", e.target.value)}
-          />
+          <div>
+            <FloatingLabelInput
+              label="Phone number"
+              value={phone}
+              onChange={(e) => onUpdateField("phone", e.target.value)}
+            />
+          </div>
 
-          <FloatingLabelInput
-            label="Email address"
-            value={email}
-            onChange={(e) => onUpdateField("email", e.target.value)}
-            type="email"
-          />
+          <div>
+            <FloatingLabelInput
+              label="Email address"
+              value={email}
+              onChange={(e) => {
+                onUpdateField("email", e.target.value);
+                onClearError?.("email");
+              }}
+              type="email"
+              className={errors?.email ? "border-destructive" : ""}
+            />
+            <ValidationError message={errors?.email} />
+          </div>
         </div>
       </div>
     </div>

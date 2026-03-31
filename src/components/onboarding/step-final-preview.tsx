@@ -46,6 +46,8 @@ export const StepFinalPreview = ({
   agreeDebit,
   onUpdateAgree,
   animateTaco,
+  errors,
+  onClearError,
 }: StepFinalPreviewProps) => {
   const products = INSURANCE_TYPES.filter((t) => selectedInsurances.includes(t.id));
   const fullName = [firstName, infix, lastName].filter(Boolean).join(" ");
