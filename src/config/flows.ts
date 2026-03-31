@@ -16,7 +16,7 @@ const designSystemEntry: FlowConfig = {
 /** Registry of all available flows. Add new flows here. */
 export const FLOWS: Record<string, FlowConfig> = {
   final: flowFinal,
-  c: { ...flowC, name: "Products Data Only", description: "Test individual product flows (e.g. House Insurance)" },
+  c: flowC,
   "design-system": designSystemEntry,
   a: flowA,
   b: flowB,
