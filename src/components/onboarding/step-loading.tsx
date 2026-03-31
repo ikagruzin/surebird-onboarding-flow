@@ -114,7 +114,7 @@ export const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
       </div>
 
       {/* Trustpilot Review */}
-      <div className="flex justify-center my-8">
+      <div className="flex justify-center my-8 max-w-lg">
         <img src={trustpilotReview} alt="Trustpilot 4.6 Excellent" className="h-9" />
       </div>
 
