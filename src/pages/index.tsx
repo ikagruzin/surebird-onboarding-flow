@@ -262,10 +262,31 @@ export const Index = () => {
         break;
       case "start-date": {
         const products = INSURANCE_TYPES.filter((t) => state.selectedInsurances.includes(t.id));
-        products.forEach((p) => {
-          const val = state.startDates[p.id] || "";
-          if (val.length !== 10) errs[`startDate_${p.id}`] = `Please select a start date for ${p.label}`;
-        });
+        const isMulti = products.length > 1;
+        if (isMulti) {
+          // Check if same-date choice has been made
+          const hasUnified = state.startDates["__unified"];
+          const allHaveDates = products.every((p) => {
+            const val = state.startDates[p.id] || "";
+            return val.length === 10;
+          });
+          if (!hasUnified && !allHaveDates) {
+            // No choice made yet or dates missing
+            if (!products.some((p) => state.startDates[p.id])) {
+              errs.sameDate = "Please select Yes or No";
+            } else {
+              products.forEach((p) => {
+                const val = state.startDates[p.id] || "";
+                if (val.length !== 10) errs[`startDate_${p.id}`] = `Please select a start date for ${p.label}`;
+              });
+            }
+          }
+        } else {
+          products.forEach((p) => {
+            const val = state.startDates[p.id] || "";
+            if (val.length !== 10) errs[`startDate_${p.id}`] = `Please select a start date for ${p.label}`;
+          });
+        }
         break;
       }
       case "confirm-details":
@@ -562,6 +583,8 @@ export const Index = () => {
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         );
       case "confirm-details":
@@ -597,6 +620,8 @@ export const Index = () => {
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         );
       case "acceptance-questions":

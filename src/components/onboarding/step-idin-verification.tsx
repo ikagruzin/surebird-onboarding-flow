@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ShieldCheck, X, QrCode, RefreshCw, Trash2 } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { TacoMessage } from "./taco-message";
+import { ValidationError } from "./validation-error";
 import idinLogo from "@/assets/idin-logo.svg";
 
 interface StepIdinVerificationProps {
@@ -10,6 +11,8 @@ interface StepIdinVerificationProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 type VerifyState = "idle" | "pending" | "verified" | "failed" | "manual";
@@ -18,6 +21,8 @@ export const StepIdinVerification = ({
   iban,
   onUpdateIban,
   animateTaco,
+  errors,
+  onClearError,
 }: StepIdinVerificationProps) => {
   const [verifyState, setVerifyState] = useState<VerifyState>("idle");
   const [showQrModal, setShowQrModal] = useState(false);
@@ -81,23 +86,26 @@ export const StepIdinVerification = ({
 
         {/* Idle state */}
         {verifyState === "idle" && (
-          <div className="space-y-3">
-            <button
-              type="button"
-              onClick={handleVerify}
-              className="w-full h-14 rounded-xl border-2 border-primary bg-primary/5 text-primary text-base font-semibold hover:bg-primary/10 transition-colors flex items-center justify-center gap-2"
-            >
-              <ShieldCheck className="w-5 h-5" />
-              Verify with my Bank
-            </button>
-            <button
-              type="button"
-              onClick={handleManualEntry}
-              className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
-            >
-              Or enter IBAN manually
-            </button>
-          </div>
+          <>
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={handleVerify}
+                className="w-full h-14 rounded-xl border-2 border-primary bg-primary/5 text-primary text-base font-semibold hover:bg-primary/10 transition-colors flex items-center justify-center gap-2"
+              >
+                <ShieldCheck className="w-5 h-5" />
+                Verify with my Bank
+              </button>
+              <button
+                type="button"
+                onClick={handleManualEntry}
+                className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
+              >
+                Or enter IBAN manually
+              </button>
+            </div>
+            <ValidationError message={errors?.iban} />
+          </>
         )}
 
         {/* Pending (modal closed) */}
