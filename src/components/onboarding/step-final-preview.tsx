@@ -162,8 +162,3 @@ export const StepFinalPreview = ({
     </div>
   );
 };
-        </div>
-      </div>
-    </div>
-  );
-};
