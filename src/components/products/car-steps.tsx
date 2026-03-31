@@ -137,6 +137,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
               value={state.mainDriver || ""}
               onChange={(v) => {
                 onUpdate("mainDriver", v);
+                onClearError?.("mainDriver");
                 if (v === "Yes") {
                   onUpdate("driverRelationship", "");
                   onUpdate("driverAge", "");
@@ -145,6 +146,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
                 }
               }}
             />
+            <ValidationError message={errors?.mainDriver} />
           </div>
 
           {/* Conditional: driver details */}
