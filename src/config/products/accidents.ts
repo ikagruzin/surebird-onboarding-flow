@@ -9,7 +9,7 @@ export const ACCIDENT_OPTIONS = {
     "Death: €15,000 | Disability: €100,000",
     "Death: €20,000 | Disability: €150,000",
   ],
-  ownRiskOptions: ["€100", "€250", "€500", "No excess"],
+  ownRiskOptions: ["€100", "€250", "€500", "€0"],
 } as const;
 
 /* ─── State shape ─── */
