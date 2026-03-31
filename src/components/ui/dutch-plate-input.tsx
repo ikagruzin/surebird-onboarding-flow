@@ -131,6 +131,7 @@ export const DutchPlateInput = ({
         autoCapitalize="characters"
         autoComplete="off"
         spellCheck={false}
+        autoFocus={autoFocus}
         disabled={disabled}
         value={displayValue}
         onChange={handleChange}
