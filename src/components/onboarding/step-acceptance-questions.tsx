@@ -144,7 +144,7 @@ export const StepAcceptanceQuestions = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => onUpdateAnswer(q.id, "no")}
+                  onClick={() => { onUpdateAnswer(q.id, "no"); onClearError?.("acceptanceQuestions"); }}
                   className={`px-4 py-2 text-sm font-medium transition-colors border-l border-input ${
                     answers[q.id] === "no"
                       ? "bg-primary text-primary-foreground"
