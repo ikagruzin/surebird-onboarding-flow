@@ -104,26 +104,27 @@ export const carProduct: ProductConfig = {
 
   stepDefs: [
     { id: "car-identity", label: "Identity" },
-    { id: "car-risk", label: "Risk & Usage" },
+    { id: "car-driver", label: "Driver" },
+    { id: "car-usage", label: "Usage" },
   ],
 
   getStepSequence(_state) {
-    return ["car-identity", "car-risk"];
+    return ["car-identity", "car-driver", "car-usage"];
   },
 
   validateStep(stepId, state) {
     if (stepId === "car-identity") {
       return (state.licensePlate || "").length === 6 && state.plateConfirmed === true;
     }
-    if (stepId === "car-risk") {
-      const baseValid =
-        state.mainDriver !== "" &&
-        state.damageFreeYears !== "" &&
-        state.kmPerYear !== "";
+    if (stepId === "car-driver") {
+      if (state.mainDriver === "") return false;
       if (state.mainDriver === "No") {
-        return baseValid && state.driverRelationship !== "" && state.driverAge !== "" && state.legalOwner !== "";
+        return state.driverRelationship !== "" && state.driverAge !== "" && state.legalOwner !== "";
       }
-      return baseValid;
+      return true;
+    }
+    if (stepId === "car-usage") {
+      return state.damageFreeYears !== "" && state.kmPerYear !== "";
     }
     return false;
   },
