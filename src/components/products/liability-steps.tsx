@@ -3,9 +3,37 @@
  */
 import type { ProductStepProps } from "@/config/products/types";
 import type { ComponentType } from "react";
+import { Info } from "lucide-react";
 import { TacoMessage } from "@/components/onboarding/taco-message";
 import { SectionCard, SegmentedControl } from "./shared-ui";
 import { LIABILITY_OPTIONS } from "@/config/products/liability";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+/* ─── Reusable info tooltip ─── */
+
+const InfoTip = ({ text }: { text: string }) => (
+  <TooltipProvider delayDuration={200}>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          className="text-muted-foreground hover:text-foreground transition-colors"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Info className="w-4 h-4" />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="top" className="max-w-64 text-xs">
+        {text}
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+);
 
 /* ─── Single consolidated step ─── */
 
@@ -20,7 +48,10 @@ const StepLiabilityAll = ({ state, onUpdate, animateTaco, onAnimationComplete }:
       <div className="space-y-6">
         {/* Dog Insurance */}
         <div className="space-y-2">
-          <p className="text-sm font-medium text-foreground">Do you want to insure your dog?</p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-foreground">Do you want to insure your dog(s)?</p>
+            <InfoTip text="Pets are not insured by default. Choose 'Yes' if you want to co-insure dog(s)." />
+          </div>
           <SegmentedControl
             options={[...LIABILITY_OPTIONS.dogOptions]}
             value={state.dog}
@@ -30,7 +61,10 @@ const StepLiabilityAll = ({ state, onUpdate, animateTaco, onAnimationComplete }:
 
         {/* Damage Limit */}
         <div className="space-y-2">
-          <p className="text-sm font-medium text-foreground">Choose your preferred damage limit</p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-foreground">Choose your preferred damage limit</p>
+            <InfoTip text="Unfortunately, insurers do not cover any damage without a limit. Claims above €1.25 million are quite rare, but the difference in premium is very small. For extra bit of certainty, you can choose €2.5 million." />
+          </div>
           <SegmentedControl
             options={[...LIABILITY_OPTIONS.damageLimitOptions]}
             value={state.damageLimit}
@@ -40,7 +74,10 @@ const StepLiabilityAll = ({ state, onUpdate, animateTaco, onAnimationComplete }:
 
         {/* Own Risk */}
         <div className="space-y-2">
-          <p className="text-sm font-medium text-foreground">What do you want to be your own risk?</p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-foreground">Own risk</p>
+            <InfoTip text="This is what you have to pay yourself when you file a claim. We recommend choosing an amount that would not cause you much stress if you suddenly lost it." />
+          </div>
           <SegmentedControl
             options={[...LIABILITY_OPTIONS.ownRiskOptions]}
             value={state.ownRisk}

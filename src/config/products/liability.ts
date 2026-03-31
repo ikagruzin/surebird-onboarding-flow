@@ -5,7 +5,7 @@ import type { ProductConfig } from "./types";
 export const LIABILITY_OPTIONS = {
   dogOptions: ["No", "Yes"],
   damageLimitOptions: ["€1,250,000", "€2,250,000"],
-  ownRiskOptions: ["€100", "No excess"],
+  ownRiskOptions: ["€100", "€0"],
 } as const;
 
 /* ─── State shape ─── */
