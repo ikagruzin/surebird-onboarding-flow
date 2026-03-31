@@ -123,7 +123,10 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
           {/* Near flood river? (conditional) */}
           {showFloodQ && (
             <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">Is it near a river that might flood?</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium text-foreground">Is your caravan campsite located near a 'high-water' area (floodplain)?</p>
+                <InfoTip text="A floodplain (uiterwaard) is the land between the river and the dike. If you cross a dike to reach your campsite, select Yes. These areas are the first to flood and require specific coverage." />
+              </div>
               <SegmentedControl
                 options={["Yes", "No"]}
                 value={state.nearFloodRiver}
