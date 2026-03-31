@@ -16,7 +16,7 @@ export const CARAVAN_OPTIONS = {
     "Hobby", "Fendt", "Knaus", "Dethleffs", "Adria",
     "Bürstner", "Hymer", "Caravelair", "Eriba", "Other",
   ],
-  conditionOptions: ["Brand New", "Used"],
+  conditionOptions: ["New", "Second hand"],
 } as const;
 
 /* ─── State shape ─── */
@@ -89,7 +89,7 @@ export const caravanProduct: ProductConfig = {
         return !!(state.brand && state.yearOfConstruction && state.length);
       case "caravan-financial": {
         if (!state.condition || !state.catalogueValue) return false;
-        if (state.condition === "Used" && !state.purchaseValue) return false;
+        if (state.condition === "Second hand" && !state.purchaseValue) return false;
         return true;
       }
       default:

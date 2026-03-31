@@ -245,7 +245,10 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
 
           {/* Length - always independent */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Length</p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium text-foreground">Length</p>
+              <InfoTip text="Measure the body only. Please enter the length of the caravan's living area. Do not include the drawbar (the metal V-shaped part at the front that attaches to your car)." />
+            </div>
             <NativeSelect
               value={state.length}
               onChange={(e) => onUpdate("length", e.target.value)}
@@ -265,7 +268,7 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
 /* ─── Step 3: Financial Valuation ─── */
 
 const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
-  const isUsed = state.condition === "Used";
+  const isUsed = state.condition === "Second hand";
   const catalogueNum = parseFloat(state.catalogueValue?.replace(/[^0-9.]/g, "") || "0");
 
   const formatCurrency = (raw: string) => {
@@ -294,7 +297,10 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
         <div className="space-y-6">
           {/* Condition */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">You bought it as:</p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium text-foreground">Bought it as</p>
+              <InfoTip text='Choose "New" if you are the first owner.' />
+            </div>
             <SegmentedControl
               options={[...CARAVAN_OPTIONS.conditionOptions]}
               value={state.condition}
