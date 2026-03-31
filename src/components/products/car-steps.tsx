@@ -8,6 +8,7 @@ import { useState, useCallback } from "react";
 import type { ProductStepProps } from "@/config/products/types";
 import type { ComponentType } from "react";
 import { TacoMessage } from "@/components/onboarding/taco-message";
+import { ValidationError } from "@/components/onboarding/validation-error";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
