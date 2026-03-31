@@ -29,7 +29,7 @@ interface SidebarProps {
   hoveredProduct?: InsuranceType | null;
 }
 
-export const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, showAvatar = false }: SidebarProps) => {
+export const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, showAvatar = false, hoveredProduct }: SidebarProps) => {
   if (!visible) return null;
 
   return (
