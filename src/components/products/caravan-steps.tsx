@@ -91,6 +91,7 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete,
                 );
               })}
             </div>
+            <ValidationError message={errors?.caravanType} />
           </div>
 
           {/* Usage */}
