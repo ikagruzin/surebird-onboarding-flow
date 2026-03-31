@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ShieldCheck, X, QrCode, RefreshCw, Trash2 } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { TacoMessage } from "./taco-message";
+import { ValidationError } from "./validation-error";
 import idinLogo from "@/assets/idin-logo.svg";
 
 interface StepIdinVerificationProps {
