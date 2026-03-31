@@ -200,7 +200,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
           <div className="flex flex-wrap items-center gap-2">
             {instances.map((inst, i) => {
               const complete = isInstanceComplete(inst);
-              const isActive = i === activeIdx && phase === "steps";
+              const isActive = i === activeIdx && (phase === "steps" || phase === "done");
               const label = getCarInstanceLabel(inst, i);
               return (
                 <div key={inst.id} className="relative group">
