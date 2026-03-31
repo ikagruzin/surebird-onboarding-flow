@@ -93,10 +93,35 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
       }, 400);
     }, [activeIdx, config]);
 
+    // Clear a single validation error
+    const clearError = useCallback((field: string) => {
+      setValidationErrors((prev) => {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      });
+    }, []);
+
+    // Validate current step and show errors
+    const tryValidate = useCallback((): boolean => {
+      if (config.getValidationErrors) {
+        const errs = config.getValidationErrors(currentStepId, active?.state || {});
+        if (Object.keys(errs).length > 0) {
+          setValidationErrors(errs);
+          setShakeFooterState(true);
+          setTimeout(() => setShakeFooterState(false), 500);
+          return false;
+        }
+      }
+      setValidationErrors({});
+      return true;
+    }, [config, currentStepId, active?.state]);
+
     // Navigation
     const goNextStep = useCallback(() => {
       const nextIdx = activeStepIdx + 1;
       if (nextIdx < steps.length) {
+        setValidationErrors({});
         setStepIdxMap((prev) => ({ ...prev, [active.id]: nextIdx }));
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
