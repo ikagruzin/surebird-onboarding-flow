@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { TacoMessage } from "./taco-message";
+import { ValidationError } from "./validation-error";
 import { Info } from "lucide-react";
 import {
   Select,
@@ -27,6 +28,8 @@ interface StepAddressProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 // Mock address lookup
@@ -66,6 +69,8 @@ export const StepAddress = ({
   onNext,
   onBack,
   animateTaco,
+  errors,
+  onClearError,
 }: StepAddressProps) => {
   const [addressResult, setAddressResult] = useState<AddressResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -113,19 +118,33 @@ export const StepAddress = ({
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <FloatingLabelInput
-              label="Postcode"
-              value={postcode}
-              onChange={(e) => onUpdate("postcode", e.target.value.toUpperCase())}
-              maxLength={7}
-              autoFocus={!postcode}
-            />
-            <FloatingLabelInput
-              label="House number"
-              value={houseNumber}
-              onChange={(e) => onUpdate("houseNumber", e.target.value)}
-              maxLength={10}
-            />
+            <div>
+              <FloatingLabelInput
+                label="Postcode"
+                value={postcode}
+                onChange={(e) => {
+                  onUpdate("postcode", e.target.value.toUpperCase());
+                  onClearError?.("postcode");
+                }}
+                maxLength={7}
+                autoFocus={!postcode}
+                className={errors?.postcode ? "border-destructive" : ""}
+              />
+              <ValidationError message={errors?.postcode} />
+            </div>
+            <div>
+              <FloatingLabelInput
+                label="House number"
+                value={houseNumber}
+                onChange={(e) => {
+                  onUpdate("houseNumber", e.target.value);
+                  onClearError?.("houseNumber");
+                }}
+                maxLength={10}
+                className={errors?.houseNumber ? "border-destructive" : ""}
+              />
+              <ValidationError message={errors?.houseNumber} />
+            </div>
           </div>
 
           {hasAdditions && (

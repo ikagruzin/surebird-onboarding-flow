@@ -10,9 +10,10 @@ interface StickyFooterProps {
   hasSidebar?: boolean;
   showSavings?: boolean;
   showNextButton?: boolean;
+  shake?: boolean;
 }
 
-export const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel = "Next", hasSidebar = false, showSavings = true, showNextButton = true }: StickyFooterProps) => {
+export const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel = "Next", hasSidebar = false, showSavings = true, showNextButton = true, shake = false }: StickyFooterProps) => {
   const formattedSavings = savings.toLocaleString("nl-NL", {
     style: "currency",
     currency: "EUR",
@@ -53,8 +54,7 @@ export const StickyFooter = ({ savings, onNext, onBack, disabled = false, button
         {showNextButton && (
           <button
             onClick={onNext}
-            disabled={disabled}
-            className="inline-flex items-center gap-2 text-success-foreground px-7 py-3 rounded-full font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            className={`inline-flex items-center gap-2 text-success-foreground px-7 py-3 rounded-full font-semibold text-base transition-all ${shake ? 'animate-shake' : ''}`}
             style={{
               background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
               boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',

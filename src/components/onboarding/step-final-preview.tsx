@@ -2,6 +2,7 @@ import { Check, Gift, Award } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
 import { TacoMessage } from "./taco-message";
+import { ValidationError } from "./validation-error";
 
 /* Mirror the offer page pricing so summary matches */
 const INSURER_PRICES: Record<string, number> = {
@@ -29,6 +30,8 @@ interface StepFinalPreviewProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 export const StepFinalPreview = ({
@@ -43,6 +46,8 @@ export const StepFinalPreview = ({
   agreeDebit,
   onUpdateAgree,
   animateTaco,
+  errors,
+  onClearError,
 }: StepFinalPreviewProps) => {
   const products = INSURANCE_TYPES.filter((t) => selectedInsurances.includes(t.id));
   const fullName = [firstName, infix, lastName].filter(Boolean).join(" ");
@@ -115,31 +120,43 @@ export const StepFinalPreview = ({
 
         {/* Agreement checkboxes – inside the card */}
         <div className="space-y-4 pt-4 border-t border-border">
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <Checkbox
-              checked={agreeTerms}
-              onCheckedChange={(v) => onUpdateAgree("agreeTerms", v === true)}
-              className="mt-0.5"
-            />
-            <span className="text-sm text-foreground leading-relaxed">
-              I agree to the{" "}
-              <span className="text-primary underline underline-offset-2">terms and conditions</span>{" "}
-              and{" "}
-              <span className="text-primary underline underline-offset-2">privacy policy</span>.
-            </span>
-          </label>
+          <div>
+            <label className="flex items-start gap-3 cursor-pointer group">
+              <Checkbox
+                checked={agreeTerms}
+                onCheckedChange={(v) => {
+                  onUpdateAgree("agreeTerms", v === true);
+                  onClearError?.("agreeTerms");
+                }}
+                className="mt-0.5"
+              />
+              <span className="text-sm text-foreground leading-relaxed">
+                I agree to the{" "}
+                <span className="text-primary underline underline-offset-2">terms and conditions</span>{" "}
+                and{" "}
+                <span className="text-primary underline underline-offset-2">privacy policy</span>.
+              </span>
+            </label>
+            <ValidationError message={errors?.agreeTerms} />
+          </div>
 
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <Checkbox
-              checked={agreeDebit}
-              onCheckedChange={(v) => onUpdateAgree("agreeDebit", v === true)}
-              className="mt-0.5"
-            />
-            <span className="text-sm text-foreground leading-relaxed">
-              I give permission to automatically debit the premiums from my account{" "}
-              <span className="font-mono font-medium">{iban || "••••"}</span>.
-            </span>
-          </label>
+          <div>
+            <label className="flex items-start gap-3 cursor-pointer group">
+              <Checkbox
+                checked={agreeDebit}
+                onCheckedChange={(v) => {
+                  onUpdateAgree("agreeDebit", v === true);
+                  onClearError?.("agreeDebit");
+                }}
+                className="mt-0.5"
+              />
+              <span className="text-sm text-foreground leading-relaxed">
+                I give permission to automatically debit the premiums from my account{" "}
+                <span className="font-mono font-medium">{iban || "••••"}</span>.
+              </span>
+            </label>
+            <ValidationError message={errors?.agreeDebit} />
+          </div>
         </div>
       </div>
     </div>

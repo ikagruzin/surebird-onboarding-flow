@@ -1,6 +1,7 @@
 import { Info } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { TacoMessage } from "./taco-message";
+import { ValidationError } from "./validation-error";
 import { ChangeEvent } from "react";
 
 interface StepBirthdateProps {
@@ -9,6 +10,8 @@ interface StepBirthdateProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 function formatDateInput(raw: string, prevValue: string): string {
@@ -21,10 +24,11 @@ function formatDateInput(raw: string, prevValue: string): string {
   return result;
 }
 
-export const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack, animateTaco }: StepBirthdateProps) => {
+export const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack, animateTaco, errors, onClearError }: StepBirthdateProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const formatted = formatDateInput(e.target.value, birthdate);
     onUpdate(formatted);
+    onClearError?.("birthdate");
   };
 
   return (
@@ -40,7 +44,9 @@ export const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack, animateTaco
             maxLength={10}
             inputMode="numeric"
             autoFocus={!birthdate}
+            className={errors?.birthdate ? "border-destructive" : ""}
           />
+          <ValidationError message={errors?.birthdate} />
         </div>
 
         <div className="flex items-start gap-2 mt-8 text-muted-foreground">
