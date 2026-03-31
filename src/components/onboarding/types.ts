@@ -29,6 +29,7 @@ export interface WizardState {
   startDates: Record<string, string>;
   iban: string;
   acceptanceAnswers: Record<string, string>;
+  acceptanceConfirmed: boolean;
   agreeTerms: boolean;
   agreeDebit: boolean;
 }
