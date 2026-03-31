@@ -49,6 +49,7 @@ export const StepFamily = ({ familyStatus, onSelect, animateTaco, errors, onClea
             </button>
           ))}
         </div>
+        <ValidationError message={errors?.familyStatus} />
       </div>
     </div>
   );

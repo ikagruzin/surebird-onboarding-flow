@@ -300,8 +300,17 @@ export const Index = () => {
   }, []);
 
   const handleNext = () => {
-    // Family step auto-advances via onSelect
-    if (currentStepId === "family" && state.familyStatus) return;
+    // Family step: if already selected, auto-advance on Next click
+    if (currentStepId === "family" && state.familyStatus) {
+      setValidationErrors({});
+      const config = flow.steps[stepIndex];
+      if (config?.getNextStep) {
+        const nextId = config.getNextStep(state);
+        if (nextId) { goToStepId(nextId); return; }
+      }
+      goToIndex(getNextIndex());
+      return;
+    }
 
     // Preferences delegates internally
     if (currentStepId === "preferences" && prefsRef.current) {
