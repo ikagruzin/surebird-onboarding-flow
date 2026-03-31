@@ -527,7 +527,9 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
             className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border h-12 ${
               isActive
                 ? "bg-foreground text-background border-foreground"
-                : "bg-white border-border text-foreground"
+                : isComplete
+                  ? "bg-background border-success text-foreground hover:bg-muted/50"
+                  : "bg-background border-border text-foreground hover:bg-muted/50"
             }`}
           >
             {isComplete ? (
