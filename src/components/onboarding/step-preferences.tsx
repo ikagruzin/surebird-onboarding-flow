@@ -728,26 +728,31 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
       <Progress value={progressPercent} className="h-2 [&>div]:bg-success mb-6" />
 
       {/* Questions card with transition */}
-        {/* Always-mounted MultiCarFlowTab for car (preserves state across tab switches) */}
+        {/* Always-mounted product flow tabs (preserves state across tab switches) */}
         {selectedInsurances.includes("car") && (
           <div className={activeTab === "car" && !isTransitioning ? "" : "hidden"}>
             <MultiCarFlowTab
               ref={(r) => { productFlowRefs.current["car"] = r; }}
               productId="car"
+              onComplete={() => completeCurrentTab()}
             />
           </div>
         )}
 
-        <div key={activeTab} className={getTransitionClass()}>
-          {isProductFlow && activeTab !== "car" ? (
-            /* ─── Product flow tab (real product steps from shared config) ─── */
+        {/* Always-mounted ProductFlowTabs for non-car products with configs */}
+        {selectedInsurances.filter((id) => id !== "car" && hasProductConfig(id)).map((id) => (
+          <div key={id} className={activeTab === id && !isTransitioning ? "" : "hidden"}>
             <ProductFlowTab
-              ref={(r) => { productFlowRefs.current[activeTab] = r; }}
-              productId={activeTab}
+              ref={(r) => { productFlowRefs.current[id] = r; }}
+              productId={id}
               animateTaco={animateTaco}
             />
-          ) : !isProductFlow ? (
-            /* ─── Legacy question-based UI (for products without full configs) ─── */
+          </div>
+        ))}
+
+        {/* Legacy question-based UI (only for active non-product-flow tab) */}
+        {!isProductFlow && (
+          <div key={activeTab} className={getTransitionClass()}>
             <>
               {showAllQuestions && introMessage && (
                 <TacoMessage message={introMessage} animate={animateTaco} />
@@ -914,8 +919,8 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
                 )}
               </div>
             </>
-          ) : null}
-        </div>
+          </div>
+        )}
       {renderAddModal()}
     </div>
   );
