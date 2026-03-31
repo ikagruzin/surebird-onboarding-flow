@@ -103,6 +103,7 @@ export const StepIdinVerification = ({
               Or enter IBAN manually
             </button>
           </div>
+          <ValidationError message={errors?.iban} />
         )}
 
         {/* Pending (modal closed) */}
