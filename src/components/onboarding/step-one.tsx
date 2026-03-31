@@ -14,6 +14,15 @@ import iconAccidents from "@/assets/icon-accidents.svg";
 import iconCaravan from "@/assets/icon-caravan.svg";
 import iconTravel from "@/assets/icon-travel.svg";
 import { Globe, User, LayoutGrid, Layers, GalleryHorizontal, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+
+const BUNDLE_CLUSTERS: Record<string, string[]> = {
+  car: ["home", "liability"],
+  home: ["car", "liability"],
+  liability: ["car", "home"],
+  travel: ["legal"],
+  legal: ["travel"],
+};
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Plane: <img src={iconTravel} alt="Travel" className="w-10 h-10" />,
