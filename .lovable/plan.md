@@ -1,82 +1,54 @@
 
 
-## Generate Product_Data_Template_v3.xlsx
+## Fix Column Shift in Product_Data_Template_v3.xlsx
 
-### Overview
+### Confirmed Issue
 
-Create a comprehensive Excel workbook with 9 sheets: one per product (7 sheets with both Set Preferences and Offer Preferences data on the same sheet), plus Tooltips and Taco Messages sheets. All text columns include EN and NL pairs. The NL columns will be empty placeholders — and yes, once you upload a version with Dutch translations filled in, I can parse it and update the file automatically.
+You are correct. The columns in all 7 product sheets are shifted by one position to the right. The intended layout was:
 
-### Sheet Structure
+```text
+A: Phase | B: Field ID | C: Question (EN) | D: Question (NL) | E: Type | F: Options (EN) | G: Options (NL) | H: Default Value | I: Conditional On | J: Notes
+```
 
-**Per-product sheets (7):** Each has two sections separated by a bold header row.
+But what was generated shifted the data so that:
+- **Column C (Question EN)** contains the Field ID text
+- **Column D (Question NL)** contains the English question
+- **Column E (Type)** is blank or has options
+- **Column F (Options EN)** contains the Type value
+- **Column G (Options NL)** contains the English options
 
-Columns for both sections:
-`Phase | Field ID | Question (EN) | Question (NL) | Type | Options (EN) | Options (NL) | Default Value | Conditional On | Notes`
+The root cause: the script likely wrote `[phase, stepId, fieldId, questionEN, ...]` instead of `[phase, fieldId, questionEN, "", ...]`, inserting an extra Step ID column and pushing everything right.
 
----
+### Fix Plan
 
-### Product Sheet Contents
+1. **Regenerate all 7 product sheets** with correct column mapping:
+   - Column A: Phase (Set Preferences / Offer Preferences)
+   - Column B: Field ID (e.g., `licensePlate`, `mainDriver`)
+   - Column C: Question (EN) — actual English question text
+   - Column D: Question (NL) — empty placeholder
+   - Column E: Type (segmented, radio, select, text, number, toggle, chips, cards)
+   - Column F: Options (EN) — actual English option values
+   - Column G: Options (NL) — empty placeholder
+   - Column H: Default Value
+   - Column I: Conditional On
+   - Column J: Notes
 
-**1. Car** (3 steps + 2 offer fields)
-- Set Preferences:
-  - car-identity: licensePlate (text input, 6 chars), plateConfirmed (auto)
-  - car-driver: mainDriver (Yes/No, segmented), driverRelationship (My partner, My child, Myself — cards, conditional on mainDriver=No), driverAge (number, conditional on relationship != Myself), legalOwner (My partner, Myself — cards, conditional on mainDriver=No)
-  - car-usage: damageFreeYears (number), kmPerYear (select, 6 brackets)
-- Offer Preferences:
-  - basicCoverage: WA, WA+ Limited Casco, WA+ Full Casco All-risk (default: WA+)
-  - ownRisk: 100, 250, 500, 0 (default: 100)
+2. **Highlight empty NL columns** using the same style from `Product_Data_Template.xlsx` — light yellow background fill on all cells in Question (NL) and Options (NL) columns to indicate "translation needed."
 
-**2. Home** (6 steps + 3 offer fields)
-- Set Preferences: presetAnswer, role, buildingType, usage (multi-chip), constructionMaterial, floorMaterial, roofShape, roofMaterial, coverageChoice, highValueAV + amount, jewelry + amount, specialAssets + amount, ownerInterest + amount, security, netIncome, outsideValue, monumental, quoted (outbuildings), floorCount, rainwater (renovation), smartSensors (solar), heatPump
-- Offer: ownRisk (100/250/500/0, default 100), contentCoverage (Extra extensive/All Risk, default All Risk), buildingCoverage (Extra extensive/All Risk, default All Risk)
+3. **Apply same highlighting** to Tooltips sheet (NL columns) and Taco Messages sheet (NL columns).
 
-**3. Travel** (3 steps + 2 offer fields)
-- Set Preferences: travelDays (60/90/180/365), coverageArea (Europe/Worldwide), playsSport (Y/N), adventureSports (Y/N), bringsEquipment (Y/N), golfEquipment (Y/N), divingEquipment (Y/N), supplements (9 checkbox options)
-- Offer: ownRisk (100/250/500/0, default 100), extraSupport (2500/1000/0, default 0)
-
-**4. Legal Expenses** (1 step + 1 offer field)
-- Set Preferences: coverageModules — Consumer (locked), Housing, Work & Income, Traffic, Home owners, Own Vehicle, Tax & Wealth, Mediation
-- Offer: ownRisk (100/250/500/0, default 100)
-
-**5. Liability** (1 step + 1 offer field)
-- Set Preferences: dog (No/Yes), damageLimit (€1.25M/€2.25M)
-- Offer: ownRisk (100/0, default 100)
-
-**6. Accidents** (1 step + 1 offer field)
-- Set Preferences: coverage (4 tiers: Death €5K|Disability €25K through Death €20K|Disability €150K)
-- Offer: ownRisk (100/250/500/0, default 100)
-
-**7. Caravan** (3 steps + 2 offer fields)
-- Set Preferences: caravanType (3 options), usage (4 dropdown options), usedAsMobileHome (Y/N conditional), nearFloodRiver (Y/N conditional), identificationMethod (3 options), licensePlate/chassisNumber, brand (10 options), yearOfConstruction, length (5 options), condition (New/Second hand), catalogueValue, purchaseValue (conditional)
-- Offer: desiredCoverage (Fire and theft/Casco Limited (WA)/Casco Extended, default Casco Limited), ownRisk (100/250/500/0, default 100)
-
----
-
-### Sheet 8: Tooltips
-
-Columns: `Product | Step | Level | Question/Option (EN) | Question/Option (NL) | Tooltip (EN) | Tooltip (NL)`
-
-Level = "Question" or "Option"
-
-~40+ entries extracted from all UI components including:
-- **Question-level**: Car (license plate, main driver, legal owner, damage-free years), Caravan (mobile home, floodplain, length, bought as), Home (building type, roof material, security, net income, outside value, monumental, outbuildings, renovation, solar, heat pump, 4 content items), Travel (coverage area, adventure sports), Liability (dog, damage limit), Accidents (coverage level), plus coverage path options (3 entries)
-- **Option-level**: Home construction materials (3), floor material "No floors", roof shape "Special", Caravan type "Touring caravan" and "Folding trailer"
-
-### Sheet 9: Taco Messages
-
-Columns: `Product | Step ID | Step Label (EN) | Step Label (NL) | Message (EN) | Message (NL)`
-
-20 entries across all products, one per step.
-
----
+4. **Keep Tooltips and Taco Messages sheets unchanged** (only add the yellow highlight for missing NL data).
 
 ### Technical Details
 
-- Built with openpyxl, bold headers with light fill per section
-- Auto-width columns, NL columns empty as placeholders
-- Saved to `/mnt/documents/Product_Data_Template_v3.xlsx`
+- Rebuild using openpyxl with correct column order
+- Match formatting from `Product_Data_Template.xlsx` (bold headers, light fill, auto-width)
+- Apply yellow highlight (`FFFFF2CC` or similar) to all empty NL placeholder cells
+- Save as `Product_Data_Template_v3.xlsx` (overwrite)
 
-### Dutch Translation Workflow
+### Files Changed
 
-Yes — once you upload a version with NL columns filled in, I can parse the Excel file and automatically merge the Dutch translations into the workbook, matching by Product + Field ID / Step ID.
+| File | Change |
+|------|--------|
+| `/mnt/documents/Product_Data_Template_v3.xlsx` | Regenerated with corrected column mapping and NL highlights |
 
