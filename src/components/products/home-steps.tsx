@@ -224,11 +224,12 @@ export const HomeDetailsStep = ({
                   selected={state.floorMaterial === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
-                  onClick={() => onUpdate("floorMaterial", opt)}
+                  onClick={() => { onUpdate("floorMaterial", opt); onClearError?.("floorMaterial"); }}
                 />
               );
             })}
           </div>
+          <ValidationError message={errors?.floorMaterial} />
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
