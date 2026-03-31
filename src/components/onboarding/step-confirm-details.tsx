@@ -1,5 +1,6 @@
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { TacoMessage } from "./taco-message";
+import { ValidationError } from "./validation-error";
 
 interface StepConfirmDetailsProps {
   firstName: string;
@@ -11,6 +12,8 @@ interface StepConfirmDetailsProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 export const StepConfirmDetails = ({
