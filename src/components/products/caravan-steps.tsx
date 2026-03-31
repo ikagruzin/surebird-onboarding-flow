@@ -277,7 +277,7 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
 
 /* ─── Step 3: Financial Valuation ─── */
 
-const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   const isUsed = state.condition === "Second hand";
   const catalogueNum = parseFloat(state.catalogueValue?.replace(/[^0-9.]/g, "") || "0");
 
