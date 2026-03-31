@@ -5,6 +5,7 @@
 import { useState, useEffect, useCallback } from "react";
 import type { ProductStepProps } from "@/config/products/types";
 import type { ComponentType } from "react";
+import { Info } from "lucide-react";
 import { TacoMessage } from "@/components/onboarding/taco-message";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
@@ -12,6 +13,31 @@ import { Input } from "@/components/ui/input";
 import { DutchPlateInput } from "@/components/ui/dutch-plate-input";
 import { CARAVAN_OPTIONS } from "@/config/products/caravan";
 import { getSelectionGridClass } from "@/lib/grid-layout";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+const InfoTip = ({ text }: { text: string }) => (
+  <TooltipProvider delayDuration={200}>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          className="text-muted-foreground hover:text-foreground transition-colors"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Info className="w-4 h-4" />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="top" className="max-w-64 text-xs">
+        {text}
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+);
 
 /* ─── Step 1: Context & Usage ─── */
 
@@ -32,28 +58,36 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
           <div className="space-y-2">
             <p className="text-sm font-medium text-foreground">What kind of caravan is it?</p>
             <div className={getSelectionGridClass(CARAVAN_OPTIONS.caravanTypes as unknown as string[])}>
-              {CARAVAN_OPTIONS.caravanTypes.map((opt) => (
-                <SelectionCard
-                  key={opt}
-                  label={opt}
-                  selected={state.caravanType === opt}
-                  onClick={() => {
-                    onUpdate("caravanType", opt);
-                    if (opt === "Mobile home") {
-                      onUpdate("usedAsMobileHome", "");
-                      onUpdate("nearFloodRiver", "No");
-                    } else if (opt === "Touring caravan") {
-                      onUpdate("usedAsMobileHome", "No");
-                      onUpdate("nearFloodRiver", "No");
-                    } else {
-                      // Folding trailer - hide mobile home Q, reset flood
-                      onUpdate("usedAsMobileHome", "");
-                      onUpdate("nearFloodRiver", "");
-                    }
-                  }}
-                  indicator="radio"
-                />
-              ))}
+              {CARAVAN_OPTIONS.caravanTypes.map((opt) => {
+                const tooltip =
+                  opt === "Touring caravan"
+                    ? "A caravan that is towed behind a car and can be detached at the campsite."
+                    : opt === "Folding trailer"
+                      ? "A lightweight, collapsible trailer that folds out into a tent-like living space."
+                      : undefined;
+                return (
+                  <SelectionCard
+                    key={opt}
+                    label={opt}
+                    selected={state.caravanType === opt}
+                    rightIcon={tooltip ? <InfoTip text={tooltip} /> : undefined}
+                    onClick={() => {
+                      onUpdate("caravanType", opt);
+                      if (opt === "Mobile home") {
+                        onUpdate("usedAsMobileHome", "");
+                        onUpdate("nearFloodRiver", "No");
+                      } else if (opt === "Touring caravan") {
+                        onUpdate("usedAsMobileHome", "No");
+                        onUpdate("nearFloodRiver", "No");
+                      } else {
+                        onUpdate("usedAsMobileHome", "");
+                        onUpdate("nearFloodRiver", "");
+                      }
+                    }}
+                    indicator="radio"
+                  />
+                );
+              })}
             </div>
           </div>
 
@@ -74,7 +108,10 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
           {/* Used as mobile home? (conditional) */}
           {showMobileHomeQ && (
             <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">Used as a mobile home?</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium text-foreground">Used as a mobile home?</p>
+                <InfoTip text="Select Yes if it remains at one location year-round in the NL (winter storage allowed elsewhere in the NL)." />
+              </div>
               <SegmentedControl
                 options={["Yes", "No"]}
                 value={state.usedAsMobileHome}
@@ -86,7 +123,10 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
           {/* Near flood river? (conditional) */}
           {showFloodQ && (
             <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">Is it near a river that might flood?</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium text-foreground">Is your caravan campsite located near a 'high-water' area (floodplain)?</p>
+                <InfoTip text="A floodplain (uiterwaard) is the land between the river and the dike. If you cross a dike to reach your campsite, select Yes. These areas are the first to flood and require specific coverage." />
+              </div>
               <SegmentedControl
                 options={["Yes", "No"]}
                 value={state.nearFloodRiver}
