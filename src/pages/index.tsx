@@ -600,6 +600,8 @@ export const Index = () => {
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         );
       case "final-preview":
