@@ -91,6 +91,7 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
               value={state.licensePlate || ""}
               onChange={(raw) => { handlePlateChange(raw); onClearError?.("licensePlate"); }}
               onComplete={handlePlateComplete}
+              autoFocus={!state.licensePlate}
             />
             <ValidationError message={errors?.licensePlate} />
           </div>

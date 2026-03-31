@@ -78,9 +78,12 @@ export const Index = () => {
   const currentStepId = currentStepConfig?.id || "product-selection";
 
   // Track whether Taco message should animate (only on first visit)
-  // Mark seen during render (not in useEffect) to survive React 18 strict-mode double-render
+  // Read ref during render but only mutate in useEffect — safe for strict mode double-render
   const shouldAnimateTaco = !seenStepsRef.current.has(currentStepId);
-  seenStepsRef.current.add(currentStepId);
+
+  useEffect(() => {
+    seenStepsRef.current.add(currentStepId);
+  }, [currentStepId]);
 
 
 

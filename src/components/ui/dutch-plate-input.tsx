@@ -91,6 +91,7 @@ interface DutchPlateInputProps {
   onComplete?: (raw: string) => void;
   className?: string;
   disabled?: boolean;
+  autoFocus?: boolean;
 }
 
 export const DutchPlateInput = ({
@@ -99,6 +100,7 @@ export const DutchPlateInput = ({
   onComplete,
   className,
   disabled,
+  autoFocus,
 }: DutchPlateInputProps) => {
   const displayValue = formatDutchPlate(value);
 
@@ -129,6 +131,7 @@ export const DutchPlateInput = ({
         autoCapitalize="characters"
         autoComplete="off"
         spellCheck={false}
+        autoFocus={autoFocus}
         disabled={disabled}
         value={displayValue}
         onChange={handleChange}
