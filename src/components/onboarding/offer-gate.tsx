@@ -28,12 +28,10 @@ export const OfferGate = ({
     <div className="absolute inset-0 z-30 flex items-start justify-center pt-24">
       <div className="relative z-10 w-full max-w-lg mx-4">
         <div className="bg-card border border-border rounded-3xl p-8 shadow-2xl animate-scale-in">
-          <div className="flex items-center gap-3 mb-6">
-            <img src={tacoAvatar} alt="Taco" className="w-10 h-10 rounded-full object-cover shrink-0" />
-            <p className="text-base font-medium text-foreground">
-              Great news! Your personal offer is ready. Where do you want me to send it?
-            </p>
-          </div>
+          <TacoMessage
+            message="Great news! Your personal offer is ready. Where do you want me to send it?"
+            animate={true}
+          />
 
           {/* Contact method selection */}
           <div className="grid grid-cols-3 gap-2 mb-5">
