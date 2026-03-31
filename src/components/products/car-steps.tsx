@@ -199,10 +199,11 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
                       key={opt}
                       label={opt}
                       selected={state.legalOwner === opt}
-                      onClick={() => onUpdate("legalOwner", opt)}
+                      onClick={() => { onUpdate("legalOwner", opt); onClearError?.("legalOwner"); }}
                     />
                   ))}
                 </div>
+                <ValidationError message={errors?.legalOwner} />
               </div>
             </>
           )}
