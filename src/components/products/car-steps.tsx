@@ -162,6 +162,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
                       selected={state.driverRelationship === opt}
                       onClick={() => {
                         onUpdate("driverRelationship", opt);
+                        onClearError?.("driverRelationship");
                         if (opt === "Myself") {
                           onUpdate("driverAge", "");
                         }
