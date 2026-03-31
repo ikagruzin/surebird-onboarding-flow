@@ -45,7 +45,7 @@ export const liabilityProduct: ProductConfig = {
 
   validateStep(stepId, state) {
     if (stepId === "liability-all") {
-      return state.dog !== "" && state.damageLimit !== "" && state.ownRisk !== "";
+      return state.dog !== "" && state.damageLimit !== "";
     }
     return false;
   },
