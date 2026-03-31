@@ -66,6 +66,8 @@ export const Index = () => {
 
   const [state, setState] = useState<WizardState>({ ...INITIAL_STATE });
   const [offerUnlocked, setOfferUnlocked] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [shakeFooter, setShakeFooter] = useState(false);
   const prefsRef = useRef<StepPreferencesHandle>(null);
   const seenStepsRef = useRef<Set<string>>(new Set());
 
