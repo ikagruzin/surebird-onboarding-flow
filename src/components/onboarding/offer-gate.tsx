@@ -58,29 +58,35 @@ export const OfferGate = ({
             />
           </div>
 
-          <div className="space-y-3 mb-6">
-            {(contactMethod === "phone" || contactMethod === "both") && (
-              <FloatingLabelInput
-                label="Phone number (+31)"
-                value={phone}
-                onChange={(e) => onUpdatePhone(e.target.value)}
-                maxLength={15}
-                inputMode="tel"
-              />
-            )}
-            {(contactMethod === "email" || contactMethod === "both") && (
-              <FloatingLabelInput
-                label="Email address"
-                value={email}
-                onChange={(e) => onUpdateEmail(e.target.value)}
-                type="email"
-              />
-            )}
-          </div>
+          {contactMethod !== "none" && (
+            <div className="space-y-3 mb-6">
+              {contactMethod === "phone" && (
+                <FloatingLabelInput
+                  label="Phone number (+31)"
+                  value={phone}
+                  onChange={(e) => onUpdatePhone(e.target.value)}
+                  maxLength={15}
+                  inputMode="tel"
+                />
+              )}
+              {contactMethod === "email" && (
+                <FloatingLabelInput
+                  label="Email address"
+                  value={email}
+                  onChange={(e) => onUpdateEmail(e.target.value)}
+                  type="email"
+                />
+              )}
+            </div>
+          )}
 
           <button
             onClick={onUnlock}
-            className="inline-flex items-center gap-2 text-success-foreground px-7 py-3 rounded-full font-semibold text-base transition-all"
+            disabled={
+              (contactMethod === "phone" && phone.replace(/\s/g, "").length <= 4) ||
+              (contactMethod === "email" && !email.includes("@"))
+            }
+            className="inline-flex items-center gap-2 text-success-foreground px-7 py-3 rounded-full font-semibold text-base transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             style={{
               background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
               boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',

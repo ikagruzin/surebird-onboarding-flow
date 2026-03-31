@@ -113,6 +113,11 @@ export const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
         </div>
       </div>
 
+      {/* Trustpilot Review */}
+      <div className="flex justify-center my-8">
+        <img src={trustpilotReview} alt="Trustpilot 4.6 Excellent" className="h-9" />
+      </div>
+
       {/* USP Card Stack */}
       <div className="relative max-w-lg" style={{ minHeight: visibleCards > 0 ? "200px" : "0" }}>
         {USP_CARDS.map((card, i) => {

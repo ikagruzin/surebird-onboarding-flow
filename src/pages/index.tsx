@@ -563,6 +563,28 @@ export const Index = () => {
             <Progress value={getPhaseProgress()} className="h-2 [&>div]:bg-success" />
           </div>
         )}
+        {/* Always-mounted StepPreferences to preserve state */}
+        {flow.steps.some((s) => s.id === "preferences") && (
+          <div className={currentStepId === "preferences" ? "" : "hidden"}>
+            <StepPreferences
+              ref={prefsRef}
+              selectedInsurances={state.selectedInsurances}
+              preferences={state.preferences}
+              firstName={state.firstName}
+              phone={state.phone}
+              email={state.email}
+              savings={totalSavings}
+              onUpdatePreference={updatePreference}
+              onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
+              onUpdateEmail={(value) => setState((s) => ({ ...s, email: value }))}
+              onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
+              onNext={() => goToIndex(getNextIndex())}
+              onBack={() => goToIndex(getPrevIndex())}
+              animateTaco={shouldAnimateTaco}
+              skipContactStep={flow.steps.some((s) => s.id === "all-set")}
+            />
+          </div>
+        )}
         {renderStep()}
         {showFooter && <div aria-hidden className="h-36 md:h-40" />}
       </main>
