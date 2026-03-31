@@ -98,13 +98,15 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete,
             <p className="text-sm font-medium text-foreground">How do you use it?</p>
             <NativeSelect
               value={state.usage}
-              onChange={(e) => onUpdate("usage", e.target.value)}
+              onChange={(e) => { onUpdate("usage", e.target.value); onClearError?.("usage"); }}
               placeholder="Select usage"
+              className={errors?.usage ? "border-destructive" : ""}
             >
               {CARAVAN_OPTIONS.usageOptions.map((opt) => (
                 <option key={opt} value={opt}>{opt}</option>
               ))}
             </NativeSelect>
+            <ValidationError message={errors?.usage} />
           </div>
 
           {/* Used as mobile home? (conditional) */}
