@@ -59,18 +59,6 @@ const StepAccidentAll = ({ state, onUpdate, animateTaco, onAnimationComplete }: 
           />
         </div>
 
-        {/* Own Risk */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <p className="text-sm font-medium text-foreground">Own risk</p>
-            <InfoTip text="This is what you have to pay yourself when you file a claim. We recommend choosing an amount that would not cause you much stress if you suddenly lost it." />
-          </div>
-          <SegmentedControl
-            options={[...ACCIDENT_OPTIONS.ownRiskOptions]}
-            value={state.ownRisk}
-            onChange={(v) => onUpdate("ownRisk", v)}
-          />
-        </div>
       </div>
     </SectionCard>
   </div>

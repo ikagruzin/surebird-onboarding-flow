@@ -46,7 +46,7 @@ export const accidentsProduct: ProductConfig = {
 
   validateStep(stepId, state) {
     if (stepId === "accidents-all") {
-      return state.coverage !== "" && state.ownRisk !== "";
+      return state.coverage !== "";
     }
     return false;
   },
