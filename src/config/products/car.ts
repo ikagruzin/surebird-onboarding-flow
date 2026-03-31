@@ -4,7 +4,8 @@ import type { ProductConfig } from "./types";
 
 export const CAR_OPTIONS = {
   mainDriverOptions: ["Yes", "No"],
-  driverRelationshipOptions: ["Partner", "Child"],
+  driverRelationshipOptions: ["My partner", "My child"],
+  legalOwnerOptions: ["Myself", "My partner", "My child"],
   kmBrackets: [
     "0 – 7,500 km",
     "7,500 – 12,000 km",
