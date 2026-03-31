@@ -247,11 +247,12 @@ export const HomeDetailsStep = ({
                   selected={state.roofShape === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
-                  onClick={() => onUpdate("roofShape", opt)}
+                  onClick={() => { onUpdate("roofShape", opt); onClearError?.("roofShape"); }}
                 />
               );
             })}
           </div>
+          <ValidationError message={errors?.roofShape} />
         </div>
         <div>
           <div className="flex items-center gap-2 mb-2">
