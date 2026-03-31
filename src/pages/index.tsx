@@ -412,6 +412,7 @@ export const Index = () => {
                 ? () => goToStepId("policy-upload")
                 : undefined
             }
+            hideVersionSwitcher={flowId === "final"}
           />
         );
       case "policy-upload":
