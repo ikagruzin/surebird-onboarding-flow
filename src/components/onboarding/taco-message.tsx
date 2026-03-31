@@ -27,6 +27,8 @@ export const TacoMessage = ({
   }, [message]);
 
   const [visibleCount, setVisibleCount] = useState(animate ? 0 : words.length);
+  const onCompleteRef = useRef(onAnimationComplete);
+  onCompleteRef.current = onAnimationComplete;
 
   useEffect(() => {
     if (!animate) {
@@ -41,12 +43,12 @@ export const TacoMessage = ({
       setVisibleCount(i);
       if (i >= words.length) {
         clearInterval(interval);
-        onAnimationComplete?.();
+        onCompleteRef.current?.();
       }
     }, wordDelay);
 
     return () => clearInterval(interval);
-  }, [animate, words, wordDelay, onAnimationComplete]);
+  }, [animate, words, wordDelay]);
 
   const textContent = (
     <>
