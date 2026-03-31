@@ -188,6 +188,7 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
                 />
               ))}
             </div>
+            <ValidationError message={errors?.caravanType} />
           </div>
 
           {/* Input for plate or chassis */}
