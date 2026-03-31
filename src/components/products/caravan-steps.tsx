@@ -146,7 +146,7 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete,
 
 /* ─── Step 2: Vehicle Specifications ─── */
 
-const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   const [autoFilled, setAutoFilled] = useState(false);
 
   const simulateAutoFill = useCallback((raw?: string) => {
