@@ -313,7 +313,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, MultiCarFlowTabP
               state={active.state}
               onUpdate={(key, value) => { update(key, value); clearError(key); }}
               onAutoAdvance={autoAdvance}
-              animateTaco={shouldAnimateTaco}
+              animateTaco={isActive && shouldAnimateTaco}
               onAnimationComplete={markAnimated}
               errors={validationErrors}
               onClearError={clearError}
@@ -326,7 +326,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, MultiCarFlowTabP
           <>
             <TacoMessage
               message="Nice one! Want to insure another car?"
-              animate={!animatedSteps.has("add-prompt")}
+              animate={isActive && !animatedSteps.has("add-prompt")}
               onAnimationComplete={() => setAnimatedSteps((prev) => new Set(prev).add("add-prompt"))}
             />
             <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">

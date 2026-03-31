@@ -2,7 +2,7 @@
  * Renders a single product's step flow inside a tab.
  * Used by StepPreferences in Flow A to embed real product logic.
  */
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useImperativeHandle, useEffect, useRef } from "react";
 import { useProductFlow } from "@/hooks/use-product-flow";
 import { getProductConfig } from "@/config/products";
 import { PRODUCT_STEP_COMPONENT_MAPS } from "./component-maps";
@@ -23,14 +23,23 @@ export interface ProductFlowTabHandle {
 interface ProductFlowTabProps {
   productId: string;
   animateTaco?: boolean;
+  isActive?: boolean;
 }
 
 export const ProductFlowTab = forwardRef<ProductFlowTabHandle, ProductFlowTabProps>(
-  ({ productId }, ref) => {
+  ({ productId, isActive = false }, ref) => {
     const config = getProductConfig(productId)!;
     const flow = useProductFlow(config);
     const componentMap = PRODUCT_STEP_COMPONENT_MAPS[productId] || {};
     const StepComponent = componentMap[flow.currentStepId];
+    const wasActiveRef = useRef(false);
+
+    useEffect(() => {
+      if (!wasActiveRef.current && isActive && flow.shouldAnimateTaco) {
+        // no-op effect to align first visible render with active state changes
+      }
+      wasActiveRef.current = isActive;
+    }, [isActive, flow.shouldAnimateTaco]);
 
     useImperativeHandle(ref, () => ({
       handleNext: () => {
@@ -78,7 +87,7 @@ export const ProductFlowTab = forwardRef<ProductFlowTabHandle, ProductFlowTabPro
           flow.clearError(key);
         }}
         onAutoAdvance={flow.autoAdvance}
-        animateTaco={flow.shouldAnimateTaco}
+        animateTaco={isActive && flow.shouldAnimateTaco}
         onAnimationComplete={flow.markAnimated}
         errors={flow.validationErrors}
         onClearError={flow.clearError}
