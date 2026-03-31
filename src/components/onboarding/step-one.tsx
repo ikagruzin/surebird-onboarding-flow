@@ -190,6 +190,7 @@ export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAud
   const [version, setVersion] = useState<"A" | "B" | "C">("A");
   const sliderRef = useRef<HTMLDivElement>(null);
   const [language, setLanguage] = useState<"en" | "nl">("en");
+  const [hoveredProduct, setHoveredProduct] = useState<InsuranceType | null>(null);
 
   const isActiveBundle = (preset: BundlePreset) =>
     preset.insuranceIds.every((id) => selected.includes(id)) &&
