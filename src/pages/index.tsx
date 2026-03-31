@@ -88,6 +88,7 @@ export const Index = () => {
     setSearchParams({ flow: newFlowId });
     setState({ ...INITIAL_STATE });
     setOfferUnlocked(false);
+    seenStepsRef.current = new Set();
   };
 
   // Navigate to a step by its ID
