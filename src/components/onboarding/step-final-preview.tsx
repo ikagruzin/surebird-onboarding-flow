@@ -2,6 +2,7 @@ import { Check, Gift, Award } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
 import { TacoMessage } from "./taco-message";
+import { ValidationError } from "./validation-error";
 
 /* Mirror the offer page pricing so summary matches */
 const INSURER_PRICES: Record<string, number> = {
