@@ -614,13 +614,8 @@ export const StepOffer = ({
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-3 pt-2 border-t border-border">
-          <img src={trustpilotLogo} alt="Trustpilot" className="h-5 object-contain" />
-          <div className="w-px h-6 bg-border" />
-          <div className="flex items-center gap-1">
-            <span className="text-2xl font-bold text-foreground">4.6</span>
-            <span className="text-sm text-muted-foreground">Excellent</span>
-          </div>
+        <div className="pt-4 border-t border-border">
+          <img src={trustpilotReview} alt="Trustpilot 4.6 Excellent" className="h-9" />
         </div>
       </div>
 
