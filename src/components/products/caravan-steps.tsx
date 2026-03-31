@@ -337,13 +337,14 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
               <p className="text-sm font-medium text-foreground">What did you pay for it? (Purchase Value)</p>
               <Input
                 value={state.purchaseValue}
-                onChange={(e) => onUpdate("purchaseValue", formatCurrency(e.target.value))}
+                onChange={(e) => { onUpdate("purchaseValue", formatCurrency(e.target.value)); onClearError?.("purchaseValue"); }}
                 placeholder="€0"
-                className={`h-12 rounded-xl ${purchaseError ? "border-destructive" : ""}`}
+                className={`h-12 rounded-xl ${purchaseError || errors?.purchaseValue ? "border-destructive" : ""}`}
               />
               {purchaseError && (
                 <p className="text-xs text-destructive">{purchaseError}</p>
               )}
+              <ValidationError message={errors?.purchaseValue} />
             </div>
           )}
         </div>

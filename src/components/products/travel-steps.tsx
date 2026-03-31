@@ -108,6 +108,8 @@ export const TravelSportStep = ({
   onAutoAdvance,
   animateTaco,
   onAnimationComplete,
+  errors,
+  onClearError,
 }: ProductStepProps) => {
   const showSportDetails = state.playsSport === "Yes";
   const showEquipmentDetails = showSportDetails && state.bringsEquipment === "Yes";
