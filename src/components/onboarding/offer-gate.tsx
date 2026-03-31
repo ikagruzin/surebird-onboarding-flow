@@ -51,9 +51,9 @@ export const OfferGate = ({
               indicator="radio"
             />
             <SelectionCard
-              label="Both"
-              selected={contactMethod === "both"}
-              onClick={() => setContactMethod("both")}
+              label="None"
+              selected={contactMethod === "none"}
+              onClick={() => setContactMethod("none")}
               indicator="radio"
             />
           </div>
