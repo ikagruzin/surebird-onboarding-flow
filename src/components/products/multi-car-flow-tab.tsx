@@ -143,11 +143,13 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
           if (!hasAskedAddPrompt) {
             // First car completed → show "add another?" prompt
             setPhase("add-prompt");
+            return true;
           } else {
-            // Subsequent cars → go straight to done
+            // Subsequent cars → done, let parent advance
             setPhase("done");
+            onComplete?.();
+            return true;
           }
-          return true;
         }
 
         if (!isLastStep && isValid) {
@@ -198,7 +200,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
           <div className="flex flex-wrap items-center gap-2">
             {instances.map((inst, i) => {
               const complete = isInstanceComplete(inst);
-              const isActive = i === activeIdx && phase === "steps";
+              const isActive = i === activeIdx && (phase === "steps" || phase === "done");
               const label = getCarInstanceLabel(inst, i);
               return (
                 <div key={inst.id} className="relative group">
