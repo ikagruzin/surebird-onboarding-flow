@@ -1,34 +1,45 @@
 
 
-## Apply Adaptive Grid Layout to All Home SelectionCard Groups
+## Add Dynamic "Bundle" Badge to Product Selection Cards
 
-### What Changes
+### Overview
 
-Import `getSelectionGridClass` from `@/lib/grid-layout` and replace every hardcoded grid/stack wrapper around `SelectionCard` groups with a dynamic call.
+Add a small "Bundle" badge inside each product card (Step 1) that appears/disappears based on cross-sell cluster logic. Two clusters: Essentials (Car, Home, Liability) and Lifestyle (Travel, Legal). Accidents and Caravan are excluded.
 
-### Affected Groups
+### Changes
 
-| Group | Current wrapper | Labels for calculation |
-|-------|----------------|----------------------|
-| **Preset Yes/No** (line 67) | `grid grid-cols-2 gap-2` | `["Yes", "No"]` → 2 cols (correct, but should use utility) |
-| **Construction Materials** (line 179) | `space-y-2` (vertical stack) | `["(Largely) stone", "Wooden frame with stone wall", "Wooden skeleton"]` |
-| **Floor Material** (line 203) | `space-y-2` | `["Stone/concrete", "Wood", "No floors"]` |
-| **Roof Shape** (line 225) | `space-y-2` | `["Sloping", "Flat", "Special"]` |
-| **Coverage Path** (line 307) | `space-y-2` | `["Household goods + Building", "Household goods", "Building"]` |
+**File: `src/components/onboarding/step-one.tsx`**
 
-**Not affected** (correctly excluded):
-- SegmentedControl groups (Role, Security, Net Income, Floor Count) — these are a different component, not SelectionCards
-- Toggle rows (Building step) — not SelectionCards
-- NativeSelect dropdowns — not SelectionCards
-- ChipSelect (Usage) — not SelectionCards
+1. **Define cluster map** as a constant:
+```typescript
+const BUNDLE_CLUSTERS: Record<string, string[]> = {
+  car: ["home", "liability"],
+  home: ["car", "liability"],
+  liability: ["car", "home"],
+  travel: ["legal"],
+  legal: ["travel"],
+};
+```
 
-### File Changed
+2. **Compute badge visibility** inside `InsuranceGrid`: derive a `Set<string>` of product IDs that should show the badge — loop through `selected`, for each selected product look up its cluster partners, add any partner that is NOT in `selected`.
+
+3. **Render the badge** inside each product card button, positioned between the label (`flex-1`) and the checkbox div. Use the existing `Badge` component from `@/components/ui/badge` with a small style (e.g., `variant="secondary"` or custom blue styling). Only render when `shouldShowBadge.has(ins.id)`.
+
+4. **Badge styling**: Small pill with text "Bundle", matching the blue primary color scheme. Approximately: `bg-primary/10 text-primary border-0 text-[10px] px-2 py-0.5 uppercase tracking-wide font-bold`.
+
+### Behavior Summary
+
+| User action | Effect |
+|-------------|--------|
+| Select Car | Badge appears on Home & Liability (if unselected) |
+| Then select Home | Badge disappears from Home, stays on Liability |
+| Deselect Car | Badge disappears from Liability (no trigger left... unless Home triggers it back on Car and Liability — Home is still selected so Car and Liability get badges) |
+| Select Travel | Badge appears on Legal |
+| Select Legal | Badge disappears from Legal |
+
+### Files Changed
 
 | File | Change |
 |------|--------|
-| `src/components/products/home-steps.tsx` | Add import for `getSelectionGridClass`; replace 5 hardcoded wrappers with `className={getSelectionGridClass(labels)}` |
-
-### Technical Note
-
-For Coverage Path options that have `rightIcon` (InfoTip), the grid utility doesn't account for icon width. The longest label "Household goods + Building" (26 chars) estimates ~276px, so the utility will likely compute 2 cols. With the icon adding ~24px, these may wrap. If so, we can keep Coverage Path as 1-col stacked since all 3 have rightIcon and long labels. Will verify at implementation.
+| `src/components/onboarding/step-one.tsx` | Add cluster constant, compute badge set, render Badge component in InsuranceGrid |
 
