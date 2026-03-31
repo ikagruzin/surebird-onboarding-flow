@@ -108,7 +108,10 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
           {/* Used as mobile home? (conditional) */}
           {showMobileHomeQ && (
             <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">Used as a mobile home?</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium text-foreground">Used as a mobile home?</p>
+                <InfoTip text="Select Yes if it remains at one location year-round in the NL (winter storage allowed elsewhere in the NL)." />
+              </div>
               <SegmentedControl
                 options={["Yes", "No"]}
                 value={state.usedAsMobileHome}
