@@ -5,6 +5,7 @@
 import { useState, useEffect, useCallback } from "react";
 import type { ProductStepProps } from "@/config/products/types";
 import type { ComponentType } from "react";
+import { Info } from "lucide-react";
 import { TacoMessage } from "@/components/onboarding/taco-message";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
@@ -12,6 +13,31 @@ import { Input } from "@/components/ui/input";
 import { DutchPlateInput } from "@/components/ui/dutch-plate-input";
 import { CARAVAN_OPTIONS } from "@/config/products/caravan";
 import { getSelectionGridClass } from "@/lib/grid-layout";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+const InfoTip = ({ text }: { text: string }) => (
+  <TooltipProvider delayDuration={200}>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          className="text-muted-foreground hover:text-foreground transition-colors"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Info className="w-4 h-4" />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="top" className="max-w-64 text-xs">
+        {text}
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+);
 
 /* ─── Step 1: Context & Usage ─── */
 
