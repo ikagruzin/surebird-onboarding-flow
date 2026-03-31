@@ -21,7 +21,7 @@ export const OfferGate = ({
   onUpdateEmail,
   onUnlock,
 }: OfferGateProps) => {
-  const [contactMethod, setContactMethod] = useState<"phone" | "email" | "both">("phone");
+  const [contactMethod, setContactMethod] = useState<"phone" | "email" | "none">("phone");
 
   return (
     <div className="absolute inset-0 z-30 flex items-start justify-center pt-24">
