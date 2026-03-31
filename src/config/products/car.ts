@@ -4,7 +4,8 @@ import type { ProductConfig } from "./types";
 
 export const CAR_OPTIONS = {
   mainDriverOptions: ["Yes", "No"],
-  driverRelationshipOptions: ["Partner", "Child"],
+  driverRelationshipOptions: ["My partner", "My child"],
+  legalOwnerOptions: ["Myself", "My partner", "My child"],
   kmBrackets: [
     "0 – 7,500 km",
     "7,500 – 12,000 km",
@@ -25,6 +26,7 @@ export interface CarState {
   mainDriver: string;
   driverRelationship: string;
   driverAge: string;
+  legalOwner: string;
   damageFreeYears: string;
   kmPerYear: string;
 }
@@ -82,6 +84,7 @@ export const carProduct: ProductConfig = {
     mainDriver: "",
     driverRelationship: "",
     driverAge: "",
+    legalOwner: "",
     damageFreeYears: "",
     kmPerYear: "",
   } satisfies CarState as Record<string, any>,
@@ -94,6 +97,7 @@ export const carProduct: ProductConfig = {
     mainDriver: "Yes",
     driverRelationship: "",
     driverAge: "",
+    legalOwner: "",
     damageFreeYears: "",
     kmPerYear: "",
   },
@@ -117,7 +121,7 @@ export const carProduct: ProductConfig = {
         state.damageFreeYears !== "" &&
         state.kmPerYear !== "";
       if (state.mainDriver === "No") {
-        return baseValid && state.driverRelationship !== "" && state.driverAge !== "";
+        return baseValid && state.driverRelationship !== "" && state.driverAge !== "" && state.legalOwner !== "";
       }
       return baseValid;
     }
