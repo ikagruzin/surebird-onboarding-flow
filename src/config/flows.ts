@@ -3,6 +3,7 @@ import { flowA } from "./flow-a";
 import { flowB } from "./flow-b";
 import { flowC } from "./flow-c";
 import { flowD } from "./flow-d";
+import { flowFinal } from "./flow-final";
 
 const designSystemEntry: FlowConfig = {
   id: "design-system",
@@ -14,14 +15,15 @@ const designSystemEntry: FlowConfig = {
 
 /** Registry of all available flows. Add new flows here. */
 export const FLOWS: Record<string, FlowConfig> = {
+  final: flowFinal,
+  c: { ...flowC, name: "Products Data Only", description: "Test individual product flows (e.g. House Insurance)" },
+  "design-system": designSystemEntry,
   a: flowA,
   b: flowB,
-  c: flowC,
   d: flowD,
-  "design-system": designSystemEntry,
 };
 
-export const DEFAULT_FLOW_ID = "a";
+export const DEFAULT_FLOW_ID = "final";
 
 export function getFlow(flowId: string): FlowConfig {
   return FLOWS[flowId] || FLOWS[DEFAULT_FLOW_ID];
