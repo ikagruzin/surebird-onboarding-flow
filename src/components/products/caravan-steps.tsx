@@ -72,8 +72,9 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete,
                     label={opt}
                     selected={state.caravanType === opt}
                     rightIcon={tooltip ? <InfoTip text={tooltip} /> : undefined}
-                    onClick={() => {
-                      onUpdate("caravanType", opt);
+                  onClick={() => {
+                    onUpdate("caravanType", opt);
+                    onClearError?.("caravanType");
                       if (opt === "Mobile home") {
                         onUpdate("usedAsMobileHome", "");
                         onUpdate("nearFloodRiver", "No");
