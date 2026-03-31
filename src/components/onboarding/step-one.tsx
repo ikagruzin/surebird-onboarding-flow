@@ -183,9 +183,10 @@ interface StepOneProps {
   onBundleSelect: (ids: string[]) => void;
   onNext: () => void;
   onSmartAudit?: () => void;
+  hideVersionSwitcher?: boolean;
 }
 
-export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit }: StepOneProps) => {
+export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit, hideVersionSwitcher }: StepOneProps) => {
   const [version, setVersion] = useState<"A" | "B" | "C">("A");
   const sliderRef = useRef<HTMLDivElement>(null);
   const [language, setLanguage] = useState<"en" | "nl">("en");
