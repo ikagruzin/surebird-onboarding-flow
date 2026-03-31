@@ -7,6 +7,7 @@ import type { ProductStepProps } from "@/config/products/types";
 import type { ComponentType } from "react";
 import { Info } from "lucide-react";
 import { TacoMessage } from "@/components/onboarding/taco-message";
+import { ValidationError } from "@/components/onboarding/validation-error";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { Input } from "@/components/ui/input";
