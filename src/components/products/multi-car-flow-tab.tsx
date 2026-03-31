@@ -284,10 +284,12 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
         {(phase === "steps" || phase === "done") && StepComponent && (
           <StepComponent
             state={active.state}
-            onUpdate={update}
+            onUpdate={(key, value) => { update(key, value); clearError(key); }}
             onAutoAdvance={autoAdvance}
             animateTaco={shouldAnimateTaco}
             onAnimationComplete={markAnimated}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         )}
 
