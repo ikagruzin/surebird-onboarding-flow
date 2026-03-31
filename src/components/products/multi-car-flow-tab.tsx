@@ -19,8 +19,8 @@ import { cn } from "@/lib/utils";
 type Phase = "steps" | "add-prompt" | "done";
 type AddPromptAnswer = "" | "yes" | "no";
 
-export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: string }>(
-  ({ productId }, ref) => {
+export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: string; onComplete?: () => void }>(
+  ({ productId, onComplete }, ref) => {
     const config = getProductConfig(productId)!;
     const componentMap = PRODUCT_STEP_COMPONENT_MAPS[productId] || {};
 
