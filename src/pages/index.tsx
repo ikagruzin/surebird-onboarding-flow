@@ -668,11 +668,11 @@ export const Index = () => {
           savings={totalSavings}
           onNext={handleNext}
           onBack={handleBack}
-          disabled={!canProceed()}
           buttonLabel={buttonLabel}
           hasSidebar={true}
           showSavings={showSavings}
           showNextButton={showNextButton}
+          shake={shakeFooter}
         />
       )}
     </div>
