@@ -224,13 +224,15 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
                 <p className="text-sm font-medium text-foreground">Brand</p>
                 <NativeSelect
                   value={state.brand}
-                  onChange={(e) => onUpdate("brand", e.target.value)}
+                  onChange={(e) => { onUpdate("brand", e.target.value); onClearError?.("brand"); }}
                   placeholder="Select brand"
+                  className={errors?.brand ? "border-destructive" : ""}
                 >
                   {CARAVAN_OPTIONS.brandOptions.map((b) => (
                     <option key={b} value={b}>{b}</option>
                   ))}
                 </NativeSelect>
+                <ValidationError message={errors?.brand} />
               </div>
 
               <div className="space-y-2">
