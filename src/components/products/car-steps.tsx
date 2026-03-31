@@ -180,7 +180,10 @@ const StepCarRisk = ({ state, onUpdate, animateTaco, onAnimationComplete }: Prod
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm font-medium text-foreground">Who is the legal owner?</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-foreground">Who is the legal owner of the car?</p>
+                  <InfoTip text="You can insure your partner's car, but only if your partner lives in your home. Children who have their own car must insure their own car." />
+                </div>
                 <div className={getSelectionGridClass([...CAR_OPTIONS.legalOwnerOptions])}>
                   {CAR_OPTIONS.legalOwnerOptions.map((opt) => (
                     <SelectionCard
