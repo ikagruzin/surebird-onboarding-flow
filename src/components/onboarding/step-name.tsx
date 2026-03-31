@@ -18,13 +18,15 @@ export const StepName = ({ firstName, onUpdate, onNext, onBack, animateTaco }: S
       />
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
-        <FloatingLabelInput
-          label="First name"
-          value={firstName}
-          onChange={(e) => onUpdate("firstName", e.target.value)}
-          maxLength={100}
-          autoFocus={!firstName}
-        />
+        <div className="max-w-xs">
+          <FloatingLabelInput
+            label="First name"
+            value={firstName}
+            onChange={(e) => onUpdate("firstName", e.target.value)}
+            maxLength={100}
+            autoFocus={!firstName}
+          />
+        </div>
       </div>
     </div>
   );
