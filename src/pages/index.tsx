@@ -78,11 +78,9 @@ export const Index = () => {
   const currentStepId = currentStepConfig?.id || "product-selection";
 
   // Track whether Taco message should animate (only on first visit)
+  // Mark seen during render (not in useEffect) to survive React 18 strict-mode double-render
   const shouldAnimateTaco = !seenStepsRef.current.has(currentStepId);
-
-  useEffect(() => {
-    seenStepsRef.current.add(currentStepId);
-  }, [currentStepId]);
+  seenStepsRef.current.add(currentStepId);
 
 
 
@@ -90,6 +88,7 @@ export const Index = () => {
     setSearchParams({ flow: newFlowId });
     setState({ ...INITIAL_STATE });
     setOfferUnlocked(false);
+    seenStepsRef.current = new Set();
   };
 
   // Navigate to a step by its ID
