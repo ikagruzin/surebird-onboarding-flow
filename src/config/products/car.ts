@@ -26,6 +26,7 @@ export interface CarState {
   mainDriver: string;
   driverRelationship: string;
   driverAge: string;
+  legalOwner: string;
   damageFreeYears: string;
   kmPerYear: string;
 }
