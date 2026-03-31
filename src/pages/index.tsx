@@ -350,7 +350,7 @@ export const Index = () => {
       if (overlay) return;
 
       // Skip steps that auto-advance or have no footer
-      const noEnterSteps: StepId[] = ["family", "phone-verification", "loading", "offer", "success", "product-selection"];
+      const noEnterSteps: StepId[] = ["phone-verification", "loading", "offer", "success", "product-selection"];
       if (noEnterSteps.includes(currentStepId as StepId)) return;
 
       // Don't trigger if user is in a textarea
