@@ -191,10 +191,10 @@ const ProductFlowView = ({ config, componentMap, onBack }: ProductFlowViewProps)
         savings={45}
         onNext={handleNext}
         onBack={flow.stepIdx > 0 ? handleBack : undefined}
-        disabled={!flow.isValid}
         buttonLabel={flow.isLastStep ? "Complete" : "Next"}
         showSavings={false}
         showNextButton
+        shake={flow.shakeFooter}
       />
     </>
   );
