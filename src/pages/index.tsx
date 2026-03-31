@@ -235,6 +235,59 @@ export const Index = () => {
     return phase?.sidebarStep || 1;
   };
 
+  const validate = (): Record<string, string> => {
+    const errs: Record<string, string> = {};
+    switch (currentStepId) {
+      case "product-selection":
+        if (state.selectedInsurances.length === 0) errs.selection = "Please select at least one insurance";
+        break;
+      case "name":
+        if (!state.firstName.trim()) errs.firstName = "Please enter your first name";
+        break;
+      case "address": {
+        const pc = state.postcode.replace(/\s/g, "");
+        if (pc.length < 6) errs.postcode = "Please enter a valid postcode";
+        if (!state.houseNumber.trim()) errs.houseNumber = "Please enter your house number";
+        break;
+      }
+      case "birthdate":
+        if (state.birthdate.trim().length < 10) errs.birthdate = "Please enter your date of birth (dd-mm-yyyy)";
+        break;
+      case "family":
+        if (!state.familyStatus) errs.familyStatus = "Please select your family status";
+        break;
+      case "start-date": {
+        const products = INSURANCE_TYPES.filter((t) => state.selectedInsurances.includes(t.id));
+        products.forEach((p) => {
+          const val = state.startDates[p.id] || "";
+          if (val.length !== 10) errs[`startDate_${p.id}`] = `Please select a start date for ${p.label}`;
+        });
+        break;
+      }
+      case "confirm-details":
+        if (!state.firstName.trim()) errs.firstName = "First name is required";
+        if (!state.lastName.trim()) errs.lastName = "Surname is required";
+        if (!state.email.includes("@")) errs.email = "Please enter a valid email address";
+        break;
+      case "idin-verification":
+        if (state.iban.length < 5) errs.iban = "Please complete iDIN verification";
+        break;
+      case "final-preview":
+        if (!state.agreeTerms) errs.agreeTerms = "You must agree to the terms";
+        if (!state.agreeDebit) errs.agreeDebit = "You must give debit permission";
+        break;
+    }
+    return errs;
+  };
+
+  const clearError = useCallback((field: string) => {
+    setValidationErrors((prev) => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  }, []);
+
   const handleNext = () => {
     // Family step auto-advances via onSelect
     if (currentStepId === "family" && state.familyStatus) return;
@@ -245,6 +298,15 @@ export const Index = () => {
       if (handled) return;
     }
 
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+      setValidationErrors(errs);
+      setShakeFooter(true);
+      setTimeout(() => setShakeFooter(false), 500);
+      return;
+    }
+
+    setValidationErrors({});
     goToIndex(getNextIndex());
   };
 
