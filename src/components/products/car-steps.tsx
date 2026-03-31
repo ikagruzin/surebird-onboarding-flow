@@ -215,7 +215,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
 
 /* ─── Step 3: Usage ─── */
 
-const StepCarUsage = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCarUsage = ({ state, onUpdate, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   return (
     <div className="space-y-6">
       <TacoMessage
