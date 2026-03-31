@@ -263,8 +263,9 @@ export const HomeDetailsStep = ({
           </div>
           <NativeSelect
             value={state.roofMaterial}
-            onChange={(e) => onUpdate("roofMaterial", e.target.value)}
+            onChange={(e) => { onUpdate("roofMaterial", e.target.value); onClearError?.("roofMaterial"); }}
             placeholder="Select roof material"
+            className={errors?.roofMaterial ? "border-destructive" : ""}
           >
             {HOME_OPTIONS.roofMaterials.map((m) => (
               <option key={m} value={m}>
@@ -272,6 +273,7 @@ export const HomeDetailsStep = ({
               </option>
             ))}
           </NativeSelect>
+          <ValidationError message={errors?.roofMaterial} />
         </div>
       </div>
     </SectionCard>
