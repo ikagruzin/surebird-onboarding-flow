@@ -7,6 +7,7 @@ import type { ProductStepProps } from "@/config/products/types";
 import type { ComponentType } from "react";
 import { Info } from "lucide-react";
 import { TacoMessage } from "@/components/onboarding/taco-message";
+import { ValidationError } from "@/components/onboarding/validation-error";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { Input } from "@/components/ui/input";
@@ -41,7 +42,7 @@ const InfoTip = ({ text }: { text: string }) => (
 
 /* ─── Step 1: Context & Usage ─── */
 
-const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   const showMobileHomeQ = state.caravanType === "Touring caravan";
   const showFloodQ = state.caravanType === "Mobile home" || state.usedAsMobileHome === "Yes";
 
@@ -71,8 +72,9 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
                     label={opt}
                     selected={state.caravanType === opt}
                     rightIcon={tooltip ? <InfoTip text={tooltip} /> : undefined}
-                    onClick={() => {
-                      onUpdate("caravanType", opt);
+                  onClick={() => {
+                    onUpdate("caravanType", opt);
+                    onClearError?.("caravanType");
                       if (opt === "Mobile home") {
                         onUpdate("usedAsMobileHome", "");
                         onUpdate("nearFloodRiver", "No");
@@ -96,13 +98,15 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
             <p className="text-sm font-medium text-foreground">How do you use it?</p>
             <NativeSelect
               value={state.usage}
-              onChange={(e) => onUpdate("usage", e.target.value)}
+              onChange={(e) => { onUpdate("usage", e.target.value); onClearError?.("usage"); }}
               placeholder="Select usage"
+              className={errors?.usage ? "border-destructive" : ""}
             >
               {CARAVAN_OPTIONS.usageOptions.map((opt) => (
                 <option key={opt} value={opt}>{opt}</option>
               ))}
             </NativeSelect>
+            <ValidationError message={errors?.usage} />
           </div>
 
           {/* Used as mobile home? (conditional) */}
@@ -142,7 +146,7 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
 
 /* ─── Step 2: Vehicle Specifications ─── */
 
-const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   const [autoFilled, setAutoFilled] = useState(false);
 
   const simulateAutoFill = useCallback((raw?: string) => {
@@ -186,6 +190,7 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
                 />
               ))}
             </div>
+            <ValidationError message={errors?.caravanType} />
           </div>
 
           {/* Input for plate or chassis */}
@@ -219,13 +224,15 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
                 <p className="text-sm font-medium text-foreground">Brand</p>
                 <NativeSelect
                   value={state.brand}
-                  onChange={(e) => onUpdate("brand", e.target.value)}
+                  onChange={(e) => { onUpdate("brand", e.target.value); onClearError?.("brand"); }}
                   placeholder="Select brand"
+                  className={errors?.brand ? "border-destructive" : ""}
                 >
                   {CARAVAN_OPTIONS.brandOptions.map((b) => (
                     <option key={b} value={b}>{b}</option>
                   ))}
                 </NativeSelect>
+                <ValidationError message={errors?.brand} />
               </div>
 
               <div className="space-y-2">
@@ -233,12 +240,13 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
                 <Input
                   type="number"
                   value={state.yearOfConstruction}
-                  onChange={(e) => onUpdate("yearOfConstruction", e.target.value)}
+                  onChange={(e) => { onUpdate("yearOfConstruction", e.target.value); onClearError?.("yearOfConstruction"); }}
                   placeholder="e.g. 2020"
-                  className="h-12 rounded-xl"
+                  className={`h-12 rounded-xl ${errors?.yearOfConstruction ? "border-destructive" : ""}`}
                   min={1970}
                   max={new Date().getFullYear()}
                 />
+                <ValidationError message={errors?.yearOfConstruction} />
               </div>
             </div>
           </div>
@@ -251,13 +259,15 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
             </div>
             <NativeSelect
               value={state.length}
-              onChange={(e) => onUpdate("length", e.target.value)}
+              onChange={(e) => { onUpdate("length", e.target.value); onClearError?.("length"); }}
               placeholder="Select length"
+              className={errors?.length ? "border-destructive" : ""}
             >
               {CARAVAN_OPTIONS.lengthOptions.map((l) => (
                 <option key={l} value={l}>{l}</option>
               ))}
             </NativeSelect>
+            <ValidationError message={errors?.length} />
           </div>
         </div>
       </SectionCard>
@@ -267,7 +277,7 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete }:
 
 /* ─── Step 3: Financial Valuation ─── */
 
-const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   const isUsed = state.condition === "Second hand";
   const catalogueNum = parseFloat(state.catalogueValue?.replace(/[^0-9.]/g, "") || "0");
 
@@ -304,8 +314,9 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
             <SegmentedControl
               options={[...CARAVAN_OPTIONS.conditionOptions]}
               value={state.condition}
-              onChange={(v) => onUpdate("condition", v)}
+              onChange={(v) => { onUpdate("condition", v); onClearError?.("condition"); }}
             />
+            <ValidationError message={errors?.condition} />
           </div>
 
           {/* Catalogue value */}
@@ -313,10 +324,11 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
             <p className="text-sm font-medium text-foreground">Original price when new? (Catalogue Value)</p>
             <Input
               value={state.catalogueValue}
-              onChange={(e) => onUpdate("catalogueValue", formatCurrency(e.target.value))}
+              onChange={(e) => { onUpdate("catalogueValue", formatCurrency(e.target.value)); onClearError?.("catalogueValue"); }}
               placeholder="€0"
-              className="h-12 rounded-xl"
+              className={`h-12 rounded-xl ${errors?.catalogueValue ? "border-destructive" : ""}`}
             />
+            <ValidationError message={errors?.catalogueValue} />
           </div>
 
           {/* Purchase value (conditional) */}
@@ -325,13 +337,14 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
               <p className="text-sm font-medium text-foreground">What did you pay for it? (Purchase Value)</p>
               <Input
                 value={state.purchaseValue}
-                onChange={(e) => onUpdate("purchaseValue", formatCurrency(e.target.value))}
+                onChange={(e) => { onUpdate("purchaseValue", formatCurrency(e.target.value)); onClearError?.("purchaseValue"); }}
                 placeholder="€0"
-                className={`h-12 rounded-xl ${purchaseError ? "border-destructive" : ""}`}
+                className={`h-12 rounded-xl ${purchaseError || errors?.purchaseValue ? "border-destructive" : ""}`}
               />
               {purchaseError && (
                 <p className="text-xs text-destructive">{purchaseError}</p>
               )}
+              <ValidationError message={errors?.purchaseValue} />
             </div>
           )}
         </div>

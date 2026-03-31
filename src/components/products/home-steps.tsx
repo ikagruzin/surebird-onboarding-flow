@@ -6,6 +6,7 @@ import { Check, Info } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { TacoMessage } from "@/components/onboarding/taco-message";
+import { ValidationError } from "@/components/onboarding/validation-error";
 import {
   SectionCard,
   ChipSelect,
@@ -45,6 +46,7 @@ export const HomePresetStep = ({
   onAutoAdvance,
   animateTaco,
   onAnimationComplete,
+  errors,
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
@@ -86,6 +88,7 @@ export const HomePresetStep = ({
           }
         />
       </div>
+      <ValidationError message={errors?.presetAnswer} />
     </SectionCard>
   </div>
 );
@@ -97,6 +100,7 @@ export const HomeRoleStep = ({
   onAutoAdvance,
   animateTaco,
   onAnimationComplete,
+  errors,
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
@@ -122,6 +126,7 @@ export const HomeRoleStep = ({
             )
           }
         />
+        <ValidationError message={errors?.role} />
       </CardContent>
     </Card>
   </div>
@@ -134,6 +139,8 @@ export const HomeDetailsStep = ({
   onUpdate,
   animateTaco,
   onAnimationComplete,
+  errors,
+  onClearError,
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
@@ -153,8 +160,9 @@ export const HomeDetailsStep = ({
           </div>
           <NativeSelect
             value={state.buildingType}
-            onChange={(e) => onUpdate("buildingType", e.target.value)}
+            onChange={(e) => { onUpdate("buildingType", e.target.value); onClearError?.("buildingType"); }}
             placeholder="Select building type"
+            className={errors?.buildingType ? "border-destructive" : ""}
           >
             {HOME_OPTIONS.buildingTypes.map((t) => (
               <option key={t} value={t}>
@@ -162,6 +170,7 @@ export const HomeDetailsStep = ({
               </option>
             ))}
           </NativeSelect>
+          <ValidationError message={errors?.buildingType} />
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
@@ -170,8 +179,9 @@ export const HomeDetailsStep = ({
           <ChipSelect
             options={[...HOME_OPTIONS.usageOptions]}
             selected={state.usage}
-            onChange={(v) => onUpdate("usage", v)}
+            onChange={(v) => { onUpdate("usage", v); onClearError?.("usage"); }}
           />
+          <ValidationError message={errors?.usage} />
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
@@ -191,11 +201,12 @@ export const HomeDetailsStep = ({
                   selected={state.constructionMaterial === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
-                  onClick={() => onUpdate("constructionMaterial", opt)}
+                  onClick={() => { onUpdate("constructionMaterial", opt); onClearError?.("constructionMaterial"); }}
                 />
               );
             })}
           </div>
+          <ValidationError message={errors?.constructionMaterial} />
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
@@ -213,11 +224,12 @@ export const HomeDetailsStep = ({
                   selected={state.floorMaterial === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
-                  onClick={() => onUpdate("floorMaterial", opt)}
+                  onClick={() => { onUpdate("floorMaterial", opt); onClearError?.("floorMaterial"); }}
                 />
               );
             })}
           </div>
+          <ValidationError message={errors?.floorMaterial} />
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
@@ -235,11 +247,12 @@ export const HomeDetailsStep = ({
                   selected={state.roofShape === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
-                  onClick={() => onUpdate("roofShape", opt)}
+                  onClick={() => { onUpdate("roofShape", opt); onClearError?.("roofShape"); }}
                 />
               );
             })}
           </div>
+          <ValidationError message={errors?.roofShape} />
         </div>
         <div>
           <div className="flex items-center gap-2 mb-2">
@@ -250,8 +263,9 @@ export const HomeDetailsStep = ({
           </div>
           <NativeSelect
             value={state.roofMaterial}
-            onChange={(e) => onUpdate("roofMaterial", e.target.value)}
+            onChange={(e) => { onUpdate("roofMaterial", e.target.value); onClearError?.("roofMaterial"); }}
             placeholder="Select roof material"
+            className={errors?.roofMaterial ? "border-destructive" : ""}
           >
             {HOME_OPTIONS.roofMaterials.map((m) => (
               <option key={m} value={m}>
@@ -259,6 +273,7 @@ export const HomeDetailsStep = ({
               </option>
             ))}
           </NativeSelect>
+          <ValidationError message={errors?.roofMaterial} />
         </div>
       </div>
     </SectionCard>
@@ -297,6 +312,7 @@ export const HomeCoveragePathStep = ({
   onAutoAdvance,
   animateTaco,
   onAnimationComplete,
+  errors,
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
@@ -318,6 +334,7 @@ export const HomeCoveragePathStep = ({
             }
           />
         ))}
+        <ValidationError message={errors?.coverageChoice} />
       </CardContent>
     </Card>
   </div>

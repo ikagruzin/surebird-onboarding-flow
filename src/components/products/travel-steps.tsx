@@ -4,6 +4,7 @@
  */
 import { useState } from "react";
 import { TacoMessage } from "@/components/onboarding/taco-message";
+import { ValidationError } from "@/components/onboarding/validation-error";
 import { SectionCard, SegmentedControl } from "./shared-ui";
 import {
   Tooltip,
@@ -108,6 +109,8 @@ export const TravelSportStep = ({
   onAutoAdvance,
   animateTaco,
   onAnimationComplete,
+  errors,
+  onClearError,
 }: ProductStepProps) => {
   const showSportDetails = state.playsSport === "Yes";
   const showEquipmentDetails = showSportDetails && state.bringsEquipment === "Yes";
@@ -129,6 +132,7 @@ export const TravelSportStep = ({
               value={state.playsSport}
               onChange={(v) => {
                 onUpdate("playsSport", v);
+                onClearError?.("playsSport");
                 if (v === "No") {
                   onAutoAdvance(
                     {
@@ -143,6 +147,7 @@ export const TravelSportStep = ({
                 }
               }}
             />
+            <ValidationError message={errors?.playsSport} />
           </div>
 
           {showSportDetails && (

@@ -65,4 +65,12 @@ export const travelProduct: ProductConfig = {
         return false;
     }
   },
+
+  getValidationErrors(stepId, state) {
+    const errs: Record<string, string> = {};
+    if (stepId === "sport") {
+      if (!state.playsSport) errs.playsSport = "Please indicate if you play sports while travelling";
+    }
+    return errs;
+  },
 };

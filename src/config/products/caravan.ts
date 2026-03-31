@@ -96,4 +96,25 @@ export const caravanProduct: ProductConfig = {
         return false;
     }
   },
+
+  getValidationErrors(stepId, state) {
+    const errs: Record<string, string> = {};
+    switch (stepId) {
+      case "caravan-context":
+        if (!state.caravanType) errs.caravanType = "Please select your caravan type";
+        if (!state.usage) errs.usage = "Please select how you use your caravan";
+        break;
+      case "caravan-specs":
+        if (!state.brand) errs.brand = "Please select the brand";
+        if (!state.yearOfConstruction) errs.yearOfConstruction = "Please enter the year of construction";
+        if (!state.length) errs.length = "Please select the length";
+        break;
+      case "caravan-financial":
+        if (!state.condition) errs.condition = "Please select the condition";
+        if (!state.catalogueValue) errs.catalogueValue = "Please enter the catalogue value";
+        if (state.condition === "Second hand" && !state.purchaseValue) errs.purchaseValue = "Please enter the purchase value";
+        break;
+    }
+    return errs;
+  },
 };

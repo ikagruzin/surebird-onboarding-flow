@@ -1,5 +1,6 @@
 import { Info } from "lucide-react";
 import { TacoMessage } from "./taco-message";
+import { ValidationError } from "./validation-error";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import {
   Tooltip,
@@ -58,12 +59,16 @@ interface StepAcceptanceQuestionsProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 export const StepAcceptanceQuestions = ({
   answers,
   onUpdateAnswer,
   animateTaco,
+  errors,
+  onClearError,
 }: StepAcceptanceQuestionsProps) => {
   const hasYesAnswer = Object.values(answers).some((v) => v === "yes");
 
@@ -128,7 +133,7 @@ export const StepAcceptanceQuestions = ({
               <div className="flex shrink-0 rounded-xl border border-input overflow-hidden">
                 <button
                   type="button"
-                  onClick={() => onUpdateAnswer(q.id, "yes")}
+                  onClick={() => { onUpdateAnswer(q.id, "yes"); onClearError?.("acceptanceQuestions"); }}
                   className={`px-4 py-2 text-sm font-medium transition-colors ${
                     answers[q.id] === "yes"
                       ? "bg-primary text-primary-foreground"
@@ -139,7 +144,7 @@ export const StepAcceptanceQuestions = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => onUpdateAnswer(q.id, "no")}
+                  onClick={() => { onUpdateAnswer(q.id, "no"); onClearError?.("acceptanceQuestions"); }}
                   className={`px-4 py-2 text-sm font-medium transition-colors border-l border-input ${
                     answers[q.id] === "no"
                       ? "bg-primary text-primary-foreground"
@@ -152,6 +157,7 @@ export const StepAcceptanceQuestions = ({
             </div>
           ))}
         </div>
+        <ValidationError message={errors?.acceptanceQuestions} />
       </TooltipProvider>
 
       {/* Taco review message for "Yes" answers */}

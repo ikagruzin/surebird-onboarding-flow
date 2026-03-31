@@ -77,8 +77,13 @@ export const StepConfirmDetails = ({
             <FloatingLabelInput
               label="Phone number"
               value={phone}
-              onChange={(e) => onUpdateField("phone", e.target.value)}
+              onChange={(e) => {
+                onUpdateField("phone", e.target.value);
+                onClearError?.("phone");
+              }}
+              className={errors?.phone ? "border-destructive" : ""}
             />
+            <ValidationError message={errors?.phone} />
           </div>
 
           <div>

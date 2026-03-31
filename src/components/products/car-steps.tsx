@@ -8,6 +8,7 @@ import { useState, useCallback } from "react";
 import type { ProductStepProps } from "@/config/products/types";
 import type { ComponentType } from "react";
 import { TacoMessage } from "@/components/onboarding/taco-message";
+import { ValidationError } from "@/components/onboarding/validation-error";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
@@ -41,7 +42,7 @@ const InfoTip = ({ text }: { text: string }) => (
 
 /* ─── Step 1: Identity ─── */
 
-const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   const [lookupDone, setLookupDone] = useState(state.plateConfirmed === true);
 
   const handleLookup = useCallback((raw?: string) => {
@@ -88,9 +89,10 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
             </div>
             <DutchPlateInput
               value={state.licensePlate || ""}
-              onChange={handlePlateChange}
+              onChange={(raw) => { handlePlateChange(raw); onClearError?.("licensePlate"); }}
               onComplete={handlePlateComplete}
             />
+            <ValidationError message={errors?.licensePlate} />
           </div>
 
           {/* Confirmation card */}
@@ -106,6 +108,7 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
               <Check className="h-5 w-5 text-primary" />
             </div>
           )}
+          <ValidationError message={errors?.plateConfirmed} />
         </div>
       </SectionCard>
     </div>
@@ -114,7 +117,7 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
 
 /* ─── Step 2: Driver ─── */
 
-const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   const showDriverDetails = state.mainDriver === "No";
   const showAgeField = showDriverDetails && state.driverRelationship !== "" && state.driverRelationship !== "Myself";
 
@@ -134,6 +137,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
               value={state.mainDriver || ""}
               onChange={(v) => {
                 onUpdate("mainDriver", v);
+                onClearError?.("mainDriver");
                 if (v === "Yes") {
                   onUpdate("driverRelationship", "");
                   onUpdate("driverAge", "");
@@ -142,6 +146,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
                 }
               }}
             />
+            <ValidationError message={errors?.mainDriver} />
           </div>
 
           {/* Conditional: driver details */}
@@ -157,6 +162,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
                       selected={state.driverRelationship === opt}
                       onClick={() => {
                         onUpdate("driverRelationship", opt);
+                        onClearError?.("driverRelationship");
                         if (opt === "Myself") {
                           onUpdate("driverAge", "");
                         }
@@ -164,6 +170,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
                     />
                   ))}
                 </div>
+                <ValidationError message={errors?.driverRelationship} />
               </div>
 
               {showAgeField && (
@@ -173,10 +180,12 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
                     label="Age"
                     type="number"
                     value={state.driverAge || ""}
-                    onChange={(e) => onUpdate("driverAge", e.target.value)}
+                    onChange={(e) => { onUpdate("driverAge", e.target.value); onClearError?.("driverAge"); }}
                     min={18}
                     max={99}
+                    className={errors?.driverAge ? "border-destructive" : ""}
                   />
+                  <ValidationError message={errors?.driverAge} />
                 </div>
               )}
 
@@ -191,10 +200,11 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
                       key={opt}
                       label={opt}
                       selected={state.legalOwner === opt}
-                      onClick={() => onUpdate("legalOwner", opt)}
+                      onClick={() => { onUpdate("legalOwner", opt); onClearError?.("legalOwner"); }}
                     />
                   ))}
                 </div>
+                <ValidationError message={errors?.legalOwner} />
               </div>
             </>
           )}
@@ -206,7 +216,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
 
 /* ─── Step 3: Usage ─── */
 
-const StepCarUsage = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCarUsage = ({ state, onUpdate, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
   return (
     <div className="space-y-6">
       <TacoMessage
@@ -226,10 +236,12 @@ const StepCarUsage = ({ state, onUpdate, animateTaco, onAnimationComplete }: Pro
               label="Number of years"
               type="number"
               value={state.damageFreeYears || ""}
-              onChange={(e) => onUpdate("damageFreeYears", e.target.value)}
+              onChange={(e) => { onUpdate("damageFreeYears", e.target.value); onClearError?.("damageFreeYears"); }}
               min={0}
               max={30}
+              className={errors?.damageFreeYears ? "border-destructive" : ""}
             />
+            <ValidationError message={errors?.damageFreeYears} />
           </div>
 
           {/* KM per year */}
@@ -238,12 +250,14 @@ const StepCarUsage = ({ state, onUpdate, animateTaco, onAnimationComplete }: Pro
             <NativeSelect
               value={state.kmPerYear || ""}
               placeholder="Select km range"
-              onChange={(e) => onUpdate("kmPerYear", e.target.value)}
+              onChange={(e) => { onUpdate("kmPerYear", e.target.value); onClearError?.("kmPerYear"); }}
+              className={errors?.kmPerYear ? "border-destructive" : ""}
             >
               {CAR_OPTIONS.kmBrackets.map((opt) => (
                 <option key={opt} value={opt}>{opt}</option>
               ))}
             </NativeSelect>
+            <ValidationError message={errors?.kmPerYear} />
           </div>
         </div>
       </SectionCard>

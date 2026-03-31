@@ -11,6 +11,8 @@ export function useProductFlow(config: ProductConfig) {
   });
   const [stepIdx, _setStepIdx] = useState(0);
   const [animatedSteps, setAnimatedSteps] = useState<Set<string>>(new Set());
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [shakeFooter, setShakeFooter] = useState(false);
 
   // Refs for stable closures in timeouts
   const stateRef = useRef(state);
@@ -47,11 +49,29 @@ export function useProductFlow(config: ProductConfig) {
     [setState],
   );
 
+  /* Clear a single validation error */
+  const clearError = useCallback((field: string) => {
+    setValidationErrors((prev) => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  }, []);
+
+  /* Validate current step and return errors */
+  const validateCurrentStep = useCallback((): Record<string, string> => {
+    if (config.getValidationErrors) {
+      return config.getValidationErrors(currentStepId, stateRef.current);
+    }
+    return {};
+  }, [config, currentStepId]);
+
   /* Navigation */
   const goNext = useCallback(() => {
     const currentSteps = config.getStepSequence(stateRef.current);
     const nextIdx = stepIdxRef.current + 1;
     if (nextIdx < currentSteps.length) {
+      setValidationErrors({});
       setStepIdx(nextIdx);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -59,20 +79,38 @@ export function useProductFlow(config: ProductConfig) {
 
   const goBack = useCallback(() => {
     if (stepIdxRef.current > 0) {
+      setValidationErrors({});
       setStepIdx(stepIdxRef.current - 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [setStepIdx]);
 
   /**
+   * Try to advance: validate first, show errors if invalid.
+   * Returns true if validation passed and advanced.
+   */
+  const tryNext = useCallback((): boolean => {
+    const errs = config.getValidationErrors
+      ? config.getValidationErrors(steps[stepIdxRef.current] || steps[0], stateRef.current)
+      : {};
+    if (Object.keys(errs).length > 0) {
+      setValidationErrors(errs);
+      setShakeFooter(true);
+      setTimeout(() => setShakeFooter(false), 500);
+      return false;
+    }
+    setValidationErrors({});
+    return true;
+  }, [config, steps]);
+
+  /**
    * Auto-advance: apply state updates, wait 400ms, then move to the next step.
-   * The caller passes the current stepId so we can resolve the correct next step
-   * after the state change (step sequence may differ).
    */
   const autoAdvance = useCallback(
     (updates: Record<string, any>, fromStepId: string) => {
       const newState = { ...stateRef.current, ...updates };
       setState(newState);
+      setValidationErrors({});
 
       setTimeout(() => {
         const newSteps = config.getStepSequence(newState);
@@ -91,6 +129,7 @@ export function useProductFlow(config: ProductConfig) {
     setState({ ...config.initialState });
     setStepIdx(0);
     setAnimatedSteps(new Set());
+    setValidationErrors({});
   }, [config, setState, setStepIdx]);
 
   return {
@@ -103,10 +142,14 @@ export function useProductFlow(config: ProductConfig) {
     isLastStep,
     goNext,
     goBack,
+    tryNext,
     autoAdvance,
     reset,
     shouldAnimateTaco,
     markAnimated,
+    validationErrors,
+    clearError,
+    shakeFooter,
     /* escape hatches for complex orchestration */
     setState,
     setStepIdx,
