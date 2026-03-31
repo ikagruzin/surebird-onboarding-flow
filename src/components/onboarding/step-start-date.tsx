@@ -32,6 +32,8 @@ interface StepStartDateProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 /** Convert dd-mm-yyyy to Date */
