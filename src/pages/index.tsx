@@ -54,7 +54,8 @@ const INITIAL_STATE: WizardState = {
   phone: "+31",
   startDates: {},
   iban: "",
-  acceptanceAnswers: {},
+  acceptanceAnswers: { cancelled: "no", criminal: "no", claims: "no", bankrupt: "no", fraud: "no", bailiff: "no", healthy: "no" },
+  acceptanceConfirmed: false,
   agreeTerms: false,
   agreeDebit: false,
 };
