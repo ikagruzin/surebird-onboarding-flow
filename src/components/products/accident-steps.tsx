@@ -3,9 +3,37 @@
  */
 import type { ProductStepProps } from "@/config/products/types";
 import type { ComponentType } from "react";
+import { Info } from "lucide-react";
 import { TacoMessage } from "@/components/onboarding/taco-message";
 import { SectionCard, SegmentedControl } from "./shared-ui";
 import { ACCIDENT_OPTIONS } from "@/config/products/accidents";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+/* ─── Reusable info tooltip ─── */
+
+const InfoTip = ({ text }: { text: string }) => (
+  <TooltipProvider delayDuration={200}>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          className="text-muted-foreground hover:text-foreground transition-colors"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Info className="w-4 h-4" />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="top" className="max-w-64 text-xs">
+        {text}
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+);
 
 /* ─── Single consolidated step ─── */
 
@@ -20,7 +48,10 @@ const StepAccidentAll = ({ state, onUpdate, animateTaco, onAnimationComplete }: 
       <div className="space-y-6">
         {/* Coverage Level */}
         <div className="space-y-2">
-          <p className="text-sm font-medium text-foreground">Choose your coverage level</p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-foreground">Your coverage level</p>
+            <InfoTip text="Insurers use a scale: for the most severe forms of disability, you receive 100% of the benefit. In less serious forms, you get a part of the amount. In the Netherlands, a funeral costs €7,000 to €10,000. If you want to have that covered, at least choose the second option." />
+          </div>
           <SegmentedControl
             options={[...ACCIDENT_OPTIONS.coverageOptions]}
             value={state.coverage}
@@ -30,7 +61,10 @@ const StepAccidentAll = ({ state, onUpdate, animateTaco, onAnimationComplete }: 
 
         {/* Own Risk */}
         <div className="space-y-2">
-          <p className="text-sm font-medium text-foreground">What do you want to be your own risk?</p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-foreground">Own risk</p>
+            <InfoTip text="This is what you have to pay yourself when you file a claim. We recommend choosing an amount that would not cause you much stress if you suddenly lost it." />
+          </div>
           <SegmentedControl
             options={[...ACCIDENT_OPTIONS.ownRiskOptions]}
             value={state.ownRisk}
