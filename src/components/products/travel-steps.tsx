@@ -4,6 +4,7 @@
  */
 import { useState } from "react";
 import { TacoMessage } from "@/components/onboarding/taco-message";
+import { ValidationError } from "@/components/onboarding/validation-error";
 import { SectionCard, SegmentedControl } from "./shared-ui";
 import {
   Tooltip,
