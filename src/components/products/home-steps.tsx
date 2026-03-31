@@ -160,8 +160,9 @@ export const HomeDetailsStep = ({
           </div>
           <NativeSelect
             value={state.buildingType}
-            onChange={(e) => onUpdate("buildingType", e.target.value)}
+            onChange={(e) => { onUpdate("buildingType", e.target.value); onClearError?.("buildingType"); }}
             placeholder="Select building type"
+            className={errors?.buildingType ? "border-destructive" : ""}
           >
             {HOME_OPTIONS.buildingTypes.map((t) => (
               <option key={t} value={t}>
@@ -169,6 +170,7 @@ export const HomeDetailsStep = ({
               </option>
             ))}
           </NativeSelect>
+          <ValidationError message={errors?.buildingType} />
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
