@@ -219,6 +219,8 @@ export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAud
             <button
               key={ins.id}
               onClick={() => onToggle(ins.id)}
+              onMouseEnter={() => setHoveredProduct(ins)}
+              onMouseLeave={() => setHoveredProduct(null)}
               className={`flex items-center gap-3 px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
                 isSelected
                   ? "border-[#0385FF] bg-[#0385FF]/10 shadow-md"
