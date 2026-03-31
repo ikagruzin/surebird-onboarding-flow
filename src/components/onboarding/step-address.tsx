@@ -27,6 +27,8 @@ interface StepAddressProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 // Mock address lookup
