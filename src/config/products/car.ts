@@ -119,7 +119,8 @@ export const carProduct: ProductConfig = {
     if (stepId === "car-driver") {
       if (state.mainDriver === "") return false;
       if (state.mainDriver === "No") {
-        return state.driverRelationship !== "" && state.driverAge !== "" && state.legalOwner !== "";
+        const needsAge = state.driverRelationship !== "Myself";
+        return state.driverRelationship !== "" && (!needsAge || state.driverAge !== "") && state.legalOwner !== "";
       }
       return true;
     }

@@ -114,8 +114,9 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
 
 /* ─── Step 2: Driver ─── */
 
-const StepCarDriver = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimationComplete }: ProductStepProps) => {
   const showDriverDetails = state.mainDriver === "No";
+  const showAgeField = showDriverDetails && state.driverRelationship !== "" && state.driverRelationship !== "Myself";
 
   return (
     <div className="space-y-6">
@@ -141,10 +142,7 @@ const StepCarDriver = ({ state, onUpdate, animateTaco, onAnimationComplete }: Pr
                   onUpdate("driverRelationship", "");
                   onUpdate("driverAge", "");
                   onUpdate("legalOwner", "");
-                } else {
-                  if (!state.legalOwner) {
-                    onUpdate("legalOwner", "Myself");
-                  }
+                  onAutoAdvance?.();
                 }
               }}
             />
@@ -161,23 +159,30 @@ const StepCarDriver = ({ state, onUpdate, animateTaco, onAnimationComplete }: Pr
                       key={opt}
                       label={opt}
                       selected={state.driverRelationship === opt}
-                      onClick={() => onUpdate("driverRelationship", opt)}
+                      onClick={() => {
+                        onUpdate("driverRelationship", opt);
+                        if (opt === "Myself") {
+                          onUpdate("driverAge", "");
+                        }
+                      }}
                     />
                   ))}
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-foreground">How old is the main driver?</p>
-                <FloatingLabelInput
-                  label="Age"
-                  type="number"
-                  value={state.driverAge || ""}
-                  onChange={(e) => onUpdate("driverAge", e.target.value)}
-                  min={18}
-                  max={99}
-                />
-              </div>
+              {showAgeField && (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-foreground">How old is the main driver?</p>
+                  <FloatingLabelInput
+                    label="Age"
+                    type="number"
+                    value={state.driverAge || ""}
+                    onChange={(e) => onUpdate("driverAge", e.target.value)}
+                    min={18}
+                    max={99}
+                  />
+                </div>
+              )}
 
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
