@@ -158,6 +158,16 @@ export const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
         })}
       </div>
 
+      {/* Dev skip button */}
+      <button
+        onClick={stableOnComplete}
+        className="fixed bottom-4 right-4 z-[9999] inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-xs font-medium opacity-70 hover:opacity-100 transition-opacity"
+        title="Skip loading (dev only)"
+      >
+        <SkipForward className="w-3.5 h-3.5" />
+        Skip
+      </button>
+
       <style>{`
         @keyframes usp-slide-up {
           0% {
