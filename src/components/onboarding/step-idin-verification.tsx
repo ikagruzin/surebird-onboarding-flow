@@ -20,6 +20,8 @@ export const StepIdinVerification = ({
   iban,
   onUpdateIban,
   animateTaco,
+  errors,
+  onClearError,
 }: StepIdinVerificationProps) => {
   const [verifyState, setVerifyState] = useState<VerifyState>("idle");
   const [showQrModal, setShowQrModal] = useState(false);
