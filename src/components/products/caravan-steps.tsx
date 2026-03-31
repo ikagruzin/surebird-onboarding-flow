@@ -58,28 +58,36 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete 
           <div className="space-y-2">
             <p className="text-sm font-medium text-foreground">What kind of caravan is it?</p>
             <div className={getSelectionGridClass(CARAVAN_OPTIONS.caravanTypes as unknown as string[])}>
-              {CARAVAN_OPTIONS.caravanTypes.map((opt) => (
-                <SelectionCard
-                  key={opt}
-                  label={opt}
-                  selected={state.caravanType === opt}
-                  onClick={() => {
-                    onUpdate("caravanType", opt);
-                    if (opt === "Mobile home") {
-                      onUpdate("usedAsMobileHome", "");
-                      onUpdate("nearFloodRiver", "No");
-                    } else if (opt === "Touring caravan") {
-                      onUpdate("usedAsMobileHome", "No");
-                      onUpdate("nearFloodRiver", "No");
-                    } else {
-                      // Folding trailer - hide mobile home Q, reset flood
-                      onUpdate("usedAsMobileHome", "");
-                      onUpdate("nearFloodRiver", "");
-                    }
-                  }}
-                  indicator="radio"
-                />
-              ))}
+              {CARAVAN_OPTIONS.caravanTypes.map((opt) => {
+                const tooltip =
+                  opt === "Touring caravan"
+                    ? "A caravan that is towed behind a car and can be detached at the campsite."
+                    : opt === "Folding trailer"
+                      ? "A lightweight, collapsible trailer that folds out into a tent-like living space."
+                      : undefined;
+                return (
+                  <SelectionCard
+                    key={opt}
+                    label={opt}
+                    selected={state.caravanType === opt}
+                    rightIcon={tooltip ? <InfoTip text={tooltip} /> : undefined}
+                    onClick={() => {
+                      onUpdate("caravanType", opt);
+                      if (opt === "Mobile home") {
+                        onUpdate("usedAsMobileHome", "");
+                        onUpdate("nearFloodRiver", "No");
+                      } else if (opt === "Touring caravan") {
+                        onUpdate("usedAsMobileHome", "No");
+                        onUpdate("nearFloodRiver", "No");
+                      } else {
+                        onUpdate("usedAsMobileHome", "");
+                        onUpdate("nearFloodRiver", "");
+                      }
+                    }}
+                    indicator="radio"
+                  />
+                );
+              })}
             </div>
           </div>
 
