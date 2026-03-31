@@ -1,6 +1,7 @@
 import { Info } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { TacoMessage } from "./taco-message";
+import { ValidationError } from "./validation-error";
 import { ChangeEvent } from "react";
 
 interface StepBirthdateProps {
@@ -9,6 +10,8 @@ interface StepBirthdateProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 function formatDateInput(raw: string, prevValue: string): string {
