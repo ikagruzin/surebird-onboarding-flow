@@ -170,7 +170,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
                     />
                   ))}
                 </div>
-              </div>
+                <ValidationError message={errors?.driverRelationship} />
 
               {showAgeField && (
                 <div className="space-y-2">
