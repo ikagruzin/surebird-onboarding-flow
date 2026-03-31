@@ -31,7 +31,7 @@ export const StepFamily = ({ familyStatus, onSelect, animateTaco, errors, onClea
           {OPTIONS.map((option) => (
             <button
               key={option.id}
-              onClick={() => onSelect(option.id)}
+              onClick={() => { onClearError?.("familyStatus"); onSelect(option.id); }}
               className={`flex flex-col items-center gap-3 rounded-xl border-2 p-4 pt-6 pb-5 transition-all ${
                 familyStatus === option.id
                   ? "border-primary bg-primary/5"
