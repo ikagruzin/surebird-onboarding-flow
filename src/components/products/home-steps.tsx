@@ -201,11 +201,12 @@ export const HomeDetailsStep = ({
                   selected={state.constructionMaterial === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
-                  onClick={() => onUpdate("constructionMaterial", opt)}
+                  onClick={() => { onUpdate("constructionMaterial", opt); onClearError?.("constructionMaterial"); }}
                 />
               );
             })}
           </div>
+          <ValidationError message={errors?.constructionMaterial} />
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
