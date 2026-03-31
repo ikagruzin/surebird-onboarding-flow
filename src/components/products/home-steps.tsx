@@ -312,6 +312,7 @@ export const HomeCoveragePathStep = ({
   onAutoAdvance,
   animateTaco,
   onAnimationComplete,
+  errors,
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
