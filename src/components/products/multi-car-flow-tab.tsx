@@ -283,7 +283,10 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, { productId: str
                   indicator="radio"
                   onClick={() => {
                     setAddPromptAnswer("no");
-                    setTimeout(() => setPhase("done"), 400);
+                    setTimeout(() => {
+                      setPhase("done");
+                      onComplete?.();
+                    }, 400);
                   }}
                 />
               </div>
