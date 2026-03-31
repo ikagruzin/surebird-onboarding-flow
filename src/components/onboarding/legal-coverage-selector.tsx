@@ -132,11 +132,7 @@ export const LegalCoverageSelector = ({ selected, onChange }: LegalCoverageSelec
             {/* Badge */}
             {opt.badge && (
               <span
-                className={`absolute top-3 right-3 text-2xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${
-                  isSelected
-                    ? "bg-primary/15 text-primary"
-                    : "bg-muted text-muted-foreground"
-                }`}
+              className="absolute top-3 right-3 text-2xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap bg-primary/10 text-primary"
               >
                 {opt.badge}
               </span>
