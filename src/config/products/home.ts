@@ -177,4 +177,28 @@ export const homeProduct: ProductConfig = {
         return false;
     }
   },
+
+  getValidationErrors(stepId, state) {
+    const errs: Record<string, string> = {};
+    switch (stepId) {
+      case "preset-verification":
+        if (!state.presetAnswer) errs.presetAnswer = "Please confirm whether your house matches";
+        break;
+      case "role":
+        if (!state.role) errs.role = "Please select tenant or homeowner";
+        break;
+      case "home-details":
+        if (!state.buildingType) errs.buildingType = "Please select a building type";
+        if (!state.usage || state.usage.length === 0) errs.usage = "Please select at least one usage";
+        if (!state.constructionMaterial) errs.constructionMaterial = "Please select a construction material";
+        if (!state.floorMaterial) errs.floorMaterial = "Please select a floor material";
+        if (!state.roofShape) errs.roofShape = "Please select a roof shape";
+        if (!state.roofMaterial) errs.roofMaterial = "Please select a roof material";
+        break;
+      case "coverage-path":
+        if (!state.coverageChoice) errs.coverageChoice = "Please select your coverage type";
+        break;
+    }
+    return errs;
+  },
 };

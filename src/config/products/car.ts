@@ -133,4 +133,25 @@ export const carProduct: ProductConfig = {
     }
     return false;
   },
+
+  getValidationErrors(stepId, state) {
+    const errs: Record<string, string> = {};
+    if (stepId === "car-identity") {
+      if ((state.licensePlate || "").length < 6) errs.licensePlate = "Please enter a valid license plate (6 characters)";
+      else if (!state.plateConfirmed) errs.plateConfirmed = "Please confirm your vehicle details";
+    }
+    if (stepId === "car-driver") {
+      if (!state.mainDriver) errs.mainDriver = "Please indicate if you are the main driver";
+      if (state.mainDriver === "No") {
+        if (!state.driverRelationship) errs.driverRelationship = "Please select the driver's relationship";
+        if (state.driverRelationship && state.driverRelationship !== "Myself" && !state.driverAge) errs.driverAge = "Please select the driver's age";
+        if (!state.legalOwner) errs.legalOwner = "Please indicate the legal owner";
+      }
+    }
+    if (stepId === "car-usage") {
+      if (!state.damageFreeYears && state.damageFreeYears !== "0") errs.damageFreeYears = "Please select your damage-free years";
+      if (!state.kmPerYear) errs.kmPerYear = "Please select your annual mileage";
+    }
+    return errs;
+  },
 };

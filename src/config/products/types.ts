@@ -53,4 +53,6 @@ export interface ProductConfig {
   getStepSequence: (state: Record<string, any>) => string[];
   /** Returns true when the given step has enough data to proceed */
   validateStep: (stepId: string, state: Record<string, any>) => boolean;
+  /** Returns field-level validation errors (empty object = valid). Optional — falls back to validateStep. */
+  getValidationErrors?: (stepId: string, state: Record<string, any>) => Record<string, string>;
 }
