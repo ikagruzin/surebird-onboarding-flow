@@ -103,18 +103,14 @@ export const LegalCoverageSelector = ({ selected, onChange }: LegalCoverageSelec
                 : "border-border hover:border-muted-foreground/30"
             } ${isLocked ? "cursor-default" : "cursor-pointer"}`}
           >
-            {/* Checkbox — hidden for locked items */}
-            {!isLocked ? (
-              <div
-                className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 mt-0.5 ${
-                  isSelected ? "border-primary bg-primary" : "border-muted-foreground/40"
-                }`}
-              >
-                {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
-              </div>
-            ) : (
-              <div className="w-5 h-5 shrink-0 mt-0.5" />
-            )}
+            {/* Checkbox */}
+            <div
+              className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 mt-0.5 ${
+                isSelected ? "border-primary bg-primary" : "border-muted-foreground/40"
+              }`}
+            >
+              {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
+            </div>
 
             {/* Icon */}
             <div
