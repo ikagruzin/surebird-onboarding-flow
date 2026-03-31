@@ -314,8 +314,9 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
             <SegmentedControl
               options={[...CARAVAN_OPTIONS.conditionOptions]}
               value={state.condition}
-              onChange={(v) => onUpdate("condition", v)}
+              onChange={(v) => { onUpdate("condition", v); onClearError?.("condition"); }}
             />
+            <ValidationError message={errors?.condition} />
           </div>
 
           {/* Catalogue value */}
