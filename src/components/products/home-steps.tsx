@@ -46,6 +46,7 @@ export const HomePresetStep = ({
   onAutoAdvance,
   animateTaco,
   onAnimationComplete,
+  errors,
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
@@ -87,6 +88,7 @@ export const HomePresetStep = ({
           }
         />
       </div>
+      <ValidationError message={errors?.presetAnswer} />
     </SectionCard>
   </div>
 );
