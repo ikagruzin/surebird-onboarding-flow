@@ -249,12 +249,14 @@ const StepCarUsage = ({ state, onUpdate, animateTaco, onAnimationComplete, error
             <NativeSelect
               value={state.kmPerYear || ""}
               placeholder="Select km range"
-              onChange={(e) => onUpdate("kmPerYear", e.target.value)}
+              onChange={(e) => { onUpdate("kmPerYear", e.target.value); onClearError?.("kmPerYear"); }}
+              className={errors?.kmPerYear ? "border-destructive" : ""}
             >
               {CAR_OPTIONS.kmBrackets.map((opt) => (
                 <option key={opt} value={opt}>{opt}</option>
               ))}
             </NativeSelect>
+            <ValidationError message={errors?.kmPerYear} />
           </div>
         </div>
       </SectionCard>
