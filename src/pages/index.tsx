@@ -637,6 +637,11 @@ export const Index = () => {
                 acceptanceAnswers: { ...s.acceptanceAnswers, [qId]: val },
               }))
             }
+            confirmed={state.acceptanceConfirmed}
+            onToggleConfirmed={(val) => {
+              setState((s) => ({ ...s, acceptanceConfirmed: val }));
+              clearError("acceptanceConfirmed");
+            }}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
