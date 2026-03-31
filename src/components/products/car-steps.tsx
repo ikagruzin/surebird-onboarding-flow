@@ -235,10 +235,12 @@ const StepCarUsage = ({ state, onUpdate, animateTaco, onAnimationComplete, error
               label="Number of years"
               type="number"
               value={state.damageFreeYears || ""}
-              onChange={(e) => onUpdate("damageFreeYears", e.target.value)}
+              onChange={(e) => { onUpdate("damageFreeYears", e.target.value); onClearError?.("damageFreeYears"); }}
               min={0}
               max={30}
+              className={errors?.damageFreeYears ? "border-destructive" : ""}
             />
+            <ValidationError message={errors?.damageFreeYears} />
           </div>
 
           {/* KM per year */}
