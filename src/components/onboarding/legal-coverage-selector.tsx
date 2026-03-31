@@ -16,6 +16,7 @@ const LEGAL_OPTIONS: LegalCoverageOption[] = [
     label: "Consumer",
     description: "Conflicts over broken goods or services. For example, a conflict with an internet provider. This coverage is always included.",
     icon: ShoppingBag,
+    badge: "Included",
     locked: true,
   },
   {
