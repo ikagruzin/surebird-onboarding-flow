@@ -3,6 +3,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
 import { TacoMessage } from "./taco-message";
 
+/* Mirror the offer page pricing so summary matches */
+const INSURER_PRICES: Record<string, number> = {
+  home: 5.11,
+  liability: 2.11,
+  travel: 4.20,
+  car: 45.00,
+  legal: 12.40,
+  accidents: 3.20,
+  caravan: 9.80,
+};
+const DISCOUNT_PERCENT = 10;
+
 interface StepFinalPreviewProps {
   selectedInsurances: string[];
   startDates: Record<string, string>;
@@ -33,9 +45,13 @@ export const StepFinalPreview = ({
   animateTaco,
 }: StepFinalPreviewProps) => {
   const products = INSURANCE_TYPES.filter((t) => selectedInsurances.includes(t.id));
-  const totalMonthly = products.reduce((sum, p) => sum + p.savings, 0);
   const fullName = [firstName, infix, lastName].filter(Boolean).join(" ");
   const firstDate = Object.values(startDates)[0] || "—";
+
+  const totalBeforeDiscount = products.reduce((sum, p) => sum + (INSURER_PRICES[p.id] || 5), 0);
+  const discountAmount = totalBeforeDiscount * (DISCOUNT_PERCENT / 100);
+  const totalAfterDiscount = totalBeforeDiscount - discountAmount;
+  const annualSavings = Math.round(discountAmount * 12 * 100) / 100;
 
   return (
     <div className="animate-fade-in space-y-8 pb-8">
@@ -51,24 +67,31 @@ export const StepFinalPreview = ({
         <div className="space-y-3">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Selected Products</p>
           <div className="space-y-2">
-            {products.map((p) => (
-              <div key={p.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-success" />
-                  <span className="text-sm font-medium text-foreground">{p.label}</span>
+            {products.map((p) => {
+              const original = INSURER_PRICES[p.id] || 5;
+              const discounted = original * (1 - DISCOUNT_PERCENT / 100);
+              return (
+                <div key={p.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-success" />
+                    <span className="text-sm font-medium text-foreground">{p.label}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground line-through">€{original.toFixed(2)}</span>
+                    <span className="text-sm font-semibold text-foreground">€{discounted.toFixed(2)}/mo</span>
+                  </div>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  €{p.savings.toFixed(2)}/mo
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="flex items-center justify-between pt-2 border-t border-border">
             <span className="text-base font-semibold text-foreground">Total Monthly</span>
-            <span className="text-base font-bold text-primary">
-              €{totalMonthly.toFixed(2)}/mo
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground line-through">€{totalBeforeDiscount.toFixed(2)}</span>
+              <span className="text-base font-bold text-primary">€{totalAfterDiscount.toFixed(2)}/mo</span>
+            </div>
           </div>
+          <p className="text-xs text-success font-medium">Annual savings: €{annualSavings.toFixed(2)}</p>
         </div>
 
         <div className="space-y-1">
@@ -113,4 +136,3 @@ export const StepFinalPreview = ({
     </div>
   );
 };
-
