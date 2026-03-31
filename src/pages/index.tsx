@@ -69,6 +69,7 @@ export const Index = () => {
   const [offerUnlocked, setOfferUnlocked] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [shakeFooter, setShakeFooter] = useState(false);
+  const [hasVisitedPreferences, setHasVisitedPreferences] = useState(false);
   const prefsRef = useRef<StepPreferencesHandle>(null);
   const seenStepsRef = useRef<Set<string>>(new Set());
 
@@ -85,12 +86,17 @@ export const Index = () => {
     seenStepsRef.current.add(currentStepId);
   }, [currentStepId]);
 
-
+  useEffect(() => {
+    if (currentStepId === "preferences") {
+      setHasVisitedPreferences(true);
+    }
+  }, [currentStepId]);
 
   const switchFlow = (newFlowId: string) => {
     setSearchParams({ flow: newFlowId });
     setState({ ...INITIAL_STATE });
     setOfferUnlocked(false);
+    setHasVisitedPreferences(false);
     seenStepsRef.current = new Set();
   };
 
