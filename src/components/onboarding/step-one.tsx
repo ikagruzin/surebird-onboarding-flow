@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { INSURANCE_TYPES } from "./types";
-import type { BundlePreset } from "./types";
+import type { BundlePreset, InsuranceType } from "./types";
 import { Sidebar } from "./sidebar";
 import bundleHomeFamily from "@/assets/bundle-home-family.png";
 import bundleBusinessTravel from "@/assets/bundle-business-travel.png";
@@ -190,6 +190,7 @@ export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAud
   const [version, setVersion] = useState<"A" | "B" | "C">("A");
   const sliderRef = useRef<HTMLDivElement>(null);
   const [language, setLanguage] = useState<"en" | "nl">("en");
+  const [hoveredProduct, setHoveredProduct] = useState<InsuranceType | null>(null);
 
   const isActiveBundle = (preset: BundlePreset) =>
     preset.insuranceIds.every((id) => selected.includes(id)) &&
@@ -218,6 +219,8 @@ export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAud
             <button
               key={ins.id}
               onClick={() => onToggle(ins.id)}
+              onMouseEnter={() => setHoveredProduct(ins)}
+              onMouseLeave={() => setHoveredProduct(null)}
               className={`flex items-center gap-3 px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
                 isSelected
                   ? "border-[#0385FF] bg-[#0385FF]/10 shadow-md"
@@ -393,7 +396,7 @@ export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAud
 
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar showProgress={false} showAvatar={true} />
+      <Sidebar showProgress={false} showAvatar={true} hoveredProduct={hoveredProduct} />
 
       {/* Main content */}
       <div className="flex-1 flex flex-col items-center">

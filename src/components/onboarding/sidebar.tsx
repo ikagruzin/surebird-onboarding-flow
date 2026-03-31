@@ -1,16 +1,35 @@
 import { MessageCircle } from "lucide-react";
 import { STEP_LABELS } from "./types";
+import type { InsuranceType } from "./types";
 import logoSurebird from "@/assets/logo-surebird.svg";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
+import iconLiability from "@/assets/icon-liability.svg";
+import iconHome from "@/assets/icon-home.svg";
+import iconCar from "@/assets/icon-car.svg";
+import iconLegal from "@/assets/icon-legal.svg";
+import iconAccidents from "@/assets/icon-accidents.svg";
+import iconCaravan from "@/assets/icon-caravan.svg";
+import iconTravel from "@/assets/icon-travel.svg";
+
+const SIDEBAR_ICON_MAP: Record<string, string> = {
+  Umbrella: iconLiability,
+  Home: iconHome,
+  Car: iconCar,
+  Scale: iconLegal,
+  Zap: iconAccidents,
+  Caravan: iconCaravan,
+  Plane: iconTravel,
+};
 
 interface SidebarProps {
   currentStep?: number;
   showProgress?: boolean;
   visible?: boolean;
   showAvatar?: boolean;
+  hoveredProduct?: InsuranceType | null;
 }
 
-export const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, showAvatar = false }: SidebarProps) => {
+export const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, showAvatar = false, hoveredProduct }: SidebarProps) => {
   if (!visible) return null;
 
   return (
@@ -61,8 +80,17 @@ export const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, 
         )}
       </div>
 
-      {/* Ask Taco */}
+      {/* Info card + Ask Taco */}
       <div className="p-4">
+        {hoveredProduct && (
+          <div className="animate-fade-in mb-4 p-4 rounded-xl bg-muted/50 border border-border">
+            <div className="flex items-center gap-2 mb-2">
+              <img src={SIDEBAR_ICON_MAP[hoveredProduct.icon]} alt={hoveredProduct.label} className="w-7 h-7" />
+              <span className="text-sm font-bold text-foreground">{hoveredProduct.label}</span>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">{hoveredProduct.tooltip}</p>
+          </div>
+        )}
         {showAvatar && (
           <div className="flex items-center gap-3 mb-3">
             <img
