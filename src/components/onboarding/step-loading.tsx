@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Check, Loader2 } from "lucide-react";
 import { TacoMessage } from "./taco-message";
+import trustpilotReview from "@/assets/trustpilot-review.svg";
 
 const USP_INTERVAL = 4500; // ~4.5s per card
 const FINAL_CARD_PAUSE = 3000; // 3s after last card
@@ -110,6 +111,11 @@ export const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
             );
           })}
         </div>
+      </div>
+
+      {/* Trustpilot Review */}
+      <div className="flex justify-center my-8">
+        <img src={trustpilotReview} alt="Trustpilot 4.6 Excellent" className="h-9" />
       </div>
 
       {/* USP Card Stack */}

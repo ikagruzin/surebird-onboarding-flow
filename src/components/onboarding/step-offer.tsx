@@ -9,6 +9,7 @@ import { LegalCoverageSelector } from "./legal-coverage-selector";
 import { INSURANCE_TYPES } from "./types";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import trustpilotLogo from "@/assets/trustpilot-logo.svg";
+import trustpilotReview from "@/assets/trustpilot-review.svg";
 import person1 from "@/assets/person-1.png";
 import person2 from "@/assets/person-2.png";
 import person3 from "@/assets/person-3.png";
@@ -614,13 +615,8 @@ export const StepOffer = ({
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-3 pt-2 border-t border-border">
-          <img src={trustpilotLogo} alt="Trustpilot" className="h-5 object-contain" />
-          <div className="w-px h-6 bg-border" />
-          <div className="flex items-center gap-1">
-            <span className="text-2xl font-bold text-foreground">4.6</span>
-            <span className="text-sm text-muted-foreground">Excellent</span>
-          </div>
+        <div className="pt-4 border-t border-border">
+          <img src={trustpilotReview} alt="Trustpilot 4.6 Excellent" className="h-9" />
         </div>
       </div>
 
