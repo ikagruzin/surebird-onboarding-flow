@@ -730,8 +730,8 @@ export const Index = () => {
             <Progress value={getPhaseProgress()} className="h-2 [&>div]:bg-success" />
           </div>
         )}
-        {/* Always-mounted StepPreferences to preserve state */}
-        {flow.steps.some((s) => s.id === "preferences") && (
+        {/* Mount StepPreferences only once the user actually reaches it, then keep it mounted */}
+        {(currentStepId === "preferences" || hasVisitedPreferences) && flow.steps.some((s) => s.id === "preferences") && (
           <div className={currentStepId === "preferences" ? "" : "hidden"}>
             <StepPreferences
               ref={prefsRef}
