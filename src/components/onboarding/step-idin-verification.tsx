@@ -10,6 +10,8 @@ interface StepIdinVerificationProps {
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
+  errors?: Record<string, string>;
+  onClearError?: (field: string) => void;
 }
 
 type VerifyState = "idle" | "pending" | "verified" | "failed" | "manual";
