@@ -196,39 +196,57 @@ export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAud
 
   const t = TRANSLATIONS[language];
 
-  const InsuranceGrid = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      {INSURANCE_TYPES.map((ins) => {
-        const isSelected = selected.includes(ins.id);
-        const label = t.labels[ins.id as keyof typeof t.labels] || ins.label;
-        return (
-          <button
-            key={ins.id}
-            onClick={() => onToggle(ins.id)}
-            className={`flex items-center gap-3 px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
-              isSelected
-                ? "border-[#0385FF] bg-[#0385FF]/10 shadow-md"
-                : "border-border bg-card hover:border-[#0385FF]/40"
-            }`}
-          >
-            <span className="text-foreground">{ICON_MAP[ins.icon]}</span>
-            <span className="font-medium text-foreground flex-1">{label}</span>
-            <div
-              className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                isSelected ? "border-[#0385FF] bg-[#0385FF]" : "border-border"
+  const InsuranceGrid = () => {
+    const badgeSet = new Set<string>();
+    for (const id of selected) {
+      const partners = BUNDLE_CLUSTERS[id];
+      if (partners) {
+        for (const p of partners) {
+          if (!selected.includes(p)) badgeSet.add(p);
+        }
+      }
+    }
+
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {INSURANCE_TYPES.map((ins) => {
+          const isSelected = selected.includes(ins.id);
+          const label = t.labels[ins.id as keyof typeof t.labels] || ins.label;
+          const showBadge = badgeSet.has(ins.id);
+          return (
+            <button
+              key={ins.id}
+              onClick={() => onToggle(ins.id)}
+              className={`flex items-center gap-3 px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
+                isSelected
+                  ? "border-[#0385FF] bg-[#0385FF]/10 shadow-md"
+                  : "border-border bg-card hover:border-[#0385FF]/40"
               }`}
             >
-              {isSelected && (
-                <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
+              <span className="text-foreground">{ICON_MAP[ins.icon]}</span>
+              <span className="font-medium text-foreground flex-1">{label}</span>
+              {showBadge && (
+                <Badge className="bg-primary/10 text-primary border-0 text-[10px] px-2 py-0.5 uppercase tracking-wide font-bold hover:bg-primary/10">
+                  Bundle
+                </Badge>
               )}
-            </div>
-          </button>
-        );
-      })}
-    </div>
-  );
+              <div
+                className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                  isSelected ? "border-[#0385FF] bg-[#0385FF]" : "border-border"
+                }`}
+              >
+                {isSelected && (
+                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
 
   const BundlePresets = ({ showHeader = true }: { showHeader?: boolean }) => (
     <div>
