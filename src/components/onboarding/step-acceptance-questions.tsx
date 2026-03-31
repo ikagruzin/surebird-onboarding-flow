@@ -133,7 +133,7 @@ export const StepAcceptanceQuestions = ({
               <div className="flex shrink-0 rounded-xl border border-input overflow-hidden">
                 <button
                   type="button"
-                  onClick={() => onUpdateAnswer(q.id, "yes")}
+                  onClick={() => { onUpdateAnswer(q.id, "yes"); onClearError?.("acceptanceQuestions"); }}
                   className={`px-4 py-2 text-sm font-medium transition-colors ${
                     answers[q.id] === "yes"
                       ? "bg-primary text-primary-foreground"
