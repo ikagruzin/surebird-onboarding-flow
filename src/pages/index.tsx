@@ -347,7 +347,7 @@ export const Index = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentStepId, handleNext]);
 
-
+  const phaseLabel = currentStepConfig?.phase
     ? flow.phases.find((p) => p.id === currentStepConfig.phase)?.label
     : null;
 
