@@ -48,24 +48,23 @@ export const ProductFlowTab = forwardRef<ProductFlowTabHandle, ProductFlowTabPro
     useImperativeHandle(ref, () => ({
       handleNext: () => {
         if (flow.isLastStep) {
-          if (flow.isValid) return false; // complete → parent handles tab transition
-          // Not valid — try to show errors
+          if (flow.isValid) return false;
           flow.tryNext();
-          return true; // consume event
+          return true;
         }
         if (flow.isValid) {
           flow.goNext();
         } else {
           flow.tryNext();
         }
-        return true; // handled internally
+        return true;
       },
       handleBack: () => {
         if (flow.stepIdx > 0) {
           flow.goBack();
           return true;
         }
-        return false; // at first step → parent handles
+        return false;
       },
       isComplete: flow.isLastStep && flow.isValid,
       progress: {
@@ -73,7 +72,11 @@ export const ProductFlowTab = forwardRef<ProductFlowTabHandle, ProductFlowTabPro
         total: flow.steps.length,
       },
       shakeFooter: flow.shakeFooter,
-    }), [flow.isLastStep, flow.isValid, flow.stepIdx, flow.steps.length, flow.goNext, flow.goBack, flow.tryNext, flow.shakeFooter]);
+      getState: () => flow.state,
+      updateState: (key: string, value: any) => {
+        flow.update(key, value);
+      },
+    }), [flow.isLastStep, flow.isValid, flow.stepIdx, flow.steps.length, flow.goNext, flow.goBack, flow.tryNext, flow.shakeFooter, flow.state, flow.update]);
 
     if (!StepComponent) {
       return (
