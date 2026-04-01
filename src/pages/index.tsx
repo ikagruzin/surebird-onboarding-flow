@@ -109,6 +109,12 @@ export const Index = () => {
   };
 
   const goToIndex = (idx: number) => {
+    // Capture product states when leaving preferences
+    if (currentStepId === "preferences" && prefsRef.current) {
+      const productStates = prefsRef.current.getProductStates();
+      setState((s) => ({ ...s, currentStep: idx, productStates }));
+      return;
+    }
     setState((s) => ({ ...s, currentStep: idx }));
   };
 
