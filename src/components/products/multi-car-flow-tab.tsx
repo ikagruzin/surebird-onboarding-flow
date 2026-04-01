@@ -246,6 +246,14 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, MultiCarFlowTabP
         }, 0),
         total: instances.reduce((sum, inst) => sum + config.getStepSequence(inst.state).length, 0),
       },
+      getState: () => instances[activeIdx]?.state || {},
+      updateState: (key: string, value: any) => {
+        setInstances((prev) =>
+          prev.map((inst, i) =>
+            i === activeIdx ? { ...inst, state: { ...inst.state, [key]: value } } : inst
+          )
+        );
+      },
     }), [phase, isLastStep, isValid, activeStepIdx, activeIdx, instances, allComplete, config, goNextStep, goBackStep, stepIdxMap, isInstanceComplete]);
 
     const StepComponent = componentMap[currentStepId];
