@@ -166,9 +166,38 @@ export const StepOffer = ({
   const [activeTab, setActiveTab] = useState("all");
   const [videoModal, setVideoModal] = useState<string | null>(null);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
-  const [openFaq, setOpenFaq] = useState<number>(0); // first open by default
+  const [openFaq, setOpenFaq] = useState<number>(0);
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
+
+  // Local offer states (rest data) with defaults from product configs
+  const [localOfferStates, setLocalOfferStates] = useState<Record<string, Record<string, any>>>(() => {
+    const initial: Record<string, Record<string, any>> = {};
+    for (const id of selectedInsurances) {
+      const config = getProductConfig(id);
+      initial[id] = { ...(config?.offerInitialState || {}), ...(offerStatesProp[id] || {}) };
+    }
+    return initial;
+  });
+
+  // Local product states (copy from Set Preferences, editable on offer page)
+  const [localProductStates, setLocalProductStates] = useState<Record<string, Record<string, any>>>(() => ({ ...productStates }));
+
+  const handleUpdateOfferState = (productId: string, key: string, value: any) => {
+    setLocalOfferStates((prev) => ({
+      ...prev,
+      [productId]: { ...(prev[productId] || {}), [key]: value },
+    }));
+    onUpdateOfferState?.(productId, key, value);
+  };
+
+  const handleUpdateProductState = (productId: string, key: string, value: any) => {
+    setLocalProductStates((prev) => ({
+      ...prev,
+      [productId]: { ...(prev[productId] || {}), [key]: value },
+    }));
+    onUpdateProductState?.(productId, key, value);
+  };
 
   const FAQ_DATA = [
     {
