@@ -59,4 +59,23 @@ export interface ProductConfig {
   validateStep: (stepId: string, state: Record<string, any>) => boolean;
   /** Returns field-level validation errors (empty object = valid). Optional — falls back to validateStep. */
   getValidationErrors?: (stepId: string, state: Record<string, any>) => Record<string, string>;
+  /** Card definitions for the Offer detail tab (rest data + set-pref cards in display order) */
+  offerCards?: OfferCardDef[];
+  /** Default values for rest-data fields shown on the Offer page */
+  offerInitialState?: Record<string, any>;
+}
+
+/* ─── Offer page card definition ─── */
+
+export interface OfferCardDef {
+  /** Unique card identifier */
+  id: string;
+  /** Card title */
+  title: string;
+  /** Explanatory subtitle shown below the title */
+  subtitle: string;
+  /** Where this data comes from */
+  source: "rest" | "preferences";
+  /** For "preferences" source: which step's data does this card display? */
+  stepId?: string;
 }
