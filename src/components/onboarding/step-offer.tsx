@@ -7,6 +7,8 @@ import logoAllianz from "@/assets/logo-allianz.svg";
 import { TacoMessage } from "./taco-message";
 import { LegalCoverageSelector } from "./legal-coverage-selector";
 import { INSURANCE_TYPES } from "./types";
+import { TravelOfferCards } from "@/components/products/travel-offer-cards";
+import { getProductConfig } from "@/config/products";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import trustpilotLogo from "@/assets/trustpilot-logo.svg";
 import trustpilotReview from "@/assets/trustpilot-review.svg";
