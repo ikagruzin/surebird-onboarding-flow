@@ -578,6 +578,26 @@ export const Index = () => {
             animateTaco={shouldAnimateTaco}
             gated={isGatedFlow}
             gateUnlocked={offerUnlocked}
+            productStates={state.productStates}
+            offerStates={state.offerStates}
+            onUpdateOfferState={(productId, key, value) => {
+              setState((s) => ({
+                ...s,
+                offerStates: {
+                  ...s.offerStates,
+                  [productId]: { ...(s.offerStates[productId] || {}), [key]: value },
+                },
+              }));
+            }}
+            onUpdateProductState={(productId, key, value) => {
+              setState((s) => ({
+                ...s,
+                productStates: {
+                  ...s.productStates,
+                  [productId]: { ...(s.productStates[productId] || {}), [key]: value },
+                },
+              }));
+            }}
             gateOverlay={
               <OfferGate
                 firstName={state.firstName}
