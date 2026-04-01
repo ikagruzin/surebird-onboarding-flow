@@ -137,6 +137,14 @@ interface StepOfferProps {
   gateUnlocked?: boolean;
   gateOverlay?: React.ReactNode;
   animateTaco?: boolean;
+  /** Product states captured from Set Preferences */
+  productStates?: Record<string, Record<string, any>>;
+  /** Rest-data states for offer page */
+  offerStates?: Record<string, Record<string, any>>;
+  /** Callback to update offer states */
+  onUpdateOfferState?: (productId: string, key: string, value: any) => void;
+  /** Callback to update product states */
+  onUpdateProductState?: (productId: string, key: string, value: any) => void;
 }
 
 export const StepOffer = ({
@@ -150,6 +158,10 @@ export const StepOffer = ({
   gateUnlocked = false,
   gateOverlay,
   animateTaco,
+  productStates = {},
+  offerStates: offerStatesProp = {},
+  onUpdateOfferState,
+  onUpdateProductState,
 }: StepOfferProps) => {
   const [activeTab, setActiveTab] = useState("all");
   const [videoModal, setVideoModal] = useState<string | null>(null);
