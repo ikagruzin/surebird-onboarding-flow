@@ -58,6 +58,8 @@ const INITIAL_STATE: WizardState = {
   acceptanceConfirmed: false,
   agreeTerms: false,
   agreeDebit: false,
+  productStates: {},
+  offerStates: {},
 };
 
 export const Index = () => {
