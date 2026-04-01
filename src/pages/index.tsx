@@ -58,6 +58,8 @@ const INITIAL_STATE: WizardState = {
   acceptanceConfirmed: false,
   agreeTerms: false,
   agreeDebit: false,
+  productStates: {},
+  offerStates: {},
 };
 
 export const Index = () => {
@@ -107,6 +109,12 @@ export const Index = () => {
   };
 
   const goToIndex = (idx: number) => {
+    // Capture product states when leaving preferences
+    if (currentStepId === "preferences" && prefsRef.current) {
+      const productStates = prefsRef.current.getProductStates();
+      setState((s) => ({ ...s, currentStep: idx, productStates }));
+      return;
+    }
     setState((s) => ({ ...s, currentStep: idx }));
   };
 
@@ -570,6 +578,26 @@ export const Index = () => {
             animateTaco={shouldAnimateTaco}
             gated={isGatedFlow}
             gateUnlocked={offerUnlocked}
+            productStates={state.productStates}
+            offerStates={state.offerStates}
+            onUpdateOfferState={(productId, key, value) => {
+              setState((s) => ({
+                ...s,
+                offerStates: {
+                  ...s.offerStates,
+                  [productId]: { ...(s.offerStates[productId] || {}), [key]: value },
+                },
+              }));
+            }}
+            onUpdateProductState={(productId, key, value) => {
+              setState((s) => ({
+                ...s,
+                productStates: {
+                  ...s.productStates,
+                  [productId]: { ...(s.productStates[productId] || {}), [key]: value },
+                },
+              }));
+            }}
             gateOverlay={
               <OfferGate
                 firstName={state.firstName}

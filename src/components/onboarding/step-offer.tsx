@@ -7,6 +7,8 @@ import logoAllianz from "@/assets/logo-allianz.svg";
 import { TacoMessage } from "./taco-message";
 import { LegalCoverageSelector } from "./legal-coverage-selector";
 import { INSURANCE_TYPES } from "./types";
+import { TravelOfferCards } from "@/components/products/travel-offer-cards";
+import { getProductConfig } from "@/config/products";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import trustpilotLogo from "@/assets/trustpilot-logo.svg";
 import trustpilotReview from "@/assets/trustpilot-review.svg";
@@ -135,6 +137,14 @@ interface StepOfferProps {
   gateUnlocked?: boolean;
   gateOverlay?: React.ReactNode;
   animateTaco?: boolean;
+  /** Product states captured from Set Preferences */
+  productStates?: Record<string, Record<string, any>>;
+  /** Rest-data states for offer page */
+  offerStates?: Record<string, Record<string, any>>;
+  /** Callback to update offer states */
+  onUpdateOfferState?: (productId: string, key: string, value: any) => void;
+  /** Callback to update product states */
+  onUpdateProductState?: (productId: string, key: string, value: any) => void;
 }
 
 export const StepOffer = ({
@@ -148,13 +158,46 @@ export const StepOffer = ({
   gateUnlocked = false,
   gateOverlay,
   animateTaco,
+  productStates = {},
+  offerStates: offerStatesProp = {},
+  onUpdateOfferState,
+  onUpdateProductState,
 }: StepOfferProps) => {
   const [activeTab, setActiveTab] = useState("all");
   const [videoModal, setVideoModal] = useState<string | null>(null);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
-  const [openFaq, setOpenFaq] = useState<number>(0); // first open by default
+  const [openFaq, setOpenFaq] = useState<number>(0);
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
+
+  // Local offer states (rest data) with defaults from product configs
+  const [localOfferStates, setLocalOfferStates] = useState<Record<string, Record<string, any>>>(() => {
+    const initial: Record<string, Record<string, any>> = {};
+    for (const id of selectedInsurances) {
+      const config = getProductConfig(id);
+      initial[id] = { ...(config?.offerInitialState || {}), ...(offerStatesProp[id] || {}) };
+    }
+    return initial;
+  });
+
+  // Local product states (copy from Set Preferences, editable on offer page)
+  const [localProductStates, setLocalProductStates] = useState<Record<string, Record<string, any>>>(() => ({ ...productStates }));
+
+  const handleUpdateOfferState = (productId: string, key: string, value: any) => {
+    setLocalOfferStates((prev) => ({
+      ...prev,
+      [productId]: { ...(prev[productId] || {}), [key]: value },
+    }));
+    onUpdateOfferState?.(productId, key, value);
+  };
+
+  const handleUpdateProductState = (productId: string, key: string, value: any) => {
+    setLocalProductStates((prev) => ({
+      ...prev,
+      [productId]: { ...(prev[productId] || {}), [key]: value },
+    }));
+    onUpdateProductState?.(productId, key, value);
+  };
 
   const FAQ_DATA = [
     {
@@ -705,7 +748,17 @@ export const StepOffer = ({
           ) : (
             <>
               {renderOfferCard(activeTab)}
-              {renderPreferences(activeTab)}
+              {activeTab === "travel" && localProductStates.travel ? (
+                <TravelOfferCards
+                  productState={localProductStates.travel}
+                  offerState={localOfferStates.travel || {}}
+                  onUpdateProduct={(key, value) => handleUpdateProductState("travel", key, value)}
+                  onUpdateOffer={(key, value) => handleUpdateOfferState("travel", key, value)}
+                  selectedInsurances={selectedInsurances}
+                />
+              ) : (
+                renderPreferences(activeTab)
+              )}
             </>
           )}
           <div className="mt-12 mb-8">

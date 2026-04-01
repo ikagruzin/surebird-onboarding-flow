@@ -249,6 +249,8 @@ const DEFAULT_PREFERENCES: Record<string, Record<string, string>> = {
 export interface StepPreferencesHandle {
   handleBack: () => boolean; // returns true if handled internally
   handleNext: () => boolean; // returns true if handled internally
+  /** Snapshot all product flow states (keyed by product id) */
+  getProductStates: () => Record<string, Record<string, any>>;
 }
 
 interface StepPreferencesProps {
@@ -423,6 +425,16 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
 
       handleNextStep();
       return true; // handled internally
+    },
+    getProductStates: () => {
+      const states: Record<string, Record<string, any>> = {};
+      for (const id of selectedInsurances) {
+        const flowRef = productFlowRefs.current[id];
+        if (flowRef) {
+          states[id] = flowRef.getState();
+        }
+      }
+      return states;
     },
   }), [showPhoneStep, questionStep, activeTab, selectedInsurances, preferences, isProductFlow]);
 

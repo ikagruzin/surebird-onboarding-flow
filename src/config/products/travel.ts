@@ -43,6 +43,47 @@ export const travelProduct: ProductConfig = {
     _selectedInsurances: [],
   } satisfies TravelState as Record<string, any>,
 
+  offerInitialState: {
+    ownRisk: "100",
+    extraSupport: "0",
+  },
+
+  offerCards: [
+    {
+      id: "own-risk",
+      title: "Own risk",
+      subtitle: "The amount you pay yourself when filing a claim. A higher own risk means a lower monthly premium.",
+      source: "rest",
+    },
+    {
+      id: "coverage",
+      title: "Coverage",
+      subtitle: "Select what should be covered during your trip. Medical expenses are always included.",
+      source: "preferences",
+      stepId: "supplements",
+    },
+    {
+      id: "extra-support",
+      title: "Extra support",
+      subtitle: "Extra financial support on top of your standard coverage, for example in case of emergency repatriation.",
+      source: "rest",
+    },
+    {
+      id: "travel-details",
+      title: "Travel details",
+      subtitle: "How long and where you typically travel. This determines the scope of your coverage.",
+      source: "preferences",
+      stepId: "foundations",
+    },
+    {
+      id: "sport",
+      title: "Sport",
+      subtitle: "Let us know about sports activities so we can make sure you are properly covered abroad.",
+      source: "preferences",
+      stepId: "sport",
+    },
+  ],
+
   stepDefs: [
     { id: "foundations", label: "Foundations" },
     { id: "sport", label: "Sport & Equipment" },

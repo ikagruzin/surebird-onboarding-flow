@@ -33,6 +33,10 @@ export interface WizardState {
   acceptanceConfirmed: boolean;
   agreeTerms: boolean;
   agreeDebit: boolean;
+  /** Product states from Set Preferences (keyed by product id) */
+  productStates: Record<string, Record<string, any>>;
+  /** Rest-data states for Offer page (keyed by product id) */
+  offerStates: Record<string, Record<string, any>>;
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [
