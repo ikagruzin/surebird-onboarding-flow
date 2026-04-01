@@ -748,7 +748,17 @@ export const StepOffer = ({
           ) : (
             <>
               {renderOfferCard(activeTab)}
-              {renderPreferences(activeTab)}
+              {activeTab === "travel" && localProductStates.travel ? (
+                <TravelOfferCards
+                  productState={localProductStates.travel}
+                  offerState={localOfferStates.travel || {}}
+                  onUpdateProduct={(key, value) => handleUpdateProductState("travel", key, value)}
+                  onUpdateOffer={(key, value) => handleUpdateOfferState("travel", key, value)}
+                  selectedInsurances={selectedInsurances}
+                />
+              ) : (
+                renderPreferences(activeTab)
+              )}
             </>
           )}
           <div className="mt-12 mb-8">
