@@ -18,6 +18,10 @@ export interface ProductFlowTabHandle {
   progress: { completed: number; total: number };
   /** Whether the footer should shake */
   shakeFooter: boolean;
+  /** Current product state snapshot */
+  getState: () => Record<string, any>;
+  /** Update a single field */
+  updateState: (key: string, value: any) => void;
 }
 
 interface ProductFlowTabProps {
