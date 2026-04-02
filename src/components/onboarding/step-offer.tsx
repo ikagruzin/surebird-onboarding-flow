@@ -791,10 +791,73 @@ export const StepOffer = ({
                   </span>
                 </div>
               </div>
-              {selectedInsurances.map((id) => renderOfferCard(id))}
+              {selectedInsurances.map((id) => {
+                // Car: grouped under one heading with one card per instance
+                if (id === "car" && carInstances.length > 1) {
+                  const ins = INSURANCE_TYPES.find((t) => t.id === "car")!;
+                  const insurer = INSURER_DATA.car;
+                  return (
+                    <div key="car" className="mb-8">
+                      <div className="flex items-center justify-between mb-3">
+                        <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="sm" onClick={() => setActiveTab("car")}>
+                            Edit
+                          </Button>
+                          <Button variant="outline" size="sm">Compare</Button>
+                        </div>
+                      </div>
+                      {carInstances.map((inst, idx) => {
+                        const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
+                          ? formatDutchPlate((inst.state.licensePlate as string).toUpperCase())
+                          : `Car ${idx + 1}`;
+                        return (
+                          <div key={inst.id} className="mb-3">
+                            <p className="text-sm font-medium text-muted-foreground mb-1">{plateLabel}</p>
+                            <InsuranceOfferCard
+                              insurerName={insurer.name}
+                              logoSrc={insurer.logoSrc}
+                              originalPrice={insurer.monthlyPrice}
+                              monthlyPrice={insurer.monthlyPrice * (1 - discountPercent / 100)}
+                              savingsPercent={insurer.savingsPercent}
+                              happyClients={insurer.happyClients}
+                              onViewDetails={() => { setActiveCarIdx(idx); setActiveTab("car"); }}
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                }
+                return renderOfferCard(id);
+              })}
             </>
           ) : (
             <>
+              {/* Car pill switcher above the offer card */}
+              {activeTab === "car" && carInstances.length > 1 && (
+                <div className="flex flex-wrap items-center gap-2 mb-4">
+                  {carInstances.map((inst, i) => {
+                    const isActive = i === activeCarIdx;
+                    const label = getCarInstanceLabel(inst as CarInstance, i);
+                    return (
+                      <button
+                        key={inst.id}
+                        onClick={() => setActiveCarIdx(i)}
+                        className={cn(
+                          "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
+                          isActive
+                            ? "bg-foreground text-background border-foreground"
+                            : "bg-white border-border text-foreground hover:border-muted-foreground/30"
+                        )}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
               {renderOfferCard(activeTab)}
               {activeTab === "travel" && localProductStates.travel ? (
                 <TravelOfferCards
@@ -832,16 +895,18 @@ export const StepOffer = ({
                   onUpdateProduct={(key, value) => handleUpdateProductState("caravan", key, value)}
                   onUpdateOffer={(key, value) => handleUpdateOfferState("caravan", key, value)}
                 />
-              ) : activeTab === "car" ? (
-                <CarOfferCards
-                  productState={localProductStates.car || {}}
-                  offerState={localOfferStates.car || {}}
-                  onUpdateProduct={(key, value) => handleUpdateProductState("car", key, value)}
-                  onUpdateOffer={(key, value) => handleUpdateOfferState("car", key, value)}
-                  activeCarIdx={activeCarIdx}
-                  onSetActiveCarIdx={setActiveCarIdx}
-                />
-              ) : (
+              ) : activeTab === "car" ? (() => {
+                const activeInst = carInstances[activeCarIdx] || carInstances[0];
+                const instOfferState = localOfferStates.car?.[activeInst?.id] || {};
+                return (
+                  <CarOfferCards
+                    instanceState={activeInst?.state || {}}
+                    instanceOfferState={instOfferState}
+                    onUpdateInstanceProduct={(key, value) => handleUpdateCarInstanceProduct(activeCarIdx, key, value)}
+                    onUpdateInstanceOffer={(key, value) => handleUpdateCarInstanceOffer(activeInst?.id, key, value)}
+                  />
+                );
+              })() : (
                 renderPreferences(activeTab)
               )}
             </>
