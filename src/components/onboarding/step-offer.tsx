@@ -569,18 +569,15 @@ export const StepOffer = ({
       <div key={id} className="mb-8">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-          <div className="flex items-center gap-2">
-            {selectedInsurances.length > 1 && (
-              <Button
-                variant="destructive-outline"
-                size="sm"
-                onClick={() => setRemoveConfirmId(id)}
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                Remove
-              </Button>
-            )}
-          </div>
+          {selectedInsurances.length > 1 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setRemoveConfirm({ label: ins.label, action: () => { onRemoveInsurance?.(id); } })}
+            >
+              Remove
+            </Button>
+          )}
         </div>
 
         <InsuranceOfferCard
@@ -591,6 +588,69 @@ export const StepOffer = ({
           savingsPercent={insurer.savingsPercent}
           happyClients={insurer.happyClients}
           onViewDetails={() => setActiveTab(id)}
+        />
+      </div>
+    );
+  };
+
+  const renderDetailTabOfferCard = (productId: string) => {
+    const insurer = INSURER_DATA[productId];
+    const ins = INSURANCE_TYPES.find(t => t.id === productId);
+    if (!insurer || !ins) return null;
+
+    let canRemove = false;
+    let removeLabel = ins.label;
+    let removeAction = () => { onRemoveInsurance?.(productId); setActiveTab("all"); };
+
+    if (productId === "car" && carInstances.length > 1) {
+      const activeInst = carInstances[activeCarIdx] || carInstances[0];
+      const plateLabel = activeInst.state.licensePlate && activeInst.state.plateConfirmed
+        ? formatDutchPlate((activeInst.state.licensePlate as string).toUpperCase())
+        : `Car ${activeCarIdx + 1}`;
+      canRemove = true;
+      removeLabel = plateLabel;
+      removeAction = () => {
+        setLocalProductStates((prev) => {
+          const instances = [...(prev.car?.__carInstances || carInstances)];
+          instances.splice(activeCarIdx, 1);
+          return { ...prev, car: { ...prev.car, __carInstances: instances } };
+        });
+        setLocalOfferStates((prev) => {
+          const carOffer = { ...prev.car };
+          const instToRemove = carInstances[activeCarIdx];
+          if (instToRemove) delete carOffer[instToRemove.id];
+          return { ...prev, car: carOffer };
+        });
+        setActiveCarIdx(0);
+      };
+    } else if (productId === "home" && localProductStates.home?.coverageChoice === "both") {
+      canRemove = true;
+      removeLabel = activeHomeTab === "household" ? "Household goods" : "Building";
+      removeAction = () => {
+        const newChoice = activeHomeTab === "household" ? "building" : "household";
+        handleUpdateProductState("home", "coverageChoice", newChoice);
+        setActiveHomeTab(newChoice as "household" | "building");
+      };
+    } else if (selectedInsurances.length > 1) {
+      canRemove = true;
+    }
+
+    return (
+      <div className="mb-6">
+        {canRemove && (
+          <div className="flex justify-end mb-3">
+            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
+              Remove
+            </Button>
+          </div>
+        )}
+        <InsuranceOfferCard
+          insurerName={insurer.name}
+          logoSrc={insurer.logoSrc}
+          originalPrice={insurer.monthlyPrice}
+          monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+          savingsPercent={insurer.savingsPercent}
+          happyClients={insurer.happyClients}
         />
       </div>
     );
