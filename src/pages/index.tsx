@@ -598,6 +598,8 @@ export const Index = () => {
                 },
               }));
             }}
+            onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
+            onRemoveInsurance={(id) => setState((s) => ({ ...s, selectedInsurances: s.selectedInsurances.filter(i => i !== id) }))}
             gateOverlay={
               <OfferGate
                 firstName={state.firstName}

@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo, useCallback } from "react";
-import { Check, CheckCircle2, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play, Star, Gift, Award } from "lucide-react";
+import { Check, BadgePercent, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Shield, Play, Star, Gift, Award, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { InsuranceOfferCard } from "./insurance-offer-card";
 import logoNN from "@/assets/logo-nationale-nederlanden.svg";
@@ -154,6 +154,10 @@ interface StepOfferProps {
   onUpdateOfferState?: (productId: string, key: string, value: any) => void;
   /** Callback to update product states */
   onUpdateProductState?: (productId: string, key: string, value: any) => void;
+  /** Callback to add new insurance products */
+  onAddInsurances?: (ids: string[]) => void;
+  /** Callback to remove an insurance product */
+  onRemoveInsurance?: (id: string) => void;
 }
 
 export const StepOffer = ({
@@ -171,13 +175,19 @@ export const StepOffer = ({
   offerStates: offerStatesProp = {},
   onUpdateOfferState,
   onUpdateProductState,
+  onAddInsurances,
+  onRemoveInsurance,
 }: StepOfferProps) => {
   const [activeTab, setActiveTab] = useState("all");
+  const [annualDiscount, setAnnualDiscount] = useState(false);
   const [videoModal, setVideoModal] = useState<string | null>(null);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number>(0);
   const [activeCarIdx, setActiveCarIdx] = useState(0);
   const [activeHomeTab, setActiveHomeTab] = useState<"household" | "building">("household");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addModalSelection, setAddModalSelection] = useState<string[]>([]);
+  const [removeConfirmId, setRemoveConfirmId] = useState<string | null>(null);
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
 
@@ -501,11 +511,47 @@ export const StepOffer = ({
     </div>
   );
 
-  const totalBeforeDiscount = selectedInsurances.reduce((sum, id) => sum + (INSURER_DATA[id]?.monthlyPrice || 5), 0);
+  // ── Pricing calculations with annual discount ──
   const discountPercent = 10;
+  const annualPaymentRate = 0.05; // 5% extra discount for annual payment
+
+  // Build calculator line items (granular for Home sub-products and Car instances)
+  const calcLineItems = useMemo(() => {
+    const items: { key: string; label: string; originalPrice: number; productId: string }[] = [];
+    for (const id of selectedInsurances) {
+      const insurer = INSURER_DATA[id];
+      const original = insurer?.monthlyPrice || 5;
+
+      if (id === "home" && localProductStates.home?.coverageChoice === "both") {
+        items.push({ key: "home-household", label: "Household goods", originalPrice: original * 0.6, productId: "home" });
+        items.push({ key: "home-building", label: "Building", originalPrice: original * 0.4, productId: "home" });
+      } else if (id === "car" && carInstances.length > 1) {
+        carInstances.forEach((inst, idx) => {
+          const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
+            ? `Car — ${formatDutchPlate((inst.state.licensePlate as string).toUpperCase())}`
+            : `Car ${idx + 1}`;
+          items.push({ key: inst.id, label: plateLabel, originalPrice: original, productId: "car" });
+        });
+      } else {
+        const ins = INSURANCE_TYPES.find(t => t.id === id);
+        items.push({ key: id, label: ins?.label || id, originalPrice: original, productId: id });
+      }
+    }
+    return items;
+  }, [selectedInsurances, localProductStates.home?.coverageChoice, carInstances]);
+
+  const totalBeforeDiscount = calcLineItems.reduce((sum, item) => sum + item.originalPrice, 0);
   const discountAmount = totalBeforeDiscount * (discountPercent / 100);
-  const totalAfterDiscount = totalBeforeDiscount - discountAmount;
-  const annualSavings = Math.round(discountAmount * 12 * 100) / 100;
+  const afterBundleDiscount = totalBeforeDiscount - discountAmount;
+  const annualPaymentSaving = annualDiscount ? afterBundleDiscount * annualPaymentRate : 0;
+  const totalAfterDiscount = afterBundleDiscount - annualPaymentSaving;
+  const annualSavings = Math.round((discountAmount + annualPaymentSaving) * 12 * 100) / 100;
+
+  // Helper to calculate final monthly price for a product (used on offer cards)
+  const getFinalMonthly = (originalPrice: number) => {
+    const afterBundle = originalPrice * (1 - discountPercent / 100);
+    return annualDiscount ? afterBundle * (1 - annualPaymentRate) : afterBundle;
+  };
 
   const renderOfferCard = (id: string) => {
     const insurer = INSURER_DATA[id];
@@ -517,16 +563,16 @@ export const StepOffer = ({
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setActiveTab(id)}
-            >
-              Edit
-            </Button>
-            <Button variant="outline" size="sm">
-              Compare
-            </Button>
+            {selectedInsurances.length > 1 && (
+              <Button
+                variant="destructive-outline"
+                size="sm"
+                onClick={() => setRemoveConfirmId(id)}
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                Remove
+              </Button>
+            )}
           </div>
         </div>
 
@@ -534,11 +580,139 @@ export const StepOffer = ({
           insurerName={insurer.name}
           logoSrc={insurer.logoSrc}
           originalPrice={insurer.monthlyPrice}
-          monthlyPrice={insurer.monthlyPrice * (1 - discountPercent / 100)}
+          monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
           savingsPercent={insurer.savingsPercent}
           happyClients={insurer.happyClients}
           onViewDetails={() => setActiveTab(id)}
         />
+      </div>
+    );
+  };
+
+  // ── Add product modal ──
+  const nonSelectedProducts = INSURANCE_TYPES.filter(t => !selectedInsurances.includes(t.id));
+
+  const handleOpenAddModal = () => {
+    setAddModalSelection([]);
+    setShowAddModal(true);
+  };
+
+  const handleToggleAddProduct = (id: string) => {
+    setAddModalSelection(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
+  };
+
+  const handleSaveAddModal = () => {
+    if (addModalSelection.length > 0 && onAddInsurances) {
+      onAddInsurances(addModalSelection);
+    }
+    setShowAddModal(false);
+  };
+
+  const renderAddModal = () => {
+    if (!showAddModal) return null;
+    return (
+      <div
+        className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setShowAddModal(false);
+        }}
+      >
+        <div className="bg-card rounded-2xl border border-border shadow-xl w-full max-w-md mx-4 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-foreground">Add products</h2>
+            <button onClick={() => setShowAddModal(false)} className="text-muted-foreground hover:text-foreground">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {nonSelectedProducts.length === 0 ? (
+            <p className="text-sm text-muted-foreground">All products have been added.</p>
+          ) : (
+            <div className="space-y-3 mb-6">
+              {nonSelectedProducts.map((ins) => {
+                const isChecked = addModalSelection.includes(ins.id);
+                return (
+                  <button
+                    key={ins.id}
+                    onClick={() => handleToggleAddProduct(ins.id)}
+                    className={`flex items-center gap-3 w-full px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
+                      isChecked
+                        ? "border-primary bg-primary/5 shadow-md"
+                        : "border-border hover:border-primary/40"
+                    }`}
+                  >
+                    <img src={ICON_MAP[ins.icon]} alt={ins.label} className="w-10 h-10" />
+                    <span className="text-sm font-medium text-foreground flex-1">{ins.label}</span>
+                    <div
+                      className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 ${
+                        isChecked ? "border-primary bg-primary" : "border-border"
+                      }`}
+                    >
+                      {isChecked && (
+                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          <div className="flex items-center justify-end">
+            <button
+              onClick={handleSaveAddModal}
+              disabled={addModalSelection.length === 0}
+              className="px-6 py-3 rounded-full text-success-foreground font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              style={{
+                background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
+                boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
+              }}
+            >
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ── Remove confirmation modal ──
+  const renderRemoveConfirm = () => {
+    if (!removeConfirmId) return null;
+    const ins = INSURANCE_TYPES.find(t => t.id === removeConfirmId);
+    return (
+      <div
+        className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setRemoveConfirmId(null);
+        }}
+      >
+        <div className="bg-card rounded-2xl border border-border shadow-xl w-full max-w-sm mx-4 p-6">
+          <h2 className="text-lg font-bold text-foreground mb-2">Remove {ins?.label}?</h2>
+          <p className="text-sm text-muted-foreground mb-6">
+            Are you sure you want to remove {ins?.label} from your offer? This action cannot be undone.
+          </p>
+          <div className="flex items-center gap-3 justify-end">
+            <Button variant="outline" size="sm" onClick={() => setRemoveConfirmId(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                onRemoveInsurance?.(removeConfirmId);
+                setRemoveConfirmId(null);
+                if (activeTab === removeConfirmId) setActiveTab("all");
+              }}
+            >
+              Remove
+            </Button>
+          </div>
+        </div>
       </div>
     );
   };
@@ -603,7 +777,6 @@ export const StepOffer = ({
     );
   };
 
-  const [annualDiscount, setAnnualDiscount] = useState(false);
 
   // Sidebar calculations
   const renderCalculations = () => (
@@ -614,17 +787,15 @@ export const StepOffer = ({
           <h3 className="text-xl font-bold text-foreground mb-4">Offer calculations</h3>
 
           <div className="space-y-3 text-sm mb-4">
-            {selectedInsurances.map(id => {
-              const ins = INSURANCE_TYPES.find(t => t.id === id);
-              const insurer = INSURER_DATA[id];
-              const original = insurer?.monthlyPrice || 5;
-              const discounted = original * (1 - discountPercent / 100);
+            {calcLineItems.map(item => {
+              const afterBundle = item.originalPrice * (1 - discountPercent / 100);
+              const final = annualDiscount ? afterBundle * (1 - annualPaymentRate) : afterBundle;
               return (
-                <div key={id} className="flex justify-between items-center">
-                  <span className="font-medium text-foreground">{ins?.label || id}</span>
+                <div key={item.key} className="flex justify-between items-center">
+                  <span className="font-medium text-foreground">{item.label}</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-muted-foreground line-through text-sm">€{original.toFixed(2)}</span>
-                    <span className="font-semibold text-foreground">€{discounted.toFixed(2)}</span>
+                    <span className="text-muted-foreground line-through text-sm">€{item.originalPrice.toFixed(2)}</span>
+                    <span className="font-semibold text-foreground">€{final.toFixed(2)}</span>
                   </div>
                 </div>
               );
@@ -634,7 +805,7 @@ export const StepOffer = ({
           <div className="border-t border-border pt-4 space-y-4">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <CheckCircle2 className="w-5 h-5 text-muted-foreground" />
+                <BadgePercent className="w-5 h-5 text-muted-foreground" />
                 Discount:
               </span>
               <span className="text-base font-semibold" style={{ color: 'hsl(0 74% 42%)' }}>-{discountPercent}%</span>
@@ -658,13 +829,13 @@ export const StepOffer = ({
           <span className="text-xl font-bold text-foreground">Total p/m</span>
           <div className="flex items-center gap-2">
             <span className="text-base font-semibold line-through" style={{ color: 'hsl(0 74% 42%)' }}>€{totalBeforeDiscount.toFixed(2)}</span>
-            <span className="text-2xl font-bold text-foreground">€{totalAfterDiscount.toFixed(1)}</span>
+            <span className="text-2xl font-bold text-foreground">€{totalAfterDiscount.toFixed(2)}</span>
           </div>
         </div>
 
         <div className="p-6 pt-4">
-          <div className="flex items-center justify-center gap-1.5 text-sm font-semibold text-foreground">
-            <Calendar className="w-4 h-4" />
+          <div className="flex items-center justify-center gap-1.5 text-sm font-semibold text-success">
+            <Gift className="w-4 h-4" />
             Annual savings: €{annualSavings.toFixed(2)}
           </div>
 
@@ -770,7 +941,10 @@ export const StepOffer = ({
                 </button>
               );
             })}
-            <button className="h-11 w-11 rounded-full border border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
+            <button
+              onClick={handleOpenAddModal}
+              className="h-11 w-11 rounded-full border border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
+            >
               <Plus className="w-4 h-4" />
             </button>
           </div>
@@ -802,12 +976,12 @@ export const StepOffer = ({
                     <div key="car" className="mb-8">
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-                        <div className="flex items-center gap-2">
-                          <Button variant="outline" size="sm" onClick={() => setActiveTab("car")}>
-                            Edit
+                        {selectedInsurances.length > 1 && (
+                          <Button variant="destructive-outline" size="sm" onClick={() => setRemoveConfirmId("car")}>
+                            <Trash2 className="w-3.5 h-3.5" />
+                            Remove
                           </Button>
-                          <Button variant="outline" size="sm">Compare</Button>
-                        </div>
+                        )}
                       </div>
                       {carInstances.map((inst, idx) => {
                         const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
@@ -820,7 +994,7 @@ export const StepOffer = ({
                               insurerName={insurer.name}
                               logoSrc={insurer.logoSrc}
                               originalPrice={insurer.monthlyPrice}
-                              monthlyPrice={insurer.monthlyPrice * (1 - discountPercent / 100)}
+                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
                               savingsPercent={insurer.savingsPercent}
                               happyClients={insurer.happyClients}
                               onViewDetails={() => { setActiveCarIdx(idx); setActiveTab("car"); }}
@@ -839,12 +1013,12 @@ export const StepOffer = ({
                     <div key="home" className="mb-8">
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-                        <div className="flex items-center gap-2">
-                          <Button variant="outline" size="sm" onClick={() => setActiveTab("home")}>
-                            Edit
+                        {selectedInsurances.length > 1 && (
+                          <Button variant="destructive-outline" size="sm" onClick={() => setRemoveConfirmId("home")}>
+                            <Trash2 className="w-3.5 h-3.5" />
+                            Remove
                           </Button>
-                          <Button variant="outline" size="sm">Compare</Button>
-                        </div>
+                        )}
                       </div>
                       {(["household", "building"] as const).map((sub) => (
                         <div key={sub} className="mb-3">
@@ -855,7 +1029,7 @@ export const StepOffer = ({
                             insurerName={insurer.name}
                             logoSrc={insurer.logoSrc}
                             originalPrice={insurer.monthlyPrice}
-                            monthlyPrice={insurer.monthlyPrice * (1 - discountPercent / 100)}
+                            monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
                             savingsPercent={insurer.savingsPercent}
                             happyClients={insurer.happyClients}
                             onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
@@ -923,7 +1097,7 @@ export const StepOffer = ({
                 return null;
               })()}
 
-              {renderOfferCard(activeTab)}
+              {/* Detail cards — no product title/offer card on detail tabs */}
               {activeTab === "travel" && localProductStates.travel ? (
                 <TravelOfferCards
                   productState={localProductStates.travel}
@@ -1042,6 +1216,8 @@ export const StepOffer = ({
         </div>
       </div>
       </div>
+      {renderAddModal()}
+      {renderRemoveConfirm()}
     </div>
   );
 };
