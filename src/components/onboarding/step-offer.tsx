@@ -941,7 +941,10 @@ export const StepOffer = ({
                 </button>
               );
             })}
-            <button className="h-11 w-11 rounded-full border border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors">
+            <button
+              onClick={handleOpenAddModal}
+              className="h-11 w-11 rounded-full border border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
+            >
               <Plus className="w-4 h-4" />
             </button>
           </div>
