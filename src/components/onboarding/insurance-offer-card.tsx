@@ -1,4 +1,4 @@
-import { CheckCircle2, SmilePlus } from "lucide-react";
+import { BadgePercent, SmilePlus } from "lucide-react";
 
 interface InsuranceOfferCardProps {
   insurerName: string;
@@ -42,7 +42,7 @@ export const InsuranceOfferCard = ({
           </div>
           {savingsPercent != null && savingsPercent > 0 && (
             <span className="inline-flex items-center gap-1 text-sm font-medium text-success mt-1">
-              <CheckCircle2 className="w-4 h-4" />
+              <BadgePercent className="w-4 h-4" />
               You save {savingsPercent}% annually
             </span>
           )}
@@ -59,10 +59,9 @@ export const InsuranceOfferCard = ({
           onClick={onViewDetails}
           className="text-sm font-semibold text-foreground underline underline-offset-2 hover:text-foreground/80 transition-colors"
         >
-          View details
+          View & Edit details
         </button>
       </div>
     </div>
   );
 };
-
