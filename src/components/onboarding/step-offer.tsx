@@ -154,6 +154,10 @@ interface StepOfferProps {
   onUpdateOfferState?: (productId: string, key: string, value: any) => void;
   /** Callback to update product states */
   onUpdateProductState?: (productId: string, key: string, value: any) => void;
+  /** Callback to add new insurance products */
+  onAddInsurances?: (ids: string[]) => void;
+  /** Callback to remove an insurance product */
+  onRemoveInsurance?: (id: string) => void;
 }
 
 export const StepOffer = ({
