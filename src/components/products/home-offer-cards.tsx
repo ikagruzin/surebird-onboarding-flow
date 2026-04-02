@@ -79,10 +79,12 @@ const OwnRiskCard = ({ value, onChange }: { value: string; onChange: (v: string)
     subtitle="The amount you pay yourself when filing a claim. A higher own risk means a lower monthly premium."
   >
     <SegmentedControl
-      options={OWN_RISK_OPTIONS}
-      value={value}
-      onChange={onChange}
-      formatLabel={(v) => (v === "0" ? "No deductible" : `€${v}`)}
+      options={OWN_RISK_OPTIONS.map((v) => (v === "0" ? "No deductible" : `€${v}`))}
+      value={value === "0" ? "No deductible" : `€${value}`}
+      onChange={(v) => {
+        const raw = v === "No deductible" ? "0" : v.replace("€", "");
+        onChange(raw);
+      }}
     />
   </OfferCard>
 );

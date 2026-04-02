@@ -99,6 +99,11 @@ export const homeProduct: ProductConfig = {
     heatPump: false,
   } satisfies HomeState as Record<string, any>,
 
+  offerInitialState: {
+    household: { ownRisk: "100", coverage: "All Risk" },
+    building: { ownRisk: "100", coverage: "All Risk" },
+  },
+
   presetState: {
     buildingType: "Apartment",
     usage: ["I live there"],
