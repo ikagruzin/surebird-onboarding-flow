@@ -179,6 +179,7 @@ export const StepOffer = ({
   onRemoveInsurance,
 }: StepOfferProps) => {
   const [activeTab, setActiveTab] = useState("all");
+  const [annualDiscount, setAnnualDiscount] = useState(false);
   const [videoModal, setVideoModal] = useState<string | null>(null);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number>(0);
