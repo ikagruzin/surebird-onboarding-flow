@@ -1,41 +1,55 @@
 
 
-## Travel Product — Offer Page Detail Tab (Revised)
+## Add Legal, Liability & Accidents to Offer Page
 
-### Card Order (corrected per your input)
+### Summary
 
-| # | Card Title | Data Source | Fields |
-|---|-----------|-------------|--------|
+Create offer-page detail card components for **Legal expenses**, **Liability**, and **Accidents** — following the same pattern as Travel. Each product gets its own offer cards file rendering Rest Data + Set Preferences cards with titles, subtitles, and fully editable controls.
+
+### Data Layout
+
+**Legal expenses** (2 cards)
+| # | Card | Source | Fields |
+|---|------|--------|--------|
 | 1 | Own risk | Rest Data | €0, €100, €250, €500 (default €100) |
-| 2 | Coverage | Set Preferences (supplements step) | Medical Expenses, Cancellation Fees, Luggage, Extraordinary Costs checklist |
-| 3 | Extra support | Rest Data | €0, €1,000, €2,500 (default €0) |
-| 4 | Travel details | Set Preferences (foundations step) | Travel days (60/90/180/365), Coverage area (Europe/Worldwide) |
-| 5 | Sport | Set Preferences (sport step) | Play sports Y/N, Adventure sports, Equipment toggles |
+| 2 | Coverage | Set Pref | Coverage modules checklist (Consumer mandatory + optional modules) |
 
-### Subtitle Copy Per Card
+**Liability** (2 cards)
+| # | Card | Source | Fields |
+|---|------|--------|--------|
+| 1 | Own risk | Rest Data | €0, €100 (default €100) |
+| 2 | Coverage | Set Pref | Dog Y/N, Damage limit €1.25M/€2.25M |
 
-| Card | Subtitle |
-|------|----------|
-| Own risk | "The amount you pay yourself when filing a claim. A higher own risk means a lower monthly premium." |
-| Coverage | "Select what should be covered during your trip. Medical expenses are always included." |
-| Extra support | "Extra financial support on top of your standard coverage, for example in case of emergency repatriation." |
-| Travel details | "How long and where you typically travel. This determines the scope of your coverage." |
-| Sport | "Let us know about sports activities so we can make sure you are properly covered abroad." |
+**Accidents** (2 cards)
+| # | Card | Source | Fields |
+|---|------|--------|--------|
+| 1 | Own risk | Rest Data | €0, €100, €250, €500 (default €100) |
+| 2 | Coverage | Set Pref | Coverage level selection |
 
-### Display Mode
+### Subtitle Copy
 
-Each card will show the **same interactive controls** as in the Set Preferences phase — selection cards, toggles, checklists — fully editable immediately. No collapsed/read-only mode. The difference from Set Preferences is purely layout: all steps are visible at once as stacked cards with their own title and subtitle, instead of one-at-a-time with Taco messages.
+| Product | Card | Subtitle |
+|---------|------|----------|
+| Legal | Own risk | "The amount you pay yourself when filing a claim. A higher own risk means a lower monthly premium." |
+| Legal | Coverage | "Choose which legal areas you want covered. Consumer protection is always included." |
+| Liability | Own risk | "The amount you pay yourself when filing a claim. Choose €0 for full coverage at a slightly higher premium." |
+| Liability | Coverage | "Adjust your liability coverage preferences, including pet insurance and maximum damage limit." |
+| Accidents | Own risk | "The amount you pay yourself when filing a claim. A higher own risk means a lower monthly premium." |
+| Accidents | Coverage | "Your accident insurance coverage level, determining the payout in case of permanent disability or death." |
 
-### Implementation
+### File Changes
 
 | File | Change |
 |------|--------|
-| `src/config/products/types.ts` | Add `OfferCardDef` interface (id, title, subtitle, source: "rest" or "preferences", stepId?) and optional `offerCards` + `offerInitialState` to `ProductConfig` |
-| `src/config/products/travel.ts` | Add `offerCards` array (5 cards above) and `offerInitialState` with own-risk/extra-support defaults |
-| `src/components/products/travel-offer-cards.tsx` | New file: renders the 5 cards using shared UI primitives (`SectionCard`, `SegmentedControl`, `ChipSelect`, `ToggleRow`). Reads current state, calls `onUpdate` for changes. |
-| `src/components/onboarding/step-offer.tsx` | When rendering the Travel product detail tab, use `TravelOfferCards` instead of the current placeholder. Pass product state and update handler. |
+| `src/config/products/legal.ts` | Add `offerCards` (2 cards) and `offerInitialState: { ownRisk: "€100" }` |
+| `src/config/products/liability.ts` | Add `offerCards` (2 cards) and `offerInitialState: { ownRisk: "€100" }` |
+| `src/config/products/accidents.ts` | Add `offerCards` (2 cards) and `offerInitialState: { ownRisk: "€100" }` |
+| `src/components/products/legal-offer-cards.tsx` | New file — renders Own Risk (SegmentedControl) + Coverage (LegalCoverageSelector) |
+| `src/components/products/liability-offer-cards.tsx` | New file — renders Own Risk (SegmentedControl) + Coverage (SegmentedControl for dog + damage limit) |
+| `src/components/products/accident-offer-cards.tsx` | New file — renders Own Risk (SegmentedControl) + Coverage (SelectionCards for coverage level) |
+| `src/components/onboarding/step-offer.tsx` | Import the 3 new offer card components. Extend the `activeTab` rendering logic (lines 751-761) to render `LegalOfferCards`, `LiabilityOfferCards`, or `AccidentOfferCards` when the respective tab is active, same pattern as Travel. |
 
-### What I Need Next
+### Remaining Products (for future)
 
-After Travel is approved and implemented, you can provide the Rest Data for the next product (e.g., Home or Liability) and we repeat the pattern.
+Home, Car, and Caravan will follow after these 3 are done, using the same architecture. The Rest Data for those products will be provided by you.
 
