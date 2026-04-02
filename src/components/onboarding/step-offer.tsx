@@ -8,6 +8,9 @@ import { TacoMessage } from "./taco-message";
 import { LegalCoverageSelector } from "./legal-coverage-selector";
 import { INSURANCE_TYPES } from "./types";
 import { TravelOfferCards } from "@/components/products/travel-offer-cards";
+import { LegalOfferCards } from "@/components/products/legal-offer-cards";
+import { LiabilityOfferCards } from "@/components/products/liability-offer-cards";
+import { AccidentOfferCards } from "@/components/products/accident-offer-cards";
 import { getProductConfig } from "@/config/products";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import trustpilotLogo from "@/assets/trustpilot-logo.svg";
@@ -755,6 +758,27 @@ export const StepOffer = ({
                   onUpdateProduct={(key, value) => handleUpdateProductState("travel", key, value)}
                   onUpdateOffer={(key, value) => handleUpdateOfferState("travel", key, value)}
                   selectedInsurances={selectedInsurances}
+                />
+              ) : activeTab === "legal" ? (
+                <LegalOfferCards
+                  productState={localProductStates.legal || { coverageModules: ["consumer"] }}
+                  offerState={localOfferStates.legal || {}}
+                  onUpdateProduct={(key, value) => handleUpdateProductState("legal", key, value)}
+                  onUpdateOffer={(key, value) => handleUpdateOfferState("legal", key, value)}
+                />
+              ) : activeTab === "liability" ? (
+                <LiabilityOfferCards
+                  productState={localProductStates.liability || { dog: "No", damageLimit: "€1,250,000" }}
+                  offerState={localOfferStates.liability || {}}
+                  onUpdateProduct={(key, value) => handleUpdateProductState("liability", key, value)}
+                  onUpdateOffer={(key, value) => handleUpdateOfferState("liability", key, value)}
+                />
+              ) : activeTab === "accidents" ? (
+                <AccidentOfferCards
+                  productState={localProductStates.accidents || { coverage: "Death: €5,000 | Disability: €25,000" }}
+                  offerState={localOfferStates.accidents || {}}
+                  onUpdateProduct={(key, value) => handleUpdateProductState("accidents", key, value)}
+                  onUpdateOffer={(key, value) => handleUpdateOfferState("accidents", key, value)}
                 />
               ) : (
                 renderPreferences(activeTab)
