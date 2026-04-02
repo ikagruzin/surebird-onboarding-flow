@@ -213,18 +213,19 @@ const AdditionalCoverageCard = ({
 
         {/* Hail damage coverage */}
         <div className="space-y-3 pt-2 border-t border-border">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-foreground">Hail damage coverage</span>
-            <InfoTip text="Hail damage can cause significant damage to your caravan. With this additional coverage, hail damage is insured." />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-foreground">Hail damage coverage</span>
+              <InfoTip text="Hail damage can cause significant damage to your caravan. With this additional coverage, hail damage is insured." />
+            </div>
+            <Switch
+              checked={hailCoverage === "Yes"}
+              onCheckedChange={(checked) => {
+                onUpdateOffer("hailDamageCoverage", checked ? "Yes" : "No");
+                if (!checked) onUpdateOffer("hailResistantRoof", "No");
+              }}
+            />
           </div>
-          <SegmentedControl
-            options={["Yes", "No"]}
-            value={hailCoverage}
-            onChange={(v) => {
-              onUpdateOffer("hailDamageCoverage", v);
-              if (v === "No") onUpdateOffer("hailResistantRoof", "No");
-            }}
-          />
 
           {hailCoverage === "Yes" && (
             <div className="space-y-2 pl-1">
