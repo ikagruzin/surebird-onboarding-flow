@@ -831,6 +831,40 @@ export const StepOffer = ({
                     </div>
                   );
                 }
+                // Home: grouped under one heading with sub-product cards when "both"
+                if (id === "home" && localProductStates.home?.coverageChoice === "both") {
+                  const ins = INSURANCE_TYPES.find((t) => t.id === "home")!;
+                  const insurer = INSURER_DATA.home;
+                  return (
+                    <div key="home" className="mb-8">
+                      <div className="flex items-center justify-between mb-3">
+                        <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="sm" onClick={() => setActiveTab("home")}>
+                            Edit
+                          </Button>
+                          <Button variant="outline" size="sm">Compare</Button>
+                        </div>
+                      </div>
+                      {(["household", "building"] as const).map((sub) => (
+                        <div key={sub} className="mb-3">
+                          <p className="text-sm font-medium text-muted-foreground mb-1">
+                            {sub === "household" ? "Household goods" : "Building"}
+                          </p>
+                          <InsuranceOfferCard
+                            insurerName={insurer.name}
+                            logoSrc={insurer.logoSrc}
+                            originalPrice={insurer.monthlyPrice}
+                            monthlyPrice={insurer.monthlyPrice * (1 - discountPercent / 100)}
+                            savingsPercent={insurer.savingsPercent}
+                            happyClients={insurer.happyClients}
+                            onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
                 return renderOfferCard(id);
               })}
             </>
