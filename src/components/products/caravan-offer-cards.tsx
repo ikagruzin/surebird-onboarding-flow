@@ -236,7 +236,7 @@ const AdditionalCoverageCard = ({
         })}
 
         {/* Hail damage coverage */}
-        <div className="space-y-3 pt-2 border-t border-border">
+        <div className="space-y-3 pt-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-foreground">Hail damage coverage</span>

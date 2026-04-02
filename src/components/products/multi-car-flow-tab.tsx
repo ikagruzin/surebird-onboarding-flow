@@ -246,7 +246,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, MultiCarFlowTabP
         }, 0),
         total: instances.reduce((sum, inst) => sum + config.getStepSequence(inst.state).length, 0),
       },
-      getState: () => instances[activeIdx]?.state || {},
+      getState: () => ({ ...instances[activeIdx]?.state, __carInstances: instances.map((inst) => ({ id: inst.id, state: inst.state })) }),
       updateState: (key: string, value: any) => {
         setInstances((prev) =>
           prev.map((inst, i) =>
