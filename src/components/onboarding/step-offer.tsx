@@ -1013,12 +1013,12 @@ export const StepOffer = ({
                     <div key="home" className="mb-8">
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-                        <div className="flex items-center gap-2">
-                          <Button variant="outline" size="sm" onClick={() => setActiveTab("home")}>
-                            Edit
+                        {selectedInsurances.length > 1 && (
+                          <Button variant="destructive-outline" size="sm" onClick={() => setRemoveConfirmId("home")}>
+                            <Trash2 className="w-3.5 h-3.5" />
+                            Remove
                           </Button>
-                          <Button variant="outline" size="sm">Compare</Button>
-                        </div>
+                        )}
                       </div>
                       {(["household", "building"] as const).map((sub) => (
                         <div key={sub} className="mb-3">
@@ -1029,7 +1029,7 @@ export const StepOffer = ({
                             insurerName={insurer.name}
                             logoSrc={insurer.logoSrc}
                             originalPrice={insurer.monthlyPrice}
-                            monthlyPrice={insurer.monthlyPrice * (1 - discountPercent / 100)}
+                            monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
                             savingsPercent={insurer.savingsPercent}
                             happyClients={insurer.happyClients}
                             onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
