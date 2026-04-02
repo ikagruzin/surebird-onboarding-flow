@@ -48,6 +48,25 @@ export const caravanProduct: ProductConfig = {
   label: "Caravan",
   icon: "icon-caravan",
 
+  offerInitialState: {
+    ownRisk: "100",
+    coverage: "Casco Limited",
+    purchaseValueGuaranteeEnabled: false,
+    purchaseValueGuarantee: "",
+    householdGoodsEnabled: false,
+    householdGoods: "",
+    outbuildingEnabled: false,
+    outbuilding: "",
+    canopyEnabled: false,
+    canopy: "",
+    awningEnabled: false,
+    awning: "",
+    moverEnabled: false,
+    mover: "",
+    hailDamageCoverage: "No",
+    hailResistantRoof: "No",
+  },
+
   initialState: {
     caravanType: "",
     usage: "",
