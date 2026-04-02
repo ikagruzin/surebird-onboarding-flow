@@ -13,6 +13,7 @@ import { LiabilityOfferCards } from "@/components/products/liability-offer-cards
 import { AccidentOfferCards } from "@/components/products/accident-offer-cards";
 import { CaravanOfferCards } from "@/components/products/caravan-offer-cards";
 import { CarOfferCards } from "@/components/products/car-offer-cards";
+import { HomeOfferCards } from "@/components/products/home-offer-cards";
 import { getProductConfig } from "@/config/products";
 import { getCarInstanceLabel, type CarInstance } from "@/config/products/car";
 import { formatDutchPlate } from "@/components/ui/dutch-plate-input";
