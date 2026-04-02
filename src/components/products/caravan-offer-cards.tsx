@@ -129,7 +129,12 @@ const CoverageCard = ({ value, onChange }: { value: string; onChange: (v: string
               {selected && <span className="h-2.5 w-2.5 rounded-full bg-primary" />}
             </span>
             <div className="flex-1 min-w-0">
-              <span className="text-sm font-medium text-foreground">{opt.label}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-foreground">{opt.label}</span>
+                {opt.label === "Casco Limited" && (
+                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">Recommended</span>
+                )}
+              </div>
               <p className="text-xs text-muted-foreground mt-1">{opt.subtitle}</p>
             </div>
           </button>
