@@ -1,55 +1,56 @@
 
 
-## Add Legal, Liability & Accidents to Offer Page
+## Add Caravan Product to Offer Page (revised)
 
-### Summary
+### Card Layout (6 cards)
 
-Create offer-page detail card components for **Legal expenses**, **Liability**, and **Accidents** — following the same pattern as Travel. Each product gets its own offer cards file rendering Rest Data + Set Preferences cards with titles, subtitles, and fully editable controls.
+| # | Card | Source | Subtitle |
+|---|------|--------|----------|
+| 1 | Own risk | Rest Data | "The amount you pay yourself when filing a claim. A higher own risk means a lower monthly premium." |
+| 2 | Coverage | Rest Data | "Choose the level of protection for your caravan against damage and theft." |
+| 3 | Additional coverage | Rest Data | "Ensure even better coverage with our special add-ons." |
+| 4 | Usage | Set Pref | "Your caravan type, how you use it, and where it is located." |
+| 5 | Caravan details | Set Pref | "Technical specifications and identification of your caravan." |
+| 6 | Finance | Set Pref | "The value of your caravan determines your coverage and premium." |
 
-### Data Layout
+### Rest Data Fields
 
-**Legal expenses** (2 cards)
-| # | Card | Source | Fields |
-|---|------|--------|--------|
-| 1 | Own risk | Rest Data | €0, €100, €250, €500 (default €100) |
-| 2 | Coverage | Set Pref | Coverage modules checklist (Consumer mandatory + optional modules) |
+**Own risk** — SegmentedControl: €0, €100, €250, €500 (default €100)
 
-**Liability** (2 cards)
-| # | Card | Source | Fields |
-|---|------|--------|--------|
-| 1 | Own risk | Rest Data | €0, €100 (default €100) |
-| 2 | Coverage | Set Pref | Dog Y/N, Damage limit €1.25M/€2.25M |
+**Coverage** — SelectionCards (radio), default Casco Limited:
 
-**Accidents** (2 cards)
-| # | Card | Source | Fields |
-|---|------|--------|--------|
-| 1 | Own risk | Rest Data | €0, €100, €250, €500 (default €100) |
-| 2 | Coverage | Set Pref | Coverage level selection |
+| Option | Subtitle |
+|--------|----------|
+| Fire and theft | "Covers damage caused by fire, explosion, lightning, and theft or attempted theft of your caravan." |
+| Casco Limited | "Includes fire and theft plus storm, hail, flooding, collision with animals, and window damage." |
+| Casco Extended | "The most complete coverage — also includes damage you cause yourself, such as a driving or parking accident." |
 
-### Subtitle Copy
+**Additional coverage** — complex card:
 
-| Product | Card | Subtitle |
-|---------|------|----------|
-| Legal | Own risk | "The amount you pay yourself when filing a claim. A higher own risk means a lower monthly premium." |
-| Legal | Coverage | "Choose which legal areas you want covered. Consumer protection is always included." |
-| Liability | Own risk | "The amount you pay yourself when filing a claim. Choose €0 for full coverage at a slightly higher premium." |
-| Liability | Coverage | "Adjust your liability coverage preferences, including pet insurance and maximum damage limit." |
-| Accidents | Own risk | "The amount you pay yourself when filing a claim. A higher own risk means a lower monthly premium." |
-| Accidents | Coverage | "Your accident insurance coverage level, determining the payout in case of permanent disability or death." |
+6 toggle items (all off by default). When toggled on, a NativeSelect appears with **"Select option"** as default placeholder (no "No longer insured" option):
+
+| Toggle | Tooltip | Dropdown options |
+|--------|---------|-----------------|
+| Purchase value guarantee | "Guarantees the original purchase price in case of total loss within the selected period." | 1 year, 3 years, 5 years |
+| Household goods | "Inventory or household effects means; the additional (not standard) inventory and the entire household effects located in the caravan or co-insured awning. Think, for example, of the furniture or a television." | €750, €1,500, €2,500, €3,000, €3,500 |
+| Outbuilding | "Under the outbuilding are sheds that are not made of tent fabric. An outbuilding is not attached to the caravan." | €500, €1,000, €1,500, €2,000, €2,500 |
+| Canopy | "By this we mean the non-closed cover (awning) that is added to the caravan." | €500, €1,000, €1,500, €2,000, €2,500 |
+| Awning | "By this we mean the closed cover (awning) that is added to the caravan." | €1,000, €1,500, €2,000, €2,500, €3,000 |
+| Mover | "A mechanical tool attached to the caravan to put it in place without using a vehicle." | €500, €1,000, €1,500, €2,000, €2,500, €3,000 |
+
+Then a Yes/No radio:
+- **Hail damage coverage** (default No) — tooltip: "Hail damage can cause significant damage to your caravan. With this additional coverage, hail damage is insured."
+  - If Yes → **"Does the caravan have a hail-resistant roof?"** Yes/No (default No)
+
+### Set Preferences Cards (4, 5, 6)
+
+Render the same interactive controls from `caravan-steps.tsx` — caravan type selection with tooltips, usage dropdown, mobile home/flood conditionals, license plate/chassis, brand/year/length, condition/values. All existing `InfoTip` tooltips preserved.
 
 ### File Changes
 
 | File | Change |
 |------|--------|
-| `src/config/products/legal.ts` | Add `offerCards` (2 cards) and `offerInitialState: { ownRisk: "€100" }` |
-| `src/config/products/liability.ts` | Add `offerCards` (2 cards) and `offerInitialState: { ownRisk: "€100" }` |
-| `src/config/products/accidents.ts` | Add `offerCards` (2 cards) and `offerInitialState: { ownRisk: "€100" }` |
-| `src/components/products/legal-offer-cards.tsx` | New file — renders Own Risk (SegmentedControl) + Coverage (LegalCoverageSelector) |
-| `src/components/products/liability-offer-cards.tsx` | New file — renders Own Risk (SegmentedControl) + Coverage (SegmentedControl for dog + damage limit) |
-| `src/components/products/accident-offer-cards.tsx` | New file — renders Own Risk (SegmentedControl) + Coverage (SelectionCards for coverage level) |
-| `src/components/onboarding/step-offer.tsx` | Import the 3 new offer card components. Extend the `activeTab` rendering logic (lines 751-761) to render `LegalOfferCards`, `LiabilityOfferCards`, or `AccidentOfferCards` when the respective tab is active, same pattern as Travel. |
-
-### Remaining Products (for future)
-
-Home, Car, and Caravan will follow after these 3 are done, using the same architecture. The Rest Data for those products will be provided by you.
+| `src/config/products/caravan.ts` | Add `offerCards` (6 cards), `offerInitialState` with defaults |
+| `src/components/products/caravan-offer-cards.tsx` | New file — renders all 6 cards |
+| `src/components/onboarding/step-offer.tsx` | Add `activeTab === "caravan"` branch, import `CaravanOfferCards` |
 
