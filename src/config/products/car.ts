@@ -106,6 +106,15 @@ export const carProduct: ProductConfig = {
     kmPerYear: "",
   },
 
+  offerInitialState: {
+    ownRisk: "100",
+    coverage: "Limited Casco (WA+)",
+    insuringOccupants: false,
+    occupantType: "",
+    roadsideAssistance: false,
+    legalAid: false,
+  },
+
   stepDefs: [
     { id: "car-identity", label: "Identity" },
     { id: "car-driver", label: "Driver" },

@@ -12,6 +12,7 @@ import { LegalOfferCards } from "@/components/products/legal-offer-cards";
 import { LiabilityOfferCards } from "@/components/products/liability-offer-cards";
 import { AccidentOfferCards } from "@/components/products/accident-offer-cards";
 import { CaravanOfferCards } from "@/components/products/caravan-offer-cards";
+import { CarOfferCards } from "@/components/products/car-offer-cards";
 import { getProductConfig } from "@/config/products";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import trustpilotLogo from "@/assets/trustpilot-logo.svg";
@@ -171,6 +172,7 @@ export const StepOffer = ({
   const [videoModal, setVideoModal] = useState<string | null>(null);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number>(0);
+  const [activeCarIdx, setActiveCarIdx] = useState(0);
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
 
@@ -787,6 +789,15 @@ export const StepOffer = ({
                   offerState={localOfferStates.caravan || {}}
                   onUpdateProduct={(key, value) => handleUpdateProductState("caravan", key, value)}
                   onUpdateOffer={(key, value) => handleUpdateOfferState("caravan", key, value)}
+                />
+              ) : activeTab === "car" ? (
+                <CarOfferCards
+                  productState={localProductStates.car || {}}
+                  offerState={localOfferStates.car || {}}
+                  onUpdateProduct={(key, value) => handleUpdateProductState("car", key, value)}
+                  onUpdateOffer={(key, value) => handleUpdateOfferState("car", key, value)}
+                  activeCarIdx={activeCarIdx}
+                  onSetActiveCarIdx={setActiveCarIdx}
                 />
               ) : (
                 renderPreferences(activeTab)
