@@ -860,6 +860,35 @@ export const StepOffer = ({
                 </div>
               )}
 
+              {/* Home sub-product pill switcher */}
+              {activeTab === "home" && (() => {
+                const coverageChoice = localProductStates.home?.coverageChoice;
+                if (coverageChoice === "both") {
+                  return (
+                    <div className="flex flex-wrap items-center gap-2 mb-4">
+                      {(["household", "building"] as const).map((sub) => {
+                        const isActive = activeHomeTab === sub;
+                        return (
+                          <button
+                            key={sub}
+                            onClick={() => setActiveHomeTab(sub)}
+                            className={cn(
+                              "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
+                              isActive
+                                ? "bg-foreground text-background border-foreground"
+                                : "bg-white border-border text-foreground hover:border-muted-foreground/30"
+                            )}
+                          >
+                            {sub === "household" ? "Household goods" : "Building"}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+
               {renderOfferCard(activeTab)}
               {activeTab === "travel" && localProductStates.travel ? (
                 <TravelOfferCards
