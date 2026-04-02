@@ -1,90 +1,56 @@
 
 
-## Offer Page — Calculator, Pricing, Add/Remove Products & UI Updates
+## Offer Page — 6 UI/UX Fixes
 
-### Summary
+### 1. Restore InsuranceOfferCard on individual product tabs
 
-Multiple changes to the offer page: calculator line-item granularity for Home/Car sub-products, annual discount logic affecting monthly prices, icon swaps, add/remove product functionality, and several UI tweaks.
+Currently, detail tabs (e.g., `activeTab === "travel"`) only render the detail cards — no `InsuranceOfferCard` at top. Restore the offer card but **without** the product title heading. The heading (`<h2>`) stays only on the "All offers" tab.
 
-### Changes
+**Change in `step-offer.tsx`**: Before each product's detail cards (lines ~1100-1173), render `<InsuranceOfferCard>` without the `<h2>` wrapper. Also add a "Remove" button (outlined, no icon) next to the card area when `selectedInsurances.length > 1`.
 
-#### 1. Calculator: Home & Car Sub-Product Line Items
+### 2. Change "Remove" button style to outlined text-only (like old "Edit")
 
-**Home**: When `coverageChoice === "both"`, show two lines: "Household goods" and "Building" (each with own price) instead of one "Home" line. When single sub-product, show that sub-product name.
+Replace the current `variant="destructive-outline"` + `Trash2` icon buttons with a plain outlined button: `variant="outline" size="sm"` with just the text "Remove", no icon. Applied on both "All offers" cards and individual product tabs.
 
-**Car**: When multiple car instances exist, show one line per car labeled by license plate (e.g., "Car — AB-12-3C") each with own price. Single car shows "Car" as today.
+### 3. Remove button on individual product tabs + sub-product removal
 
-#### 2. Annual Payment Discount Logic
+- Each individual product tab gets a "Remove" button (hidden if only 1 total product/sub-product).
+- **Car**: Each car instance gets its own "Remove" button (hidden if only 1 car). Removing a car instance removes it from `__carInstances` array.
+- **Home**: Each sub-product (Household / Building) gets a "Remove" button when `coverageChoice === "both"`. Removing one switches `coverageChoice` to the remaining one.
+- The remove confirmation dialog stays the same, just with a contextual message (e.g., "Remove Household goods?" or "Remove Car AB-12-3C?").
 
-When "Activate annual payment discount" toggle is on:
-- Apply an additional discount (e.g., 5%) to every product's monthly price.
-- **Keep showing "Total p/m"** (monthly) but the number reflects the reduced annual-rate divided by 12.
-- Annual savings should increase correspondingly (reflect both the bundle discount + annual payment discount).
-- The discount should also be reflected in each product's `InsuranceOfferCard` price on the "All offers" tab and in the calculator line items.
+New props needed: `onRemoveCarInstance` and `onUpdateHomeCoverage` (or reuse `onUpdateProductState` for home).
 
-#### 3. Icon Replacements
+### 4. Calculator discount icon — match text color and smaller size
 
-| Location | Current Icon | New Icon |
-|----------|-------------|----------|
-| "You save X% annually" on InsuranceOfferCard | `CheckCircle2` | `BadgePercent` |
-| "Discount: -X%" in calculator | `CheckCircle2` | `BadgePercent` |
-| "Annual savings: €X" in calculator | `Calendar` | `Gift` (already imported) |
-| "Annual savings" text + icon + number | current color | `text-success` (green) |
+The `BadgePercent` icon on the "Discount" row (line ~808) currently uses `w-5 h-5 text-muted-foreground`. Change to `w-4 h-4` and remove the explicit color so it inherits the same `text-sm font-medium text-foreground` as its parent, matching the style of the `BadgePercent` on the `InsuranceOfferCard` savings line.
 
-#### 4. Add Product from Offer Page
+### 5. Add product → full-page overlay with Set Preferences flow + Loading
 
-- The `+` button in the product tabs already exists but does nothing. Wire it to open the **same add-product modal** used in `step-preferences.tsx`.
-- Extract the modal into a reusable component or duplicate the pattern inline in `step-offer.tsx`.
-- When products are added, call a new `onAddInsurances` prop (same pattern as step-preferences) which updates `selectedInsurances` in the wizard state.
-- Newly added products get default offer states initialized.
-- The new product will need Set Preferences to be configured — render the product flow inline within the offer tab (same `ProductFlowTab`/`MultiCarFlowTab` components) so the user can fill preferences without leaving the offer page.
+Instead of adding products directly, clicking "Add" in the modal should:
+1. Close the selection modal.
+2. Open a **full-page overlay** (`fixed inset-0 z-[70] bg-background overflow-y-auto`) containing the product's Set Preferences flow (`ProductFlowTab` / `MultiCarFlowTab`) with the same design, Taco messages, and sticky footer.
+3. The overlay has a close/X button in the corner.
+4. Once the user completes all steps, show the **Loading animation** (reuse `StepLoading` component) but without the "Where do you want me to send offer" gate — just the animation → auto-return to offer page with the new product added.
 
-#### 5. "View details" → "View & Edit details"
+**Implementation**:
+- New state: `addFlowProduct: string | null` (which product is being configured in overlay), `addFlowPhase: "preferences" | "loading"`.
+- Render overlay when `addFlowProduct` is set:
+  - `"preferences"` phase: Render `ProductFlowTab` (or `MultiCarFlowTab` for car) inside a full-screen container with a sticky footer for Next/Back. On completion → switch to `"loading"` phase.
+  - `"loading"` phase: Render `StepLoading` with `onComplete` that calls `onAddInsurances([addFlowProduct])`, initializes offer state for the new product, and closes the overlay.
+- The overlay uses the same sidebar-less layout as the preferences step.
 
-Change the link text in `InsuranceOfferCard` from "View details" to "View & Edit details".
+### 6. "All offers" tab — Remove button per sub-item
 
-#### 6. "Edit" → "Remove" Button with Confirmation
-
-On the "All offers" tab, for each product's header:
-- Replace "Edit" button with "Remove" button (destructive-outline variant).
-- Hide the "Remove" button if there is only 1 product selected.
-- Clicking "Remove" opens an `AlertDialog` confirmation: "Are you sure you want to remove [Product Name]?" with "Cancel" and "Remove" actions.
-- On confirm, call a new `onRemoveInsurance` prop to remove the product from `selectedInsurances`.
-
-#### 7. Delete "Compare" Button
-
-Remove all "Compare" buttons from the offer cards on the "All offers" tab.
-
-#### 8. Remove Product Titles from Detail Tab Pages
-
-When viewing a specific product tab (not "All offers"), remove the product name heading (`<h2>`) and the `renderOfferCard(activeTab)` call that shows the `InsuranceOfferCard` at the top. Only show the detail cards directly. Product titles remain on the "All offers" page.
+On the "All offers" tab:
+- **Car with multiple instances**: Each car instance card gets a "Remove" button (hidden if only 1 car AND only 1 total product).
+- **Home with both sub-products**: Each sub-product card ("Household goods" / "Building") gets a "Remove" button.
+- Standard products: Keep existing "Remove" button (hidden if only 1 product total).
 
 ### File Changes
 
 | File | Change |
 |------|--------|
-| `src/components/onboarding/insurance-offer-card.tsx` | (1) Replace `CheckCircle2` with `BadgePercent` for savings. (2) Change "View details" text to "View & Edit details". |
-| `src/components/onboarding/step-offer.tsx` | (1) Calculator: expand Home into sub-product lines, Car into per-instance lines. (2) Annual discount toggle: apply additional 5% discount to monthly prices when active, update all savings figures. (3) Calculator icons: `BadgePercent` for discount, `Gift` for annual savings, green color for savings row. (4) Add product modal (reuse pattern from step-preferences). Wire `+` button. (5) Replace "Edit" with "Remove" (hidden if only 1 product). Add AlertDialog confirmation. (6) Remove "Compare" buttons. (7) Remove product title + offer card from detail tab views (keep only on "all"). (8) New props: `onAddInsurances`, `onRemoveInsurance`. |
-| `src/pages/index.tsx` | Pass `onAddInsurances` and `onRemoveInsurance` to `StepOffer`. Wire them to `setState` to update `selectedInsurances`. |
-
-### Technical Details
-
-**Annual discount calculation:**
-```text
-basePrice = INSURER_DATA[id].monthlyPrice
-bundleDiscount = basePrice * (discountPercent / 100)
-annualPaymentDiscount = annualDiscount ? (basePrice - bundleDiscount) * 0.05 : 0
-finalMonthly = basePrice - bundleDiscount - annualPaymentDiscount
-```
-
-**Add product flow on offer page:**
-When a new product is added from the offer page, it appears as a new tab. The detail tab renders `ProductFlowTab` / `MultiCarFlowTab` inline so the user can complete Set Preferences without navigating away. Once preferences are saved, the detail cards (Own Risk, Coverage, etc.) replace the flow.
-
-**Remove product:**
-```text
-onRemoveInsurance(id) → setState(s => ({
-  ...s,
-  selectedInsurances: s.selectedInsurances.filter(i => i !== id)
-}))
-```
+| `src/components/onboarding/step-offer.tsx` | (1) Restore `InsuranceOfferCard` on detail tabs without `<h2>`. (2) Change Remove buttons to `variant="outline"` text-only. (3) Add Remove on detail tabs + per-car-instance + per-home-sub-product. (4) Fix calculator discount icon size/color. (5) Replace add-product modal with full-page overlay flow using `ProductFlowTab` + `StepLoading`. (6) New state for `addFlowProduct`, `addFlowPhase`. (7) New handlers for car instance removal and home sub-product removal. |
+| `src/pages/index.tsx` | Wire new callbacks for car instance removal and home coverage choice updates if needed. |
 
