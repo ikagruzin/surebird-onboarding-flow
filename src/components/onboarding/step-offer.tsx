@@ -777,7 +777,6 @@ export const StepOffer = ({
     );
   };
 
-  const [annualDiscount, setAnnualDiscount] = useState(false);
 
   // Sidebar calculations
   const renderCalculations = () => (
