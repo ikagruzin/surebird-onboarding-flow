@@ -1097,7 +1097,7 @@ export const StepOffer = ({
                 return null;
               })()}
 
-              {renderOfferCard(activeTab)}
+              {/* Detail cards — no product title/offer card on detail tabs */}
               {activeTab === "travel" && localProductStates.travel ? (
                 <TravelOfferCards
                   productState={localProductStates.travel}
