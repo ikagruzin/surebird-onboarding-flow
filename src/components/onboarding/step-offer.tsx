@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo, useCallback } from "react";
-import { Check, BadgePercent, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Shield, Play, Star, Gift, Award, Trash2 } from "lucide-react";
+import { Check, BadgePercent, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Shield, Play, Star, Gift, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { InsuranceOfferCard } from "./insurance-offer-card";
 import logoNN from "@/assets/logo-nationale-nederlanden.svg";
@@ -15,6 +15,9 @@ import { CaravanOfferCards } from "@/components/products/caravan-offer-cards";
 import { CarOfferCards } from "@/components/products/car-offer-cards";
 import { HomeOfferCards } from "@/components/products/home-offer-cards";
 import { getProductConfig } from "@/config/products";
+import { ProductFlowTab, type ProductFlowTabHandle } from "@/components/products/product-flow-tab";
+import { MultiCarFlowTab } from "@/components/products/multi-car-flow-tab";
+import { StepLoading } from "./step-loading";
 import { getCarInstanceLabel, type CarInstance } from "@/config/products/car";
 import { formatDutchPlate } from "@/components/ui/dutch-plate-input";
 import { cn } from "@/lib/utils";
@@ -187,7 +190,11 @@ export const StepOffer = ({
   const [activeHomeTab, setActiveHomeTab] = useState<"household" | "building">("household");
   const [showAddModal, setShowAddModal] = useState(false);
   const [addModalSelection, setAddModalSelection] = useState<string[]>([]);
-  const [removeConfirmId, setRemoveConfirmId] = useState<string | null>(null);
+  const [removeConfirm, setRemoveConfirm] = useState<{ label: string; action: () => void } | null>(null);
+  const [addFlowQueue, setAddFlowQueue] = useState<string[]>([]);
+  const [addFlowProduct, setAddFlowProduct] = useState<string | null>(null);
+  const [addFlowPhase, setAddFlowPhase] = useState<"preferences" | "loading">("preferences");
+  const addFlowRef = useRef<ProductFlowTabHandle>(null);
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
 
@@ -562,18 +569,15 @@ export const StepOffer = ({
       <div key={id} className="mb-8">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-          <div className="flex items-center gap-2">
-            {selectedInsurances.length > 1 && (
-              <Button
-                variant="destructive-outline"
-                size="sm"
-                onClick={() => setRemoveConfirmId(id)}
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                Remove
-              </Button>
-            )}
-          </div>
+          {selectedInsurances.length > 1 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setRemoveConfirm({ label: ins.label, action: () => { onRemoveInsurance?.(id); } })}
+            >
+              Remove
+            </Button>
+          )}
         </div>
 
         <InsuranceOfferCard
@@ -584,6 +588,69 @@ export const StepOffer = ({
           savingsPercent={insurer.savingsPercent}
           happyClients={insurer.happyClients}
           onViewDetails={() => setActiveTab(id)}
+        />
+      </div>
+    );
+  };
+
+  const renderDetailTabOfferCard = (productId: string) => {
+    const insurer = INSURER_DATA[productId];
+    const ins = INSURANCE_TYPES.find(t => t.id === productId);
+    if (!insurer || !ins) return null;
+
+    let canRemove = false;
+    let removeLabel = ins.label;
+    let removeAction = () => { onRemoveInsurance?.(productId); setActiveTab("all"); };
+
+    if (productId === "car" && carInstances.length > 1) {
+      const activeInst = carInstances[activeCarIdx] || carInstances[0];
+      const plateLabel = activeInst.state.licensePlate && activeInst.state.plateConfirmed
+        ? formatDutchPlate((activeInst.state.licensePlate as string).toUpperCase())
+        : `Car ${activeCarIdx + 1}`;
+      canRemove = true;
+      removeLabel = plateLabel;
+      removeAction = () => {
+        setLocalProductStates((prev) => {
+          const instances = [...(prev.car?.__carInstances || carInstances)];
+          instances.splice(activeCarIdx, 1);
+          return { ...prev, car: { ...prev.car, __carInstances: instances } };
+        });
+        setLocalOfferStates((prev) => {
+          const carOffer = { ...prev.car };
+          const instToRemove = carInstances[activeCarIdx];
+          if (instToRemove) delete carOffer[instToRemove.id];
+          return { ...prev, car: carOffer };
+        });
+        setActiveCarIdx(0);
+      };
+    } else if (productId === "home" && localProductStates.home?.coverageChoice === "both") {
+      canRemove = true;
+      removeLabel = activeHomeTab === "household" ? "Household goods" : "Building";
+      removeAction = () => {
+        const newChoice = activeHomeTab === "household" ? "building" : "household";
+        handleUpdateProductState("home", "coverageChoice", newChoice);
+        setActiveHomeTab(newChoice as "household" | "building");
+      };
+    } else if (selectedInsurances.length > 1) {
+      canRemove = true;
+    }
+
+    return (
+      <div className="mb-6">
+        {canRemove && (
+          <div className="flex justify-end mb-3">
+            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
+              Remove
+            </Button>
+          </div>
+        )}
+        <InsuranceOfferCard
+          insurerName={insurer.name}
+          logoSrc={insurer.logoSrc}
+          originalPrice={insurer.monthlyPrice}
+          monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+          savingsPercent={insurer.savingsPercent}
+          happyClients={insurer.happyClients}
         />
       </div>
     );
@@ -604,8 +671,10 @@ export const StepOffer = ({
   };
 
   const handleSaveAddModal = () => {
-    if (addModalSelection.length > 0 && onAddInsurances) {
-      onAddInsurances(addModalSelection);
+    if (addModalSelection.length > 0) {
+      setAddFlowQueue([...addModalSelection]);
+      setAddFlowProduct(addModalSelection[0]);
+      setAddFlowPhase("preferences");
     }
     setShowAddModal(false);
   };
@@ -682,35 +751,135 @@ export const StepOffer = ({
 
   // ── Remove confirmation modal ──
   const renderRemoveConfirm = () => {
-    if (!removeConfirmId) return null;
-    const ins = INSURANCE_TYPES.find(t => t.id === removeConfirmId);
+    if (!removeConfirm) return null;
     return (
       <div
         className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40"
         onClick={(e) => {
-          if (e.target === e.currentTarget) setRemoveConfirmId(null);
+          if (e.target === e.currentTarget) setRemoveConfirm(null);
         }}
       >
         <div className="bg-card rounded-2xl border border-border shadow-xl w-full max-w-sm mx-4 p-6">
-          <h2 className="text-lg font-bold text-foreground mb-2">Remove {ins?.label}?</h2>
+          <h2 className="text-lg font-bold text-foreground mb-2">Remove {removeConfirm.label}?</h2>
           <p className="text-sm text-muted-foreground mb-6">
-            Are you sure you want to remove {ins?.label} from your offer? This action cannot be undone.
+            Are you sure you want to remove {removeConfirm.label} from your offer? This action cannot be undone.
           </p>
           <div className="flex items-center gap-3 justify-end">
-            <Button variant="outline" size="sm" onClick={() => setRemoveConfirmId(null)}>
+            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm(null)}>
               Cancel
             </Button>
             <Button
               variant="destructive"
               size="sm"
               onClick={() => {
-                onRemoveInsurance?.(removeConfirmId);
-                setRemoveConfirmId(null);
-                if (activeTab === removeConfirmId) setActiveTab("all");
+                removeConfirm.action();
+                setRemoveConfirm(null);
               }}
             >
               Remove
             </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ── Full-page add product overlay ──
+  const renderAddFlowOverlay = () => {
+    if (!addFlowProduct) return null;
+
+    if (addFlowPhase === "loading") {
+      return (
+        <div className="fixed inset-0 z-[70] bg-background overflow-y-auto">
+          <div className="max-w-3xl mx-auto px-6 py-12">
+            <StepLoading onComplete={() => {
+              onAddInsurances?.([addFlowProduct]);
+              const config = getProductConfig(addFlowProduct);
+              if (config?.offerInitialState) {
+                setLocalOfferStates((prev) => ({
+                  ...prev,
+                  [addFlowProduct]: { ...(config.offerInitialState || {}) },
+                }));
+              }
+              const remaining = addFlowQueue.filter(id => id !== addFlowProduct);
+              if (remaining.length > 0) {
+                setAddFlowQueue(remaining);
+                setAddFlowProduct(remaining[0]);
+                setAddFlowPhase("preferences");
+              } else {
+                setAddFlowProduct(null);
+                setAddFlowQueue([]);
+                setAddFlowPhase("preferences");
+              }
+            }} />
+          </div>
+        </div>
+      );
+    }
+
+    const productLabel = INSURANCE_TYPES.find(t => t.id === addFlowProduct)?.label || addFlowProduct;
+
+    return (
+      <div className="fixed inset-0 z-[70] bg-background overflow-y-auto">
+        <div className="max-w-3xl mx-auto px-6 py-12 pb-32">
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-2xl font-bold text-foreground">Set preferences — {productLabel}</h1>
+            <button
+              onClick={() => { setAddFlowProduct(null); setAddFlowQueue([]); }}
+              className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
+            >
+              <X className="w-5 h-5 text-foreground" />
+            </button>
+          </div>
+          {addFlowProduct === "car" ? (
+            <MultiCarFlowTab
+              ref={addFlowRef}
+              productId="car"
+              isActive={true}
+            />
+          ) : (
+            <ProductFlowTab
+              ref={addFlowRef}
+              productId={addFlowProduct}
+              isActive={true}
+            />
+          )}
+          <div className="fixed bottom-0 left-0 right-0 z-[71] bg-background border-t border-border py-4 px-6">
+            <div className="max-w-3xl mx-auto flex items-center justify-between">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (addFlowRef.current && addFlowRef.current.handleBack()) return;
+                  setAddFlowProduct(null);
+                  setAddFlowQueue([]);
+                }}
+              >
+                Back
+              </Button>
+              <button
+                onClick={() => {
+                  if (addFlowRef.current) {
+                    const handled = addFlowRef.current.handleNext();
+                    if (!handled) {
+                      const flowState = addFlowRef.current.getState();
+                      setLocalProductStates((prev) => ({
+                        ...prev,
+                        [addFlowProduct]: flowState,
+                      }));
+                      setAddFlowPhase("loading");
+                    }
+                  }
+                }}
+                className="inline-flex items-center justify-center gap-2 text-success-foreground px-7 py-3 rounded-full font-semibold text-base transition-all"
+                style={{
+                  background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
+                  boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
+                }}
+              >
+                Next
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -805,7 +974,7 @@ export const StepOffer = ({
           <div className="border-t border-border pt-4 space-y-4">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <BadgePercent className="w-5 h-5 text-muted-foreground" />
+                <BadgePercent className="w-4 h-4" />
                 Discount:
               </span>
               <span className="text-base font-semibold" style={{ color: 'hsl(0 74% 42%)' }}>-{discountPercent}%</span>
@@ -977,8 +1146,7 @@ export const StepOffer = ({
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
                         {selectedInsurances.length > 1 && (
-                          <Button variant="destructive-outline" size="sm" onClick={() => setRemoveConfirmId("car")}>
-                            <Trash2 className="w-3.5 h-3.5" />
+                          <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("car") })}>
                             Remove
                           </Button>
                         )}
@@ -989,7 +1157,29 @@ export const StepOffer = ({
                           : `Car ${idx + 1}`;
                         return (
                           <div key={inst.id} className="mb-3">
-                            <p className="text-sm font-medium text-muted-foreground mb-1">{plateLabel}</p>
+                            <div className="flex items-center justify-between mb-1">
+                              <p className="text-sm font-medium text-muted-foreground">{plateLabel}</p>
+                              {carInstances.length > 1 && (
+                                <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
+                                  label: plateLabel,
+                                  action: () => {
+                                    setLocalProductStates((prev) => {
+                                      const instances = [...(prev.car?.__carInstances || carInstances)];
+                                      instances.splice(idx, 1);
+                                      return { ...prev, car: { ...prev.car, __carInstances: instances } };
+                                    });
+                                    setLocalOfferStates((prev) => {
+                                      const carOffer = { ...prev.car };
+                                      delete carOffer[inst.id];
+                                      return { ...prev, car: carOffer };
+                                    });
+                                    if (activeCarIdx >= idx && activeCarIdx > 0) setActiveCarIdx(activeCarIdx - 1);
+                                  },
+                                })}>
+                                  Remove
+                                </Button>
+                              )}
+                            </div>
                             <InsuranceOfferCard
                               insurerName={insurer.name}
                               logoSrc={insurer.logoSrc}
@@ -1014,28 +1204,40 @@ export const StepOffer = ({
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
                         {selectedInsurances.length > 1 && (
-                          <Button variant="destructive-outline" size="sm" onClick={() => setRemoveConfirmId("home")}>
-                            <Trash2 className="w-3.5 h-3.5" />
+                          <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("home") })}>
                             Remove
                           </Button>
                         )}
                       </div>
-                      {(["household", "building"] as const).map((sub) => (
-                        <div key={sub} className="mb-3">
-                          <p className="text-sm font-medium text-muted-foreground mb-1">
-                            {sub === "household" ? "Household goods" : "Building"}
-                          </p>
-                          <InsuranceOfferCard
-                            insurerName={insurer.name}
-                            logoSrc={insurer.logoSrc}
-                            originalPrice={insurer.monthlyPrice}
-                            monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-                            savingsPercent={insurer.savingsPercent}
-                            happyClients={insurer.happyClients}
-                            onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
-                          />
-                        </div>
-                      ))}
+                      {(["household", "building"] as const).map((sub) => {
+                        const subLabel = sub === "household" ? "Household goods" : "Building";
+                        return (
+                          <div key={sub} className="mb-3">
+                            <div className="flex items-center justify-between mb-1">
+                              <p className="text-sm font-medium text-muted-foreground">{subLabel}</p>
+                              <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
+                                label: subLabel,
+                                action: () => {
+                                  const newChoice = sub === "household" ? "building" : "household";
+                                  handleUpdateProductState("home", "coverageChoice", newChoice);
+                                  setActiveHomeTab(newChoice as "household" | "building");
+                                },
+                              })}>
+                                Remove
+                              </Button>
+                            </div>
+                            <InsuranceOfferCard
+                              insurerName={insurer.name}
+                              logoSrc={insurer.logoSrc}
+                              originalPrice={insurer.monthlyPrice}
+                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+                              savingsPercent={insurer.savingsPercent}
+                              happyClients={insurer.happyClients}
+                              onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
                   );
                 }
@@ -1097,7 +1299,10 @@ export const StepOffer = ({
                 return null;
               })()}
 
-              {/* Detail cards — no product title/offer card on detail tabs */}
+              {/* Offer card on detail tabs (no h2 title) */}
+              {renderDetailTabOfferCard(activeTab)}
+
+              {/* Detail cards */}
               {activeTab === "travel" && localProductStates.travel ? (
                 <TravelOfferCards
                   productState={localProductStates.travel}
@@ -1218,6 +1423,7 @@ export const StepOffer = ({
       </div>
       {renderAddModal()}
       {renderRemoveConfirm()}
+      {renderAddFlowOverlay()}
     </div>
   );
 };
