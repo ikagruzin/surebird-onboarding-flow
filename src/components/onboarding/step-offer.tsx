@@ -781,6 +781,13 @@ export const StepOffer = ({
                   onUpdateProduct={(key, value) => handleUpdateProductState("accidents", key, value)}
                   onUpdateOffer={(key, value) => handleUpdateOfferState("accidents", key, value)}
                 />
+              ) : activeTab === "caravan" ? (
+                <CaravanOfferCards
+                  productState={localProductStates.caravan || {}}
+                  offerState={localOfferStates.caravan || {}}
+                  onUpdateProduct={(key, value) => handleUpdateProductState("caravan", key, value)}
+                  onUpdateOffer={(key, value) => handleUpdateOfferState("caravan", key, value)}
+                />
               ) : (
                 renderPreferences(activeTab)
               )}
