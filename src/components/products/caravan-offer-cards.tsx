@@ -130,16 +130,16 @@ const ADDON_TOGGLES = [
     options: ["1 year", "3 years", "5 years"],
   },
   {
-    key: "householdGoods",
-    label: "Household goods",
-    tooltip: "Inventory or household effects means; the additional (not standard) inventory and the entire household effects located in the caravan or co-insured awning. Think, for example, of the furniture or a television.",
-    options: ["€750", "€1,500", "€2,500", "€3,000", "€3,500"],
-  },
-  {
     key: "outbuilding",
     label: "Outbuilding",
     tooltip: "Under the outbuilding are sheds that are not made of tent fabric. An outbuilding is not attached to the caravan.",
     options: ["€500", "€1,000", "€1,500", "€2,000", "€2,500"],
+  },
+  {
+    key: "householdGoods",
+    label: "Household goods",
+    tooltip: "Inventory or household effects means; the additional (not standard) inventory and the entire household effects located in the caravan or co-insured awning. Think, for example, of the furniture or a television.",
+    options: ["€750", "€1,500", "€2,500", "€3,000", "€3,500"],
   },
   {
     key: "canopy",
