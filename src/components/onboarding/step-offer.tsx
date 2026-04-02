@@ -976,12 +976,12 @@ export const StepOffer = ({
                     <div key="car" className="mb-8">
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-                        <div className="flex items-center gap-2">
-                          <Button variant="outline" size="sm" onClick={() => setActiveTab("car")}>
-                            Edit
+                        {selectedInsurances.length > 1 && (
+                          <Button variant="destructive-outline" size="sm" onClick={() => setRemoveConfirmId("car")}>
+                            <Trash2 className="w-3.5 h-3.5" />
+                            Remove
                           </Button>
-                          <Button variant="outline" size="sm">Compare</Button>
-                        </div>
+                        )}
                       </div>
                       {carInstances.map((inst, idx) => {
                         const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
@@ -994,7 +994,7 @@ export const StepOffer = ({
                               insurerName={insurer.name}
                               logoSrc={insurer.logoSrc}
                               originalPrice={insurer.monthlyPrice}
-                              monthlyPrice={insurer.monthlyPrice * (1 - discountPercent / 100)}
+                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
                               savingsPercent={insurer.savingsPercent}
                               happyClients={insurer.happyClients}
                               onViewDetails={() => { setActiveCarIdx(idx); setActiveTab("car"); }}
