@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useCallback } from "react";
 import { Check, CheckCircle2, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Calendar, Shield, Play, Star, Gift, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { InsuranceOfferCard } from "./insurance-offer-card";
