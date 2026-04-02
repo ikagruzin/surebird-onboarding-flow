@@ -175,6 +175,8 @@ export const StepOffer = ({
   offerStates: offerStatesProp = {},
   onUpdateOfferState,
   onUpdateProductState,
+  onAddInsurances,
+  onRemoveInsurance,
 }: StepOfferProps) => {
   const [activeTab, setActiveTab] = useState("all");
   const [videoModal, setVideoModal] = useState<string | null>(null);
