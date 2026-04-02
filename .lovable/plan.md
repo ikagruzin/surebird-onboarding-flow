@@ -1,54 +1,79 @@
 
 
-## Car Offer Page Fixes + All Offers Multi-Car Display
+## Add Home Product to Offer Page
 
-### Issues to Fix
+### Concept
 
-**1. Per-instance offer state (independent insurance data per car)**
-Currently `onUpdateOffer` writes to a flat `localOfferStates.car` object shared across all cars. Fix: key offer state by car instance ID (`localOfferStates.car[instanceId]`). Each car gets its own Own Risk, Coverage, and Additional Coverage selections.
+Home insurance has up to 2 sub-products: **Household goods** and **Building** (determined by `coverageChoice` from Set Preferences: "household", "building", or "both"). When "both" is selected, a pill switcher (same as multi-car) lets the user toggle between them. Each sub-product has its own independent Own Risk and Coverage.
 
-**2. Rename "Vehicle" → "Car Details" with editable license plate**
-Replace the read-only `VehicleCard` with an editable card titled "Car Details" that includes the `DutchPlateInput` component (same as Set Preferences identity step) plus the brand/model confirmation card. Users can change the plate and trigger a new lookup.
+### Card Layout
 
-**3. Driver card not editable**
-The `handleUpdateInstanceProduct` function writes keys like `__carInstance_car-123_mainDriver` into the flat product state — but the `DriverCard` reads from `activeState` which is the instance's snapshot. Fix: make `handleUpdateInstanceProduct` update the actual instance state inside `localProductStates.car.__carInstances[idx].state` so changes are reflected immediately.
+**Household goods tab (4 cards)**
 
-**4. Car switcher placement — above the insurance offer card**
-Move the multi-instance pill switcher out of `CarOfferCards` and render it in `step-offer.tsx` between the product tabs and the `renderOfferCard(activeTab)` call, so it appears above the insurance card (as shown in screenshot).
+| # | Card | Source | Subtitle |
+|---|------|--------|----------|
+| 1 | Own risk | Rest Data | "The amount you pay yourself when filing a claim. A higher own risk means a lower monthly premium." |
+| 2 | Coverage | Rest Data | Radio cards (same style as Car/Caravan) |
+| 3 | Contents insurance | Set Preferences | "Details about your belongings and their estimated value." |
+| 4 | My house details | Set Preferences | "The physical characteristics of your home." |
 
-**5. "All offers" page — grouped under one heading**
-When `activeTab === "all"` and there are multiple cars, render one "Car" heading followed by stacked insurance offer cards, each showing the formatted license plate as a sub-label (e.g., "AB-12-3C"). Each card's "Edit" button navigates to the car tab with the corresponding instance active.
+**Building tab (4 cards)**
+
+| # | Card | Source | Subtitle |
+|---|------|--------|----------|
+| 1 | Own risk | Rest Data | Same subtitle |
+| 2 | Coverage | Rest Data | Radio cards |
+| 3 | Building insurance | Set Preferences | "Structural details and features of your building." |
+| 4 | My house details | Set Preferences | Same shared data (common for both) |
+
+### Coverage Options (radio cards with subtitles)
+
+| Option | Subtitle | Badge |
+|--------|----------|-------|
+| Extra extensive | "Covers a wide range of damage including fire, storm, theft, and water damage — suitable for most homeowners." | — |
+| All Risk | "The most comprehensive coverage — includes all risks except those explicitly excluded. Maximum protection for your home." | Recommended |
+
+Default: **All Risk**
+
+### Rest Data
+
+- **Own risk**: €0, €100, €250, €500 (default €100) — SegmentedControl, independent per sub-product
+- **Coverage**: Extra extensive / All Risk — radio cards, independent per sub-product
+
+### Sub-product switcher
+
+When `coverageChoice === "both"`, render pill buttons "Household goods" / "Building" above the insurance offer card (same pattern as car multi-instance pills). State tracked via `activeHomeTab: "household" | "building"`.
+
+### Offer state structure
+
+```text
+localOfferStates.home = {
+  household: { ownRisk: "100", coverage: "All Risk" },
+  building:  { ownRisk: "100", coverage: "All Risk" }
+}
+```
+
+When only one sub-product is selected, still key by sub-product ID but only render that one.
+
+### Set Preferences cards
+
+- **Contents insurance card**: Reuses the same fields from `HomeContentsStep` — high-value AV, jewelry, special assets, owner interest toggles with amount inputs, security, net income, outside value.
+- **Building insurance card**: Reuses fields from `HomeBuildingStep` — monumental status, outbuildings, floor count, renovation, solar panels, heat pump.
+- **My house details card**: Shared between both tabs — building type, usage, construction material, floor material, roof shape, roof material. Editable with same controls as `HomeDetailsStep`.
+
+### All Offers page
+
+When `coverageChoice === "both"`, render two insurance cards under one "Home" heading:
+- "Household goods" sub-label + InsuranceOfferCard → Edit opens home tab with household active
+- "Building" sub-label + InsuranceOfferCard → Edit opens home tab with building active
+
+When only one sub-product, render single card as normal.
 
 ### File Changes
 
 | File | Change |
 |------|--------|
-| `src/components/products/car-offer-cards.tsx` | (1) Remove pill switcher from component (moved to parent). (2) Replace `VehicleCard` with `CarDetailsCard` — editable `DutchPlateInput` + brand/model confirmation, same as `car-steps.tsx` identity step. (3) Fix `handleUpdateInstanceProduct` to update instance state in-place via a new callback prop `onUpdateInstanceState`. (4) Make offer state read/write per instance via `instanceOfferState` / `onUpdateInstanceOffer`. |
-| `src/components/onboarding/step-offer.tsx` | (1) Render car pill switcher above `renderOfferCard("car")` when `activeTab === "car"`. (2) Change car offer state structure to be keyed by instance ID: `localOfferStates.car = { [instanceId]: {...} }`. (3) Pass per-instance offer handlers to `CarOfferCards`. (4) In "All offers" view, for car product: render one "Car" heading then loop over car instances, rendering an offer card per instance with license plate sub-label. (5) Fix product state updates to mutate `__carInstances[idx].state` directly. |
-
-### Technical Detail
-
-**Per-instance offer state structure:**
-```text
-localOfferStates.car = {
-  "car-123-1": { ownRisk: "100", coverage: "Limited Casco (WA+)", ... },
-  "car-456-2": { ownRisk: "250", coverage: "Civil Liability (WA)", ... }
-}
-```
-
-**Per-instance product state update** — instead of writing `__carInstance_id_key`, directly mutate the instance inside the array:
-```text
-setLocalProductStates(prev => {
-  const instances = [...prev.car.__carInstances];
-  instances[idx] = { ...instances[idx], state: { ...instances[idx].state, [key]: value } };
-  return { ...prev, car: { ...prev.car, __carInstances: instances } };
-});
-```
-
-**All offers rendering for car:**
-```text
-Car (heading)
-├── [AB-12-3C] InsuranceOfferCard  → Edit opens car tab, idx=0
-└── [XY-45-6Z] InsuranceOfferCard  → Edit opens car tab, idx=1
-```
+| `src/config/products/home.ts` | Add `offerInitialState: { household: { ownRisk: "100", coverage: "All Risk" }, building: { ownRisk: "100", coverage: "All Risk" } }` |
+| `src/components/products/home-offer-cards.tsx` | **New file** — Renders 4 cards per active sub-product. Coverage uses radio card pattern from Car/Caravan. Contents/Building/Details cards reuse the same fields and controls from `home-steps.tsx`. |
+| `src/components/onboarding/step-offer.tsx` | (1) Add `activeHomeTab` state. (2) Render home pill switcher when `coverageChoice === "both"`. (3) Initialize `localOfferStates.home` keyed by sub-product. (4) Add `activeTab === "home"` branch rendering `HomeOfferCards`. (5) In "All offers", when both sub-products: render grouped cards under one "Home" heading with sub-labels. |
 
