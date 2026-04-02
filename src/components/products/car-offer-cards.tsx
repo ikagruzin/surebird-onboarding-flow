@@ -1,15 +1,18 @@
 /**
  * Car product – Offer page detail cards.
- * Multi-instance support with pill switcher.
- * Cards: Own Risk, Coverage, Additional Coverage, Vehicle, Driver, Usage.
+ * Cards: Own Risk, Coverage, Additional Coverage, Car Details, Driver, Usage.
+ * Multi-instance support: pill switcher is rendered by parent (step-offer.tsx).
+ * Each car instance has independent offer + product state.
  */
-import { Info } from "lucide-react";
+import { useState, useCallback } from "react";
+import { Info, Car, Check } from "lucide-react";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import { DutchPlateInput, formatDutchPlate } from "@/components/ui/dutch-plate-input";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-import { CAR_OPTIONS, getCarInstanceLabel, type CarInstance } from "@/config/products/car";
+import { CAR_OPTIONS, lookupPlate } from "@/config/products/car";
 import { getSelectionGridClass } from "@/lib/grid-layout";
 import {
   Tooltip,
@@ -21,13 +24,14 @@ import {
 /* ─── Types ─── */
 
 interface CarOfferCardsProps {
-  productState: Record<string, any>;
-  offerState: Record<string, any>;
-  onUpdateProduct: (key: string, value: any) => void;
-  onUpdateOffer: (key: string, value: any) => void;
-  /** Active car instance index */
-  activeCarIdx: number;
-  onSetActiveCarIdx: (idx: number) => void;
+  /** The active car instance's product state */
+  instanceState: Record<string, any>;
+  /** The active car instance's offer state */
+  instanceOfferState: Record<string, any>;
+  /** Update a key in the active instance's product state */
+  onUpdateInstanceProduct: (key: string, value: any) => void;
+  /** Update a key in the active instance's offer state */
+  onUpdateInstanceOffer: (key: string, value: any) => void;
 }
 
 /* ─── Shared helpers ─── */
@@ -231,42 +235,76 @@ const AdditionalCoverageCard = ({
   </OfferCard>
 );
 
-/* ─── Card 4: Vehicle (Set Pref) ─── */
+/* ─── Card 4: Car Details (editable plate + brand/model) ─── */
 
-const VehicleCard = ({ state }: { state: Record<string, any> }) => (
-  <OfferCard
-    title="Vehicle"
-    subtitle="Your car details retrieved from the license plate."
-  >
-    <div className="space-y-3">
-      {state.licensePlate && (
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">License plate</span>
-          <span className="text-sm font-medium text-foreground">
-            {(() => {
-              const raw = (state.licensePlate as string).toUpperCase();
-              return raw.length === 6 ? `${raw.slice(0, 2)}-${raw.slice(2, 4)}-${raw.slice(4, 6)}` : raw;
-            })()}
-          </span>
-        </div>
-      )}
-      {state.carBrand && (
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">Brand</span>
-          <span className="text-sm font-medium text-foreground">{state.carBrand}</span>
-        </div>
-      )}
-      {state.carModel && (
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">Model</span>
-          <span className="text-sm font-medium text-foreground">{state.carModel}</span>
-        </div>
-      )}
-    </div>
-  </OfferCard>
-);
+const CarDetailsCard = ({
+  state,
+  onUpdate,
+}: {
+  state: Record<string, any>;
+  onUpdate: (key: string, value: any) => void;
+}) => {
+  const [lookupDone, setLookupDone] = useState(state.plateConfirmed === true);
 
-/* ─── Card 5: Driver (Set Pref) ─── */
+  const handleLookup = useCallback((raw?: string) => {
+    const plate = (raw || state.licensePlate || "").trim();
+    if (!plate) return;
+    const result = lookupPlate(plate);
+    if (result) {
+      onUpdate("carBrand", result.brand);
+      onUpdate("carModel", result.model);
+      onUpdate("plateConfirmed", true);
+      setLookupDone(true);
+    }
+  }, [state.licensePlate, onUpdate]);
+
+  const handlePlateChange = (raw: string) => {
+    onUpdate("licensePlate", raw);
+    if (lookupDone) {
+      setLookupDone(false);
+      onUpdate("plateConfirmed", false);
+      onUpdate("carBrand", "");
+      onUpdate("carModel", "");
+    }
+  };
+
+  return (
+    <OfferCard
+      title="Car details"
+      subtitle="Your car details retrieved from the license plate."
+    >
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-foreground">License plate number</p>
+            <InfoTip text="We use the license plate of your car to retrieve the details of your car from the RDW, among others. You can only take out car insurance for vehicles with a Dutch license plate." />
+          </div>
+          <DutchPlateInput
+            value={state.licensePlate || ""}
+            onChange={handlePlateChange}
+            onComplete={handleLookup}
+          />
+        </div>
+
+        {/* Confirmation card */}
+        {(lookupDone || state.plateConfirmed) && state.carBrand && (
+          <div className="flex items-center gap-4 rounded-xl border-2 border-primary bg-primary/5 px-4 py-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+              <Car className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-foreground">{state.carBrand}</p>
+              <p className="text-sm text-muted-foreground">{state.carModel}</p>
+            </div>
+            <Check className="h-5 w-5 text-primary" />
+          </div>
+        )}
+      </div>
+    </OfferCard>
+  );
+};
+
+/* ─── Card 5: Driver (Set Pref — editable) ─── */
 
 const DriverCard = ({
   state,
@@ -356,7 +394,7 @@ const DriverCard = ({
   );
 };
 
-/* ─── Card 6: Usage (Set Pref) ─── */
+/* ─── Card 6: Usage (Set Pref — editable) ─── */
 
 const UsageCard = ({
   state,
@@ -404,72 +442,34 @@ const UsageCard = ({
 /* ─── Main component ─── */
 
 export const CarOfferCards = ({
-  productState,
-  offerState,
-  onUpdateProduct,
-  onUpdateOffer,
-  activeCarIdx,
-  onSetActiveCarIdx,
+  instanceState,
+  instanceOfferState,
+  onUpdateInstanceProduct,
+  onUpdateInstanceOffer,
 }: CarOfferCardsProps) => {
-  // Extract car instances from productState
-  const instances: { id: string; state: Record<string, any> }[] =
-    productState.__carInstances || [{ id: "car-0", state: productState }];
-
-  const activeInstance = instances[activeCarIdx] || instances[0];
-  const activeState = activeInstance?.state || {};
-
-  // Per-instance offer state is keyed by instance id
-  const instanceOfferState = offerState[activeInstance?.id] || offerState;
-
-  const handleUpdateInstanceProduct = (key: string, value: any) => {
-    // Update the specific instance's state
-    onUpdateProduct(`__carInstance_${activeInstance.id}_${key}`, value);
-  };
+  const offerState = instanceOfferState || {};
+  const state = instanceState || {};
 
   return (
     <div className="space-y-4">
-      {/* Multi-instance pill switcher */}
-      {instances.length > 1 && (
-        <div className="flex flex-wrap items-center gap-2">
-          {instances.map((inst, i) => {
-            const isActive = i === activeCarIdx;
-            const label = getCarInstanceLabel(inst as CarInstance, i);
-            return (
-              <button
-                key={inst.id}
-                onClick={() => onSetActiveCarIdx(i)}
-                className={cn(
-                  "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
-                  isActive
-                    ? "bg-foreground text-background border-foreground"
-                    : "bg-white border-border text-foreground hover:border-muted-foreground/30"
-                )}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
-      )}
-
       {/* Rest Data cards */}
       <OwnRiskCard
-        value={instanceOfferState.ownRisk || "100"}
-        onChange={(v) => onUpdateOffer("ownRisk", v)}
+        value={offerState.ownRisk || "100"}
+        onChange={(v) => onUpdateInstanceOffer("ownRisk", v)}
       />
       <CoverageCard
-        value={instanceOfferState.coverage || "Limited Casco (WA+)"}
-        onChange={(v) => onUpdateOffer("coverage", v)}
+        value={offerState.coverage || "Limited Casco (WA+)"}
+        onChange={(v) => onUpdateInstanceOffer("coverage", v)}
       />
       <AdditionalCoverageCard
-        offerState={instanceOfferState}
-        onUpdateOffer={onUpdateOffer}
+        offerState={offerState}
+        onUpdateOffer={onUpdateInstanceOffer}
       />
 
-      {/* Set Preferences cards (read from instance state) */}
-      <VehicleCard state={activeState} />
-      <DriverCard state={activeState} onUpdate={handleUpdateInstanceProduct} />
-      <UsageCard state={activeState} onUpdate={handleUpdateInstanceProduct} />
+      {/* Set Preferences cards */}
+      <CarDetailsCard state={state} onUpdate={onUpdateInstanceProduct} />
+      <DriverCard state={state} onUpdate={onUpdateInstanceProduct} />
+      <UsageCard state={state} onUpdate={onUpdateInstanceProduct} />
     </div>
   );
 };
