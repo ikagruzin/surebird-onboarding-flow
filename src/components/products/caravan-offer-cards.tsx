@@ -106,14 +106,15 @@ const CoverageCard = ({ value, onChange }: { value: string; onChange: (v: string
   >
     <div className="space-y-3">
       {COVERAGE_OPTIONS.map((opt) => (
-        <SelectionCard
-          key={opt.id}
-          label={opt.label}
-          subtitle={opt.subtitle}
-          selected={value === opt.label}
-          onClick={() => onChange(opt.label)}
-          indicator="radio"
-        />
+        <div key={opt.id} className="space-y-1">
+          <SelectionCard
+            label={opt.label}
+            selected={value === opt.label}
+            onClick={() => onChange(opt.label)}
+            indicator="radio"
+          />
+          <p className="text-xs text-muted-foreground pl-1">{opt.subtitle}</p>
+        </div>
       ))}
     </div>
   </OfferCard>
