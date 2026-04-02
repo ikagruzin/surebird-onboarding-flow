@@ -13,6 +13,7 @@ import { LiabilityOfferCards } from "@/components/products/liability-offer-cards
 import { AccidentOfferCards } from "@/components/products/accident-offer-cards";
 import { CaravanOfferCards } from "@/components/products/caravan-offer-cards";
 import { CarOfferCards } from "@/components/products/car-offer-cards";
+import { HomeOfferCards } from "@/components/products/home-offer-cards";
 import { getProductConfig } from "@/config/products";
 import { getCarInstanceLabel, type CarInstance } from "@/config/products/car";
 import { formatDutchPlate } from "@/components/ui/dutch-plate-input";
@@ -176,6 +177,7 @@ export const StepOffer = ({
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number>(0);
   const [activeCarIdx, setActiveCarIdx] = useState(0);
+  const [activeHomeTab, setActiveHomeTab] = useState<"household" | "building">("household");
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
 
@@ -829,6 +831,40 @@ export const StepOffer = ({
                     </div>
                   );
                 }
+                // Home: grouped under one heading with sub-product cards when "both"
+                if (id === "home" && localProductStates.home?.coverageChoice === "both") {
+                  const ins = INSURANCE_TYPES.find((t) => t.id === "home")!;
+                  const insurer = INSURER_DATA.home;
+                  return (
+                    <div key="home" className="mb-8">
+                      <div className="flex items-center justify-between mb-3">
+                        <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="sm" onClick={() => setActiveTab("home")}>
+                            Edit
+                          </Button>
+                          <Button variant="outline" size="sm">Compare</Button>
+                        </div>
+                      </div>
+                      {(["household", "building"] as const).map((sub) => (
+                        <div key={sub} className="mb-3">
+                          <p className="text-sm font-medium text-muted-foreground mb-1">
+                            {sub === "household" ? "Household goods" : "Building"}
+                          </p>
+                          <InsuranceOfferCard
+                            insurerName={insurer.name}
+                            logoSrc={insurer.logoSrc}
+                            originalPrice={insurer.monthlyPrice}
+                            monthlyPrice={insurer.monthlyPrice * (1 - discountPercent / 100)}
+                            savingsPercent={insurer.savingsPercent}
+                            happyClients={insurer.happyClients}
+                            onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
                 return renderOfferCard(id);
               })}
             </>
@@ -857,6 +893,35 @@ export const StepOffer = ({
                   })}
                 </div>
               )}
+
+              {/* Home sub-product pill switcher */}
+              {activeTab === "home" && (() => {
+                const coverageChoice = localProductStates.home?.coverageChoice;
+                if (coverageChoice === "both") {
+                  return (
+                    <div className="flex flex-wrap items-center gap-2 mb-4">
+                      {(["household", "building"] as const).map((sub) => {
+                        const isActive = activeHomeTab === sub;
+                        return (
+                          <button
+                            key={sub}
+                            onClick={() => setActiveHomeTab(sub)}
+                            className={cn(
+                              "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
+                              isActive
+                                ? "bg-foreground text-background border-foreground"
+                                : "bg-white border-border text-foreground hover:border-muted-foreground/30"
+                            )}
+                          >
+                            {sub === "household" ? "Household goods" : "Building"}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                }
+                return null;
+              })()}
 
               {renderOfferCard(activeTab)}
               {activeTab === "travel" && localProductStates.travel ? (
@@ -904,6 +969,29 @@ export const StepOffer = ({
                     instanceOfferState={instOfferState}
                     onUpdateInstanceProduct={(key, value) => handleUpdateCarInstanceProduct(activeCarIdx, key, value)}
                     onUpdateInstanceOffer={(key, value) => handleUpdateCarInstanceOffer(activeInst?.id, key, value)}
+                  />
+                );
+              })() : activeTab === "home" ? (() => {
+                const coverageChoice = localProductStates.home?.coverageChoice || "household";
+                const effectiveSubTab = coverageChoice === "both" ? activeHomeTab
+                  : coverageChoice === "building" ? "building" as const
+                  : "household" as const;
+                const subOffer = localOfferStates.home?.[effectiveSubTab] || { ownRisk: "100", coverage: "All Risk" };
+                return (
+                  <HomeOfferCards
+                    activeSubTab={effectiveSubTab}
+                    productState={localProductStates.home || {}}
+                    subOfferState={subOffer}
+                    onUpdateProduct={(key, value) => handleUpdateProductState("home", key, value)}
+                    onUpdateSubOffer={(key, value) => {
+                      setLocalOfferStates((prev) => ({
+                        ...prev,
+                        home: {
+                          ...(prev.home || {}),
+                          [effectiveSubTab]: { ...(prev.home?.[effectiveSubTab] || {}), [key]: value },
+                        },
+                      }));
+                    }}
                   />
                 );
               })() : (
