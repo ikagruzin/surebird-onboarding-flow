@@ -36,6 +36,15 @@ export const accidentsProduct: ProductConfig = {
     ownRisk: "€100",
   },
 
+  offerCards: [
+    { id: "accidents-own-risk", title: "Own risk", subtitle: "The amount you pay yourself when filing a claim. A higher own risk means a lower monthly premium.", source: "rest" },
+    { id: "accidents-coverage", title: "Coverage", subtitle: "Your accident insurance coverage level, determining the payout in case of permanent disability or death.", source: "preferences", stepId: "accidents-all" },
+  ],
+
+  offerInitialState: {
+    ownRisk: "€100",
+  },
+
   stepDefs: [
     { id: "accidents-all", label: "Accidents" },
   ],

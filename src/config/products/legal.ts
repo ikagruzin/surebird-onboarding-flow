@@ -33,6 +33,15 @@ export const legalProduct: ProductConfig = {
     coverageModules: ["consumer"],
   },
 
+  offerCards: [
+    { id: "legal-own-risk", title: "Own risk", subtitle: "The amount you pay yourself when filing a claim. A higher own risk means a lower monthly premium.", source: "rest" },
+    { id: "legal-coverage", title: "Coverage", subtitle: "Choose which legal areas you want covered. Consumer protection is always included.", source: "preferences", stepId: "legal-all" },
+  ],
+
+  offerInitialState: {
+    ownRisk: "€100",
+  },
+
   stepDefs: [
     { id: "legal-all", label: "Legal expenses" },
   ],

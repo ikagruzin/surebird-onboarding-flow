@@ -35,6 +35,15 @@ export const liabilityProduct: ProductConfig = {
     ownRisk: "€100",
   },
 
+  offerCards: [
+    { id: "liability-own-risk", title: "Own risk", subtitle: "The amount you pay yourself when filing a claim. Choose €0 for full coverage at a slightly higher premium.", source: "rest" },
+    { id: "liability-coverage", title: "Coverage", subtitle: "Adjust your liability coverage preferences, including pet insurance and maximum damage limit.", source: "preferences", stepId: "liability-all" },
+  ],
+
+  offerInitialState: {
+    ownRisk: "€100",
+  },
+
   stepDefs: [
     { id: "liability-all", label: "Liability" },
   ],
