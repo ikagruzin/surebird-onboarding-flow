@@ -179,12 +179,29 @@ export const StepOffer = ({
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
 
+  // Extract car instances once for reuse
+  const carInstances: { id: string; state: Record<string, any> }[] = useMemo(() => {
+    return localProductStates?.car?.__carInstances || (productStates?.car?.__carInstances) || [{ id: "car-0", state: productStates?.car || {} }];
+  }, [localProductStates?.car?.__carInstances, productStates?.car]);
+
   // Local offer states (rest data) with defaults from product configs
+  // Car uses per-instance offer state keyed by instance ID
   const [localOfferStates, setLocalOfferStates] = useState<Record<string, Record<string, any>>>(() => {
     const initial: Record<string, Record<string, any>> = {};
     for (const id of selectedInsurances) {
-      const config = getProductConfig(id);
-      initial[id] = { ...(config?.offerInitialState || {}), ...(offerStatesProp[id] || {}) };
+      if (id === "car") {
+        // Per-instance car offer state
+        const config = getProductConfig("car");
+        const carInsts = productStates?.car?.__carInstances || [{ id: "car-0", state: productStates?.car || {} }];
+        const carOfferMap: Record<string, any> = {};
+        for (const inst of carInsts) {
+          carOfferMap[inst.id] = { ...(config?.offerInitialState || {}) };
+        }
+        initial.car = carOfferMap;
+      } else {
+        const config = getProductConfig(id);
+        initial[id] = { ...(config?.offerInitialState || {}), ...(offerStatesProp[id] || {}) };
+      }
     }
     return initial;
   });
@@ -207,6 +224,29 @@ export const StepOffer = ({
     }));
     onUpdateProductState?.(productId, key, value);
   };
+
+  // ── Car-specific per-instance handlers ──
+
+  const handleUpdateCarInstanceOffer = useCallback((instanceId: string, key: string, value: any) => {
+    setLocalOfferStates((prev) => ({
+      ...prev,
+      car: {
+        ...(prev.car || {}),
+        [instanceId]: { ...(prev.car?.[instanceId] || {}), [key]: value },
+      },
+    }));
+  }, []);
+
+  const handleUpdateCarInstanceProduct = useCallback((instanceIdx: number, key: string, value: any) => {
+    setLocalProductStates((prev) => {
+      const instances = [...(prev.car?.__carInstances || carInstances)];
+      instances[instanceIdx] = {
+        ...instances[instanceIdx],
+        state: { ...instances[instanceIdx].state, [key]: value },
+      };
+      return { ...prev, car: { ...prev.car, __carInstances: instances } };
+    });
+  }, [carInstances]);
 
   const FAQ_DATA = [
     {
