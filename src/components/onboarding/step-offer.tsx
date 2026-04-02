@@ -751,35 +751,135 @@ export const StepOffer = ({
 
   // ── Remove confirmation modal ──
   const renderRemoveConfirm = () => {
-    if (!removeConfirmId) return null;
-    const ins = INSURANCE_TYPES.find(t => t.id === removeConfirmId);
+    if (!removeConfirm) return null;
     return (
       <div
         className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40"
         onClick={(e) => {
-          if (e.target === e.currentTarget) setRemoveConfirmId(null);
+          if (e.target === e.currentTarget) setRemoveConfirm(null);
         }}
       >
         <div className="bg-card rounded-2xl border border-border shadow-xl w-full max-w-sm mx-4 p-6">
-          <h2 className="text-lg font-bold text-foreground mb-2">Remove {ins?.label}?</h2>
+          <h2 className="text-lg font-bold text-foreground mb-2">Remove {removeConfirm.label}?</h2>
           <p className="text-sm text-muted-foreground mb-6">
-            Are you sure you want to remove {ins?.label} from your offer? This action cannot be undone.
+            Are you sure you want to remove {removeConfirm.label} from your offer? This action cannot be undone.
           </p>
           <div className="flex items-center gap-3 justify-end">
-            <Button variant="outline" size="sm" onClick={() => setRemoveConfirmId(null)}>
+            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm(null)}>
               Cancel
             </Button>
             <Button
               variant="destructive"
               size="sm"
               onClick={() => {
-                onRemoveInsurance?.(removeConfirmId);
-                setRemoveConfirmId(null);
-                if (activeTab === removeConfirmId) setActiveTab("all");
+                removeConfirm.action();
+                setRemoveConfirm(null);
               }}
             >
               Remove
             </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ── Full-page add product overlay ──
+  const renderAddFlowOverlay = () => {
+    if (!addFlowProduct) return null;
+
+    if (addFlowPhase === "loading") {
+      return (
+        <div className="fixed inset-0 z-[70] bg-background overflow-y-auto">
+          <div className="max-w-3xl mx-auto px-6 py-12">
+            <StepLoading onComplete={() => {
+              onAddInsurances?.([addFlowProduct]);
+              const config = getProductConfig(addFlowProduct);
+              if (config?.offerInitialState) {
+                setLocalOfferStates((prev) => ({
+                  ...prev,
+                  [addFlowProduct]: { ...(config.offerInitialState || {}) },
+                }));
+              }
+              const remaining = addFlowQueue.filter(id => id !== addFlowProduct);
+              if (remaining.length > 0) {
+                setAddFlowQueue(remaining);
+                setAddFlowProduct(remaining[0]);
+                setAddFlowPhase("preferences");
+              } else {
+                setAddFlowProduct(null);
+                setAddFlowQueue([]);
+                setAddFlowPhase("preferences");
+              }
+            }} />
+          </div>
+        </div>
+      );
+    }
+
+    const productLabel = INSURANCE_TYPES.find(t => t.id === addFlowProduct)?.label || addFlowProduct;
+
+    return (
+      <div className="fixed inset-0 z-[70] bg-background overflow-y-auto">
+        <div className="max-w-3xl mx-auto px-6 py-12 pb-32">
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-2xl font-bold text-foreground">Set preferences — {productLabel}</h1>
+            <button
+              onClick={() => { setAddFlowProduct(null); setAddFlowQueue([]); }}
+              className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
+            >
+              <X className="w-5 h-5 text-foreground" />
+            </button>
+          </div>
+          {addFlowProduct === "car" ? (
+            <MultiCarFlowTab
+              ref={addFlowRef}
+              productId="car"
+              isActive={true}
+            />
+          ) : (
+            <ProductFlowTab
+              ref={addFlowRef}
+              productId={addFlowProduct}
+              isActive={true}
+            />
+          )}
+          <div className="fixed bottom-0 left-0 right-0 z-[71] bg-background border-t border-border py-4 px-6">
+            <div className="max-w-3xl mx-auto flex items-center justify-between">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (addFlowRef.current && addFlowRef.current.handleBack()) return;
+                  setAddFlowProduct(null);
+                  setAddFlowQueue([]);
+                }}
+              >
+                Back
+              </Button>
+              <button
+                onClick={() => {
+                  if (addFlowRef.current) {
+                    const handled = addFlowRef.current.handleNext();
+                    if (!handled) {
+                      const flowState = addFlowRef.current.getState();
+                      setLocalProductStates((prev) => ({
+                        ...prev,
+                        [addFlowProduct]: flowState,
+                      }));
+                      setAddFlowPhase("loading");
+                    }
+                  }
+                }}
+                className="inline-flex items-center justify-center gap-2 text-success-foreground px-7 py-3 rounded-full font-semibold text-base transition-all"
+                style={{
+                  background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
+                  boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
+                }}
+              >
+                Next
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
