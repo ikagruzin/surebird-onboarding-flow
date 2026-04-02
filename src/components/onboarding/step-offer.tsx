@@ -671,8 +671,10 @@ export const StepOffer = ({
   };
 
   const handleSaveAddModal = () => {
-    if (addModalSelection.length > 0 && onAddInsurances) {
-      onAddInsurances(addModalSelection);
+    if (addModalSelection.length > 0) {
+      setAddFlowQueue([...addModalSelection]);
+      setAddFlowProduct(addModalSelection[0]);
+      setAddFlowPhase("preferences");
     }
     setShowAddModal(false);
   };
