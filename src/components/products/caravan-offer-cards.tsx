@@ -6,6 +6,7 @@ import { useState, useCallback } from "react";
 import { Info } from "lucide-react";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
+import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { DutchPlateInput } from "@/components/ui/dutch-plate-input";
@@ -105,17 +106,35 @@ const CoverageCard = ({ value, onChange }: { value: string; onChange: (v: string
     subtitle="Choose the level of protection for your caravan against damage and theft."
   >
     <div className="space-y-3">
-      {COVERAGE_OPTIONS.map((opt) => (
-        <div key={opt.id} className="space-y-1">
-          <SelectionCard
-            label={opt.label}
-            selected={value === opt.label}
+      {COVERAGE_OPTIONS.map((opt) => {
+        const selected = value === opt.label;
+        return (
+          <button
+            key={opt.id}
+            type="button"
             onClick={() => onChange(opt.label)}
-            indicator="radio"
-          />
-          <p className="text-xs text-muted-foreground pl-1">{opt.subtitle}</p>
-        </div>
-      ))}
+            className={cn(
+              "flex w-full items-start gap-3 rounded-2xl border-2 p-4 text-left transition-all cursor-pointer",
+              selected
+                ? "border-primary bg-primary/5"
+                : "border-border bg-card hover:border-muted-foreground/30"
+            )}
+          >
+            <span
+              className={cn(
+                "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+                selected ? "border-primary" : "border-muted-foreground/40"
+              )}
+            >
+              {selected && <span className="h-2.5 w-2.5 rounded-full bg-primary" />}
+            </span>
+            <div className="flex-1 min-w-0">
+              <span className="text-sm font-medium text-foreground">{opt.label}</span>
+              <p className="text-xs text-muted-foreground mt-1">{opt.subtitle}</p>
+            </div>
+          </button>
+        );
+      })}
     </div>
   </OfferCard>
 );
@@ -130,16 +149,16 @@ const ADDON_TOGGLES = [
     options: ["1 year", "3 years", "5 years"],
   },
   {
-    key: "householdGoods",
-    label: "Household goods",
-    tooltip: "Inventory or household effects means; the additional (not standard) inventory and the entire household effects located in the caravan or co-insured awning. Think, for example, of the furniture or a television.",
-    options: ["€750", "€1,500", "€2,500", "€3,000", "€3,500"],
-  },
-  {
     key: "outbuilding",
     label: "Outbuilding",
     tooltip: "Under the outbuilding are sheds that are not made of tent fabric. An outbuilding is not attached to the caravan.",
     options: ["€500", "€1,000", "€1,500", "€2,000", "€2,500"],
+  },
+  {
+    key: "householdGoods",
+    label: "Household goods",
+    tooltip: "Inventory or household effects means; the additional (not standard) inventory and the entire household effects located in the caravan or co-insured awning. Think, for example, of the furniture or a television.",
+    options: ["€750", "€1,500", "€2,500", "€3,000", "€3,500"],
   },
   {
     key: "canopy",
@@ -213,18 +232,19 @@ const AdditionalCoverageCard = ({
 
         {/* Hail damage coverage */}
         <div className="space-y-3 pt-2 border-t border-border">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-foreground">Hail damage coverage</span>
-            <InfoTip text="Hail damage can cause significant damage to your caravan. With this additional coverage, hail damage is insured." />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-foreground">Hail damage coverage</span>
+              <InfoTip text="Hail damage can cause significant damage to your caravan. With this additional coverage, hail damage is insured." />
+            </div>
+            <Switch
+              checked={hailCoverage === "Yes"}
+              onCheckedChange={(checked) => {
+                onUpdateOffer("hailDamageCoverage", checked ? "Yes" : "No");
+                if (!checked) onUpdateOffer("hailResistantRoof", "No");
+              }}
+            />
           </div>
-          <SegmentedControl
-            options={["Yes", "No"]}
-            value={hailCoverage}
-            onChange={(v) => {
-              onUpdateOffer("hailDamageCoverage", v);
-              if (v === "No") onUpdateOffer("hailResistantRoof", "No");
-            }}
-          />
 
           {hailCoverage === "Yes" && (
             <div className="space-y-2 pl-1">
