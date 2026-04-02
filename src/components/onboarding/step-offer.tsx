@@ -184,6 +184,9 @@ export const StepOffer = ({
   const [openFaq, setOpenFaq] = useState<number>(0);
   const [activeCarIdx, setActiveCarIdx] = useState(0);
   const [activeHomeTab, setActiveHomeTab] = useState<"household" | "building">("household");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addModalSelection, setAddModalSelection] = useState<string[]>([]);
+  const [removeConfirmId, setRemoveConfirmId] = useState<string | null>(null);
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
 
