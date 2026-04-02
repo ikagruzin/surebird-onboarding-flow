@@ -1146,8 +1146,7 @@ export const StepOffer = ({
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
                         {selectedInsurances.length > 1 && (
-                          <Button variant="destructive-outline" size="sm" onClick={() => setRemoveConfirmId("car")}>
-                            <Trash2 className="w-3.5 h-3.5" />
+                          <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("car") })}>
                             Remove
                           </Button>
                         )}
@@ -1158,7 +1157,29 @@ export const StepOffer = ({
                           : `Car ${idx + 1}`;
                         return (
                           <div key={inst.id} className="mb-3">
-                            <p className="text-sm font-medium text-muted-foreground mb-1">{plateLabel}</p>
+                            <div className="flex items-center justify-between mb-1">
+                              <p className="text-sm font-medium text-muted-foreground">{plateLabel}</p>
+                              {carInstances.length > 1 && (
+                                <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
+                                  label: plateLabel,
+                                  action: () => {
+                                    setLocalProductStates((prev) => {
+                                      const instances = [...(prev.car?.__carInstances || carInstances)];
+                                      instances.splice(idx, 1);
+                                      return { ...prev, car: { ...prev.car, __carInstances: instances } };
+                                    });
+                                    setLocalOfferStates((prev) => {
+                                      const carOffer = { ...prev.car };
+                                      delete carOffer[inst.id];
+                                      return { ...prev, car: carOffer };
+                                    });
+                                    if (activeCarIdx >= idx && activeCarIdx > 0) setActiveCarIdx(activeCarIdx - 1);
+                                  },
+                                })}>
+                                  Remove
+                                </Button>
+                              )}
+                            </div>
                             <InsuranceOfferCard
                               insurerName={insurer.name}
                               logoSrc={insurer.logoSrc}
@@ -1183,28 +1204,40 @@ export const StepOffer = ({
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
                         {selectedInsurances.length > 1 && (
-                          <Button variant="destructive-outline" size="sm" onClick={() => setRemoveConfirmId("home")}>
-                            <Trash2 className="w-3.5 h-3.5" />
+                          <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("home") })}>
                             Remove
                           </Button>
                         )}
                       </div>
-                      {(["household", "building"] as const).map((sub) => (
-                        <div key={sub} className="mb-3">
-                          <p className="text-sm font-medium text-muted-foreground mb-1">
-                            {sub === "household" ? "Household goods" : "Building"}
-                          </p>
-                          <InsuranceOfferCard
-                            insurerName={insurer.name}
-                            logoSrc={insurer.logoSrc}
-                            originalPrice={insurer.monthlyPrice}
-                            monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-                            savingsPercent={insurer.savingsPercent}
-                            happyClients={insurer.happyClients}
-                            onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
-                          />
-                        </div>
-                      ))}
+                      {(["household", "building"] as const).map((sub) => {
+                        const subLabel = sub === "household" ? "Household goods" : "Building";
+                        return (
+                          <div key={sub} className="mb-3">
+                            <div className="flex items-center justify-between mb-1">
+                              <p className="text-sm font-medium text-muted-foreground">{subLabel}</p>
+                              <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
+                                label: subLabel,
+                                action: () => {
+                                  const newChoice = sub === "household" ? "building" : "household";
+                                  handleUpdateProductState("home", "coverageChoice", newChoice);
+                                  setActiveHomeTab(newChoice as "household" | "building");
+                                },
+                              })}>
+                                Remove
+                              </Button>
+                            </div>
+                            <InsuranceOfferCard
+                              insurerName={insurer.name}
+                              logoSrc={insurer.logoSrc}
+                              originalPrice={insurer.monthlyPrice}
+                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+                              savingsPercent={insurer.savingsPercent}
+                              happyClients={insurer.happyClients}
+                              onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
                   );
                 }
