@@ -177,6 +177,7 @@ export const StepOffer = ({
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number>(0);
   const [activeCarIdx, setActiveCarIdx] = useState(0);
+  const [activeHomeTab, setActiveHomeTab] = useState<"household" | "building">("household");
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
 
