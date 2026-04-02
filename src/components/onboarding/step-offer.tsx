@@ -12,6 +12,7 @@ import { LegalOfferCards } from "@/components/products/legal-offer-cards";
 import { LiabilityOfferCards } from "@/components/products/liability-offer-cards";
 import { AccidentOfferCards } from "@/components/products/accident-offer-cards";
 import { CaravanOfferCards } from "@/components/products/caravan-offer-cards";
+import { CarOfferCards } from "@/components/products/car-offer-cards";
 import { getProductConfig } from "@/config/products";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import trustpilotLogo from "@/assets/trustpilot-logo.svg";
