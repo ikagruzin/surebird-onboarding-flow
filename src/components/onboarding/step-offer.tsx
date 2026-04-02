@@ -1216,6 +1216,8 @@ export const StepOffer = ({
         </div>
       </div>
       </div>
+      {renderAddModal()}
+      {renderRemoveConfirm()}
     </div>
   );
 };
