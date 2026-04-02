@@ -172,6 +172,7 @@ export const StepOffer = ({
   const [videoModal, setVideoModal] = useState<string | null>(null);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number>(0);
+  const [activeCarIdx, setActiveCarIdx] = useState(0);
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
 
