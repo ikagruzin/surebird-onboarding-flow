@@ -190,7 +190,11 @@ export const StepOffer = ({
   const [activeHomeTab, setActiveHomeTab] = useState<"household" | "building">("household");
   const [showAddModal, setShowAddModal] = useState(false);
   const [addModalSelection, setAddModalSelection] = useState<string[]>([]);
-  const [removeConfirmId, setRemoveConfirmId] = useState<string | null>(null);
+  const [removeConfirm, setRemoveConfirm] = useState<{ label: string; action: () => void } | null>(null);
+  const [addFlowQueue, setAddFlowQueue] = useState<string[]>([]);
+  const [addFlowProduct, setAddFlowProduct] = useState<string | null>(null);
+  const [addFlowPhase, setAddFlowPhase] = useState<"preferences" | "loading">("preferences");
+  const addFlowRef = useRef<ProductFlowTabHandle>(null);
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
 
