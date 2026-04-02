@@ -1299,7 +1299,10 @@ export const StepOffer = ({
                 return null;
               })()}
 
-              {/* Detail cards — no product title/offer card on detail tabs */}
+              {/* Offer card on detail tabs (no h2 title) */}
+              {renderDetailTabOfferCard(activeTab)}
+
+              {/* Detail cards */}
               {activeTab === "travel" && localProductStates.travel ? (
                 <TravelOfferCards
                   productState={localProductStates.travel}
