@@ -1423,6 +1423,7 @@ export const StepOffer = ({
       </div>
       {renderAddModal()}
       {renderRemoveConfirm()}
+      {renderAddFlowOverlay()}
     </div>
   );
 };
