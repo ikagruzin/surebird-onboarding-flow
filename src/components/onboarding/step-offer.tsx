@@ -937,6 +937,29 @@ export const StepOffer = ({
                     onUpdateInstanceOffer={(key, value) => handleUpdateCarInstanceOffer(activeInst?.id, key, value)}
                   />
                 );
+              })() : activeTab === "home" ? (() => {
+                const coverageChoice = localProductStates.home?.coverageChoice || "household";
+                const effectiveSubTab = coverageChoice === "both" ? activeHomeTab
+                  : coverageChoice === "building" ? "building" as const
+                  : "household" as const;
+                const subOffer = localOfferStates.home?.[effectiveSubTab] || { ownRisk: "100", coverage: "All Risk" };
+                return (
+                  <HomeOfferCards
+                    activeSubTab={effectiveSubTab}
+                    productState={localProductStates.home || {}}
+                    subOfferState={subOffer}
+                    onUpdateProduct={(key, value) => handleUpdateProductState("home", key, value)}
+                    onUpdateSubOffer={(key, value) => {
+                      setLocalOfferStates((prev) => ({
+                        ...prev,
+                        home: {
+                          ...(prev.home || {}),
+                          [effectiveSubTab]: { ...(prev.home?.[effectiveSubTab] || {}), [key]: value },
+                        },
+                      }));
+                    }}
+                  />
+                );
               })() : (
                 renderPreferences(activeTab)
               )}
