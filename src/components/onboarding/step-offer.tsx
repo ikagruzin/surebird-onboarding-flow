@@ -179,9 +179,12 @@ export const StepOffer = ({
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
 
+  // Local product states (copy from Set Preferences, editable on offer page)
+  const [localProductStates, setLocalProductStates] = useState<Record<string, Record<string, any>>>(() => ({ ...productStates }));
+
   // Extract car instances once for reuse
   const carInstances: { id: string; state: Record<string, any> }[] = useMemo(() => {
-    return localProductStates?.car?.__carInstances || (productStates?.car?.__carInstances) || [{ id: "car-0", state: productStates?.car || {} }];
+    return localProductStates?.car?.__carInstances || [{ id: "car-0", state: productStates?.car || {} }];
   }, [localProductStates?.car?.__carInstances, productStates?.car]);
 
   // Local offer states (rest data) with defaults from product configs
@@ -190,7 +193,6 @@ export const StepOffer = ({
     const initial: Record<string, Record<string, any>> = {};
     for (const id of selectedInsurances) {
       if (id === "car") {
-        // Per-instance car offer state
         const config = getProductConfig("car");
         const carInsts = productStates?.car?.__carInstances || [{ id: "car-0", state: productStates?.car || {} }];
         const carOfferMap: Record<string, any> = {};
@@ -205,9 +207,6 @@ export const StepOffer = ({
     }
     return initial;
   });
-
-  // Local product states (copy from Set Preferences, editable on offer page)
-  const [localProductStates, setLocalProductStates] = useState<Record<string, Record<string, any>>>(() => ({ ...productStates }));
 
   const handleUpdateOfferState = (productId: string, key: string, value: any) => {
     setLocalOfferStates((prev) => ({
