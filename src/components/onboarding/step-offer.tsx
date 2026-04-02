@@ -974,7 +974,7 @@ export const StepOffer = ({
           <div className="border-t border-border pt-4 space-y-4">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <BadgePercent className="w-5 h-5 text-muted-foreground" />
+                <BadgePercent className="w-4 h-4" />
                 Discount:
               </span>
               <span className="text-base font-semibold" style={{ color: 'hsl(0 74% 42%)' }}>-{discountPercent}%</span>
