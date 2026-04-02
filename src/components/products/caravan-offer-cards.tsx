@@ -6,6 +6,7 @@ import { useState, useCallback } from "react";
 import { Info } from "lucide-react";
 import { SectionCard, SegmentedControl, NativeSelect } from "./shared-ui";
 import { SelectionCard } from "@/components/ui/selection-card";
+import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { DutchPlateInput } from "@/components/ui/dutch-plate-input";
