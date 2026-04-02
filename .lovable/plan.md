@@ -1,65 +1,54 @@
 
 
-## Caravan Tweaks + Car Offer Page Implementation
+## Car Offer Page Fixes + All Offers Multi-Car Display
 
-### Part A: Caravan Tweaks (2 changes)
+### Issues to Fix
 
-1. **"Recommended" badge on Casco Limited** — Add a small `Badge` component next to the "Casco Limited" label in the Coverage radio card, using the `bg-primary/10 text-primary` style from Travel.
+**1. Per-instance offer state (independent insurance data per car)**
+Currently `onUpdateOffer` writes to a flat `localOfferStates.car` object shared across all cars. Fix: key offer state by car instance ID (`localOfferStates.car[instanceId]`). Each car gets its own Own Risk, Coverage, and Additional Coverage selections.
 
-2. **Remove separator before Hail Damage** — Remove `border-t border-border` classes from the hail damage section wrapper in `AdditionalCoverageCard`.
+**2. Rename "Vehicle" → "Car Details" with editable license plate**
+Replace the read-only `VehicleCard` with an editable card titled "Car Details" that includes the `DutchPlateInput` component (same as Set Preferences identity step) plus the brand/model confirmation card. Users can change the plate and trigger a new lookup.
 
-### Part B: Car Offer Page (new)
+**3. Driver card not editable**
+The `handleUpdateInstanceProduct` function writes keys like `__carInstance_car-123_mainDriver` into the flat product state — but the `DriverCard` reads from `activeState` which is the instance's snapshot. Fix: make `handleUpdateInstanceProduct` update the actual instance state inside `localProductStates.car.__carInstances[idx].state` so changes are reflected immediately.
 
-**Card layout (3 cards + multi-instance switcher)**
+**4. Car switcher placement — above the insurance offer card**
+Move the multi-instance pill switcher out of `CarOfferCards` and render it in `step-offer.tsx` between the product tabs and the `renderOfferCard(activeTab)` call, so it appears above the insurance card (as shown in screenshot).
 
-| # | Card | Fields |
-|---|------|--------|
-| 1 | Own risk | €0, €100, €250, €500 (default €100) — SegmentedControl |
-| 2 | Coverage | Radio cards (same component as Caravan) with subtitles + "Recommended" badge on WA+ |
-| 3 | Additional coverage | Toggles with conditional sub-fields |
-
-**Coverage options (radio cards with subtitles)**
-
-| Option | Subtitle | Badge |
-|--------|----------|-------|
-| Civil Liability (WA) | "The legally required minimum. Covers damage you cause to others, but not to your own vehicle." | — |
-| Limited Casco (WA+) | "Includes civil liability plus theft, fire, storm, hail, and window damage to your own vehicle." | Recommended |
-| Full Casco (All-risk) | "The most complete coverage — also covers damage to your own car, including collision and parking accidents." | — |
-
-**Additional coverage toggles**
-
-| Toggle | Default | When on → shows | Tooltip |
-|--------|---------|-----------------|---------|
-| Insuring occupants | Off | Radio: "Accidents occupant" / "Damage occupant" | "If something happens then the car is covered, but not the occupants. With this coverage, you also take care of the medical costs if someone does something wrong." |
-| Roadside assistance | Off | (nothing extra) | "Covers the costs of roadside assistance if your car breaks down. Make sure it doesn't overlap with your travel insurance." |
-| Legal aid | Off | (nothing extra) | "Provides legal support and covers attorney fees in case of a traffic-related dispute, such as after an accident." |
-
-Occupant type tooltip: "With the passenger damage insurance (SIV) you will be reimbursed exactly enough to cover the (medical) costs if one of the passengers is wrong. With accident-occupant insurance (OIV) you get a fixed amount, even in the event of death. We recommend the SIV."
-
-**Multi-instance car switcher**
-
-- Pill navigation at top of car detail tab (like Set Preferences but without checkmarks — just selected/unselected styling)
-- Each car instance gets its own offer state
-- Need to expose all car instances from `MultiCarFlowTab` via `getState()` returning `{ instances: [...] }` and capture that in `step-preferences.tsx`'s `getProductStates()`
-
-**Set Preferences data (cards 4-6 from car-steps)**
-
-The car Set Preferences data (license plate, driver info, usage) will be shown per-instance below the Rest Data cards — same editable controls as in the steps.
-
-| # | Card | Subtitle |
-|---|------|----------|
-| 4 | Vehicle | "Your car details retrieved from the license plate." |
-| 5 | Driver | "Details about who primarily drives this vehicle." |
-| 6 | Usage | "Your driving habits and experience for premium calculation." |
+**5. "All offers" page — grouped under one heading**
+When `activeTab === "all"` and there are multiple cars, render one "Car" heading followed by stacked insurance offer cards, each showing the formatted license plate as a sub-label (e.g., "AB-12-3C"). Each card's "Edit" button navigates to the car tab with the corresponding instance active.
 
 ### File Changes
 
 | File | Change |
 |------|--------|
-| `src/components/products/caravan-offer-cards.tsx` | Add "Recommended" badge to Casco Limited. Remove `border-t` from hail damage section. |
-| `src/components/products/multi-car-flow-tab.tsx` | Modify `getState()` to return `{ instances: [...allInstances], ...activeState }` so the offer page gets all car data. |
-| `src/components/onboarding/step-preferences.tsx` | No change needed — already calls `getState()` which will now include instances. |
-| `src/config/products/car.ts` | Add `offerInitialState: { ownRisk: "100", coverage: "Limited Casco (WA+)" }`. |
-| `src/components/products/car-offer-cards.tsx` | **New file** — Renders multi-instance pills (no checkmarks) + 3 Rest Data cards (Own Risk, Coverage radio cards, Additional Coverage toggles) + 3 Set Pref cards (Vehicle, Driver, Usage) per instance. Reuses the same radio card pattern from Caravan. |
-| `src/components/onboarding/step-offer.tsx` | Import `CarOfferCards`, add `activeTab === "car"` branch. Handle per-instance offer state keyed by car instance ID. |
+| `src/components/products/car-offer-cards.tsx` | (1) Remove pill switcher from component (moved to parent). (2) Replace `VehicleCard` with `CarDetailsCard` — editable `DutchPlateInput` + brand/model confirmation, same as `car-steps.tsx` identity step. (3) Fix `handleUpdateInstanceProduct` to update instance state in-place via a new callback prop `onUpdateInstanceState`. (4) Make offer state read/write per instance via `instanceOfferState` / `onUpdateInstanceOffer`. |
+| `src/components/onboarding/step-offer.tsx` | (1) Render car pill switcher above `renderOfferCard("car")` when `activeTab === "car"`. (2) Change car offer state structure to be keyed by instance ID: `localOfferStates.car = { [instanceId]: {...} }`. (3) Pass per-instance offer handlers to `CarOfferCards`. (4) In "All offers" view, for car product: render one "Car" heading then loop over car instances, rendering an offer card per instance with license plate sub-label. (5) Fix product state updates to mutate `__carInstances[idx].state` directly. |
+
+### Technical Detail
+
+**Per-instance offer state structure:**
+```text
+localOfferStates.car = {
+  "car-123-1": { ownRisk: "100", coverage: "Limited Casco (WA+)", ... },
+  "car-456-2": { ownRisk: "250", coverage: "Civil Liability (WA)", ... }
+}
+```
+
+**Per-instance product state update** — instead of writing `__carInstance_id_key`, directly mutate the instance inside the array:
+```text
+setLocalProductStates(prev => {
+  const instances = [...prev.car.__carInstances];
+  instances[idx] = { ...instances[idx], state: { ...instances[idx].state, [key]: value } };
+  return { ...prev, car: { ...prev.car, __carInstances: instances } };
+});
+```
+
+**All offers rendering for car:**
+```text
+Car (heading)
+├── [AB-12-3C] InsuranceOfferCard  → Edit opens car tab, idx=0
+└── [XY-45-6Z] InsuranceOfferCard  → Edit opens car tab, idx=1
+```
 
