@@ -106,17 +106,35 @@ const CoverageCard = ({ value, onChange }: { value: string; onChange: (v: string
     subtitle="Choose the level of protection for your caravan against damage and theft."
   >
     <div className="space-y-3">
-      {COVERAGE_OPTIONS.map((opt) => (
-        <div key={opt.id} className="space-y-1">
-          <SelectionCard
-            label={opt.label}
-            selected={value === opt.label}
+      {COVERAGE_OPTIONS.map((opt) => {
+        const selected = value === opt.label;
+        return (
+          <button
+            key={opt.id}
+            type="button"
             onClick={() => onChange(opt.label)}
-            indicator="radio"
-          />
-          <p className="text-xs text-muted-foreground pl-1">{opt.subtitle}</p>
-        </div>
-      ))}
+            className={cn(
+              "flex w-full items-start gap-3 rounded-2xl border-2 p-4 text-left transition-all cursor-pointer",
+              selected
+                ? "border-primary bg-primary/5"
+                : "border-border bg-card hover:border-muted-foreground/30"
+            )}
+          >
+            <span
+              className={cn(
+                "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+                selected ? "border-primary" : "border-muted-foreground/40"
+              )}
+            >
+              {selected && <span className="h-2.5 w-2.5 rounded-full bg-primary" />}
+            </span>
+            <div className="flex-1 min-w-0">
+              <span className="text-sm font-medium text-foreground">{opt.label}</span>
+              <p className="text-xs text-muted-foreground mt-1">{opt.subtitle}</p>
+            </div>
+          </button>
+        );
+      })}
     </div>
   </OfferCard>
 );
