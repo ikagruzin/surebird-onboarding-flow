@@ -61,7 +61,7 @@ export const InsuranceOfferCard = ({
           onClick={onViewDetails}
           className="text-sm font-semibold text-foreground underline underline-offset-2 hover:text-foreground/80 transition-colors"
         >
-          View & Edit details
+          {actionLabel}
         </button>
       </div>
     </div>
