@@ -271,7 +271,8 @@ export const StepOffer = ({
         [instanceId]: { ...(prev.car?.[instanceId] || {}), [key]: value },
       },
     }));
-  }, []);
+    triggerRecalc();
+  }, [triggerRecalc]);
 
   const handleUpdateCarInstanceProduct = useCallback((instanceIdx: number, key: string, value: any) => {
     setLocalProductStates((prev) => {
