@@ -1438,7 +1438,7 @@ export const StepOffer = ({
           ) : (
             <>
               {/* Car pill switcher above the offer card */}
-              {activeTab === "car" && carInstances.length > 1 && (
+              {activeTab === "car" && (
                 <>
                   <div className="border-t border-border my-4" />
                   <div className="flex flex-wrap items-center gap-2 mb-4">
@@ -1460,6 +1460,20 @@ export const StepOffer = ({
                         </button>
                       );
                     })}
+                    <button
+                      onClick={() => {
+                        const newInst = { id: crypto.randomUUID(), state: {} } as CarInstance;
+                        setLocalProductStates((prev) => ({
+                          ...prev,
+                          car: { ...prev.car, __carInstances: [...carInstances, newInst] },
+                        }));
+                        setActiveCarIdx(carInstances.length);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium border border-border bg-white text-muted-foreground hover:bg-muted transition-colors"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      Add car
+                    </button>
                   </div>
                 </>
               )}
