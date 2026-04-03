@@ -54,7 +54,9 @@ const ICON_MAP: Record<string, string> = {
   Caravan: iconCaravan,
 };
 
-const INSURER_DATA: Record<string, { name: string; logoSrc?: string; happyClients: string; deductible: string; priceQuality?: string; cancellable: boolean; monthlyPrice: number; savingsPercent: number }> = {
+type InsurerEntry = { name: string; logoSrc?: string; happyClients: string; deductible: string; priceQuality?: string; cancellable: boolean; monthlyPrice: number; savingsPercent: number };
+
+const INSURER_DATA: Record<string, InsurerEntry> = {
   home: {
     name: "Nationale Nederlanden",
     logoSrc: logoNN,
@@ -117,6 +119,60 @@ const INSURER_DATA: Record<string, { name: string; logoSrc?: string; happyClient
     savingsPercent: 1,
   },
 };
+
+/* Sub-product insurer data — different companies/prices for Home sub-products */
+const HOME_SUB_INSURER: Record<string, InsurerEntry> = {
+  household: {
+    name: "Nationale Nederlanden",
+    logoSrc: logoNN,
+    happyClients: "650+ happy clients",
+    deductible: "€250",
+    cancellable: true,
+    monthlyPrice: 8.45,
+    savingsPercent: 6,
+  },
+  building: {
+    name: "Allianz",
+    logoSrc: logoAllianz,
+    happyClients: "420+ happy clients",
+    deductible: "€500",
+    cancellable: true,
+    monthlyPrice: 12.30,
+    savingsPercent: 4,
+  },
+};
+
+/* Per-car-instance insurer rotation — each car gets a different insurer */
+const CAR_INSTANCE_INSURERS: InsurerEntry[] = [
+  {
+    name: "FBTO",
+    happyClients: "200+ happy clients",
+    deductible: "€150",
+    priceQuality: "Good",
+    cancellable: true,
+    monthlyPrice: 45.00,
+    savingsPercent: 4,
+  },
+  {
+    name: "Allianz",
+    logoSrc: logoAllianz,
+    happyClients: "310+ happy clients",
+    deductible: "€100",
+    priceQuality: "Excellent",
+    cancellable: true,
+    monthlyPrice: 52.80,
+    savingsPercent: 3,
+  },
+  {
+    name: "Nationale Nederlanden",
+    logoSrc: logoNN,
+    happyClients: "180+ happy clients",
+    deductible: "€200",
+    cancellable: true,
+    monthlyPrice: 48.50,
+    savingsPercent: 5,
+  },
+];
 // Preference questions shown on offer page (per product)
 const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { value: string; label: string }[]; customComponent?: string }[]> = {
   liability: [
