@@ -1414,16 +1414,6 @@ export const StepOffer = ({
                             <div className="flex items-center justify-between mb-1">
                               <p className="text-sm font-medium text-muted-foreground">{subLabel}</p>
                               <div className="flex items-center gap-2">
-                                <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
-                                  label: subLabel,
-                                  action: () => {
-                                    const newChoice = sub === "household" ? "building" : "household";
-                                    handleUpdateProductState("home", "coverageChoice", newChoice);
-                                    setActiveHomeTab(newChoice as "household" | "building");
-                                  },
-                                })}>
-                                  Remove
-                                </Button>
                                 <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("home")}>Compare</Button>
                               </div>
                             </div>
