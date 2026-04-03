@@ -196,9 +196,13 @@ export const StepOffer = ({
   const [addFlowQueue, setAddFlowQueue] = useState<string[]>([]);
   const [addFlowProduct, setAddFlowProduct] = useState<string | null>(null);
   const [addFlowPhase, setAddFlowPhase] = useState<"preferences" | "loading">("preferences");
+  const [addFlowActiveTab, setAddFlowActiveTab] = useState<string>("");
+  const [addFlowCompletedTabs, setAddFlowCompletedTabs] = useState<string[]>([]);
   const addFlowRef = useRef<ProductFlowTabHandle>(null);
+  const addFlowRefs = useRef<Record<string, ProductFlowTabHandle | null>>({});
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
+  const [policyModalOpen, setPolicyModalOpen] = useState(false);
 
   // Local product states (copy from Set Preferences, editable on offer page)
   const [localProductStates, setLocalProductStates] = useState<Record<string, Record<string, any>>>(() => ({ ...productStates }));
