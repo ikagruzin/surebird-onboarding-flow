@@ -106,7 +106,8 @@ const INSURER_DATA: Record<string, InsurerEntry> = {
     savingsPercent: 3,
   },
   accidents: {
-    name: "Interpolis",
+    name: "Univé",
+    logoSrc: logoUnive,
     happyClients: "60+ happy clients",
     deductible: "€0",
     cancellable: true,
