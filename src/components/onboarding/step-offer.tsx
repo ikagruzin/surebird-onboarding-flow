@@ -815,11 +815,16 @@ export const StepOffer = ({
 
   const handleSaveAddModal = () => {
     if (addModalSelection.length > 0) {
-      setAddFlowQueue([...addModalSelection]);
-      setAddFlowProduct(addModalSelection[0]);
-      setAddFlowActiveTab(addModalSelection[0]);
-      setAddFlowCompletedTabs([]);
-      setAddFlowPhase("preferences");
+      if (addFlowProduct) {
+        // Already in add-flow overlay — append to existing queue
+        setAddFlowQueue((prev) => [...prev, ...addModalSelection]);
+      } else {
+        setAddFlowQueue([...addModalSelection]);
+        setAddFlowProduct(addModalSelection[0]);
+        setAddFlowActiveTab(addModalSelection[0]);
+        setAddFlowCompletedTabs([]);
+        setAddFlowPhase("preferences");
+      }
     }
     setShowAddModal(false);
   };
