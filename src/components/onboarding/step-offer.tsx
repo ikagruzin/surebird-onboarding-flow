@@ -1380,7 +1380,6 @@ export const StepOffer = ({
                               happyClients={insurer.happyClients}
                               onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
                             />
-                            </div>
                           </div>
                         );
                       })}
