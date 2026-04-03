@@ -1,35 +1,32 @@
-## Badge Fixes — Detail Page Only + py-3 Height + Button Alignment
 
-### 1. Detail page (`renderDetailTabOfferCard`, ~line 703-731)
 
-Replace the current absolute-positioned tab badge + separate button row with a single flex row containing badge (left) and buttons (right), then the card below:
+## Offer Page — 5 Fixes
 
-```text
-<div className="flex items-center justify-between mb-3">
-  <div className="flex items-center gap-2 bg-primary/5 border border-primary/20 rounded-full px-5 py-3">
-    <Award className="w-4 h-4 text-primary" />
-    <span className="text-primary text-sm font-semibold">Best and cheapest choice</span>
-  </div>
-  <div className="flex items-center gap-2">
-    {canRemove && <Button variant="outline" size="sm" onClick={...}>Remove</Button>}
-    <Button variant="outline" size="sm" onClick={...}>Compare</Button>
-  </div>
-</div>
-<InsuranceOfferCard ... />  (no relative/mt-8 wrapper)
-```
+### 1. Badge: Move "All offers" style to Detail page, hide from All offers
 
-### 2. All Offers tab — remove badge from 3 locations
+The "All offers" tab has the correct tab-overlap badge style (lines 642-646: `rounded-t-xl`, smaller text). The detail page (lines 716-720) has a different implementation that overlays the card incorrectly.
 
-- **`renderOfferCard`** (~line 640-655): Remove the `relative mt-8` wrapper and badge div. Render `InsuranceOfferCard` directly.
-- **Car instances** (~line 1337-1348): Same — remove badge, render card directly.
-- **Home sub-products** (~line 1385-1396): Same — remove badge, render card directly.
+**Fix**: Copy the All Offers badge style (tab-overlap with `absolute -top-[28px]`) into `renderDetailTabOfferCard`, replacing the current badge. Then remove the badge from `renderOfferCard` (All offers) entirely — render `InsuranceOfferCard` directly without the `relative mt-8` wrapper and badge div.
 
-### 3. Compare modal (~line 1621-1631) — keep badge as-is (tab style)
+Increase badge height on detail page with `py-2.5` (up from `py-1.5` used on All offers).
 
-No changes to the compare modal badge.
+### 2. Lock button: Keep original styling when locked
+
+Currently when locked (line 1176), the button uses green styling (`border-success/30 bg-success/5 text-success`). Change it to match the unlocked button style: `border border-border text-foreground bg-background` with a `Check` icon and countdown, but same colors as the original outline button.
+
+### 3. After adding product → redirect to "All offers" + success toast
+
+In the `addFlowPhase === "loading"` completion handler (line 939-953), after `onAddInsurances` and state init:
+- Set `setActiveTab("all")` to redirect to All offers
+- Show a sonner toast: `toast.success("Your [product names] offer is ready to review!")`
+
+### 4. Badge height increase on detail page
+
+Use `py-2.5` and slightly larger text (`text-sm` instead of `text-xs`) for the detail page badge to make it taller than the All offers version.
 
 ### File changes
 
 | File | Change |
 |------|--------|
-| `src/components/onboarding/step-offer.tsx` | Merge badge+buttons into one row on detail page with `py-3`; remove badge from All Offers in 3 locations. |
+| `src/components/onboarding/step-offer.tsx` | (1) Move tab-overlap badge style to detail page, remove from All offers. (2) Change locked button to original outline styling. (3) Add `setActiveTab("all")` + `toast.success(...)` after add-flow loading completes. |
+
