@@ -548,6 +548,7 @@ export const StepOffer = ({
             <div key={i} className="shrink-0 w-72 bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm min-h-72 snap-start">
               <div>
                 <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm font-bold text-foreground">{review.rating}.0</span>
                   <TrustpilotStars count={review.rating} />
                 </div>
                 <h3 className="font-bold text-foreground mb-2 text-sm">{review.title}</h3>
