@@ -1602,8 +1602,8 @@ export const StepOffer = ({
                 <h2 className="text-xl font-bold text-foreground mb-6">Compare insurers</h2>
 
                 {/* Current (recommended) */}
-                <div className="mb-2">
-                  <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-3 py-1.5 w-fit mb-3">
+                <div className="relative mt-8 mb-2">
+                  <div className="absolute -top-[28px] left-6 z-10 flex items-center gap-2 bg-primary/5 border border-primary/20 border-b-0 rounded-t-xl px-4 py-1.5">
                     <Award className="w-3.5 h-3.5 text-primary" />
                     <span className="text-primary text-xs font-semibold">Best and cheapest choice</span>
                   </div>
