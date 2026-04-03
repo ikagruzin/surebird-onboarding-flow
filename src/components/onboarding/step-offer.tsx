@@ -599,7 +599,7 @@ export const StepOffer = ({
                 Remove
               </Button>
             )}
-            <Button variant="outline" size="sm">Compare</Button>
+            <Button variant="outline" size="sm" onClick={() => setCompareModalProduct(id)}>Compare</Button>
           </div>
         </div>
 
