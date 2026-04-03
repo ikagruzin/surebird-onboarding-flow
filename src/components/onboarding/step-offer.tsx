@@ -489,16 +489,10 @@ export const StepOffer = ({
   ];
 
 
-  const TrustpilotStars = ({ count, size = 16 }: { count: number; size?: number }) => (
+  const TrustpilotStars = ({ count }: { count: number }) => (
     <div className="flex gap-0.5">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <div
-          key={i}
-          className={`flex items-center justify-center rounded-sm ${i <= count ? "bg-[#00b67a]" : "bg-[#dcdce6]"}`}
-          style={{ width: size + 4, height: size + 4 }}
-        >
-          <Star className="text-white" style={{ width: size - 2, height: size - 2 }} fill="currentColor" />
-        </div>
+      {Array.from({ length: count }).map((_, i) => (
+        <img key={i} src={trustpilotStar} alt="star" className="w-5 h-5" />
       ))}
     </div>
   );
