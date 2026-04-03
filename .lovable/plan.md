@@ -1,3 +1,5 @@
+
+
 ## Badge Fixes — Detail Page Only + py-3 Height + Button Alignment
 
 ### 1. Detail page (`renderDetailTabOfferCard`, ~line 703-731)
@@ -33,3 +35,4 @@ No changes to the compare modal badge.
 | File | Change |
 |------|--------|
 | `src/components/onboarding/step-offer.tsx` | Merge badge+buttons into one row on detail page with `py-3`; remove badge from All Offers in 3 locations. |
+
