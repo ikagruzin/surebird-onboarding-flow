@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { Check, Gift, Award } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
 import { TacoMessage } from "./taco-message";
 import { ValidationError } from "./validation-error";
 
-/* Mirror the offer page pricing so summary matches */
 const INSURER_PRICES: Record<string, number> = {
   home: 5.11,
   liability: 2.11,
@@ -14,7 +15,8 @@ const INSURER_PRICES: Record<string, number> = {
   accidents: 3.20,
   caravan: 9.80,
 };
-const DISCOUNT_PERCENT = 10;
+const BUNDLE_DISCOUNT_PERCENT = 10;
+const ANNUAL_DISCOUNT_PERCENT = 5;
 
 interface StepFinalPreviewProps {
   selectedInsurances: string[];
@@ -49,14 +51,20 @@ export const StepFinalPreview = ({
   errors,
   onClearError,
 }: StepFinalPreviewProps) => {
+  const [annualDiscount, setAnnualDiscount] = useState(false);
+
   const products = INSURANCE_TYPES.filter((t) => selectedInsurances.includes(t.id));
   const fullName = [firstName, infix, lastName].filter(Boolean).join(" ");
   const firstDate = Object.values(startDates)[0] || "—";
 
-  const totalBeforeDiscount = products.reduce((sum, p) => sum + (INSURER_PRICES[p.id] || 5), 0);
-  const discountAmount = totalBeforeDiscount * (DISCOUNT_PERCENT / 100);
-  const totalAfterDiscount = totalBeforeDiscount - discountAmount;
-  const annualSavings = Math.round(discountAmount * 12 * 100) / 100;
+  const totalBefore = products.reduce((sum, p) => sum + (INSURER_PRICES[p.id] || 5), 0);
+  const bundleDiscount = totalBefore * (BUNDLE_DISCOUNT_PERCENT / 100);
+  const afterBundle = totalBefore - bundleDiscount;
+  const annualExtra = annualDiscount ? afterBundle * (ANNUAL_DISCOUNT_PERCENT / 100) : 0;
+  const finalMonthly = afterBundle - annualExtra;
+  const annualTotal = finalMonthly * 12;
+  const totalMonthlySavings = bundleDiscount + annualExtra;
+  const annualSavings = Math.round(totalMonthlySavings * 12 * 100) / 100;
 
   return (
     <div className="animate-fade-in space-y-8 pb-8">
@@ -65,7 +73,6 @@ export const StepFinalPreview = ({
         animate={animateTaco}
       />
 
-      {/* Summary card */}
       <div className="rounded-3xl border-2 border-input bg-card p-6 space-y-5">
         <h3 className="text-lg font-semibold text-foreground">Your Insurance Summary</h3>
 
@@ -73,7 +80,7 @@ export const StepFinalPreview = ({
         <div className="flex flex-wrap gap-3">
           <span className="inline-flex items-center gap-2 text-sm font-semibold text-success bg-success/10 border border-success/20 rounded-full px-4 py-3">
             <Gift className="w-5 h-5" />
-            You save with Surebird: €{annualSavings.toFixed(2)}
+            You save with Surebird: €{annualSavings.toFixed(2)}/yr
           </span>
           <span className="inline-flex items-center gap-2 text-sm font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-4 py-3">
             <Award className="w-5 h-5" />
@@ -81,10 +88,12 @@ export const StepFinalPreview = ({
           </span>
         </div>
 
+        {/* Product lines */}
         <div className="space-y-2">
           {products.map((p) => {
             const original = INSURER_PRICES[p.id] || 5;
-            const discounted = original * (1 - DISCOUNT_PERCENT / 100);
+            const afterB = original * (1 - BUNDLE_DISCOUNT_PERCENT / 100);
+            const final = annualDiscount ? afterB * (1 - ANNUAL_DISCOUNT_PERCENT / 100) : afterB;
             return (
               <div key={p.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
                 <div className="flex items-center gap-2">
@@ -93,19 +102,51 @@ export const StepFinalPreview = ({
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-muted-foreground line-through">€{original.toFixed(2)}</span>
-                  <span className="text-sm font-semibold text-foreground">€{discounted.toFixed(2)}/mo</span>
+                  <span className="text-sm font-semibold text-foreground">€{final.toFixed(2)}/mo</span>
                 </div>
               </div>
             );
           })}
         </div>
-        <div className="flex items-center justify-between pt-2 border-t border-border">
+
+        {/* Discount lines */}
+        <div className="space-y-1 pt-1">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-success">Discount — 10%</span>
+            <span className="text-sm font-semibold text-success">-€{bundleDiscount.toFixed(2)}</span>
+          </div>
+          {annualDiscount && (
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-success">Annual payment discount — 5%</span>
+              <span className="text-sm font-semibold text-success">-€{annualExtra.toFixed(2)}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Annual discount toggle */}
+        <div className="flex items-center justify-between py-3 border-t border-b border-border">
+          <div>
+            <span className="text-sm font-medium text-foreground">Annual payment discount</span>
+            <span className="text-xs text-muted-foreground ml-1">— save 5% extra</span>
+          </div>
+          <Switch checked={annualDiscount} onCheckedChange={setAnnualDiscount} />
+        </div>
+
+        {/* Totals */}
+        <div className="flex items-center justify-between pt-2">
           <span className="text-base font-semibold text-foreground">Total Monthly</span>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground line-through">€{totalBeforeDiscount.toFixed(2)}</span>
-            <span className="text-base font-bold text-primary">€{totalAfterDiscount.toFixed(2)}/mo</span>
+            <span className="text-sm text-muted-foreground line-through">€{totalBefore.toFixed(2)}</span>
+            <span className="text-base font-bold text-primary">€{finalMonthly.toFixed(2)}/mo</span>
           </div>
         </div>
+
+        {annualDiscount && (
+          <div className="flex items-center justify-between">
+            <span className="text-base font-semibold text-foreground">Annual Total</span>
+            <span className="text-base font-bold text-primary">€{annualTotal.toFixed(2)}/yr</span>
+          </div>
+        )}
 
         <div className="space-y-1">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Start Date</p>
@@ -118,7 +159,7 @@ export const StepFinalPreview = ({
           <p className="text-sm text-muted-foreground">{iban || "—"}</p>
         </div>
 
-        {/* Agreement checkboxes – inside the card */}
+        {/* Agreement checkboxes */}
         <div className="space-y-4 pt-4 border-t border-border">
           <div>
             <label className="flex items-start gap-3 cursor-pointer group">
