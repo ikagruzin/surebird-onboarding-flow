@@ -636,22 +636,25 @@ export const StepOffer = ({
   const calcLineItems = useMemo(() => {
     const items: { key: string; label: string; originalPrice: number; productId: string }[] = [];
     for (const id of selectedInsurances) {
-      const insurer = INSURER_DATA[id];
-      const original = insurer?.monthlyPrice || 5;
-
       if (id === "home" && localProductStates.home?.coverageChoice === "both") {
-        items.push({ key: "home-household", label: "Household goods", originalPrice: original * 0.6, productId: "home" });
-        items.push({ key: "home-building", label: "Building", originalPrice: original * 0.4, productId: "home" });
+        items.push({ key: "home-household", label: "Household goods", originalPrice: HOME_SUB_INSURER.household.monthlyPrice, productId: "home" });
+        items.push({ key: "home-building", label: "Building", originalPrice: HOME_SUB_INSURER.building.monthlyPrice, productId: "home" });
+      } else if (id === "home") {
+        const sub = localProductStates.home?.coverageChoice === "building" ? "building" : "household";
+        const subInsurer = HOME_SUB_INSURER[sub];
+        items.push({ key: id, label: sub === "building" ? "Building" : "Household goods", originalPrice: subInsurer.monthlyPrice, productId: "home" });
       } else if (id === "car" && carInstances.length > 1) {
         carInstances.forEach((inst, idx) => {
           const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
             ? `Car — ${formatDutchPlate((inst.state.licensePlate as string).toUpperCase())}`
             : `Car ${idx + 1}`;
-          items.push({ key: inst.id, label: plateLabel, originalPrice: original, productId: "car" });
+          const carInsurer = CAR_INSTANCE_INSURERS[idx % CAR_INSTANCE_INSURERS.length];
+          items.push({ key: inst.id, label: plateLabel, originalPrice: carInsurer.monthlyPrice, productId: "car" });
         });
       } else {
+        const insurer = INSURER_DATA[id];
         const ins = INSURANCE_TYPES.find(t => t.id === id);
-        items.push({ key: id, label: ins?.label || id, originalPrice: original, productId: id });
+        items.push({ key: id, label: ins?.label || id, originalPrice: insurer?.monthlyPrice || 5, productId: id });
       }
     }
     return items;
