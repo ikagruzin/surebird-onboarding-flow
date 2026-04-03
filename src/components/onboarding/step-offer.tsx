@@ -54,7 +54,9 @@ const ICON_MAP: Record<string, string> = {
   Caravan: iconCaravan,
 };
 
-const INSURER_DATA: Record<string, { name: string; logoSrc?: string; happyClients: string; deductible: string; priceQuality?: string; cancellable: boolean; monthlyPrice: number; savingsPercent: number }> = {
+type InsurerEntry = { name: string; logoSrc?: string; happyClients: string; deductible: string; priceQuality?: string; cancellable: boolean; monthlyPrice: number; savingsPercent: number };
+
+const INSURER_DATA: Record<string, InsurerEntry> = {
   home: {
     name: "Nationale Nederlanden",
     logoSrc: logoNN,
@@ -117,6 +119,60 @@ const INSURER_DATA: Record<string, { name: string; logoSrc?: string; happyClient
     savingsPercent: 1,
   },
 };
+
+/* Sub-product insurer data — different companies/prices for Home sub-products */
+const HOME_SUB_INSURER: Record<string, InsurerEntry> = {
+  household: {
+    name: "Nationale Nederlanden",
+    logoSrc: logoNN,
+    happyClients: "650+ happy clients",
+    deductible: "€250",
+    cancellable: true,
+    monthlyPrice: 8.45,
+    savingsPercent: 6,
+  },
+  building: {
+    name: "Allianz",
+    logoSrc: logoAllianz,
+    happyClients: "420+ happy clients",
+    deductible: "€500",
+    cancellable: true,
+    monthlyPrice: 12.30,
+    savingsPercent: 4,
+  },
+};
+
+/* Per-car-instance insurer rotation — each car gets a different insurer */
+const CAR_INSTANCE_INSURERS: InsurerEntry[] = [
+  {
+    name: "FBTO",
+    happyClients: "200+ happy clients",
+    deductible: "€150",
+    priceQuality: "Good",
+    cancellable: true,
+    monthlyPrice: 45.00,
+    savingsPercent: 4,
+  },
+  {
+    name: "Allianz",
+    logoSrc: logoAllianz,
+    happyClients: "310+ happy clients",
+    deductible: "€100",
+    priceQuality: "Excellent",
+    cancellable: true,
+    monthlyPrice: 52.80,
+    savingsPercent: 3,
+  },
+  {
+    name: "Nationale Nederlanden",
+    logoSrc: logoNN,
+    happyClients: "180+ happy clients",
+    deductible: "€200",
+    cancellable: true,
+    monthlyPrice: 48.50,
+    savingsPercent: 5,
+  },
+];
 // Preference questions shown on offer page (per product)
 const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { value: string; label: string }[]; customComponent?: string }[]> = {
   liability: [
@@ -580,22 +636,25 @@ export const StepOffer = ({
   const calcLineItems = useMemo(() => {
     const items: { key: string; label: string; originalPrice: number; productId: string }[] = [];
     for (const id of selectedInsurances) {
-      const insurer = INSURER_DATA[id];
-      const original = insurer?.monthlyPrice || 5;
-
       if (id === "home" && localProductStates.home?.coverageChoice === "both") {
-        items.push({ key: "home-household", label: "Household goods", originalPrice: original * 0.6, productId: "home" });
-        items.push({ key: "home-building", label: "Building", originalPrice: original * 0.4, productId: "home" });
+        items.push({ key: "home-household", label: "Household goods", originalPrice: HOME_SUB_INSURER.household.monthlyPrice, productId: "home" });
+        items.push({ key: "home-building", label: "Building", originalPrice: HOME_SUB_INSURER.building.monthlyPrice, productId: "home" });
+      } else if (id === "home") {
+        const sub = localProductStates.home?.coverageChoice === "building" ? "building" : "household";
+        const subInsurer = HOME_SUB_INSURER[sub];
+        items.push({ key: id, label: sub === "building" ? "Building" : "Household goods", originalPrice: subInsurer.monthlyPrice, productId: "home" });
       } else if (id === "car" && carInstances.length > 1) {
         carInstances.forEach((inst, idx) => {
           const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
             ? `Car — ${formatDutchPlate((inst.state.licensePlate as string).toUpperCase())}`
             : `Car ${idx + 1}`;
-          items.push({ key: inst.id, label: plateLabel, originalPrice: original, productId: "car" });
+          const carInsurer = CAR_INSTANCE_INSURERS[idx % CAR_INSTANCE_INSURERS.length];
+          items.push({ key: inst.id, label: plateLabel, originalPrice: carInsurer.monthlyPrice, productId: "car" });
         });
       } else {
+        const insurer = INSURER_DATA[id];
         const ins = INSURANCE_TYPES.find(t => t.id === id);
-        items.push({ key: id, label: ins?.label || id, originalPrice: original, productId: id });
+        items.push({ key: id, label: ins?.label || id, originalPrice: insurer?.monthlyPrice || 5, productId: id });
       }
     }
     return items;
@@ -615,8 +674,15 @@ export const StepOffer = ({
   };
 
   const renderOfferCard = (id: string) => {
-    const insurer = INSURER_DATA[id];
+    let insurer: InsurerEntry | undefined = INSURER_DATA[id];
     const ins = INSURANCE_TYPES.find(t => t.id === id);
+
+    // For home with single coverage, use sub-insurer
+    if (id === "home") {
+      const sub = localProductStates.home?.coverageChoice === "building" ? "building" : "household";
+      insurer = HOME_SUB_INSURER[sub];
+    }
+
     if (!insurer || !ins) return null;
 
     return (
@@ -651,9 +717,20 @@ export const StepOffer = ({
   };
 
   const renderDetailTabOfferCard = (productId: string) => {
-    const insurer = INSURER_DATA[productId];
+    let insurer: InsurerEntry | undefined = INSURER_DATA[productId];
     const ins = INSURANCE_TYPES.find(t => t.id === productId);
-    if (!insurer || !ins) return null;
+    if (!ins) return null;
+
+    // Use sub-product specific insurer for car instances and home sub-products
+    if (productId === "car") {
+      insurer = CAR_INSTANCE_INSURERS[activeCarIdx % CAR_INSTANCE_INSURERS.length];
+    } else if (productId === "home") {
+      const coverageChoice = localProductStates.home?.coverageChoice || "household";
+      const effectiveSub = coverageChoice === "both" ? activeHomeTab : coverageChoice;
+      insurer = HOME_SUB_INSURER[effectiveSub] || HOME_SUB_INSURER.household;
+    }
+
+    if (!insurer) return null;
 
     let canRemove = false;
     let removeLabel = ins.label;
@@ -1296,7 +1373,6 @@ export const StepOffer = ({
                 // Car: grouped under one heading with one card per instance
                 if (id === "car" && carInstances.length > 1) {
                   const ins = INSURANCE_TYPES.find((t) => t.id === "car")!;
-                  const insurer = INSURER_DATA.car;
                   return (
                     <div key="car" className="mb-8">
                       <h2 className="text-2xl font-bold text-foreground mb-3">{ins.label}</h2>
@@ -1304,6 +1380,7 @@ export const StepOffer = ({
                         const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
                           ? formatDutchPlate((inst.state.licensePlate as string).toUpperCase())
                           : `Car ${idx + 1}`;
+                        const carInsurer = CAR_INSTANCE_INSURERS[idx % CAR_INSTANCE_INSURERS.length];
                         return (
                           <div key={inst.id} className="mb-3">
                             <div className="flex items-center justify-between mb-1">
@@ -1331,12 +1408,12 @@ export const StepOffer = ({
                               </div>
                             </div>
                             <InsuranceOfferCard
-                              insurerName={insurer.name}
-                              logoSrc={insurer.logoSrc}
-                              originalPrice={insurer.monthlyPrice}
-                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-                              savingsPercent={insurer.savingsPercent}
-                              happyClients={insurer.happyClients}
+                              insurerName={carInsurer.name}
+                              logoSrc={carInsurer.logoSrc}
+                              originalPrice={carInsurer.monthlyPrice}
+                              monthlyPrice={getFinalMonthly(carInsurer.monthlyPrice)}
+                              savingsPercent={carInsurer.savingsPercent}
+                              happyClients={carInsurer.happyClients}
                               onViewDetails={() => { setActiveCarIdx(idx); setActiveTab("car"); }}
                             />
                           </div>
@@ -1348,12 +1425,12 @@ export const StepOffer = ({
                 // Home: grouped under one heading with sub-product cards when "both"
                 if (id === "home" && localProductStates.home?.coverageChoice === "both") {
                   const ins = INSURANCE_TYPES.find((t) => t.id === "home")!;
-                  const insurer = INSURER_DATA.home;
                   return (
                     <div key="home" className="mb-8">
                       <h2 className="text-2xl font-bold text-foreground mb-3">{ins.label}</h2>
                       {(["household", "building"] as const).map((sub) => {
                         const subLabel = sub === "household" ? "Household goods" : "Building";
+                        const subInsurer = HOME_SUB_INSURER[sub];
                         return (
                           <div key={sub} className="mb-3">
                             <div className="flex items-center justify-between mb-1">
@@ -1373,12 +1450,12 @@ export const StepOffer = ({
                               </div>
                             </div>
                             <InsuranceOfferCard
-                              insurerName={insurer.name}
-                              logoSrc={insurer.logoSrc}
-                              originalPrice={insurer.monthlyPrice}
-                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-                              savingsPercent={insurer.savingsPercent}
-                              happyClients={insurer.happyClients}
+                              insurerName={subInsurer.name}
+                              logoSrc={subInsurer.logoSrc}
+                              originalPrice={subInsurer.monthlyPrice}
+                              monthlyPrice={getFinalMonthly(subInsurer.monthlyPrice)}
+                              savingsPercent={subInsurer.savingsPercent}
+                              happyClients={subInsurer.happyClients}
                               onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
                             />
                           </div>
@@ -1523,6 +1600,7 @@ export const StepOffer = ({
                           [effectiveSubTab]: { ...(prev.home?.[effectiveSubTab] || {}), [key]: value },
                         },
                       }));
+                      triggerRecalc();
                     }}
                   />
                 );
