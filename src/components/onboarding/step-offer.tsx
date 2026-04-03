@@ -1240,11 +1240,14 @@ export const StepOffer = ({
                     <div key="car" className="mb-8">
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-                        {selectedInsurances.length > 1 && (
-                          <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("car") })}>
-                            Remove
-                          </Button>
-                        )}
+                        <div className="flex items-center gap-2">
+                          {selectedInsurances.length > 1 && (
+                            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("car") })}>
+                              Remove
+                            </Button>
+                          )}
+                          <Button variant="outline" size="sm">Compare</Button>
+                        </div>
                       </div>
                       {carInstances.map((inst, idx) => {
                         const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
