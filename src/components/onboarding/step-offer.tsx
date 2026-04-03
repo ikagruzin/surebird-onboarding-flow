@@ -1355,7 +1355,6 @@ export const StepOffer = ({
                 // Car: grouped under one heading with one card per instance
                 if (id === "car" && carInstances.length > 1) {
                   const ins = INSURANCE_TYPES.find((t) => t.id === "car")!;
-                  const insurer = INSURER_DATA.car;
                   return (
                     <div key="car" className="mb-8">
                       <h2 className="text-2xl font-bold text-foreground mb-3">{ins.label}</h2>
@@ -1363,6 +1362,7 @@ export const StepOffer = ({
                         const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
                           ? formatDutchPlate((inst.state.licensePlate as string).toUpperCase())
                           : `Car ${idx + 1}`;
+                        const carInsurer = CAR_INSTANCE_INSURERS[idx % CAR_INSTANCE_INSURERS.length];
                         return (
                           <div key={inst.id} className="mb-3">
                             <div className="flex items-center justify-between mb-1">
@@ -1390,12 +1390,12 @@ export const StepOffer = ({
                               </div>
                             </div>
                             <InsuranceOfferCard
-                              insurerName={insurer.name}
-                              logoSrc={insurer.logoSrc}
-                              originalPrice={insurer.monthlyPrice}
-                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-                              savingsPercent={insurer.savingsPercent}
-                              happyClients={insurer.happyClients}
+                              insurerName={carInsurer.name}
+                              logoSrc={carInsurer.logoSrc}
+                              originalPrice={carInsurer.monthlyPrice}
+                              monthlyPrice={getFinalMonthly(carInsurer.monthlyPrice)}
+                              savingsPercent={carInsurer.savingsPercent}
+                              happyClients={carInsurer.happyClients}
                               onViewDetails={() => { setActiveCarIdx(idx); setActiveTab("car"); }}
                             />
                           </div>
