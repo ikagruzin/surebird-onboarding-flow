@@ -1523,6 +1523,7 @@ export const StepOffer = ({
                           [effectiveSubTab]: { ...(prev.home?.[effectiveSubTab] || {}), [key]: value },
                         },
                       }));
+                      triggerRecalc();
                     }}
                   />
                 );
