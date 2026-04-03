@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { InsuranceOfferCard } from "./insurance-offer-card";
 import logoNN from "@/assets/logo-nationale-nederlanden.svg";
 import logoAllianz from "@/assets/logo-allianz.svg";
+import logoASR from "@/assets/logo-asr.svg";
+import logoUnive from "@/assets/logo-unive.svg";
 import { TacoMessage } from "./taco-message";
 import { LegalCoverageSelector } from "./legal-coverage-selector";
 import { INSURANCE_TYPES } from "./types";
