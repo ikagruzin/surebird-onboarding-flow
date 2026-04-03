@@ -660,20 +660,20 @@ export const StepOffer = ({
 
     return (
       <div className="mb-6">
-        {/* Action buttons */}
-        <div className="flex justify-end gap-2 mb-3">
-          {canRemove && (
-            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
-              Remove
-            </Button>
-          )}
-          <Button variant="outline" size="sm">Compare</Button>
-        </div>
-
-        {/* Best and cheapest choice badge */}
-        <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2 w-fit mb-4">
-          <Award className="w-4 h-4 text-primary" />
-          <span className="text-primary text-sm font-semibold">Best and cheapest choice</span>
+        {/* Badge + action buttons aligned in one row */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2">
+            <Award className="w-4 h-4 text-primary" />
+            <span className="text-primary text-sm font-semibold">Best and cheapest choice</span>
+          </div>
+          <div className="flex items-center gap-2">
+            {canRemove && (
+              <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
+                Remove
+              </Button>
+            )}
+            <Button variant="outline" size="sm" onClick={() => setCompareModalProduct(productId)}>Compare</Button>
+          </div>
         </div>
 
         <InsuranceOfferCard
@@ -687,7 +687,7 @@ export const StepOffer = ({
           onViewDetails={() => setPolicyModalOpen(true)}
         />
 
-        <h2 className="text-2xl font-bold text-foreground mt-8 mb-6">Details</h2>
+        <h2 className="text-2xl font-bold text-foreground mt-6 mb-3">Details</h2>
       </div>
     );
   };
