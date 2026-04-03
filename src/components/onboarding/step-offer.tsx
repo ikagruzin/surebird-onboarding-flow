@@ -31,7 +31,6 @@ import { getCarInstanceLabel, type CarInstance } from "@/config/products/car";
 import { formatDutchPlate } from "@/components/ui/dutch-plate-input";
 import { cn } from "@/lib/utils";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
-import trustpilotLogo from "@/assets/trustpilot-logo.svg";
 import trustpilotReview from "@/assets/trustpilot-review.svg";
 import surebirdIcon from "@/assets/logo-surebird-icon.svg";
 import person1 from "@/assets/person-1.png";
