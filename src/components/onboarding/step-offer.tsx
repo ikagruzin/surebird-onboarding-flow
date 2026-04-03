@@ -696,6 +696,8 @@ export const StepOffer = ({
     if (addModalSelection.length > 0) {
       setAddFlowQueue([...addModalSelection]);
       setAddFlowProduct(addModalSelection[0]);
+      setAddFlowActiveTab(addModalSelection[0]);
+      setAddFlowCompletedTabs([]);
       setAddFlowPhase("preferences");
     }
     setShowAddModal(false);
