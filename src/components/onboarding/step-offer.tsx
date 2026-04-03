@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { InsuranceOfferCard } from "./insurance-offer-card";
 import logoNN from "@/assets/logo-nationale-nederlanden.svg";
 import logoAllianz from "@/assets/logo-allianz.svg";
+import logoASR from "@/assets/logo-asr.svg";
+import logoUnive from "@/assets/logo-unive.svg";
 import { TacoMessage } from "./taco-message";
 import { LegalCoverageSelector } from "./legal-coverage-selector";
 import { INSURANCE_TYPES } from "./types";
@@ -86,7 +88,8 @@ const INSURER_DATA: Record<string, InsurerEntry> = {
     savingsPercent: 3,
   },
   car: {
-    name: "FBTO",
+    name: "ASR",
+    logoSrc: logoASR,
     happyClients: "200+ happy clients",
     deductible: "€150",
     priceQuality: "Good",
@@ -103,7 +106,8 @@ const INSURER_DATA: Record<string, InsurerEntry> = {
     savingsPercent: 3,
   },
   accidents: {
-    name: "Interpolis",
+    name: "Univé",
+    logoSrc: logoUnive,
     happyClients: "60+ happy clients",
     deductible: "€0",
     cancellable: true,
@@ -145,7 +149,8 @@ const HOME_SUB_INSURER: Record<string, InsurerEntry> = {
 /* Per-car-instance insurer rotation — each car gets a different insurer */
 const CAR_INSTANCE_INSURERS: InsurerEntry[] = [
   {
-    name: "FBTO",
+    name: "ASR",
+    logoSrc: logoASR,
     happyClients: "200+ happy clients",
     deductible: "€150",
     priceQuality: "Good",
@@ -164,8 +169,8 @@ const CAR_INSTANCE_INSURERS: InsurerEntry[] = [
     savingsPercent: 3,
   },
   {
-    name: "Nationale Nederlanden",
-    logoSrc: logoNN,
+    name: "Univé",
+    logoSrc: logoUnive,
     happyClients: "180+ happy clients",
     deductible: "€200",
     cancellable: true,
@@ -690,15 +695,6 @@ export const StepOffer = ({
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
           <div className="flex items-center gap-2">
-            {selectedInsurances.length > 1 && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setRemoveConfirm({ label: ins.label, action: () => { onRemoveInsurance?.(id); } })}
-              >
-                Remove
-              </Button>
-            )}
             <Button variant="outline" size="sm" onClick={() => setCompareModalProduct(id)}>Compare</Button>
           </div>
         </div>
@@ -804,7 +800,7 @@ export const StepOffer = ({
   };
 
   // ── Add product modal ──
-  const nonSelectedProducts = INSURANCE_TYPES.filter(t => !selectedInsurances.includes(t.id));
+  const nonSelectedProducts = INSURANCE_TYPES.filter(t => !selectedInsurances.includes(t.id) && !addFlowQueue.includes(t.id));
 
   const handleOpenAddModal = () => {
     setAddModalSelection([]);
@@ -819,11 +815,16 @@ export const StepOffer = ({
 
   const handleSaveAddModal = () => {
     if (addModalSelection.length > 0) {
-      setAddFlowQueue([...addModalSelection]);
-      setAddFlowProduct(addModalSelection[0]);
-      setAddFlowActiveTab(addModalSelection[0]);
-      setAddFlowCompletedTabs([]);
-      setAddFlowPhase("preferences");
+      if (addFlowProduct) {
+        // Already in add-flow overlay — append to existing queue
+        setAddFlowQueue((prev) => [...prev, ...addModalSelection]);
+      } else {
+        setAddFlowQueue([...addModalSelection]);
+        setAddFlowProduct(addModalSelection[0]);
+        setAddFlowActiveTab(addModalSelection[0]);
+        setAddFlowCompletedTabs([]);
+        setAddFlowPhase("preferences");
+      }
     }
     setShowAddModal(false);
   };
@@ -1070,6 +1071,22 @@ export const StepOffer = ({
                 </button>
               );
             })}
+            {/* Add product button */}
+            {(() => {
+              const availableToAdd = INSURANCE_TYPES.filter(t => !addFlowQueue.includes(t.id) && !selectedInsurances.includes(t.id));
+              if (availableToAdd.length === 0) return null;
+              return (
+                <button
+                  onClick={() => {
+                    setShowAddModal(true);
+                    setAddModalSelection([]);
+                  }}
+                  className="h-12 w-12 rounded-full border border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              );
+            })()}
           </div>
 
           {/* Progress bar */}
@@ -1386,24 +1403,6 @@ export const StepOffer = ({
                             <div className="flex items-center justify-between mb-1">
                               <p className="text-sm font-medium text-muted-foreground">{plateLabel}</p>
                               <div className="flex items-center gap-2">
-                                <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
-                                  label: plateLabel,
-                                  action: () => {
-                                    setLocalProductStates((prev) => {
-                                      const instances = [...(prev.car?.__carInstances || carInstances)];
-                                      instances.splice(idx, 1);
-                                      return { ...prev, car: { ...prev.car, __carInstances: instances } };
-                                    });
-                                    setLocalOfferStates((prev) => {
-                                      const carOffer = { ...prev.car };
-                                      delete carOffer[inst.id];
-                                      return { ...prev, car: carOffer };
-                                    });
-                                    if (activeCarIdx >= idx && activeCarIdx > 0) setActiveCarIdx(activeCarIdx - 1);
-                                  },
-                                })}>
-                                  Remove
-                                </Button>
                                 <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("car")}>Compare</Button>
                               </div>
                             </div>
@@ -1436,16 +1435,6 @@ export const StepOffer = ({
                             <div className="flex items-center justify-between mb-1">
                               <p className="text-sm font-medium text-muted-foreground">{subLabel}</p>
                               <div className="flex items-center gap-2">
-                                <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
-                                  label: subLabel,
-                                  action: () => {
-                                    const newChoice = sub === "household" ? "building" : "household";
-                                    handleUpdateProductState("home", "coverageChoice", newChoice);
-                                    setActiveHomeTab(newChoice as "household" | "building");
-                                  },
-                                })}>
-                                  Remove
-                                </Button>
                                 <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("home")}>Compare</Button>
                               </div>
                             </div>
@@ -1470,7 +1459,7 @@ export const StepOffer = ({
           ) : (
             <>
               {/* Car pill switcher above the offer card */}
-              {activeTab === "car" && carInstances.length > 1 && (
+              {activeTab === "car" && (
                 <>
                   <div className="border-t border-border my-4" />
                   <div className="flex flex-wrap items-center gap-2 mb-4">
@@ -1492,6 +1481,20 @@ export const StepOffer = ({
                         </button>
                       );
                     })}
+                    <button
+                      onClick={() => {
+                        const newInst = { id: crypto.randomUUID(), state: {} } as CarInstance;
+                        setLocalProductStates((prev) => ({
+                          ...prev,
+                          car: { ...prev.car, __carInstances: [...carInstances, newInst] },
+                        }));
+                        setActiveCarIdx(carInstances.length);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium border border-border bg-white text-muted-foreground hover:bg-muted transition-colors"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      Add car
+                    </button>
                   </div>
                 </>
               )}
