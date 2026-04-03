@@ -1170,7 +1170,7 @@ export const StepOffer = ({
           </button>
 
           {discountLocked ? (
-            <button disabled className="w-full mt-3 inline-flex items-center justify-center gap-2 border border-success/30 bg-success/5 rounded-full px-6 py-3 text-sm font-medium text-success cursor-not-allowed">
+            <button disabled className="w-full mt-3 inline-flex items-center justify-center gap-2 border border-border bg-background rounded-full px-6 py-3 text-sm font-medium text-foreground cursor-not-allowed">
               <Check className="w-4 h-4" />
               Discount locked {lockCountdown}
             </button>
