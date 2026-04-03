@@ -1349,26 +1349,29 @@ export const StepOffer = ({
             <>
               {/* Car pill switcher above the offer card */}
               {activeTab === "car" && carInstances.length > 1 && (
-                <div className="flex flex-wrap items-center gap-2 mb-4">
-                  {carInstances.map((inst, i) => {
-                    const isActive = i === activeCarIdx;
-                    const label = getCarInstanceLabel(inst as CarInstance, i);
-                    return (
-                      <button
-                        key={inst.id}
-                        onClick={() => setActiveCarIdx(i)}
-                        className={cn(
-                          "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
-                          isActive
-                            ? "bg-foreground text-background border-foreground"
-                            : "bg-white border-border text-foreground hover:border-muted-foreground/30"
-                        )}
-                      >
-                        {label}
-                      </button>
-                    );
-                  })}
-                </div>
+                <>
+                  <div className="border-t border-border my-4" />
+                  <div className="flex flex-wrap items-center gap-2 mb-4">
+                    {carInstances.map((inst, i) => {
+                      const isActive = i === activeCarIdx;
+                      const label = getCarInstanceLabel(inst as CarInstance, i);
+                      return (
+                        <button
+                          key={inst.id}
+                          onClick={() => setActiveCarIdx(i)}
+                          className={cn(
+                            "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
+                            isActive
+                              ? "bg-foreground text-background border-foreground"
+                              : "bg-white border-border text-foreground hover:border-muted-foreground/30"
+                          )}
+                        >
+                          {label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
               )}
 
               {/* Home sub-product pill switcher */}
