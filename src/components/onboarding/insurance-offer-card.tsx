@@ -19,6 +19,7 @@ export const InsuranceOfferCard = ({
   savingsPercent,
   happyClients,
   onViewDetails,
+  actionLabel = "View & Edit details",
 }: InsuranceOfferCardProps) => {
   return (
     <div className="border border-border rounded-3xl p-6 bg-card">
