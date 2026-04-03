@@ -204,6 +204,9 @@ export const StepOffer = ({
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
+  const [compareModalProduct, setCompareModalProduct] = useState<string | null>(null);
+  const [isRecalculating, setIsRecalculating] = useState(false);
+  const recalcTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Local product states (copy from Set Preferences, editable on offer page)
   const [localProductStates, setLocalProductStates] = useState<Record<string, Record<string, any>>>(() => ({ ...productStates }));
