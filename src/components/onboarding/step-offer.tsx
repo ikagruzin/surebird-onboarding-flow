@@ -1531,6 +1531,28 @@ export const StepOffer = ({
       {renderAddModal()}
       {renderRemoveConfirm()}
       {renderAddFlowOverlay()}
+
+      {/* Policy conditions modal */}
+      {policyModalOpen && (
+        <>
+          <div className="fixed inset-0 z-[60] bg-black/40" onClick={() => setPolicyModalOpen(false)} />
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <div className="relative w-full max-w-5xl h-[90vh] bg-background rounded-2xl border border-border shadow-xl overflow-hidden">
+              <button
+                onClick={() => setPolicyModalOpen(false)}
+                className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
+              >
+                <X className="w-5 h-5 text-foreground" />
+              </button>
+              <iframe
+                src="https://verzekeringskaarten.nl/allianz/aansprakelijkheidsverzekering-allianz"
+                title="Policy conditions"
+                className="w-full h-full"
+              />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
