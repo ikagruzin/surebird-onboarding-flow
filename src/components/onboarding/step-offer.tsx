@@ -1382,24 +1382,6 @@ export const StepOffer = ({
                             <div className="flex items-center justify-between mb-1">
                               <p className="text-sm font-medium text-muted-foreground">{plateLabel}</p>
                               <div className="flex items-center gap-2">
-                                <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
-                                  label: plateLabel,
-                                  action: () => {
-                                    setLocalProductStates((prev) => {
-                                      const instances = [...(prev.car?.__carInstances || carInstances)];
-                                      instances.splice(idx, 1);
-                                      return { ...prev, car: { ...prev.car, __carInstances: instances } };
-                                    });
-                                    setLocalOfferStates((prev) => {
-                                      const carOffer = { ...prev.car };
-                                      delete carOffer[inst.id];
-                                      return { ...prev, car: carOffer };
-                                    });
-                                    if (activeCarIdx >= idx && activeCarIdx > 0) setActiveCarIdx(activeCarIdx - 1);
-                                  },
-                                })}>
-                                  Remove
-                                </Button>
                                 <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("car")}>Compare</Button>
                               </div>
                             </div>
