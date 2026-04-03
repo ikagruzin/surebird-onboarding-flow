@@ -529,15 +529,16 @@ export const StepOffer = ({
       >
         {/* Trustpilot overview card */}
         <div className="shrink-0 w-72 bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm min-h-72 snap-start">
-          <div className="flex items-center gap-2 mb-4">
-            <Star className="w-5 h-5 text-success" fill="currentColor" />
-            <span className="text-lg font-bold text-foreground">Trustpilot</span>
-          </div>
-          <div className="flex flex-col items-center my-4">
-            <span className="text-5xl font-bold text-foreground mb-3">4.2</span>
-            <TrustpilotStars count={4} size={20} />
-          </div>
-          <p className="text-sm text-muted-foreground mt-4">2,466 Trustpilot reviews</p>
+          <img src={trustpilotLogo} alt="Trustpilot" className="h-7 mb-4" />
+          <img src={trustpilotScore} alt="Trustpilot score" className="mb-4" />
+          <a
+            href="https://nl.trustpilot.com/review/surebird.nl?utm_medium=trustbox&utm_source=MicroReviewCount"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-muted-foreground hover:underline mt-2"
+          >
+            123 reviews
+          </a>
         </div>
 
         {/* Review cards */}
