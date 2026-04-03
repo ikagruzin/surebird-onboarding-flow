@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import trustpilotLogo from "@/assets/trustpilot-logo.svg";
 import trustpilotReview from "@/assets/trustpilot-review.svg";
+import surebirdIcon from "@/assets/logo-surebird-icon.svg";
 import person1 from "@/assets/person-1.png";
 import person2 from "@/assets/person-2.png";
 import person3 from "@/assets/person-3.png";
@@ -203,6 +204,9 @@ export const StepOffer = ({
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
+  const [compareModalProduct, setCompareModalProduct] = useState<string | null>(null);
+  const [isRecalculating, setIsRecalculating] = useState(false);
+  const recalcTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Local product states (copy from Set Preferences, editable on offer page)
   const [localProductStates, setLocalProductStates] = useState<Record<string, Record<string, any>>>(() => ({ ...productStates }));
@@ -233,12 +237,19 @@ export const StepOffer = ({
     return initial;
   });
 
+  const triggerRecalc = useCallback(() => {
+    setIsRecalculating(true);
+    if (recalcTimerRef.current) clearTimeout(recalcTimerRef.current);
+    recalcTimerRef.current = setTimeout(() => setIsRecalculating(false), 800);
+  }, []);
+
   const handleUpdateOfferState = (productId: string, key: string, value: any) => {
     setLocalOfferStates((prev) => ({
       ...prev,
       [productId]: { ...(prev[productId] || {}), [key]: value },
     }));
     onUpdateOfferState?.(productId, key, value);
+    triggerRecalc();
   };
 
   const handleUpdateProductState = (productId: string, key: string, value: any) => {
@@ -247,6 +258,7 @@ export const StepOffer = ({
       [productId]: { ...(prev[productId] || {}), [key]: value },
     }));
     onUpdateProductState?.(productId, key, value);
+    triggerRecalc();
   };
 
   // ── Car-specific per-instance handlers ──
@@ -259,7 +271,8 @@ export const StepOffer = ({
         [instanceId]: { ...(prev.car?.[instanceId] || {}), [key]: value },
       },
     }));
-  }, []);
+    triggerRecalc();
+  }, [triggerRecalc]);
 
   const handleUpdateCarInstanceProduct = useCallback((instanceIdx: number, key: string, value: any) => {
     setLocalProductStates((prev) => {
@@ -270,7 +283,8 @@ export const StepOffer = ({
       };
       return { ...prev, car: { ...prev.car, __carInstances: instances } };
     });
-  }, [carInstances]);
+    triggerRecalc();
+  }, [carInstances, triggerRecalc]);
 
   const FAQ_DATA = [
     {
@@ -585,7 +599,7 @@ export const StepOffer = ({
                 Remove
               </Button>
             )}
-            <Button variant="outline" size="sm">Compare</Button>
+            <Button variant="outline" size="sm" onClick={() => setCompareModalProduct(id)}>Compare</Button>
           </div>
         </div>
 
@@ -646,20 +660,20 @@ export const StepOffer = ({
 
     return (
       <div className="mb-6">
-        {/* Action buttons */}
-        <div className="flex justify-end gap-2 mb-3">
-          {canRemove && (
-            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
-              Remove
-            </Button>
-          )}
-          <Button variant="outline" size="sm">Compare</Button>
-        </div>
-
-        {/* Best and cheapest choice badge */}
-        <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2 w-fit mb-4">
-          <Award className="w-4 h-4 text-primary" />
-          <span className="text-primary text-sm font-semibold">Best and cheapest choice</span>
+        {/* Badge + action buttons aligned in one row */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2">
+            <Award className="w-4 h-4 text-primary" />
+            <span className="text-primary text-sm font-semibold">Best and cheapest choice</span>
+          </div>
+          <div className="flex items-center gap-2">
+            {canRemove && (
+              <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
+                Remove
+              </Button>
+            )}
+            <Button variant="outline" size="sm" onClick={() => setCompareModalProduct(productId)}>Compare</Button>
+          </div>
         </div>
 
         <InsuranceOfferCard
@@ -673,7 +687,7 @@ export const StepOffer = ({
           onViewDetails={() => setPolicyModalOpen(true)}
         />
 
-        <h2 className="text-2xl font-bold text-foreground mt-8 mb-6">Details</h2>
+        <h2 className="text-2xl font-bold text-foreground mt-6 mb-3">Details</h2>
       </div>
     );
   };
@@ -1238,17 +1252,7 @@ export const StepOffer = ({
                   const insurer = INSURER_DATA.car;
                   return (
                     <div key="car" className="mb-8">
-                      <div className="flex items-center justify-between mb-3">
-                        <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-                        <div className="flex items-center gap-2">
-                          {selectedInsurances.length > 1 && (
-                            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("car") })}>
-                              Remove
-                            </Button>
-                          )}
-                          <Button variant="outline" size="sm">Compare</Button>
-                        </div>
-                      </div>
+                      <h2 className="text-2xl font-bold text-foreground mb-3">{ins.label}</h2>
                       {carInstances.map((inst, idx) => {
                         const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
                           ? formatDutchPlate((inst.state.licensePlate as string).toUpperCase())
@@ -1257,7 +1261,7 @@ export const StepOffer = ({
                           <div key={inst.id} className="mb-3">
                             <div className="flex items-center justify-between mb-1">
                               <p className="text-sm font-medium text-muted-foreground">{plateLabel}</p>
-                              {carInstances.length > 1 && (
+                              <div className="flex items-center gap-2">
                                 <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
                                   label: plateLabel,
                                   action: () => {
@@ -1276,7 +1280,8 @@ export const StepOffer = ({
                                 })}>
                                   Remove
                                 </Button>
-                              )}
+                                <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("car")}>Compare</Button>
+                              </div>
                             </div>
                             <InsuranceOfferCard
                               insurerName={insurer.name}
@@ -1299,33 +1304,26 @@ export const StepOffer = ({
                   const insurer = INSURER_DATA.home;
                   return (
                     <div key="home" className="mb-8">
-                      <div className="flex items-center justify-between mb-3">
-                        <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-                        <div className="flex items-center gap-2">
-                          {selectedInsurances.length > 1 && (
-                            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("home") })}>
-                              Remove
-                            </Button>
-                          )}
-                          <Button variant="outline" size="sm">Compare</Button>
-                        </div>
-                      </div>
+                      <h2 className="text-2xl font-bold text-foreground mb-3">{ins.label}</h2>
                       {(["household", "building"] as const).map((sub) => {
                         const subLabel = sub === "household" ? "Household goods" : "Building";
                         return (
                           <div key={sub} className="mb-3">
                             <div className="flex items-center justify-between mb-1">
                               <p className="text-sm font-medium text-muted-foreground">{subLabel}</p>
-                              <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
-                                label: subLabel,
-                                action: () => {
-                                  const newChoice = sub === "household" ? "building" : "household";
-                                  handleUpdateProductState("home", "coverageChoice", newChoice);
-                                  setActiveHomeTab(newChoice as "household" | "building");
-                                },
-                              })}>
-                                Remove
-                              </Button>
+                              <div className="flex items-center gap-2">
+                                <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
+                                  label: subLabel,
+                                  action: () => {
+                                    const newChoice = sub === "household" ? "building" : "household";
+                                    handleUpdateProductState("home", "coverageChoice", newChoice);
+                                    setActiveHomeTab(newChoice as "household" | "building");
+                                  },
+                                })}>
+                                  Remove
+                                </Button>
+                                <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("home")}>Compare</Button>
+                              </div>
                             </div>
                             <InsuranceOfferCard
                               insurerName={insurer.name}
@@ -1409,7 +1407,14 @@ export const StepOffer = ({
               {/* Offer card on detail tabs (no h2 title) */}
               {renderDetailTabOfferCard(activeTab)}
 
-              {/* Detail cards */}
+              {/* Detail cards with recalculating overlay */}
+              <div className="relative">
+              {isRecalculating && (
+                <div className="absolute inset-0 bg-background/60 z-20 flex flex-col items-center justify-center backdrop-blur-[1px] rounded-2xl">
+                  <img src={surebirdIcon} alt="Loading" className="w-12 h-12 animate-[spin_2s_linear_infinite]" />
+                  <p className="text-sm font-medium text-muted-foreground mt-4">Updating prices...</p>
+                </div>
+              )}
               {activeTab === "travel" && localProductStates.travel ? (
                 <TravelOfferCards
                   productState={localProductStates.travel}
@@ -1483,6 +1488,7 @@ export const StepOffer = ({
               })() : (
                 renderPreferences(activeTab)
               )}
+              </div>
             </>
           )}
           <div className="mt-12 mb-8">
@@ -1531,6 +1537,69 @@ export const StepOffer = ({
       {renderAddModal()}
       {renderRemoveConfirm()}
       {renderAddFlowOverlay()}
+
+      {/* Compare modal */}
+      {compareModalProduct && (() => {
+        const insurer = INSURER_DATA[compareModalProduct];
+        if (!insurer) return null;
+        const COMPETITORS = [
+          { name: "Centraal Beheer", happyClients: "120+ happy clients", priceMultiplier: 1.15 },
+          { name: "OHRA", happyClients: "90+ happy clients", priceMultiplier: 1.22 },
+          { name: "Univé", happyClients: "75+ happy clients", priceMultiplier: 1.30 },
+        ];
+        return (
+          <>
+            <div className="fixed inset-0 z-[60] bg-black/40" onClick={() => setCompareModalProduct(null)} />
+            <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+              <div className="relative w-full max-w-lg max-h-[85vh] bg-background rounded-2xl border border-border shadow-xl overflow-y-auto p-6">
+                <button
+                  onClick={() => setCompareModalProduct(null)}
+                  className="absolute top-4 right-4 w-9 h-9 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
+                >
+                  <X className="w-5 h-5 text-foreground" />
+                </button>
+                <h2 className="text-xl font-bold text-foreground mb-6">Compare insurers</h2>
+
+                {/* Current (recommended) */}
+                <div className="mb-2">
+                  <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-3 py-1.5 w-fit mb-3">
+                    <Award className="w-3.5 h-3.5 text-primary" />
+                    <span className="text-primary text-xs font-semibold">Best and cheapest choice</span>
+                  </div>
+                  <InsuranceOfferCard
+                    insurerName={insurer.name}
+                    logoSrc={insurer.logoSrc}
+                    originalPrice={insurer.monthlyPrice}
+                    monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+                    savingsPercent={insurer.savingsPercent}
+                    happyClients={insurer.happyClients}
+                    actionLabel="Policy conditions"
+                    onViewDetails={() => { setCompareModalProduct(null); setPolicyModalOpen(true); }}
+                  />
+                </div>
+
+                {/* Alternatives */}
+                <div className="space-y-3 mt-4">
+                  {COMPETITORS.map((comp) => {
+                    const compPrice = insurer.monthlyPrice * comp.priceMultiplier;
+                    return (
+                      <InsuranceOfferCard
+                        key={comp.name}
+                        insurerName={comp.name}
+                        originalPrice={compPrice}
+                        monthlyPrice={compPrice}
+                        happyClients={comp.happyClients}
+                        actionLabel="Policy conditions"
+                        onViewDetails={() => {}}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </>
+        );
+      })()}
 
       {/* Policy conditions modal */}
       {policyModalOpen && (
