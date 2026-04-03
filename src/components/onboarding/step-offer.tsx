@@ -1,6 +1,9 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { toast } from "sonner";
-import { Check, BadgePercent, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Shield, Play, Star, Gift, Award, Clock } from "lucide-react";
+import { Check, BadgePercent, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Shield, Play, Gift, Award, Clock } from "lucide-react";
+import trustpilotStar from "@/assets/trustpilot-star.svg";
+import trustpilotLogo from "@/assets/trustpilot-logo.svg";
+import trustpilotScore from "@/assets/trustpilot-score.svg";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -28,7 +31,6 @@ import { getCarInstanceLabel, type CarInstance } from "@/config/products/car";
 import { formatDutchPlate } from "@/components/ui/dutch-plate-input";
 import { cn } from "@/lib/utils";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
-import trustpilotLogo from "@/assets/trustpilot-logo.svg";
 import trustpilotReview from "@/assets/trustpilot-review.svg";
 import surebirdIcon from "@/assets/logo-surebird-icon.svg";
 import person1 from "@/assets/person-1.png";
@@ -486,16 +488,10 @@ export const StepOffer = ({
   ];
 
 
-  const TrustpilotStars = ({ count, size = 16 }: { count: number; size?: number }) => (
+  const TrustpilotStars = ({ count }: { count: number }) => (
     <div className="flex gap-0.5">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <div
-          key={i}
-          className={`flex items-center justify-center rounded-sm ${i <= count ? "bg-[#00b67a]" : "bg-[#dcdce6]"}`}
-          style={{ width: size + 4, height: size + 4 }}
-        >
-          <Star className="text-white" style={{ width: size - 2, height: size - 2 }} fill="currentColor" />
-        </div>
+      {Array.from({ length: count }).map((_, i) => (
+        <img key={i} src={trustpilotStar} alt="star" className="w-5 h-5" />
       ))}
     </div>
   );
@@ -532,15 +528,16 @@ export const StepOffer = ({
       >
         {/* Trustpilot overview card */}
         <div className="shrink-0 w-72 bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-between shadow-sm min-h-72 snap-start">
-          <div className="flex items-center gap-2 mb-4">
-            <Star className="w-5 h-5 text-success" fill="currentColor" />
-            <span className="text-lg font-bold text-foreground">Trustpilot</span>
-          </div>
-          <div className="flex flex-col items-center my-4">
-            <span className="text-5xl font-bold text-foreground mb-3">4.2</span>
-            <TrustpilotStars count={4} size={20} />
-          </div>
-          <p className="text-sm text-muted-foreground mt-4">2,466 Trustpilot reviews</p>
+          <img src={trustpilotLogo} alt="Trustpilot" className="h-7 mb-4" />
+          <img src={trustpilotScore} alt="Trustpilot score" className="mb-4" />
+          <a
+            href="https://nl.trustpilot.com/review/surebird.nl?utm_medium=trustbox&utm_source=MicroReviewCount"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-muted-foreground hover:underline mt-2"
+          >
+            123 reviews
+          </a>
         </div>
 
         {/* Review cards */}
@@ -551,7 +548,6 @@ export const StepOffer = ({
             <div key={i} className="shrink-0 w-72 bg-card border border-border rounded-2xl p-6 flex flex-col justify-between shadow-sm min-h-72 snap-start">
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-sm font-bold text-foreground">{review.rating}.0</span>
                   <TrustpilotStars count={review.rating} />
                 </div>
                 <h3 className="font-bold text-foreground mb-2 text-sm">{review.title}</h3>
