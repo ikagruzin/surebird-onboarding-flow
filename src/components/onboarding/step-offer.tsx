@@ -88,7 +88,8 @@ const INSURER_DATA: Record<string, InsurerEntry> = {
     savingsPercent: 3,
   },
   car: {
-    name: "FBTO",
+    name: "ASR",
+    logoSrc: logoASR,
     happyClients: "200+ happy clients",
     deductible: "€150",
     priceQuality: "Good",
