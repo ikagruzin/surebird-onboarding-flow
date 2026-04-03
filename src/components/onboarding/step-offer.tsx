@@ -674,8 +674,15 @@ export const StepOffer = ({
   };
 
   const renderOfferCard = (id: string) => {
-    const insurer = INSURER_DATA[id];
+    let insurer: InsurerEntry | undefined = INSURER_DATA[id];
     const ins = INSURANCE_TYPES.find(t => t.id === id);
+
+    // For home with single coverage, use sub-insurer
+    if (id === "home") {
+      const sub = localProductStates.home?.coverageChoice === "building" ? "building" : "household";
+      insurer = HOME_SUB_INSURER[sub];
+    }
+
     if (!insurer || !ins) return null;
 
     return (
