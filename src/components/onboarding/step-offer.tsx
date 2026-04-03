@@ -1407,7 +1407,14 @@ export const StepOffer = ({
               {/* Offer card on detail tabs (no h2 title) */}
               {renderDetailTabOfferCard(activeTab)}
 
-              {/* Detail cards */}
+              {/* Detail cards with recalculating overlay */}
+              <div className="relative">
+              {isRecalculating && (
+                <div className="absolute inset-0 bg-background/60 z-20 flex flex-col items-center justify-center backdrop-blur-[1px] rounded-2xl">
+                  <img src={surebirdIcon} alt="Loading" className="w-12 h-12 animate-[spin_2s_linear_infinite]" />
+                  <p className="text-sm font-medium text-muted-foreground mt-4">Updating prices...</p>
+                </div>
+              )}
               {activeTab === "travel" && localProductStates.travel ? (
                 <TravelOfferCards
                   productState={localProductStates.travel}
