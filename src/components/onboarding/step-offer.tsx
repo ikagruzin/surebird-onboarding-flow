@@ -646,13 +646,22 @@ export const StepOffer = ({
 
     return (
       <div className="mb-6">
-        {canRemove && (
-          <div className="flex justify-end mb-3">
+        {/* Action buttons */}
+        <div className="flex justify-end gap-2 mb-3">
+          {canRemove && (
             <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
               Remove
             </Button>
-          </div>
-        )}
+          )}
+          <Button variant="outline" size="sm">Compare</Button>
+        </div>
+
+        {/* Best and cheapest choice badge */}
+        <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2 w-fit mb-4">
+          <Award className="w-4 h-4 text-primary" />
+          <span className="text-primary text-sm font-semibold">Best and cheapest choice</span>
+        </div>
+
         <InsuranceOfferCard
           insurerName={insurer.name}
           logoSrc={insurer.logoSrc}
@@ -660,7 +669,11 @@ export const StepOffer = ({
           monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
           savingsPercent={insurer.savingsPercent}
           happyClients={insurer.happyClients}
+          actionLabel="Policy conditions"
+          onViewDetails={() => setPolicyModalOpen(true)}
         />
+
+        <h2 className="text-2xl font-bold text-foreground mt-8 mb-6">Details</h2>
       </div>
     );
   };
