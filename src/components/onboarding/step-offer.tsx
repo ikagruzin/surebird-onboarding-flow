@@ -1407,12 +1407,12 @@ export const StepOffer = ({
                 // Home: grouped under one heading with sub-product cards when "both"
                 if (id === "home" && localProductStates.home?.coverageChoice === "both") {
                   const ins = INSURANCE_TYPES.find((t) => t.id === "home")!;
-                  const insurer = INSURER_DATA.home;
                   return (
                     <div key="home" className="mb-8">
                       <h2 className="text-2xl font-bold text-foreground mb-3">{ins.label}</h2>
                       {(["household", "building"] as const).map((sub) => {
                         const subLabel = sub === "household" ? "Household goods" : "Building";
+                        const subInsurer = HOME_SUB_INSURER[sub];
                         return (
                           <div key={sub} className="mb-3">
                             <div className="flex items-center justify-between mb-1">
@@ -1432,12 +1432,12 @@ export const StepOffer = ({
                               </div>
                             </div>
                             <InsuranceOfferCard
-                              insurerName={insurer.name}
-                              logoSrc={insurer.logoSrc}
-                              originalPrice={insurer.monthlyPrice}
-                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-                              savingsPercent={insurer.savingsPercent}
-                              happyClients={insurer.happyClients}
+                              insurerName={subInsurer.name}
+                              logoSrc={subInsurer.logoSrc}
+                              originalPrice={subInsurer.monthlyPrice}
+                              monthlyPrice={getFinalMonthly(subInsurer.monthlyPrice)}
+                              savingsPercent={subInsurer.savingsPercent}
+                              happyClients={subInsurer.happyClients}
                               onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
                             />
                           </div>
