@@ -1488,6 +1488,7 @@ export const StepOffer = ({
               })() : (
                 renderPreferences(activeTab)
               )}
+              </div>
             </>
           )}
           <div className="mt-12 mb-8">
