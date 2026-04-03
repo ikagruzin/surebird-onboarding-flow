@@ -639,15 +639,21 @@ export const StepOffer = ({
           </div>
         </div>
 
-        <InsuranceOfferCard
-          insurerName={insurer.name}
-          logoSrc={insurer.logoSrc}
-          originalPrice={insurer.monthlyPrice}
-          monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-          savingsPercent={insurer.savingsPercent}
-          happyClients={insurer.happyClients}
-          onViewDetails={() => setActiveTab(id)}
-        />
+        <div className="relative mt-8">
+          <div className="absolute -top-[28px] left-6 z-10 flex items-center gap-2 bg-primary/5 border border-primary/20 border-b-0 rounded-t-xl px-4 py-1.5">
+            <Award className="w-3.5 h-3.5 text-primary" />
+            <span className="text-primary text-xs font-semibold">Best and cheapest choice</span>
+          </div>
+          <InsuranceOfferCard
+            insurerName={insurer.name}
+            logoSrc={insurer.logoSrc}
+            originalPrice={insurer.monthlyPrice}
+            monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+            savingsPercent={insurer.savingsPercent}
+            happyClients={insurer.happyClients}
+            onViewDetails={() => setActiveTab(id)}
+          />
+        </div>
       </div>
     );
   };
@@ -696,32 +702,33 @@ export const StepOffer = ({
 
     return (
       <div className="mb-6">
-        {/* Badge + action buttons aligned in one row */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2">
+        {/* Action buttons row */}
+        <div className="flex items-center justify-end mb-2 gap-2">
+          {canRemove && (
+            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
+              Remove
+            </Button>
+          )}
+          <Button variant="outline" size="sm" onClick={() => setCompareModalProduct(productId)}>Compare</Button>
+        </div>
+
+        {/* Badge overlapping card top border */}
+        <div className="relative mt-8">
+          <div className="absolute -top-[28px] left-6 z-10 flex items-center gap-2 bg-primary/5 border border-primary/20 border-b-0 rounded-t-xl px-5 py-2">
             <Award className="w-4 h-4 text-primary" />
             <span className="text-primary text-sm font-semibold">Best and cheapest choice</span>
           </div>
-          <div className="flex items-center gap-2">
-            {canRemove && (
-              <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
-                Remove
-              </Button>
-            )}
-            <Button variant="outline" size="sm" onClick={() => setCompareModalProduct(productId)}>Compare</Button>
-          </div>
+          <InsuranceOfferCard
+            insurerName={insurer.name}
+            logoSrc={insurer.logoSrc}
+            originalPrice={insurer.monthlyPrice}
+            monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+            savingsPercent={insurer.savingsPercent}
+            happyClients={insurer.happyClients}
+            actionLabel="Policy conditions"
+            onViewDetails={() => setPolicyModalOpen(true)}
+          />
         </div>
-
-        <InsuranceOfferCard
-          insurerName={insurer.name}
-          logoSrc={insurer.logoSrc}
-          originalPrice={insurer.monthlyPrice}
-          monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-          savingsPercent={insurer.savingsPercent}
-          happyClients={insurer.happyClients}
-          actionLabel="Policy conditions"
-          onViewDetails={() => setPolicyModalOpen(true)}
-        />
 
         <h2 className="text-2xl font-bold text-foreground mt-6 mb-3">Details</h2>
       </div>
@@ -1329,15 +1336,21 @@ export const StepOffer = ({
                                 <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("car")}>Compare</Button>
                               </div>
                             </div>
-                            <InsuranceOfferCard
-                              insurerName={insurer.name}
-                              logoSrc={insurer.logoSrc}
-                              originalPrice={insurer.monthlyPrice}
-                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-                              savingsPercent={insurer.savingsPercent}
-                              happyClients={insurer.happyClients}
-                              onViewDetails={() => { setActiveCarIdx(idx); setActiveTab("car"); }}
-                            />
+                            <div className="relative mt-8">
+                              <div className="absolute -top-[28px] left-6 z-10 flex items-center gap-2 bg-primary/5 border border-primary/20 border-b-0 rounded-t-xl px-4 py-1.5">
+                                <Award className="w-3.5 h-3.5 text-primary" />
+                                <span className="text-primary text-xs font-semibold">Best and cheapest choice</span>
+                              </div>
+                              <InsuranceOfferCard
+                                insurerName={insurer.name}
+                                logoSrc={insurer.logoSrc}
+                                originalPrice={insurer.monthlyPrice}
+                                monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+                                savingsPercent={insurer.savingsPercent}
+                                happyClients={insurer.happyClients}
+                                onViewDetails={() => { setActiveCarIdx(idx); setActiveTab("car"); }}
+                              />
+                            </div>
                           </div>
                         );
                       })}
@@ -1371,15 +1384,21 @@ export const StepOffer = ({
                                 <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("home")}>Compare</Button>
                               </div>
                             </div>
-                            <InsuranceOfferCard
-                              insurerName={insurer.name}
-                              logoSrc={insurer.logoSrc}
-                              originalPrice={insurer.monthlyPrice}
-                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-                              savingsPercent={insurer.savingsPercent}
-                              happyClients={insurer.happyClients}
-                              onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
-                            />
+                            <div className="relative mt-8">
+                              <div className="absolute -top-[28px] left-6 z-10 flex items-center gap-2 bg-primary/5 border border-primary/20 border-b-0 rounded-t-xl px-4 py-1.5">
+                                <Award className="w-3.5 h-3.5 text-primary" />
+                                <span className="text-primary text-xs font-semibold">Best and cheapest choice</span>
+                              </div>
+                              <InsuranceOfferCard
+                                insurerName={insurer.name}
+                                logoSrc={insurer.logoSrc}
+                                originalPrice={insurer.monthlyPrice}
+                                monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+                                savingsPercent={insurer.savingsPercent}
+                                happyClients={insurer.happyClients}
+                                onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
+                              />
+                            </div>
                           </div>
                         );
                       })}
@@ -1601,8 +1620,8 @@ export const StepOffer = ({
                 <h2 className="text-xl font-bold text-foreground mb-6">Compare insurers</h2>
 
                 {/* Current (recommended) */}
-                <div className="mb-2">
-                  <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-3 py-1.5 w-fit mb-3">
+                <div className="relative mt-8 mb-2">
+                  <div className="absolute -top-[28px] left-6 z-10 flex items-center gap-2 bg-primary/5 border border-primary/20 border-b-0 rounded-t-xl px-4 py-1.5">
                     <Award className="w-3.5 h-3.5 text-primary" />
                     <span className="text-primary text-xs font-semibold">Best and cheapest choice</span>
                   </div>
