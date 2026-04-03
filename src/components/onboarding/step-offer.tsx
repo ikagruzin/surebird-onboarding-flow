@@ -372,7 +372,7 @@ export const StepOffer = ({
                 <ChevronDown className={`w-5 h-5 text-muted-foreground shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
               </button>
               {isOpen && (
-                <div className="px-6 pb-5 animate-fade-in">
+                <div className="px-6 pb-5">
                   <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
                 </div>
               )}
