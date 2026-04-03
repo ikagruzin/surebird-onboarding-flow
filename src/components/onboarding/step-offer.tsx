@@ -710,9 +710,20 @@ export const StepOffer = ({
   };
 
   const renderDetailTabOfferCard = (productId: string) => {
-    const insurer = INSURER_DATA[productId];
+    let insurer: InsurerEntry | undefined = INSURER_DATA[productId];
     const ins = INSURANCE_TYPES.find(t => t.id === productId);
-    if (!insurer || !ins) return null;
+    if (!ins) return null;
+
+    // Use sub-product specific insurer for car instances and home sub-products
+    if (productId === "car") {
+      insurer = CAR_INSTANCE_INSURERS[activeCarIdx % CAR_INSTANCE_INSURERS.length];
+    } else if (productId === "home") {
+      const coverageChoice = localProductStates.home?.coverageChoice || "household";
+      const effectiveSub = coverageChoice === "both" ? activeHomeTab : coverageChoice;
+      insurer = HOME_SUB_INSURER[effectiveSub] || HOME_SUB_INSURER.household;
+    }
+
+    if (!insurer) return null;
 
     let canRemove = false;
     let removeLabel = ins.label;
