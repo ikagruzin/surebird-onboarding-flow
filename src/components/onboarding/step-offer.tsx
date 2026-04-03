@@ -1733,7 +1733,7 @@ export const StepOffer = ({
                 {calcLineItems.map((item) => (
                   <div key={item.key} className="flex justify-between items-center">
                     <span className="text-foreground">{item.label}</span>
-                    <span className="font-medium text-foreground">\u20AC{item.originalPrice.toFixed(2)}</span>
+                    <span className="font-medium text-foreground">€{item.originalPrice.toFixed(2)}</span>
                   </div>
                 ))}
 
@@ -1752,24 +1752,24 @@ export const StepOffer = ({
                         </Tooltip>
                       </TooltipProvider>
                     </span>
-                    <span className="font-medium text-foreground">\u20AC2.50</span>
+                    <span className="font-medium text-foreground">€2.50</span>
                   </div>
                 </div>
 
                 <div className="flex justify-between items-center">
                   <span className="text-foreground">Insurance tax (21%)</span>
-                  <span className="font-medium text-foreground">\u20AC{(totalBeforeDiscount * 0.21).toFixed(2)}</span>
+                  <span className="font-medium text-foreground">€{(totalBeforeDiscount * 0.21).toFixed(2)}</span>
                 </div>
 
                 <div className="border-t border-border pt-3">
                   <div className="flex justify-between items-center">
                     <span className="text-foreground">Bundle discount (-{discountPercent}%)</span>
-                    <span className="font-medium" style={{ color: 'hsl(0 74% 42%)' }}>-\u20AC{discountAmount.toFixed(2)}</span>
+                    <span className="font-medium" style={{ color: 'hsl(0 74% 42%)' }}>-€{discountAmount.toFixed(2)}</span>
                   </div>
                   {annualDiscount && (
                     <div className="flex justify-between items-center mt-2">
                       <span className="text-foreground">Annual payment discount (-5%)</span>
-                      <span className="font-medium" style={{ color: 'hsl(0 74% 42%)' }}>-\u20AC{annualPaymentSaving.toFixed(2)}</span>
+                      <span className="font-medium" style={{ color: 'hsl(0 74% 42%)' }}>-€{annualPaymentSaving.toFixed(2)}</span>
                     </div>
                   )}
                 </div>
@@ -1777,7 +1777,7 @@ export const StepOffer = ({
                 <div className="border-t border-border pt-3">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-bold text-foreground">Total per month</span>
-                    <span className="text-lg font-bold text-foreground">\u20AC{totalAfterDiscount.toFixed(2)}</span>
+                    <span className="text-lg font-bold text-foreground">€{totalAfterDiscount.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
