@@ -1252,17 +1252,7 @@ export const StepOffer = ({
                   const insurer = INSURER_DATA.car;
                   return (
                     <div key="car" className="mb-8">
-                      <div className="flex items-center justify-between mb-3">
-                        <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-                        <div className="flex items-center gap-2">
-                          {selectedInsurances.length > 1 && (
-                            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("car") })}>
-                              Remove
-                            </Button>
-                          )}
-                          <Button variant="outline" size="sm">Compare</Button>
-                        </div>
-                      </div>
+                      <h2 className="text-2xl font-bold text-foreground mb-3">{ins.label}</h2>
                       {carInstances.map((inst, idx) => {
                         const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
                           ? formatDutchPlate((inst.state.licensePlate as string).toUpperCase())
@@ -1271,7 +1261,7 @@ export const StepOffer = ({
                           <div key={inst.id} className="mb-3">
                             <div className="flex items-center justify-between mb-1">
                               <p className="text-sm font-medium text-muted-foreground">{plateLabel}</p>
-                              {carInstances.length > 1 && (
+                              <div className="flex items-center gap-2">
                                 <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
                                   label: plateLabel,
                                   action: () => {
@@ -1290,7 +1280,8 @@ export const StepOffer = ({
                                 })}>
                                   Remove
                                 </Button>
-                              )}
+                                <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("car")}>Compare</Button>
+                              </div>
                             </div>
                             <InsuranceOfferCard
                               insurerName={insurer.name}
@@ -1313,33 +1304,26 @@ export const StepOffer = ({
                   const insurer = INSURER_DATA.home;
                   return (
                     <div key="home" className="mb-8">
-                      <div className="flex items-center justify-between mb-3">
-                        <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-                        <div className="flex items-center gap-2">
-                          {selectedInsurances.length > 1 && (
-                            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("home") })}>
-                              Remove
-                            </Button>
-                          )}
-                          <Button variant="outline" size="sm">Compare</Button>
-                        </div>
-                      </div>
+                      <h2 className="text-2xl font-bold text-foreground mb-3">{ins.label}</h2>
                       {(["household", "building"] as const).map((sub) => {
                         const subLabel = sub === "household" ? "Household goods" : "Building";
                         return (
                           <div key={sub} className="mb-3">
                             <div className="flex items-center justify-between mb-1">
                               <p className="text-sm font-medium text-muted-foreground">{subLabel}</p>
-                              <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
-                                label: subLabel,
-                                action: () => {
-                                  const newChoice = sub === "household" ? "building" : "household";
-                                  handleUpdateProductState("home", "coverageChoice", newChoice);
-                                  setActiveHomeTab(newChoice as "household" | "building");
-                                },
-                              })}>
-                                Remove
-                              </Button>
+                              <div className="flex items-center gap-2">
+                                <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({
+                                  label: subLabel,
+                                  action: () => {
+                                    const newChoice = sub === "household" ? "building" : "household";
+                                    handleUpdateProductState("home", "coverageChoice", newChoice);
+                                    setActiveHomeTab(newChoice as "household" | "building");
+                                  },
+                                })}>
+                                  Remove
+                                </Button>
+                                <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("home")}>Compare</Button>
+                              </div>
                             </div>
                             <InsuranceOfferCard
                               insurerName={insurer.name}
