@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from "react";
+import { toast } from "sonner";
 import { Check, BadgePercent, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Shield, Play, Star, Gift, Award, Clock } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -639,21 +640,15 @@ export const StepOffer = ({
           </div>
         </div>
 
-        <div className="relative mt-8">
-          <div className="absolute -top-[28px] left-6 z-10 flex items-center gap-2 bg-primary/5 border border-primary/20 border-b-0 rounded-t-xl px-4 py-1.5">
-            <Award className="w-3.5 h-3.5 text-primary" />
-            <span className="text-primary text-xs font-semibold">Best and cheapest choice</span>
-          </div>
-          <InsuranceOfferCard
-            insurerName={insurer.name}
-            logoSrc={insurer.logoSrc}
-            originalPrice={insurer.monthlyPrice}
-            monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-            savingsPercent={insurer.savingsPercent}
-            happyClients={insurer.happyClients}
-            onViewDetails={() => setActiveTab(id)}
-          />
-        </div>
+        <InsuranceOfferCard
+          insurerName={insurer.name}
+          logoSrc={insurer.logoSrc}
+          originalPrice={insurer.monthlyPrice}
+          monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+          savingsPercent={insurer.savingsPercent}
+          happyClients={insurer.happyClients}
+          onViewDetails={() => setActiveTab(id)}
+        />
       </div>
     );
   };
@@ -702,33 +697,32 @@ export const StepOffer = ({
 
     return (
       <div className="mb-6">
-        {/* Action buttons row */}
-        <div className="flex items-center justify-end mb-2 gap-2">
-          {canRemove && (
-            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
-              Remove
-            </Button>
-          )}
-          <Button variant="outline" size="sm" onClick={() => setCompareModalProduct(productId)}>Compare</Button>
-        </div>
-
-        {/* Badge overlapping card top border */}
-        <div className="relative mt-8">
-          <div className="absolute -top-[28px] left-6 z-10 flex items-center gap-2 bg-primary/5 border border-primary/20 border-b-0 rounded-t-xl px-5 py-2">
+        {/* Badge + action buttons in one row */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2 bg-primary/5 border border-primary/20 rounded-full px-5 py-3">
             <Award className="w-4 h-4 text-primary" />
             <span className="text-primary text-sm font-semibold">Best and cheapest choice</span>
           </div>
-          <InsuranceOfferCard
-            insurerName={insurer.name}
-            logoSrc={insurer.logoSrc}
-            originalPrice={insurer.monthlyPrice}
-            monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-            savingsPercent={insurer.savingsPercent}
-            happyClients={insurer.happyClients}
-            actionLabel="Policy conditions"
-            onViewDetails={() => setPolicyModalOpen(true)}
-          />
+          <div className="flex items-center gap-2">
+            {canRemove && (
+              <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
+                Remove
+              </Button>
+            )}
+            <Button variant="outline" size="sm" onClick={() => setCompareModalProduct(productId)}>Compare</Button>
+          </div>
         </div>
+
+        <InsuranceOfferCard
+          insurerName={insurer.name}
+          logoSrc={insurer.logoSrc}
+          originalPrice={insurer.monthlyPrice}
+          monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+          savingsPercent={insurer.savingsPercent}
+          happyClients={insurer.happyClients}
+          actionLabel="Policy conditions"
+          onViewDetails={() => setPolicyModalOpen(true)}
+        />
 
         <h2 className="text-2xl font-bold text-foreground mt-6 mb-3">Details</h2>
       </div>
@@ -938,6 +932,7 @@ export const StepOffer = ({
           <div className="flex items-center justify-center min-h-screen">
             <StepLoading onComplete={() => {
               onAddInsurances?.(addFlowQueue);
+              const addedNames = addFlowQueue.map(id => INSURANCE_TYPES.find(t => t.id === id)?.label || id);
               for (const id of addFlowQueue) {
                 const config = getProductConfig(id);
                 if (config?.offerInitialState) {
@@ -951,6 +946,8 @@ export const StepOffer = ({
               setAddFlowQueue([]);
               setAddFlowCompletedTabs([]);
               setAddFlowPhase("preferences");
+              setActiveTab("all");
+              toast.success(`Your ${addedNames.join(" & ")} offer${addedNames.length > 1 ? "s are" : " is"} ready to review!`);
             }} />
           </div>
         </div>
@@ -1173,7 +1170,7 @@ export const StepOffer = ({
           </button>
 
           {discountLocked ? (
-            <button disabled className="w-full mt-3 inline-flex items-center justify-center gap-2 border border-success/30 bg-success/5 rounded-full px-6 py-3 text-sm font-medium text-success cursor-not-allowed">
+            <button disabled className="w-full mt-3 inline-flex items-center justify-center gap-2 border border-border bg-background rounded-full px-6 py-3 text-sm font-medium text-foreground cursor-not-allowed">
               <Check className="w-4 h-4" />
               Discount locked {lockCountdown}
             </button>
@@ -1336,21 +1333,15 @@ export const StepOffer = ({
                                 <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("car")}>Compare</Button>
                               </div>
                             </div>
-                            <div className="relative mt-8">
-                              <div className="absolute -top-[28px] left-6 z-10 flex items-center gap-2 bg-primary/5 border border-primary/20 border-b-0 rounded-t-xl px-4 py-1.5">
-                                <Award className="w-3.5 h-3.5 text-primary" />
-                                <span className="text-primary text-xs font-semibold">Best and cheapest choice</span>
-                              </div>
-                              <InsuranceOfferCard
-                                insurerName={insurer.name}
-                                logoSrc={insurer.logoSrc}
-                                originalPrice={insurer.monthlyPrice}
-                                monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-                                savingsPercent={insurer.savingsPercent}
-                                happyClients={insurer.happyClients}
-                                onViewDetails={() => { setActiveCarIdx(idx); setActiveTab("car"); }}
-                              />
-                            </div>
+                            <InsuranceOfferCard
+                              insurerName={insurer.name}
+                              logoSrc={insurer.logoSrc}
+                              originalPrice={insurer.monthlyPrice}
+                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+                              savingsPercent={insurer.savingsPercent}
+                              happyClients={insurer.happyClients}
+                              onViewDetails={() => { setActiveCarIdx(idx); setActiveTab("car"); }}
+                            />
                           </div>
                         );
                       })}
@@ -1384,21 +1375,15 @@ export const StepOffer = ({
                                 <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("home")}>Compare</Button>
                               </div>
                             </div>
-                            <div className="relative mt-8">
-                              <div className="absolute -top-[28px] left-6 z-10 flex items-center gap-2 bg-primary/5 border border-primary/20 border-b-0 rounded-t-xl px-4 py-1.5">
-                                <Award className="w-3.5 h-3.5 text-primary" />
-                                <span className="text-primary text-xs font-semibold">Best and cheapest choice</span>
-                              </div>
-                              <InsuranceOfferCard
-                                insurerName={insurer.name}
-                                logoSrc={insurer.logoSrc}
-                                originalPrice={insurer.monthlyPrice}
-                                monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-                                savingsPercent={insurer.savingsPercent}
-                                happyClients={insurer.happyClients}
-                                onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
-                              />
-                            </div>
+                            <InsuranceOfferCard
+                              insurerName={insurer.name}
+                              logoSrc={insurer.logoSrc}
+                              originalPrice={insurer.monthlyPrice}
+                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+                              savingsPercent={insurer.savingsPercent}
+                              happyClients={insurer.happyClients}
+                              onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
+                            />
                           </div>
                         );
                       })}
