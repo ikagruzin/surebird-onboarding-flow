@@ -1,32 +1,38 @@
 
 
-## Offer Page — 5 Fixes
+## Trustpilot Reviews — Use Real SVG Assets
 
-### 1. Badge: Move "All offers" style to Detail page, hide from All offers
+### What changes
 
-The "All offers" tab has the correct tab-overlap badge style (lines 642-646: `rounded-t-xl`, smaller text). The detail page (lines 716-720) has a different implementation that overlays the card incorrectly.
+Replace the hand-coded Trustpilot stars, logo, and score in the review carousel with the real uploaded SVG assets. Update review count and make it a clickable link.
 
-**Fix**: Copy the All Offers badge style (tab-overlap with `absolute -top-[28px]`) into `renderDetailTabOfferCard`, replacing the current badge. Then remove the badge from `renderOfferCard` (All offers) entirely — render `InsuranceOfferCard` directly without the `relative mt-8` wrapper and badge div.
+### Assets to copy into `src/assets/`
 
-Increase badge height on detail page with `py-2.5` (up from `py-1.5` used on All offers).
+| Source | Destination | Usage |
+|--------|-------------|-------|
+| `user-uploads://star.svg` | `src/assets/trustpilot-star.svg` | Individual star in review cards |
+| `user-uploads://Logo_trustpilot.svg` | `src/assets/trustpilot-logo.svg` (overwrite existing) | Logo in overview card header |
+| `user-uploads://Review_Score.svg` | `src/assets/trustpilot-score.svg` | Large "4.6" score with stars in overview card |
 
-### 2. Lock button: Keep original styling when locked
+### Changes in `step-offer.tsx`
 
-Currently when locked (line 1176), the button uses green styling (`border-success/30 bg-success/5 text-success`). Change it to match the unlocked button style: `border border-border text-foreground bg-background` with a `Check` icon and countdown, but same colors as the original outline button.
+**1. Replace `TrustpilotStars` component** (lines 489-501):
+Instead of rendering lucide `Star` icons inside colored divs, render `<img src={trustpilotStar} />` repeated per star count. For unfilled stars, apply a grayscale/opacity filter or skip rendering (the star.svg is already the green Trustpilot square style).
 
-### 3. After adding product → redirect to "All offers" + success toast
+**2. Trustpilot overview card** (lines 533-544):
+- Replace the `<Star>` icon + "Trustpilot" text with `<img src={trustpilotLogo} />` (the full logo SVG)
+- Replace the `<span>4.2</span>` + `<TrustpilotStars count={4}>` block with `<img src={trustpilotScore} />` (the score SVG already contains "4.6", the star row, and "Excellent" text)
+- Change `"2,466 Trustpilot reviews"` to a clickable `<a>` tag: `"123 reviews"` linking to `https://nl.trustpilot.com/review/surebird.nl?utm_medium=trustbox&utm_source=MicroReviewCount` with `target="_blank" rel="noopener noreferrer"`
 
-In the `addFlowPhase === "loading"` completion handler (line 939-953), after `onAddInsurances` and state init:
-- Set `setActiveTab("all")` to redirect to All offers
-- Show a sonner toast: `toast.success("Your [product names] offer is ready to review!")`
-
-### 4. Badge height increase on detail page
-
-Use `py-2.5` and slightly larger text (`text-sm` instead of `text-xs`) for the detail page badge to make it taller than the All offers version.
+**3. Individual review cards** (lines 553-555):
+- Replace `<TrustpilotStars count={review.rating} />` with a row of `<img src={trustpilotStar} />` images (one per rating point), keeping the `{review.rating}.0` text label
 
 ### File changes
 
 | File | Change |
 |------|--------|
-| `src/components/onboarding/step-offer.tsx` | (1) Move tab-overlap badge style to detail page, remove from All offers. (2) Change locked button to original outline styling. (3) Add `setActiveTab("all")` + `toast.success(...)` after add-flow loading completes. |
+| `src/assets/trustpilot-star.svg` | New — copy from upload |
+| `src/assets/trustpilot-logo.svg` | Overwrite with new upload |
+| `src/assets/trustpilot-score.svg` | New — copy from upload |
+| `src/components/onboarding/step-offer.tsx` | Import new SVG assets. Replace `TrustpilotStars` to use real star SVG. Replace overview card header/score with logo and score SVGs. Change review count to "123 reviews" as clickable link. |
 
