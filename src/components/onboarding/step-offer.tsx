@@ -283,7 +283,8 @@ export const StepOffer = ({
       };
       return { ...prev, car: { ...prev.car, __carInstances: instances } };
     });
-  }, [carInstances]);
+    triggerRecalc();
+  }, [carInstances, triggerRecalc]);
 
   const FAQ_DATA = [
     {
