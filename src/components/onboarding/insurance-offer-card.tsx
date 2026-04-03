@@ -8,6 +8,7 @@ interface InsuranceOfferCardProps {
   savingsPercent?: number;
   happyClients: string;
   onViewDetails?: () => void;
+  actionLabel?: string;
 }
 
 export const InsuranceOfferCard = ({
