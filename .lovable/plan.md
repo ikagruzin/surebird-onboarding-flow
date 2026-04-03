@@ -1,55 +1,73 @@
+## Offer Page — 5 Feature Updates
 
+### 1. "Best and cheapest choice" Badge — Match Design Reference
 
-## Offer Page — 5 Changes
+The current badge uses `bg-primary/10 border border-primary/20` with an `Award` icon inline. The user's design (My_design.png) shows a different style: the badge has a **ribbon/medal icon** (not the Award icon), text is **bolder**, and the badge has a more pronounced pill shape with subtle shadow.
 
-### 1. Home & Car: Remove/Compare only on sub-products, not parent
+**Changes to `renderDetailTabOfferCard`** (line ~664-668):
+- Replace `Award` icon with a custom ribbon SVG or use `Medal` from lucide (closest match)
+- Increase padding to `px-5 py-2.5`
+- Add subtle shadow: `shadow-sm`
+- Use `font-bold` instead of `font-semibold`
+- Ensure the badge background matches the screenshot: lighter blue tint with visible border
 
-**All offers tab**: When Home has "both" or Car has multiple instances, the parent heading row should NOT show Remove/Compare buttons. Only each sub-item (Household/Building cards, individual car instance cards) gets Remove and Compare buttons.
+Apply the same fix to the compare modal badge (line ~1565) and the "All offers" tab badge (line ~1242).
 
-**Detail tabs**: Same logic — Remove/Compare appear per sub-product (per car instance pill, per home sub-tab), not at the top level.
+### 2. Recalculating Overlay — Cover Entire Page
 
-For single car or single home sub-product, the buttons stay on the product level as today.
+Currently the recalculating overlay only covers the detail cards area (lines 1411-1417). Change it to cover the **entire page** (full-screen overlay like the add flow overlay) so it's visible regardless of scroll position.
 
-### 2. Align badge + buttons in one row on detail tabs
+**Changes**:
+- Move the overlay from inside the detail cards `<div className="relative">` to a `fixed inset-0 z-50` overlay
+- Keep the spinning Surebird logo centered on screen
+- Apply to all products when any preference changes (already triggered by `triggerRecalc`)
 
-In `renderDetailTabOfferCard`, change the layout so the "Best and cheapest choice" badge and the Remove/Compare buttons sit on the same row:
+### 3. Lock Discount for 24h — Full Flow
 
-```text
-[🏆 Best and cheapest choice]          [Remove] [Compare]
-```
+The "Lock discount for 24h" button (line ~1132) currently does nothing. Implement:
 
-Use `flex items-center justify-between mb-4` as the wrapper. Badge on the left, buttons on the right.
+**A. Modal with Taco message + form:**
+- Taco avatar + message: "Please enter your details to lock the discount for 24h and save your offer"
+- Form fields: Name (pre-filled from `firstName`), Email address, Phone number (all using `FloatingLabelInput`)
+- Two checkboxes:
+  - "Yes, keep comparing offers monthly and send me updates and offers" (checked by default)
+  - "I agree to the privacy policy and terms and conditions" (unchecked, required) — with "privacy policy", "terms", and "conditions" as blue links
+- CTA button: "Lock the discount" (primary styled, full-width, `rounded-full`)
 
-### 3. Compare modal with competitor insurances
+**B. Success state:**
+- After clicking "Lock the discount", show success message inside the same modal: "Your discount is locked for 24 hours!"
+- Close modal after brief delay
 
-When "Compare" is clicked, open a modal/dialog showing:
-- **Current proposed insurance** at the top (highlighted with the "Best and cheapest choice" badge)
-- **Below**: A list of 2-3 alternative insurers with higher prices
+**C. Button state change:**
+- After locking, the button text changes to "Discount locked" with a countdown timer showing remaining time (e.g., "23:59:00")
+- Button becomes disabled with a muted/success style
+- Timer counts down in real-time using `setInterval`
 
-The alternatives are mock data — different insurer names, slightly higher prices, same structure as `InsuranceOfferCard`. The modal uses `DialogContent` with a scrollable body.
+**New state**: `discountLocked: boolean`, `discountLockedAt: number | null`, `showLockModal: boolean`, `lockFormPhase: "form" | "success"`
 
-Add state `compareModalProduct: string | null` to track which product's compare modal is open.
+### 4. Price Breakdown Modal
 
-### 4. Reduce gap between "Details" heading and first card
+The "Check the price breakdown" link (line ~1139) currently does nothing. Implement a modal showing:
 
-Change `mt-8 mb-6` on the "Details" `<h2>` to `mt-6 mb-3` to bring it closer to the Own Risk card below.
+- **Title**: "Price breakdown"
+- **Line items per product**: Product name → base premium
+- **Service costs**: "Surebird service costs" with an `Info` tooltip icon explaining: "This covers continuous monitoring of your policies, 24/7 support, and smart switching technology to keep your premiums low."
+- **Insurance tax**: "Insurance tax (21%)" 
+- **Bundle discount**: Show the discount percentage and amount saved
+- **Annual payment discount** (if active): Show the additional savings
+- **Total**: Bold total per month
+- Modal uses the same custom modal pattern (fixed overlay + centered card)
 
-### 5. Loading animation on preference/offer changes using Surebird logo
+### 5. Add Product Loading — Centered Full-Page Layout
 
-When any insurance detail or preference option is changed (via `handleUpdateProductState`, `handleUpdateOfferState`, etc.), show a brief loading overlay on the detail cards area. The overlay displays the uploaded Surebird logo SVG spinning/pulsing as a loading indicator.
+The loading page in the add-product overlay (lines 892-914) is not centered. Currently it renders `StepLoading` inside `max-w-3xl mx-auto px-6 py-12`. Match the original loading step layout:
 
-**Implementation**:
-- Copy the uploaded SVG to `src/assets/logo-surebird-icon.svg`
-- Add state `isRecalculating: boolean` in `step-offer.tsx`
-- When any offer/product state update handler fires, set `isRecalculating = true`, then after a short delay (e.g., 800ms) set it back to `false`
-- While `isRecalculating` is true, render a semi-transparent overlay on top of the detail cards area with the Surebird icon rotating (`animate-spin` but slower, custom animation ~2s)
-- This is distinct from the full-page `StepLoading` — it's a localized inline overlay
+- Make the loading container `flex items-center justify-center min-h-screen`
+- Hide the sidebar (keep it in DOM but not visible — already the case since it's an overlay)
+- Center `StepLoading` vertically and horizontally within the full-page overlay
 
 ### File Changes
 
 | File | Change |
 |------|--------|
-| `src/assets/logo-surebird-icon.svg` | Copy uploaded SVG file |
-| `src/components/onboarding/step-offer.tsx` | (1) Remove Remove/Compare from parent Car/Home headers on All Offers when multiple sub-items exist; add Compare per sub-item. (2) Align badge + buttons in one row in `renderDetailTabOfferCard`. (3) Add compare modal state + render `Dialog` with current + alternative insurers. (4) Change "Details" heading margins. (5) Add `isRecalculating` state + overlay with spinning Surebird logo on state changes. |
-| `src/components/onboarding/insurance-offer-card.tsx` | No changes needed |
-
+| `src/components/onboarding/step-offer.tsx` | (1) Update badge styling in 3 locations. (2) Move recalculating overlay to fixed full-page. (3) Add Lock Discount modal with form, success state, countdown timer. (4) Add Price Breakdown modal. (5) Center the add-product loading phase. New states: `showLockModal`, `lockFormPhase`, `discountLocked`, `discountLockedAt`, `showPriceBreakdown`. |
