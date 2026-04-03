@@ -237,12 +237,19 @@ export const StepOffer = ({
     return initial;
   });
 
+  const triggerRecalc = useCallback(() => {
+    setIsRecalculating(true);
+    if (recalcTimerRef.current) clearTimeout(recalcTimerRef.current);
+    recalcTimerRef.current = setTimeout(() => setIsRecalculating(false), 800);
+  }, []);
+
   const handleUpdateOfferState = (productId: string, key: string, value: any) => {
     setLocalOfferStates((prev) => ({
       ...prev,
       [productId]: { ...(prev[productId] || {}), [key]: value },
     }));
     onUpdateOfferState?.(productId, key, value);
+    triggerRecalc();
   };
 
   const handleUpdateProductState = (productId: string, key: string, value: any) => {
@@ -251,6 +258,7 @@ export const StepOffer = ({
       [productId]: { ...(prev[productId] || {}), [key]: value },
     }));
     onUpdateProductState?.(productId, key, value);
+    triggerRecalc();
   };
 
   // ── Car-specific per-instance handlers ──
