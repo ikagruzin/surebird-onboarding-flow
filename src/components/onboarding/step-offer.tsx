@@ -1,5 +1,8 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from "react";
-import { Check, BadgePercent, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Shield, Play, Star, Gift, Award } from "lucide-react";
+import { Check, BadgePercent, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Shield, Play, Star, Gift, Award, Clock } from "lucide-react";
+import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Progress } from "@/components/ui/progress";
 import { StickyFooter } from "./sticky-footer";
 import { Button } from "@/components/ui/button";
@@ -208,6 +211,21 @@ export const StepOffer = ({
   const [isRecalculating, setIsRecalculating] = useState(false);
   const recalcTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Lock discount states
+  const [showLockModal, setShowLockModal] = useState(false);
+  const [lockFormPhase, setLockFormPhase] = useState<"form" | "success">("form");
+  const [discountLocked, setDiscountLocked] = useState(false);
+  const [discountLockedAt, setDiscountLockedAt] = useState<number | null>(null);
+  const [lockName, setLockName] = useState(firstName || "");
+  const [lockEmail, setLockEmail] = useState("");
+  const [lockPhone, setLockPhone] = useState("");
+  const [lockMarketing, setLockMarketing] = useState(true);
+  const [lockPrivacy, setLockPrivacy] = useState(false);
+  const [lockCountdown, setLockCountdown] = useState("24:00:00");
+
+  // Price breakdown state
+  const [showPriceBreakdown, setShowPriceBreakdown] = useState(false);
+
   // Local product states (copy from Set Preferences, editable on offer page)
   const [localProductStates, setLocalProductStates] = useState<Record<string, Record<string, any>>>(() => ({ ...productStates }));
 
@@ -242,6 +260,24 @@ export const StepOffer = ({
     if (recalcTimerRef.current) clearTimeout(recalcTimerRef.current);
     recalcTimerRef.current = setTimeout(() => setIsRecalculating(false), 800);
   }, []);
+
+  // Countdown timer for locked discount
+  useEffect(() => {
+    if (!discountLockedAt) return;
+    const interval = setInterval(() => {
+      const diff = 24 * 3600 * 1000 - (Date.now() - discountLockedAt);
+      if (diff <= 0) {
+        setLockCountdown("00:00:00");
+        clearInterval(interval);
+        return;
+      }
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      setLockCountdown(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [discountLockedAt]);
 
   const handleUpdateOfferState = (productId: string, key: string, value: any) => {
     setLocalOfferStates((prev) => ({
@@ -892,7 +928,7 @@ export const StepOffer = ({
     if (addFlowPhase === "loading") {
       return (
         <div className="fixed inset-0 z-[70] bg-background overflow-y-auto">
-          <div className="max-w-3xl mx-auto px-6 py-12">
+          <div className="flex items-center justify-center min-h-screen">
             <StepLoading onComplete={() => {
               onAddInsurances?.(addFlowQueue);
               for (const id of addFlowQueue) {
@@ -1129,14 +1165,24 @@ export const StepOffer = ({
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          <button className="w-full mt-3 inline-flex items-center justify-center gap-2 border border-border rounded-full px-6 py-3 text-sm font-medium text-foreground hover:bg-muted transition-colors">
-            <Lock className="w-4 h-4" />
-            Lock discount for 24h
-          </button>
+          {discountLocked ? (
+            <button disabled className="w-full mt-3 inline-flex items-center justify-center gap-2 border border-success/30 bg-success/5 rounded-full px-6 py-3 text-sm font-medium text-success cursor-not-allowed">
+              <Check className="w-4 h-4" />
+              Discount locked {lockCountdown}
+            </button>
+          ) : (
+            <button
+              onClick={() => { setShowLockModal(true); setLockFormPhase("form"); }}
+              className="w-full mt-3 inline-flex items-center justify-center gap-2 border border-border rounded-full px-6 py-3 text-sm font-medium text-foreground hover:bg-muted transition-colors"
+            >
+              <Lock className="w-4 h-4" />
+              Lock discount for 24h
+            </button>
+          )}
 
           <div className="flex items-start gap-2 mt-4 text-xs text-muted-foreground">
             <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-            <p>All prices include 21% insurance tax and service costs. <span className="underline cursor-pointer">Check the price breakdown</span></p>
+            <p>All prices include 21% insurance tax and service costs. <span className="underline cursor-pointer" onClick={() => setShowPriceBreakdown(true)}>Check the price breakdown</span></p>
           </div>
         </div>
       </div>
@@ -1407,14 +1453,8 @@ export const StepOffer = ({
               {/* Offer card on detail tabs (no h2 title) */}
               {renderDetailTabOfferCard(activeTab)}
 
-              {/* Detail cards with recalculating overlay */}
+              {/* Detail cards */}
               <div className="relative">
-              {isRecalculating && (
-                <div className="absolute inset-0 bg-background/60 z-20 flex flex-col items-center justify-center backdrop-blur-[1px] rounded-2xl">
-                  <img src={surebirdIcon} alt="Loading" className="w-12 h-12 animate-[spin_2s_linear_infinite]" />
-                  <p className="text-sm font-medium text-muted-foreground mt-4">Updating prices...</p>
-                </div>
-              )}
               {activeTab === "travel" && localProductStates.travel ? (
                 <TravelOfferCards
                   productState={localProductStates.travel}
@@ -1600,6 +1640,151 @@ export const StepOffer = ({
           </>
         );
       })()}
+
+      {/* Full-page recalculating overlay */}
+      {isRecalculating && (
+        <div className="fixed inset-0 z-[60] bg-background/60 backdrop-blur-[1px] flex flex-col items-center justify-center">
+          <img src={surebirdIcon} alt="Loading" className="w-16 h-16 animate-[spin_2s_linear_infinite]" />
+          <p className="text-lg font-medium text-muted-foreground mt-4">Updating prices...</p>
+        </div>
+      )}
+
+      {/* Lock discount modal */}
+      {showLockModal && (
+        <>
+          <div className="fixed inset-0 z-[60] bg-black/40" onClick={() => setShowLockModal(false)} />
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <div className="bg-background rounded-2xl border border-border shadow-xl max-w-lg w-full p-8 relative">
+              <button
+                onClick={() => setShowLockModal(false)}
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
+              >
+                <X className="w-5 h-5 text-foreground" />
+              </button>
+
+              {lockFormPhase === "form" ? (
+                <>
+                  <TacoMessage message="Please enter your details to lock the discount for 24h and save your offer" />
+                  <div className="space-y-4">
+                    <FloatingLabelInput label="Name" value={lockName} onChange={(e) => setLockName(e.target.value)} />
+                    <FloatingLabelInput label="Email address" type="email" value={lockEmail} onChange={(e) => setLockEmail(e.target.value)} />
+                    <FloatingLabelInput label="Phone number" type="tel" value={lockPhone} onChange={(e) => setLockPhone(e.target.value)} />
+                  </div>
+                  <div className="space-y-3 mt-6">
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <Checkbox checked={lockMarketing} onCheckedChange={(v) => setLockMarketing(!!v)} className="mt-0.5" />
+                      <span className="text-sm text-foreground">Yes, keep comparing offers monthly and send me updates and offers</span>
+                    </label>
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <Checkbox checked={lockPrivacy} onCheckedChange={(v) => setLockPrivacy(!!v)} className="mt-0.5" />
+                      <span className="text-sm text-foreground">
+                        I agree to the <a href="#" className="text-primary underline">privacy policy</a> and <a href="#" className="text-primary underline">terms and conditions</a>
+                      </span>
+                    </label>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setLockFormPhase("success");
+                      setDiscountLocked(true);
+                      setDiscountLockedAt(Date.now());
+                      setTimeout(() => setShowLockModal(false), 2000);
+                    }}
+                    disabled={!lockPrivacy}
+                    className="w-full mt-6 inline-flex items-center justify-center gap-2 text-success-foreground px-7 py-3.5 rounded-full font-semibold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
+                      boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
+                    }}
+                  >
+                    <Lock className="w-4 h-4" />
+                    Lock the discount
+                  </button>
+                </>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
+                    <Check className="w-8 h-8 text-success" />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground mb-2">Your discount is locked for 24 hours!</h3>
+                  <p className="text-sm text-muted-foreground">We\'ll send you a confirmation email shortly.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Price breakdown modal */}
+      {showPriceBreakdown && (
+        <>
+          <div className="fixed inset-0 z-[60] bg-black/40" onClick={() => setShowPriceBreakdown(false)} />
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <div className="bg-background rounded-2xl border border-border shadow-xl max-w-lg w-full p-6 relative">
+              <button
+                onClick={() => setShowPriceBreakdown(false)}
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
+              >
+                <X className="w-5 h-5 text-foreground" />
+              </button>
+
+              <h3 className="text-xl font-bold text-foreground mb-6">Price breakdown</h3>
+
+              <div className="space-y-3 text-sm">
+                {calcLineItems.map((item) => (
+                  <div key={item.key} className="flex justify-between items-center">
+                    <span className="text-foreground">{item.label}</span>
+                    <span className="font-medium text-foreground">\u20AC{item.originalPrice.toFixed(2)}</span>
+                  </div>
+                ))}
+
+                <div className="border-t border-border pt-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-foreground flex items-center gap-1.5">
+                      Surebird service costs
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="w-3.5 h-3.5 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            <p>This covers continuous monitoring of your policies, 24/7 support, and smart switching technology to keep your premiums low.</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </span>
+                    <span className="font-medium text-foreground">\u20AC2.50</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <span className="text-foreground">Insurance tax (21%)</span>
+                  <span className="font-medium text-foreground">\u20AC{(totalBeforeDiscount * 0.21).toFixed(2)}</span>
+                </div>
+
+                <div className="border-t border-border pt-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-foreground">Bundle discount (-{discountPercent}%)</span>
+                    <span className="font-medium" style={{ color: 'hsl(0 74% 42%)' }}>-\u20AC{discountAmount.toFixed(2)}</span>
+                  </div>
+                  {annualDiscount && (
+                    <div className="flex justify-between items-center mt-2">
+                      <span className="text-foreground">Annual payment discount (-5%)</span>
+                      <span className="font-medium" style={{ color: 'hsl(0 74% 42%)' }}>-\u20AC{annualPaymentSaving.toFixed(2)}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="border-t border-border pt-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-lg font-bold text-foreground">Total per month</span>
+                    <span className="text-lg font-bold text-foreground">\u20AC{totalAfterDiscount.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Policy conditions modal */}
       {policyModalOpen && (
