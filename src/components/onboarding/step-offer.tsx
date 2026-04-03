@@ -1538,6 +1538,69 @@ export const StepOffer = ({
       {renderRemoveConfirm()}
       {renderAddFlowOverlay()}
 
+      {/* Compare modal */}
+      {compareModalProduct && (() => {
+        const insurer = INSURER_DATA[compareModalProduct];
+        if (!insurer) return null;
+        const COMPETITORS = [
+          { name: "Centraal Beheer", happyClients: "120+ happy clients", priceMultiplier: 1.15 },
+          { name: "OHRA", happyClients: "90+ happy clients", priceMultiplier: 1.22 },
+          { name: "Univé", happyClients: "75+ happy clients", priceMultiplier: 1.30 },
+        ];
+        return (
+          <>
+            <div className="fixed inset-0 z-[60] bg-black/40" onClick={() => setCompareModalProduct(null)} />
+            <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+              <div className="relative w-full max-w-lg max-h-[85vh] bg-background rounded-2xl border border-border shadow-xl overflow-y-auto p-6">
+                <button
+                  onClick={() => setCompareModalProduct(null)}
+                  className="absolute top-4 right-4 w-9 h-9 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
+                >
+                  <X className="w-5 h-5 text-foreground" />
+                </button>
+                <h2 className="text-xl font-bold text-foreground mb-6">Compare insurers</h2>
+
+                {/* Current (recommended) */}
+                <div className="mb-2">
+                  <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-3 py-1.5 w-fit mb-3">
+                    <Award className="w-3.5 h-3.5 text-primary" />
+                    <span className="text-primary text-xs font-semibold">Best and cheapest choice</span>
+                  </div>
+                  <InsuranceOfferCard
+                    insurerName={insurer.name}
+                    logoSrc={insurer.logoSrc}
+                    originalPrice={insurer.monthlyPrice}
+                    monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+                    savingsPercent={insurer.savingsPercent}
+                    happyClients={insurer.happyClients}
+                    actionLabel="Policy conditions"
+                    onViewDetails={() => { setCompareModalProduct(null); setPolicyModalOpen(true); }}
+                  />
+                </div>
+
+                {/* Alternatives */}
+                <div className="space-y-3 mt-4">
+                  {COMPETITORS.map((comp) => {
+                    const compPrice = insurer.monthlyPrice * comp.priceMultiplier;
+                    return (
+                      <InsuranceOfferCard
+                        key={comp.name}
+                        insurerName={comp.name}
+                        originalPrice={compPrice}
+                        monthlyPrice={compPrice}
+                        happyClients={comp.happyClients}
+                        actionLabel="Policy conditions"
+                        onViewDetails={() => {}}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </>
+        );
+      })()}
+
       {/* Policy conditions modal */}
       {policyModalOpen && (
         <>
