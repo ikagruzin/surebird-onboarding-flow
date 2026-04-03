@@ -8,6 +8,7 @@ interface InsuranceOfferCardProps {
   savingsPercent?: number;
   happyClients: string;
   onViewDetails?: () => void;
+  actionLabel?: string;
 }
 
 export const InsuranceOfferCard = ({
@@ -18,6 +19,7 @@ export const InsuranceOfferCard = ({
   savingsPercent,
   happyClients,
   onViewDetails,
+  actionLabel = "View & Edit details",
 }: InsuranceOfferCardProps) => {
   return (
     <div className="border border-border rounded-3xl p-6 bg-card">
@@ -59,7 +61,7 @@ export const InsuranceOfferCard = ({
           onClick={onViewDetails}
           className="text-sm font-semibold text-foreground underline underline-offset-2 hover:text-foreground/80 transition-colors"
         >
-          View & Edit details
+          {actionLabel}
         </button>
       </div>
     </div>

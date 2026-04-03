@@ -1,5 +1,7 @@
-import { useState, useRef, useMemo, useCallback } from "react";
+import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { Check, BadgePercent, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Shield, Play, Star, Gift, Award } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { StickyFooter } from "./sticky-footer";
 import { Button } from "@/components/ui/button";
 import { InsuranceOfferCard } from "./insurance-offer-card";
 import logoNN from "@/assets/logo-nationale-nederlanden.svg";
@@ -194,9 +196,13 @@ export const StepOffer = ({
   const [addFlowQueue, setAddFlowQueue] = useState<string[]>([]);
   const [addFlowProduct, setAddFlowProduct] = useState<string | null>(null);
   const [addFlowPhase, setAddFlowPhase] = useState<"preferences" | "loading">("preferences");
+  const [addFlowActiveTab, setAddFlowActiveTab] = useState<string>("");
+  const [addFlowCompletedTabs, setAddFlowCompletedTabs] = useState<string[]>([]);
   const addFlowRef = useRef<ProductFlowTabHandle>(null);
+  const addFlowRefs = useRef<Record<string, ProductFlowTabHandle | null>>({});
   const testimonialRef = useRef<HTMLDivElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
+  const [policyModalOpen, setPolicyModalOpen] = useState(false);
 
   // Local product states (copy from Set Preferences, editable on offer page)
   const [localProductStates, setLocalProductStates] = useState<Record<string, Record<string, any>>>(() => ({ ...productStates }));
@@ -569,15 +575,18 @@ export const StepOffer = ({
       <div key={id} className="mb-8">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-          {selectedInsurances.length > 1 && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setRemoveConfirm({ label: ins.label, action: () => { onRemoveInsurance?.(id); } })}
-            >
-              Remove
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {selectedInsurances.length > 1 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setRemoveConfirm({ label: ins.label, action: () => { onRemoveInsurance?.(id); } })}
+              >
+                Remove
+              </Button>
+            )}
+            <Button variant="outline" size="sm">Compare</Button>
+          </div>
         </div>
 
         <InsuranceOfferCard
@@ -637,13 +646,22 @@ export const StepOffer = ({
 
     return (
       <div className="mb-6">
-        {canRemove && (
-          <div className="flex justify-end mb-3">
+        {/* Action buttons */}
+        <div className="flex justify-end gap-2 mb-3">
+          {canRemove && (
             <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: removeLabel, action: removeAction })}>
               Remove
             </Button>
-          </div>
-        )}
+          )}
+          <Button variant="outline" size="sm">Compare</Button>
+        </div>
+
+        {/* Best and cheapest choice badge */}
+        <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2 w-fit mb-4">
+          <Award className="w-4 h-4 text-primary" />
+          <span className="text-primary text-sm font-semibold">Best and cheapest choice</span>
+        </div>
+
         <InsuranceOfferCard
           insurerName={insurer.name}
           logoSrc={insurer.logoSrc}
@@ -651,7 +669,11 @@ export const StepOffer = ({
           monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
           savingsPercent={insurer.savingsPercent}
           happyClients={insurer.happyClients}
+          actionLabel="Policy conditions"
+          onViewDetails={() => setPolicyModalOpen(true)}
         />
+
+        <h2 className="text-2xl font-bold text-foreground mt-8 mb-6">Details</h2>
       </div>
     );
   };
@@ -674,6 +696,8 @@ export const StepOffer = ({
     if (addModalSelection.length > 0) {
       setAddFlowQueue([...addModalSelection]);
       setAddFlowProduct(addModalSelection[0]);
+      setAddFlowActiveTab(addModalSelection[0]);
+      setAddFlowCompletedTabs([]);
       setAddFlowPhase("preferences");
     }
     setShowAddModal(false);
@@ -784,6 +808,69 @@ export const StepOffer = ({
     );
   };
 
+  // ── Add flow: progress polling ──
+  const [addFlowProgressTick, setAddFlowProgressTick] = useState(0);
+  useEffect(() => {
+    if (!addFlowProduct || addFlowPhase !== "preferences") return;
+    const interval = setInterval(() => setAddFlowProgressTick((t) => t + 1), 300);
+    return () => clearInterval(interval);
+  }, [addFlowProduct, addFlowPhase]);
+
+  const addFlowProgressPercent = useMemo(() => {
+    void addFlowProgressTick;
+    if (addFlowQueue.length === 0) return 0;
+    let totalSteps = 0;
+    let completedSteps = 0;
+    for (const id of addFlowQueue) {
+      const config = getProductConfig(id);
+      const stepCount = config?.stepDefs?.length || 3;
+      if (addFlowCompletedTabs.includes(id)) {
+        totalSteps += stepCount;
+        completedSteps += stepCount;
+      } else {
+        const flowRef = addFlowRefs.current[id];
+        if (flowRef?.progress) {
+          totalSteps += flowRef.progress.total;
+          completedSteps += flowRef.progress.completed;
+        } else {
+          totalSteps += stepCount;
+        }
+      }
+    }
+    return totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
+  }, [addFlowProgressTick, addFlowQueue, addFlowCompletedTabs]);
+
+  const handleAddFlowNext = () => {
+    const ref = addFlowRefs.current[addFlowActiveTab];
+    if (!ref) return;
+    const handled = ref.handleNext();
+    if (!handled) {
+      // Current tab complete
+      const flowState = ref.getState();
+      setLocalProductStates((prev) => ({ ...prev, [addFlowActiveTab]: flowState }));
+      const newCompleted = [...addFlowCompletedTabs, addFlowActiveTab];
+      setAddFlowCompletedTabs(newCompleted);
+      // Move to next uncompleted tab
+      const nextTab = addFlowQueue.find(id => !newCompleted.includes(id));
+      if (nextTab) {
+        setAddFlowActiveTab(nextTab);
+      } else {
+        // All done → loading
+        setAddFlowPhase("loading");
+      }
+    }
+  };
+
+  const handleAddFlowBack = () => {
+    const ref = addFlowRefs.current[addFlowActiveTab];
+    if (ref && ref.handleBack()) return;
+    // At first step of current tab → go to previous tab
+    const idx = addFlowQueue.indexOf(addFlowActiveTab);
+    if (idx > 0) {
+      setAddFlowActiveTab(addFlowQueue[idx - 1]);
+    }
+  };
+
   // ── Full-page add product overlay ──
   const renderAddFlowOverlay = () => {
     if (!addFlowProduct) return null;
@@ -793,95 +880,103 @@ export const StepOffer = ({
         <div className="fixed inset-0 z-[70] bg-background overflow-y-auto">
           <div className="max-w-3xl mx-auto px-6 py-12">
             <StepLoading onComplete={() => {
-              onAddInsurances?.([addFlowProduct]);
-              const config = getProductConfig(addFlowProduct);
-              if (config?.offerInitialState) {
-                setLocalOfferStates((prev) => ({
-                  ...prev,
-                  [addFlowProduct]: { ...(config.offerInitialState || {}) },
-                }));
+              onAddInsurances?.(addFlowQueue);
+              for (const id of addFlowQueue) {
+                const config = getProductConfig(id);
+                if (config?.offerInitialState) {
+                  setLocalOfferStates((prev) => ({
+                    ...prev,
+                    [id]: { ...(config.offerInitialState || {}) },
+                  }));
+                }
               }
-              const remaining = addFlowQueue.filter(id => id !== addFlowProduct);
-              if (remaining.length > 0) {
-                setAddFlowQueue(remaining);
-                setAddFlowProduct(remaining[0]);
-                setAddFlowPhase("preferences");
-              } else {
-                setAddFlowProduct(null);
-                setAddFlowQueue([]);
-                setAddFlowPhase("preferences");
-              }
+              setAddFlowProduct(null);
+              setAddFlowQueue([]);
+              setAddFlowCompletedTabs([]);
+              setAddFlowPhase("preferences");
             }} />
           </div>
         </div>
       );
     }
 
-    const productLabel = INSURANCE_TYPES.find(t => t.id === addFlowProduct)?.label || addFlowProduct;
-
     return (
       <div className="fixed inset-0 z-[70] bg-background overflow-y-auto">
-        <div className="max-w-3xl mx-auto px-6 py-12 pb-32">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-2xl font-bold text-foreground">Set preferences — {productLabel}</h1>
+        <div className="max-w-3xl mx-auto px-6 md:px-12 lg:px-16 py-12 pb-40">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-3xl font-bold text-foreground">Set your preferences</h1>
             <button
-              onClick={() => { setAddFlowProduct(null); setAddFlowQueue([]); }}
+              onClick={() => { setAddFlowProduct(null); setAddFlowQueue([]); setAddFlowCompletedTabs([]); }}
               className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
             >
               <X className="w-5 h-5 text-foreground" />
             </button>
           </div>
-          {addFlowProduct === "car" ? (
-            <MultiCarFlowTab
-              ref={addFlowRef}
-              productId="car"
-              isActive={true}
-            />
-          ) : (
-            <ProductFlowTab
-              ref={addFlowRef}
-              productId={addFlowProduct}
-              isActive={true}
-            />
-          )}
-          <div className="fixed bottom-0 left-0 right-0 z-[71] bg-background border-t border-border py-4 px-6">
-            <div className="max-w-3xl mx-auto flex items-center justify-between">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  if (addFlowRef.current && addFlowRef.current.handleBack()) return;
-                  setAddFlowProduct(null);
-                  setAddFlowQueue([]);
-                }}
-              >
-                Back
-              </Button>
-              <button
-                onClick={() => {
-                  if (addFlowRef.current) {
-                    const handled = addFlowRef.current.handleNext();
-                    if (!handled) {
-                      const flowState = addFlowRef.current.getState();
-                      setLocalProductStates((prev) => ({
-                        ...prev,
-                        [addFlowProduct]: flowState,
-                      }));
-                      setAddFlowPhase("loading");
-                    }
-                  }
-                }}
-                className="inline-flex items-center justify-center gap-2 text-success-foreground px-7 py-3 rounded-full font-semibold text-base transition-all"
-                style={{
-                  background: 'linear-gradient(180deg, hsl(121 72% 48%) 0%, hsl(121 72% 38%) 100%)',
-                  boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
-                }}
-              >
-                Next
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
+
+          {/* Product tabs */}
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            {addFlowQueue.map((id) => {
+              const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
+              const isActive = addFlowActiveTab === id;
+              const isComplete = addFlowCompletedTabs.includes(id);
+              return (
+                <button
+                  key={id}
+                  onClick={() => setAddFlowActiveTab(id)}
+                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border h-12 ${
+                    isActive
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-white border-border text-foreground"
+                  }`}
+                >
+                  {isComplete ? (
+                    <Check className={`w-6 h-6 ${isActive ? "text-background" : "text-success"}`} />
+                  ) : (
+                    <img
+                      src={ICON_MAP[ins.icon]}
+                      alt={ins.label}
+                      className={`w-6 h-6 ${isActive ? "brightness-0 invert" : ""}`}
+                    />
+                  )}
+                  {ins.label}
+                </button>
+              );
+            })}
           </div>
+
+          {/* Progress bar */}
+          <Progress value={addFlowProgressPercent} className="h-2 [&>div]:bg-success mb-6" />
+
+          {/* Product flow content — always mounted to preserve state */}
+          {addFlowQueue.map((id) => (
+            <div key={id} className={addFlowActiveTab === id ? "" : "hidden"}>
+              {id === "car" ? (
+                <MultiCarFlowTab
+                  ref={(r) => { addFlowRefs.current[id] = r; }}
+                  productId="car"
+                  isActive={addFlowActiveTab === id}
+                />
+              ) : (
+                <ProductFlowTab
+                  ref={(r) => { addFlowRefs.current[id] = r; }}
+                  productId={id}
+                  isActive={addFlowActiveTab === id}
+                />
+              )}
+            </div>
+          ))}
+
+          {/* Spacer for sticky footer */}
+          <div className="h-36 md:h-40" />
         </div>
+
+        {/* Sticky footer matching Set Preferences */}
+        <StickyFooter
+          savings={0}
+          onNext={handleAddFlowNext}
+          onBack={handleAddFlowBack}
+          showSavings={false}
+        />
       </div>
     );
   };
@@ -1145,11 +1240,14 @@ export const StepOffer = ({
                     <div key="car" className="mb-8">
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-                        {selectedInsurances.length > 1 && (
-                          <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("car") })}>
-                            Remove
-                          </Button>
-                        )}
+                        <div className="flex items-center gap-2">
+                          {selectedInsurances.length > 1 && (
+                            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("car") })}>
+                              Remove
+                            </Button>
+                          )}
+                          <Button variant="outline" size="sm">Compare</Button>
+                        </div>
                       </div>
                       {carInstances.map((inst, idx) => {
                         const plateLabel = inst.state.licensePlate && inst.state.plateConfirmed
@@ -1203,11 +1301,14 @@ export const StepOffer = ({
                     <div key="home" className="mb-8">
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-2xl font-bold text-foreground">{ins.label}</h2>
-                        {selectedInsurances.length > 1 && (
-                          <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("home") })}>
-                            Remove
-                          </Button>
-                        )}
+                        <div className="flex items-center gap-2">
+                          {selectedInsurances.length > 1 && (
+                            <Button variant="outline" size="sm" onClick={() => setRemoveConfirm({ label: ins.label, action: () => onRemoveInsurance?.("home") })}>
+                              Remove
+                            </Button>
+                          )}
+                          <Button variant="outline" size="sm">Compare</Button>
+                        </div>
                       </div>
                       {(["household", "building"] as const).map((sub) => {
                         const subLabel = sub === "household" ? "Household goods" : "Building";
@@ -1248,26 +1349,29 @@ export const StepOffer = ({
             <>
               {/* Car pill switcher above the offer card */}
               {activeTab === "car" && carInstances.length > 1 && (
-                <div className="flex flex-wrap items-center gap-2 mb-4">
-                  {carInstances.map((inst, i) => {
-                    const isActive = i === activeCarIdx;
-                    const label = getCarInstanceLabel(inst as CarInstance, i);
-                    return (
-                      <button
-                        key={inst.id}
-                        onClick={() => setActiveCarIdx(i)}
-                        className={cn(
-                          "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
-                          isActive
-                            ? "bg-foreground text-background border-foreground"
-                            : "bg-white border-border text-foreground hover:border-muted-foreground/30"
-                        )}
-                      >
-                        {label}
-                      </button>
-                    );
-                  })}
-                </div>
+                <>
+                  <div className="border-t border-border my-4" />
+                  <div className="flex flex-wrap items-center gap-2 mb-4">
+                    {carInstances.map((inst, i) => {
+                      const isActive = i === activeCarIdx;
+                      const label = getCarInstanceLabel(inst as CarInstance, i);
+                      return (
+                        <button
+                          key={inst.id}
+                          onClick={() => setActiveCarIdx(i)}
+                          className={cn(
+                            "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
+                            isActive
+                              ? "bg-foreground text-background border-foreground"
+                              : "bg-white border-border text-foreground hover:border-muted-foreground/30"
+                          )}
+                        >
+                          {label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
               )}
 
               {/* Home sub-product pill switcher */}
@@ -1275,25 +1379,28 @@ export const StepOffer = ({
                 const coverageChoice = localProductStates.home?.coverageChoice;
                 if (coverageChoice === "both") {
                   return (
-                    <div className="flex flex-wrap items-center gap-2 mb-4">
-                      {(["household", "building"] as const).map((sub) => {
-                        const isActive = activeHomeTab === sub;
-                        return (
-                          <button
-                            key={sub}
-                            onClick={() => setActiveHomeTab(sub)}
-                            className={cn(
-                              "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
-                              isActive
-                                ? "bg-foreground text-background border-foreground"
-                                : "bg-white border-border text-foreground hover:border-muted-foreground/30"
-                            )}
-                          >
-                            {sub === "household" ? "Household goods" : "Building"}
-                          </button>
-                        );
-                      })}
-                    </div>
+                    <>
+                      <div className="border-t border-border my-4" />
+                      <div className="flex flex-wrap items-center gap-2 mb-4">
+                        {(["household", "building"] as const).map((sub) => {
+                          const isActive = activeHomeTab === sub;
+                          return (
+                            <button
+                              key={sub}
+                              onClick={() => setActiveHomeTab(sub)}
+                              className={cn(
+                                "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all border",
+                                isActive
+                                  ? "bg-foreground text-background border-foreground"
+                                  : "bg-white border-border text-foreground hover:border-muted-foreground/30"
+                              )}
+                            >
+                              {sub === "household" ? "Household goods" : "Building"}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </>
                   );
                 }
                 return null;
@@ -1424,6 +1531,28 @@ export const StepOffer = ({
       {renderAddModal()}
       {renderRemoveConfirm()}
       {renderAddFlowOverlay()}
+
+      {/* Policy conditions modal */}
+      {policyModalOpen && (
+        <>
+          <div className="fixed inset-0 z-[60] bg-black/40" onClick={() => setPolicyModalOpen(false)} />
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <div className="relative w-full max-w-5xl h-[90vh] bg-background rounded-2xl border border-border shadow-xl overflow-hidden">
+              <button
+                onClick={() => setPolicyModalOpen(false)}
+                className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
+              >
+                <X className="w-5 h-5 text-foreground" />
+              </button>
+              <iframe
+                src="https://verzekeringskaarten.nl/allianz/aansprakelijkheidsverzekering-allianz"
+                title="Policy conditions"
+                className="w-full h-full"
+              />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
