@@ -149,7 +149,8 @@ const HOME_SUB_INSURER: Record<string, InsurerEntry> = {
 /* Per-car-instance insurer rotation — each car gets a different insurer */
 const CAR_INSTANCE_INSURERS: InsurerEntry[] = [
   {
-    name: "FBTO",
+    name: "ASR",
+    logoSrc: logoASR,
     happyClients: "200+ happy clients",
     deductible: "€150",
     priceQuality: "Good",
@@ -168,8 +169,8 @@ const CAR_INSTANCE_INSURERS: InsurerEntry[] = [
     savingsPercent: 3,
   },
   {
-    name: "Nationale Nederlanden",
-    logoSrc: logoNN,
+    name: "Univé",
+    logoSrc: logoUnive,
     happyClients: "180+ happy clients",
     deductible: "€200",
     cancellable: true,
