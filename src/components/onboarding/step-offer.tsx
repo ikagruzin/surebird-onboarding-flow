@@ -1378,15 +1378,21 @@ export const StepOffer = ({
                                 <Button variant="outline" size="sm" onClick={() => setCompareModalProduct("home")}>Compare</Button>
                               </div>
                             </div>
-                            <InsuranceOfferCard
-                              insurerName={insurer.name}
-                              logoSrc={insurer.logoSrc}
-                              originalPrice={insurer.monthlyPrice}
-                              monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
-                              savingsPercent={insurer.savingsPercent}
-                              happyClients={insurer.happyClients}
-                              onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
-                            />
+                            <div className="relative mt-8">
+                              <div className="absolute -top-[28px] left-6 z-10 flex items-center gap-2 bg-primary/5 border border-primary/20 border-b-0 rounded-t-xl px-4 py-1.5">
+                                <Award className="w-3.5 h-3.5 text-primary" />
+                                <span className="text-primary text-xs font-semibold">Best and cheapest choice</span>
+                              </div>
+                              <InsuranceOfferCard
+                                insurerName={insurer.name}
+                                logoSrc={insurer.logoSrc}
+                                originalPrice={insurer.monthlyPrice}
+                                monthlyPrice={getFinalMonthly(insurer.monthlyPrice)}
+                                savingsPercent={insurer.savingsPercent}
+                                happyClients={insurer.happyClients}
+                                onViewDetails={() => { setActiveHomeTab(sub); setActiveTab("home"); }}
+                              />
+                            </div>
                           </div>
                         );
                       })}
