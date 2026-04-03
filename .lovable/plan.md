@@ -1,38 +1,40 @@
 
 
-## Trustpilot Reviews — Use Real SVG Assets
+## Final Preview Step — Annual Payment Discount & Pricing Enhancements
 
-### What changes
+### Changes
 
-Replace the hand-coded Trustpilot stars, logo, and score in the review carousel with the real uploaded SVG assets. Update review count and make it a clickable link.
+**1. Annual payment discount toggle**
 
-### Assets to copy into `src/assets/`
+Add a `Switch` toggle inside the summary card (between the product list and Total Monthly row) labeled "Annual payment discount — save 5% extra". This toggle activates/deactivates the annual discount. New state managed locally via `useState`.
 
-| Source | Destination | Usage |
-|--------|-------------|-------|
-| `user-uploads://star.svg` | `src/assets/trustpilot-star.svg` | Individual star in review cards |
-| `user-uploads://Logo_trustpilot.svg` | `src/assets/trustpilot-logo.svg` (overwrite existing) | Logo in overview card header |
-| `user-uploads://Review_Score.svg` | `src/assets/trustpilot-score.svg` | Large "4.6" score with stars in overview card |
+When active:
+- Each product line shows the additional 5% applied on top of the 10% bundle discount
+- A new "Annual total" row appears below "Total Monthly" showing `totalAfterDiscount * 12` (with the 5% already applied)
+- The savings badge updates to include the annual discount amount
 
-### Changes in `step-offer.tsx`
+**2. Discount line item — visible like calculator**
 
-**1. Replace `TrustpilotStars` component** (lines 489-501):
-Instead of rendering lucide `Star` icons inside colored divs, render `<img src={trustpilotStar} />` repeated per star count. For unfilled stars, apply a grayscale/opacity filter or skip rendering (the star.svg is already the green Trustpilot square style).
+Add a "Discount — 10%" line between the product list and the total row, styled the same as the offer calculator (green text, showing `-€X.XX`). When annual discount is active, show a second line "Annual payment discount — 5%" also in green.
 
-**2. Trustpilot overview card** (lines 533-544):
-- Replace the `<Star>` icon + "Trustpilot" text with `<img src={trustpilotLogo} />` (the full logo SVG)
-- Replace the `<span>4.2</span>` + `<TrustpilotStars count={4}>` block with `<img src={trustpilotScore} />` (the score SVG already contains "4.6", the star row, and "Excellent" text)
-- Change `"2,466 Trustpilot reviews"` to a clickable `<a>` tag: `"123 reviews"` linking to `https://nl.trustpilot.com/review/surebird.nl?utm_medium=trustbox&utm_source=MicroReviewCount` with `target="_blank" rel="noopener noreferrer"`
+**3. Props & state**
 
-**3. Individual review cards** (lines 553-555):
-- Replace `<TrustpilotStars count={review.rating} />` with a row of `<img src={trustpilotStar} />` images (one per rating point), keeping the `{review.rating}.0` text label
+- Add `annualDiscount` boolean state inside `StepFinalPreview` (local `useState`, default `false`)
+- No new props needed from parent — this is a display preference toggle
+
+### Pricing logic
+
+```
+bundleDiscount = totalBefore * 0.10
+afterBundle = totalBefore - bundleDiscount
+annualExtra = annualDiscount ? afterBundle * 0.05 : 0
+finalMonthly = afterBundle - annualExtra
+annualTotal = finalMonthly * 12
+```
 
 ### File changes
 
 | File | Change |
 |------|--------|
-| `src/assets/trustpilot-star.svg` | New — copy from upload |
-| `src/assets/trustpilot-logo.svg` | Overwrite with new upload |
-| `src/assets/trustpilot-score.svg` | New — copy from upload |
-| `src/components/onboarding/step-offer.tsx` | Import new SVG assets. Replace `TrustpilotStars` to use real star SVG. Replace overview card header/score with logo and score SVGs. Change review count to "123 reviews" as clickable link. |
+| `src/components/onboarding/step-final-preview.tsx` | Import `Switch`. Add `annualDiscount` state. Add discount line items (10% bundle + optional 5% annual) between product list and total. Add Switch toggle row. Show "Annual total" row when active. Update savings badge to reflect combined savings. |
 
