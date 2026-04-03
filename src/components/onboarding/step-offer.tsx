@@ -932,6 +932,7 @@ export const StepOffer = ({
           <div className="flex items-center justify-center min-h-screen">
             <StepLoading onComplete={() => {
               onAddInsurances?.(addFlowQueue);
+              const addedNames = addFlowQueue.map(id => INSURANCE_TYPES.find(t => t.id === id)?.label || id);
               for (const id of addFlowQueue) {
                 const config = getProductConfig(id);
                 if (config?.offerInitialState) {
@@ -945,6 +946,8 @@ export const StepOffer = ({
               setAddFlowQueue([]);
               setAddFlowCompletedTabs([]);
               setAddFlowPhase("preferences");
+              setActiveTab("all");
+              toast.success(`Your ${addedNames.join(" & ")} offer${addedNames.length > 1 ? "s are" : " is"} ready to review!`);
             }} />
           </div>
         </div>
