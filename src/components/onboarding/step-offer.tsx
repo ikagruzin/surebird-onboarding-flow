@@ -800,7 +800,7 @@ export const StepOffer = ({
   };
 
   // ── Add product modal ──
-  const nonSelectedProducts = INSURANCE_TYPES.filter(t => !selectedInsurances.includes(t.id));
+  const nonSelectedProducts = INSURANCE_TYPES.filter(t => !selectedInsurances.includes(t.id) && !addFlowQueue.includes(t.id));
 
   const handleOpenAddModal = () => {
     setAddModalSelection([]);
