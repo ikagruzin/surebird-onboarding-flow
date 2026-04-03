@@ -1066,6 +1066,22 @@ export const StepOffer = ({
                 </button>
               );
             })}
+            {/* Add product button */}
+            {(() => {
+              const availableToAdd = INSURANCE_TYPES.filter(t => !addFlowQueue.includes(t.id) && !selectedInsurances.includes(t.id));
+              if (availableToAdd.length === 0) return null;
+              return (
+                <button
+                  onClick={() => {
+                    setShowAddModal(true);
+                    setAddModalSelection([]);
+                  }}
+                  className="h-12 w-12 rounded-full border border-border bg-white flex items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              );
+            })()}
           </div>
 
           {/* Progress bar */}
