@@ -1,6 +1,9 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { toast } from "sonner";
-import { Check, BadgePercent, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Shield, Play, Star, Gift, Award, Clock } from "lucide-react";
+import { Check, BadgePercent, ChevronLeft, ChevronRight, ChevronDown, Plus, X, Info, MessageCircle, Lock, Shield, Play, Gift, Award, Clock } from "lucide-react";
+import trustpilotStar from "@/assets/trustpilot-star.svg";
+import trustpilotLogo from "@/assets/trustpilot-logo.svg";
+import trustpilotScore from "@/assets/trustpilot-score.svg";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
