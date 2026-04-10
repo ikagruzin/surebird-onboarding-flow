@@ -100,8 +100,8 @@ export const homeProduct: ProductConfig = {
   } satisfies HomeState as Record<string, any>,
 
   offerInitialState: {
-    household: { ownRisk: "100", coverage: "All Risk" },
-    building: { ownRisk: "100", coverage: "All Risk" },
+    household: { ownRisk: "100", contentCoverage: "All Risk" },
+    building: { ownRisk: "100", buildingCoverage: "All Risk" },
   },
 
   presetState: {

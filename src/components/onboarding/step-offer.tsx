@@ -187,6 +187,8 @@ const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { 
   ],
   home: [
     { id: "own_risk", label: "Own risk", options: [{ value: "0", label: "€0" }, { value: "100", label: "€100" }, { value: "250", label: "€250" }, { value: "500", label: "€500" }] },
+    { id: "contentCoverage", label: "Content coverage", options: [{ value: "Extra extensive", label: "Extra extensive" }, { value: "All Risk", label: "All Risk" }] },
+    { id: "buildingCoverage", label: "Building coverage", options: [{ value: "Extra extensive", label: "Extra extensive" }, { value: "All Risk", label: "All Risk" }] },
   ],
   travel: [
     { id: "own_risk", label: "Own risk", options: [{ value: "0", label: "€0" }, { value: "250", label: "€250" }, { value: "500", label: "€500" }] },
@@ -201,6 +203,17 @@ const OFFER_PREFERENCES: Record<string, { id: string; label: string; options: { 
     { id: "cancellation", label: "Do you want cancellation coverage?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
     { id: "roadside_assistance", label: "Add roadside assistance?", options: [{ value: "no", label: "No" }, { value: "yes", label: "Yes" }] },
     { id: "bike_coverage", label: "Extra coverage for your bike?", options: [{ value: "0", label: "€0" }, { value: "250", label: "€250" }, { value: "500", label: "€500" }] },
+  ],
+  car: [
+    { id: "basicCoverage", label: "Basic coverage", options: [{ value: "WA", label: "WA" }, { value: "WA+ Limited Casco", label: "WA+ Limited Casco" }, { value: "WA+ Full Casco", label: "WA+ Full Casco" }] },
+    { id: "own_risk", label: "Own risk", options: [{ value: "0", label: "€0" }, { value: "100", label: "€100" }, { value: "250", label: "€250" }, { value: "500", label: "€500" }] },
+  ],
+  caravan: [
+    { id: "desiredCoverage", label: "Desired coverage", options: [{ value: "Fire and theft", label: "Fire and theft" }, { value: "Casco Limited", label: "Casco Limited" }, { value: "Casco Extended", label: "Casco Extended" }] },
+    { id: "own_risk", label: "Own risk", options: [{ value: "0", label: "€0" }, { value: "100", label: "€100" }, { value: "250", label: "€250" }, { value: "500", label: "€500" }] },
+  ],
+  accidents: [
+    { id: "own_risk", label: "Own risk", options: [{ value: "0", label: "€0" }, { value: "100", label: "€100" }, { value: "250", label: "€250" }] },
   ],
   legal: [
     { id: "coverage_modules", label: "Coverage areas", options: [], customComponent: "legal_coverage" },
