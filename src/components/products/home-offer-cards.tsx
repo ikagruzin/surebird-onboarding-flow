@@ -105,10 +105,10 @@ const COVERAGE_OPTIONS: { value: string; label: string; subtitle: string; recomm
   },
 ];
 
-const CoverageCard = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
+const CoverageCard = ({ value, onChange, title = "Coverage", subtitle = "Choose the level of protection for your home insurance." }: { value: string; onChange: (v: string) => void; title?: string; subtitle?: string }) => (
   <OfferCard
-    title="Coverage"
-    subtitle="Choose the level of protection for your home insurance."
+    title={title}
+    subtitle={subtitle}
   >
     <div className="space-y-3">
       {COVERAGE_OPTIONS.map((opt) => {
@@ -469,11 +469,22 @@ export const HomeOfferCards = ({
         onChange={(v) => onUpdateSubOffer("ownRisk", v)}
       />
 
-      {/* Card 2: Coverage */}
-      <CoverageCard
-        value={subOfferState.coverage || "All Risk"}
-        onChange={(v) => onUpdateSubOffer("coverage", v)}
-      />
+      {/* Card 2: Coverage (separate for content vs building) */}
+      {activeSubTab === "household" ? (
+        <CoverageCard
+          title="Content coverage"
+          subtitle="Choose the level of protection for your household contents."
+          value={subOfferState.contentCoverage || subOfferState.coverage || "All Risk"}
+          onChange={(v) => onUpdateSubOffer("contentCoverage", v)}
+        />
+      ) : (
+        <CoverageCard
+          title="Building coverage"
+          subtitle="Choose the level of protection for your building."
+          value={subOfferState.buildingCoverage || subOfferState.coverage || "All Risk"}
+          onChange={(v) => onUpdateSubOffer("buildingCoverage", v)}
+        />
+      )}
 
       {/* Card 3: Product-specific Set Preferences card */}
       {activeSubTab === "household" ? (
