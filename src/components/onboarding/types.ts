@@ -37,6 +37,7 @@ export interface WizardState {
   productStates: Record<string, Record<string, any>>;
   /** Rest-data states for Offer page (keyed by product id) */
   offerStates: Record<string, Record<string, any>>;
+  acceptanceExplanations: Record<string, string>;
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [

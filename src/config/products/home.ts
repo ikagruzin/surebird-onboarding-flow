@@ -114,6 +114,7 @@ export const homeProduct: ProductConfig = {
   },
 
   presetChecklist: [
+    "An apartment",
     "Stone exterior walls",
     "A sloping roof with tiles, pan, or shingles",
     "Concrete or stone floors throughout",
