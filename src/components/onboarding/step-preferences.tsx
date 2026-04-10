@@ -570,27 +570,46 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
         const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
         const isActive = activeTab === id && !showPhoneStep;
         const isComplete = completedTabs.includes(id);
+        const canDelete = selectedInsurances.length > 1;
         return (
-          <button
-            key={id}
-            onClick={() => handleTabClick(id)}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border h-12 ${
-              isActive
-                ? "bg-foreground text-background border-foreground"
-                : "bg-white border-border text-foreground"
-            }`}
-          >
-            {isComplete ? (
-              <Check className={`w-6 h-6 ${isActive ? "text-background" : "text-success"}`} />
-            ) : (
-              <img
-                src={ICON_MAP[ins.icon]}
-                alt={ins.label}
-                className={`w-6 h-6 ${isActive ? "brightness-0 invert" : ""}`}
-              />
+          <div key={id} className="relative group">
+            <button
+              onClick={() => handleTabClick(id)}
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-semibold transition-all border h-12 ${
+                isActive
+                  ? "bg-foreground text-background border-foreground"
+                  : "bg-white border-border text-foreground"
+              }`}
+            >
+              {isComplete ? (
+                <Check className={`w-6 h-6 ${isActive ? "text-background" : "text-success"}`} />
+              ) : (
+                <img
+                  src={ICON_MAP[ins.icon]}
+                  alt={ins.label}
+                  className={`w-6 h-6 ${isActive ? "brightness-0 invert" : ""}`}
+                />
+              )}
+              {ins.label}
+            </button>
+            {canDelete && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // Switch tab if deleting the active one
+                  if (activeTab === id) {
+                    const remaining = selectedInsurances.filter(i => i !== id);
+                    if (remaining.length > 0) setActiveTab(remaining[0]);
+                  }
+                  setCompletedTabs((prev) => prev.filter(t => t !== id));
+                  onRemoveInsurance(id);
+                }}
+                className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-muted border border-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive hover:border-destructive hover:text-destructive-foreground"
+              >
+                <X className="w-3 h-3" />
+              </button>
             )}
-            {ins.label}
-          </button>
+          </div>
         );
       })}
       <button
