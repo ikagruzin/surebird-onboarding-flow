@@ -783,6 +783,7 @@ export const Index = () => {
               onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
               onUpdateEmail={(value) => setState((s) => ({ ...s, email: value }))}
               onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
+              onRemoveInsurance={(id) => setState((s) => ({ ...s, selectedInsurances: s.selectedInsurances.filter(i => i !== id) }))}
               onNext={() => goToIndex(getNextIndex())}
               onBack={() => goToIndex(getPrevIndex())}
               animateTaco={shouldAnimateTaco}
