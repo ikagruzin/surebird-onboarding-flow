@@ -3,8 +3,10 @@
  * Each component implements ProductStepProps.
  */
 import { Check, Info } from "lucide-react";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { SelectionCard } from "@/components/ui/selection-card";
+import { Switch } from "@/components/ui/switch";
 import { TacoMessage } from "@/components/onboarding/taco-message";
 import { ValidationError } from "@/components/onboarding/validation-error";
 import {
@@ -466,23 +468,41 @@ export const HomeContentsStep = ({
           />
         </div>
         <div>
-          <div className="flex items-center gap-2 mb-2">
-            <label className="text-sm font-semibold text-foreground">
-              How much value do you take with you outside?
-            </label>
-            <InfoTip text="Items you regularly carry outside your home, like a laptop, phone, bicycle, or sports equipment." />
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-semibold text-foreground">
+                Insure things you take outside
+              </label>
+              <InfoTip text="Items you regularly carry outside your home, like a laptop, phone, bicycle, or sports equipment." />
+            </div>
+            <Switch
+              checked={state.outsideValue !== "€0" && state.outsideValue !== ""}
+              onCheckedChange={(checked) => {
+                if (!checked) {
+                  onUpdate("outsideValue", "€0");
+                } else {
+                  onUpdate("outsideValue", "");
+                }
+              }}
+            />
           </div>
-          <NativeSelect
-            value={state.outsideValue}
-            onChange={(e) => onUpdate("outsideValue", e.target.value)}
-            placeholder="Select outside value"
-          >
-            {HOME_OPTIONS.outsideValueOptions.map((o) => (
-              <option key={o} value={o}>
-                {o}
-              </option>
-            ))}
-          </NativeSelect>
+          {state.outsideValue !== "€0" && (
+            <div className="mt-3">
+              <NativeSelect
+                value={state.outsideValue || ""}
+                onChange={(e) => onUpdate("outsideValue", e.target.value)}
+                placeholder="Select outside value"
+              >
+                {HOME_OPTIONS.outsideValueOptions
+                  .filter((o) => o !== "€0")
+                  .map((o) => (
+                    <option key={o} value={o}>
+                      {o}
+                    </option>
+                  ))}
+              </NativeSelect>
+            </div>
+          )}
         </div>
       </div>
     </SectionCard>

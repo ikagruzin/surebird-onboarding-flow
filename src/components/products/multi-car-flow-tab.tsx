@@ -261,7 +261,7 @@ export const MultiCarFlowTab = forwardRef<ProductFlowTabHandle, MultiCarFlowTabP
     return (
       <div className="space-y-4">
         {/* Sub-navigation pills */}
-        {(instances.length > 1 || phase === "add-prompt") && (
+        {(
           <div className="flex flex-wrap items-center gap-2">
             {instances.map((inst, i) => {
               const complete = isInstanceComplete(inst);

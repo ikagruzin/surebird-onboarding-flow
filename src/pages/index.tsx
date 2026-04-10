@@ -54,12 +54,13 @@ const INITIAL_STATE: WizardState = {
   phone: "+31",
   startDates: {},
   iban: "",
-  acceptanceAnswers: { cancelled: "no", criminal: "no", claims: "no", bankrupt: "no", fraud: "no", bailiff: "no", healthy: "no" },
+  acceptanceAnswers: { cancelled: "no", criminal: "no", claims: "no", bankrupt: "no", fraud: "no", bailiff: "no", healthy: "yes" },
   acceptanceConfirmed: false,
   agreeTerms: false,
   agreeDebit: false,
   productStates: {},
   offerStates: {},
+  acceptanceExplanations: {},
 };
 
 export const Index = () => {
@@ -680,6 +681,13 @@ export const Index = () => {
               setState((s) => ({ ...s, acceptanceConfirmed: val }));
               clearError("acceptanceConfirmed");
             }}
+            explanations={state.acceptanceExplanations}
+            onUpdateExplanation={(field, value) =>
+              setState((s) => ({
+                ...s,
+                acceptanceExplanations: { ...s.acceptanceExplanations, [field]: value },
+              }))
+            }
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
@@ -775,6 +783,7 @@ export const Index = () => {
               onUpdatePhone={(value) => setState((s) => ({ ...s, phone: value }))}
               onUpdateEmail={(value) => setState((s) => ({ ...s, email: value }))}
               onAddInsurances={(ids) => setState((s) => ({ ...s, selectedInsurances: [...s.selectedInsurances, ...ids] }))}
+              onRemoveInsurance={(id) => setState((s) => ({ ...s, selectedInsurances: s.selectedInsurances.filter(i => i !== id) }))}
               onNext={() => goToIndex(getNextIndex())}
               onBack={() => goToIndex(getPrevIndex())}
               animateTaco={shouldAnimateTaco}
