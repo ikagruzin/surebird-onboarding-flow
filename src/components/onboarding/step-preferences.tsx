@@ -264,6 +264,7 @@ interface StepPreferencesProps {
   onUpdatePhone: (value: string) => void;
   onUpdateEmail: (value: string) => void;
   onAddInsurances: (ids: string[]) => void;
+  onRemoveInsurance: (id: string) => void;
   onNext: () => void;
   onBack: () => void;
   animateTaco?: boolean;
@@ -282,6 +283,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
   onUpdatePhone,
   onUpdateEmail,
   onAddInsurances,
+  onRemoveInsurance,
   onNext,
   onBack,
   animateTaco,
