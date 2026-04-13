@@ -1,4 +1,14 @@
-import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from "react";
+import { useState, useEffect, useRef, useImperativeHandle, forwardRef, useCallback } from "react";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { Check, Plus, Info, X, Mail, Phone, ChevronRight } from "lucide-react";
 import { INSURANCE_TYPES } from "./types";
 import { Progress } from "@/components/ui/progress";
@@ -301,6 +311,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
   const [contactMethod, setContactMethod] = useState<"phone" | "email">("phone");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionDirection, setTransitionDirection] = useState<"left" | "right">("left");
+  const [removeConfirmId, setRemoveConfirmId] = useState<string | null>(null);
 
   // Product flow refs for products with full configs (e.g. Home)
   const productFlowRefs = useRef<Record<string, ProductFlowTabHandle | null>>({});
@@ -607,13 +618,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  // Switch tab if deleting the active one
-                  if (activeTab === id) {
-                    const remaining = selectedInsurances.filter(i => i !== id);
-                    if (remaining.length > 0) setActiveTab(remaining[0]);
-                  }
-                  setCompletedTabs((prev) => prev.filter(t => t !== id));
-                  onRemoveInsurance(id);
+                  setRemoveConfirmId(id);
                 }}
                 className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-muted border border-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive hover:border-destructive hover:text-destructive-foreground"
               >
@@ -1003,6 +1008,37 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
           </div>
         )}
       {renderAddModal()}
+
+      {/* Remove product confirmation dialog */}
+      <AlertDialog open={!!removeConfirmId} onOpenChange={(open) => { if (!open) setRemoveConfirmId(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove {removeConfirmId ? INSURANCE_TYPES.find(i => i.id === removeConfirmId)?.label : ''} insurance?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove the product from your bundle and any preferences you've set for it will be lost.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (!removeConfirmId) return;
+                const id = removeConfirmId;
+                if (activeTab === id) {
+                  const remaining = selectedInsurances.filter(i => i !== id);
+                  if (remaining.length > 0) setActiveTab(remaining[0]);
+                }
+                setCompletedTabs((prev) => prev.filter(t => t !== id));
+                onRemoveInsurance(id);
+                setRemoveConfirmId(null);
+              }}
+            >
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 });
