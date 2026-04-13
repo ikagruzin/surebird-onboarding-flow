@@ -1,4 +1,4 @@
-import { BadgePercent, SmilePlus } from "lucide-react";
+import { BadgePercent, SmilePlus, Check } from "lucide-react";
 
 interface InsuranceOfferCardProps {
   insurerName: string;
@@ -9,6 +9,8 @@ interface InsuranceOfferCardProps {
   happyClients: string;
   onViewDetails?: () => void;
   actionLabel?: string;
+  selected?: boolean;
+  onSelect?: () => void;
 }
 
 export const InsuranceOfferCard = ({
@@ -20,16 +22,24 @@ export const InsuranceOfferCard = ({
   happyClients,
   onViewDetails,
   actionLabel = "View & Edit details",
+  selected,
+  onSelect,
 }: InsuranceOfferCardProps) => {
   return (
-    <div className="border border-border rounded-3xl p-6 bg-card">
+    <div className={`border rounded-3xl p-6 bg-card ${selected ? "border-success" : "border-border"}`}>
       <div className="flex items-start justify-between">
-        {/* Left: Logo */}
+        {/* Left: Logo + selected badge */}
         <div className="flex items-center gap-3">
           {logoSrc ? (
             <img src={logoSrc} alt={insurerName} className="h-8 object-contain" />
           ) : (
             <span className="text-lg font-bold text-foreground">{insurerName}</span>
+          )}
+          {selected && (
+            <span className="inline-flex items-center gap-1 text-xs font-semibold text-success bg-success/10 px-2 py-0.5 rounded-full">
+              <Check className="w-3 h-3" />
+              Selected
+            </span>
           )}
         </div>
 
@@ -57,12 +67,22 @@ export const InsuranceOfferCard = ({
           <SmilePlus className="w-4 h-4" />
           {happyClients}
         </span>
-        <button
-          onClick={onViewDetails}
-          className="text-sm font-semibold text-foreground underline underline-offset-2 hover:text-foreground/80 transition-colors"
-        >
-          {actionLabel}
-        </button>
+        <div className="flex items-center gap-3">
+          {onSelect && !selected && (
+            <button
+              onClick={onSelect}
+              className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+            >
+              Select this
+            </button>
+          )}
+          <button
+            onClick={onViewDetails}
+            className="text-sm font-semibold text-foreground underline underline-offset-2 hover:text-foreground/80 transition-colors"
+          >
+            {actionLabel}
+          </button>
+        </div>
       </div>
     </div>
   );

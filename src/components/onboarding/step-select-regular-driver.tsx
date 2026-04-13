@@ -48,7 +48,7 @@ export const StepSelectRegularDriver = ({
               Select a regular driver for {formatPlate(car.licensePlate)}
             </h3>
 
-            <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-2">
               {children.map((child, childIdx) => {
                 const childLabel = child.firstName ? `${child.firstName} ${child.infix ? child.infix + " " : ""}${child.lastName}`.trim() : `Child ${childIdx + 1}`;
                 return (

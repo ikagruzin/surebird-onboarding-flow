@@ -81,7 +81,7 @@ export const StepConfirmDetails = ({
           {/* Gender */}
           <div>
             <p className="text-sm font-medium text-foreground mb-2">Gender</p>
-            <div className="space-y-2">
+            <div className="grid grid-cols-3 gap-2">
               {GENDER_OPTIONS.map((g) => (
                 <SelectionCard
                   key={g}
