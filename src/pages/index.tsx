@@ -18,6 +18,11 @@ import { OfferGate } from "@/components/onboarding/offer-gate";
 import { StepPolicyUpload } from "@/components/onboarding/step-policy-upload";
 import { StepStartDate } from "@/components/onboarding/step-start-date";
 import { StepConfirmDetails } from "@/components/onboarding/step-confirm-details";
+import { StepFamilyMembersInfo } from "@/components/onboarding/step-family-members-info";
+import { StepSelectRegularDriver } from "@/components/onboarding/step-select-regular-driver";
+import { StepCarRegistrationCode } from "@/components/onboarding/step-car-registration-code";
+import { StepCaravanLocation } from "@/components/onboarding/step-caravan-location";
+import { StepLegalAdditionalQuestions } from "@/components/onboarding/step-legal-additional-questions";
 import { StepPhoneVerification } from "@/components/onboarding/step-phone-verification";
 import { StepIdinVerification } from "@/components/onboarding/step-idin-verification";
 import { StepAcceptanceQuestions } from "@/components/onboarding/step-acceptance-questions";
@@ -29,7 +34,7 @@ import { FlowSwitcher } from "@/components/onboarding/flow-switcher";
 import { DevSkipButton } from "@/components/onboarding/dev-skip-button";
 import { Progress } from "@/components/ui/progress";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
-import type { WizardState } from "@/components/onboarding/types";
+import type { WizardState, FamilyMember } from "@/components/onboarding/types";
 import type { StepId, StepConfig, FlowConfig } from "@/config/flow-types";
 import { getFlow, DEFAULT_FLOW_ID } from "@/config/flows";
 
@@ -61,6 +66,14 @@ const INITIAL_STATE: WizardState = {
   productStates: {},
   offerStates: {},
   acceptanceExplanations: {},
+  gender: "",
+  familyMembers: [],
+  carRegCodes: {},
+  carRegularDrivers: {},
+  caravanLocationPostcode: "",
+  caravanLocationHouseNumber: "",
+  caravanLocationAddition: "",
+  legalAdditionalAnswers: {},
 };
 
 export const Index = () => {
@@ -312,6 +325,38 @@ export const Index = () => {
         if (!state.lastName.trim()) errs.lastName = "Surname is required";
         if (!state.email.includes("@")) errs.email = "Please enter a valid email address";
         if (state.phone.replace(/\D/g, "").length < 10) errs.phone = "Please enter your phone number";
+        break;
+      case "family-members-info":
+        state.familyMembers.forEach((m, idx) => {
+          const p = `familyMember_${idx}`;
+          if (!m.firstName.trim()) errs[`${p}_firstName`] = "First name is required";
+          if (!m.lastName.trim()) errs[`${p}_lastName`] = "Surname is required";
+          if (m.birthdate.trim().length < 10) errs[`${p}_birthdate`] = "Date of birth is required";
+          if (!m.gender) errs[`${p}_gender`] = "Gender is required";
+        });
+        break;
+      case "select-regular-driver": {
+        const ps = state.productStates || {};
+        Object.keys(ps).filter((k) => k.startsWith("car-") && ps[k]?.driverRelationship === "My child").forEach((k) => {
+          if (!state.carRegularDrivers[k]) errs[`regularDriver_${k}`] = "Please select a driver";
+        });
+        break;
+      }
+      case "car-registration-code": {
+        const ps3 = state.productStates || {};
+        Object.keys(ps3).filter((k) => k.startsWith("car-") && ps3[k]?.licensePlate).forEach((k) => {
+          if (!state.carRegCodes[k] || state.carRegCodes[k].length < 4) errs[`regCode_${k}`] = "Please enter the 4-digit reporting code";
+        });
+        break;
+      }
+      case "caravan-location": {
+        const cp = (state.caravanLocationPostcode || state.postcode).replace(/\s/g, "");
+        if (cp.length < 6) errs.caravanPostcode = "Please enter a valid postcode";
+        if (!(state.caravanLocationHouseNumber || state.houseNumber).trim()) errs.caravanHouseNumber = "Please enter the house number";
+        break;
+      }
+      case "legal-additional-questions":
+        if (!state.legalAdditionalAnswers.profession?.trim()) errs.legalProfession = "Please enter your profession";
         break;
       case "acceptance-questions": {
         const totalQs = 7;
@@ -637,6 +682,7 @@ export const Index = () => {
             lastName={state.lastName}
             phone={state.phone}
             email={state.email}
+            gender={state.gender}
             onUpdateField={(field, value) => setState((s) => ({ ...s, [field]: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
@@ -652,6 +698,112 @@ export const Index = () => {
             onVerified={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+          />
+        );
+      case "family-members-info": {
+        // Build family members list from wizard state + car states
+        const members = buildFamilyMembers(state);
+        // Ensure state.familyMembers is populated
+        if (state.familyMembers.length !== members.length) {
+          setState((s) => ({ ...s, familyMembers: members }));
+        }
+        return (
+          <StepFamilyMembersInfo
+            familyMembers={state.familyMembers.length > 0 ? state.familyMembers : members}
+            onUpdateMember={(idx, field, value) => {
+              setState((s) => {
+                const updated = [...s.familyMembers];
+                if (updated[idx]) {
+                  updated[idx] = { ...updated[idx], [field]: value };
+                }
+                return { ...s, familyMembers: updated };
+              });
+            }}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
+          />
+        );
+      }
+      case "select-regular-driver": {
+        const ps = state.productStates || {};
+        const carsNeedingDriver = Object.keys(ps)
+          .filter((k) => k.startsWith("car-") && ps[k]?.driverRelationship === "My child")
+          .map((k) => ({ instanceId: k, licensePlate: ps[k]?.licensePlate || "" }));
+        const childMembers = state.familyMembers.filter((m) => m.relation === "child");
+        return (
+          <StepSelectRegularDriver
+            carsNeedingDriver={carsNeedingDriver}
+            children={childMembers}
+            carRegularDrivers={state.carRegularDrivers}
+            onSelectDriver={(carId, childIdx) => {
+              setState((s) => ({
+                ...s,
+                carRegularDrivers: { ...s.carRegularDrivers, [carId]: childIdx },
+              }));
+            }}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
+          />
+        );
+      }
+      case "car-registration-code": {
+        const ps2 = state.productStates || {};
+        const carInstances = Object.keys(ps2)
+          .filter((k) => k.startsWith("car-") && ps2[k]?.licensePlate)
+          .map((k) => ({ instanceId: k, licensePlate: ps2[k].licensePlate }));
+        return (
+          <StepCarRegistrationCode
+            cars={carInstances}
+            carRegCodes={state.carRegCodes}
+            onUpdateCode={(id, val) => {
+              setState((s) => ({
+                ...s,
+                carRegCodes: { ...s.carRegCodes, [id]: val },
+              }));
+            }}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
+          />
+        );
+      }
+      case "caravan-location":
+        return (
+          <StepCaravanLocation
+            postcode={state.caravanLocationPostcode || state.postcode}
+            houseNumber={state.caravanLocationHouseNumber || state.houseNumber}
+            addition={state.caravanLocationAddition || state.addition}
+            onUpdate={(field, value) => setState((s) => ({ ...s, [field]: value }))}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
+          />
+        );
+      case "legal-additional-questions":
+        return (
+          <StepLegalAdditionalQuestions
+            answers={state.legalAdditionalAnswers}
+            onUpdateAnswer={(field, value) => {
+              setState((s) => ({
+                ...s,
+                legalAdditionalAnswers: { ...s.legalAdditionalAnswers, [field]: value },
+              }));
+            }}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         );
       case "idin-verification":
@@ -810,4 +962,27 @@ export const Index = () => {
     </div>
   );
 };
+
+function buildFamilyMembers(state: WizardState): FamilyMember[] {
+  const members: FamilyMember[] = [];
+  const hasPartner = (state.familyStatus === "partner" || state.familyStatus === "partner-children") && state.insurePartner === "yes";
+  const hasChildren = (state.familyStatus === "single-children" || state.familyStatus === "partner-children") && state.childrenCount > 0;
+
+  // Also check car states for partner/child assignments
+  const ps = state.productStates || {};
+  const carStates = Object.keys(ps).filter((k) => k.startsWith("car-")).map((k) => ps[k]);
+  const carNeedsPartner = carStates.some((c: any) => c.driverRelationship === "My partner");
+  const carChildCount = carStates.filter((c: any) => c.driverRelationship === "My child").length;
+
+  if (hasPartner || carNeedsPartner) {
+    members.push({ relation: "partner", firstName: "", infix: "", lastName: "", birthdate: "", gender: "" });
+  }
+
+  const childCount = hasChildren ? state.childrenCount : Math.max(0, carChildCount);
+  for (let i = 0; i < childCount; i++) {
+    members.push({ relation: "child", firstName: "", infix: "", lastName: "", birthdate: "", gender: "" });
+  }
+
+  return members;
+}
 

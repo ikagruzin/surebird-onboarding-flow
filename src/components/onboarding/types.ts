@@ -8,6 +8,15 @@ export interface InsuranceType {
   tooltip: string;
 }
 
+export interface FamilyMember {
+  relation: "partner" | "child";
+  firstName: string;
+  infix: string;
+  lastName: string;
+  birthdate: string;
+  gender: string;
+}
+
 export interface WizardState {
   currentStep: number;
   selectedInsurances: string[];
@@ -38,6 +47,14 @@ export interface WizardState {
   /** Rest-data states for Offer page (keyed by product id) */
   offerStates: Record<string, Record<string, any>>;
   acceptanceExplanations: Record<string, string>;
+  gender: string;
+  familyMembers: FamilyMember[];
+  carRegCodes: Record<string, string>;
+  carRegularDrivers: Record<string, string>;
+  caravanLocationPostcode: string;
+  caravanLocationHouseNumber: string;
+  caravanLocationAddition: string;
+  legalAdditionalAnswers: Record<string, string>;
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [

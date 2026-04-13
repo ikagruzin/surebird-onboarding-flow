@@ -94,6 +94,59 @@ export const flowFinal: FlowConfig = {
       buttonLabel: "Verifying...",
     },
     {
+      id: "family-members-info",
+      phase: "finalise",
+      hideSavings: true,
+      buttonLabel: "Next",
+      shouldSkip: (state) => {
+        const hasPartner = (state.familyStatus === "partner" || state.familyStatus === "partner-children") && state.insurePartner === "yes";
+        const hasChildren = (state.familyStatus === "single-children" || state.familyStatus === "partner-children") && state.childrenCount > 0;
+        // Also check if car assigned to partner/child
+        const ps = state.productStates || {};
+        const carStates = Object.keys(ps).filter((k) => k.startsWith("car-")).map((k) => ps[k]);
+        const carNeedsFamily = carStates.some((c: any) => c.driverRelationship === "My partner" || c.driverRelationship === "My child");
+        return !hasPartner && !hasChildren && !carNeedsFamily;
+      },
+    },
+    {
+      id: "select-regular-driver",
+      phase: "finalise",
+      hideSavings: true,
+      buttonLabel: "Next",
+      shouldSkip: (state) => {
+        if ((state.childrenCount || 0) <= 1) return true;
+        const ps = state.productStates || {};
+        const carStates = Object.keys(ps).filter((k) => k.startsWith("car-")).map((k) => ps[k]);
+        return !carStates.some((c: any) => c.driverRelationship === "My child");
+      },
+    },
+    {
+      id: "car-registration-code",
+      phase: "finalise",
+      hideSavings: true,
+      buttonLabel: "Next",
+      shouldSkip: (state) => !(state.selectedInsurances || []).includes("car"),
+    },
+    {
+      id: "caravan-location",
+      phase: "finalise",
+      hideSavings: true,
+      buttonLabel: "Next",
+      shouldSkip: (state) => {
+        if (!(state.selectedInsurances || []).includes("caravan")) return true;
+        const ps = state.productStates || {};
+        const caravanState = Object.keys(ps).filter((k) => k.startsWith("caravan")).map((k) => ps[k])[0] || ps["caravan"];
+        return !caravanState || caravanState.caravanType !== "Mobile home";
+      },
+    },
+    {
+      id: "legal-additional-questions",
+      phase: "finalise",
+      hideSavings: true,
+      buttonLabel: "Next",
+      shouldSkip: (state) => !(state.selectedInsurances || []).includes("legal"),
+    },
+    {
       id: "idin-verification",
       phase: "finalise",
       hideSavings: true,

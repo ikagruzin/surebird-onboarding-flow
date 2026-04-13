@@ -8,6 +8,7 @@ interface StepConfirmDetailsProps {
   lastName: string;
   phone: string;
   email: string;
+  gender: string;
   onUpdateField: (field: string, value: string) => void;
   onNext: () => void;
   onBack: () => void;
@@ -16,12 +17,15 @@ interface StepConfirmDetailsProps {
   onClearError?: (field: string) => void;
 }
 
+const GENDER_OPTIONS = ["Man", "Woman", "Different"];
+
 export const StepConfirmDetails = ({
   firstName,
   infix,
   lastName,
   phone,
   email,
+  gender,
   onUpdateField,
   animateTaco,
   errors,
@@ -70,6 +74,30 @@ export const StepConfirmDetails = ({
                 className={errors?.lastName ? "border-destructive" : ""}
               />
               <ValidationError message={errors?.lastName} />
+            </div>
+          </div>
+
+          {/* Gender */}
+          <div>
+            <p className="text-sm font-medium text-foreground mb-2">Gender</p>
+            <div className="flex rounded-xl border-2 border-input overflow-hidden">
+              {GENDER_OPTIONS.map((g) => (
+                <button
+                  key={g}
+                  type="button"
+                  onClick={() => {
+                    onUpdateField("gender", g);
+                    onClearError?.("gender");
+                  }}
+                  className={`flex-1 px-4 py-2.5 text-sm font-medium transition-colors ${
+                    gender === g
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-card text-muted-foreground hover:bg-muted"
+                  } ${g !== GENDER_OPTIONS[0] ? "border-l border-input" : ""}`}
+                >
+                  {g}
+                </button>
+              ))}
             </div>
           </div>
 
