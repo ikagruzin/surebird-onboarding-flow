@@ -1,92 +1,76 @@
-import { ChevronLeft, ChevronRight, Plus, Check, Plane, Home, Umbrella, Car, Scale, Zap, Caravan } from "lucide-react";
+import { useState } from "react";
 import { INSURANCE_TYPES } from "./types";
+import { TacoMessage } from "./taco-message";
+import iconLiability from "@/assets/icon-liability.svg";
+import iconHome from "@/assets/icon-home.svg";
+import iconCar from "@/assets/icon-car.svg";
+import iconLegal from "@/assets/icon-legal.svg";
+import iconAccidents from "@/assets/icon-accidents.svg";
+import iconCaravan from "@/assets/icon-caravan.svg";
+import iconTravel from "@/assets/icon-travel.svg";
 
-const ICON_MAP: Record<string, React.ReactNode> = {
-  Plane: <Plane className="w-5 h-5" />,
-  Home: <Home className="w-5 h-5" />,
-  Umbrella: <Umbrella className="w-5 h-5" />,
-  Car: <Car className="w-5 h-5" />,
-  Scale: <Scale className="w-5 h-5" />,
-  Zap: <Zap className="w-5 h-5" />,
-  Caravan: <Caravan className="w-5 h-5" />,
+const ICON_MAP: Record<string, string> = {
+  Plane: iconTravel,
+  Home: iconHome,
+  Umbrella: iconLiability,
+  Car: iconCar,
+  Scale: iconLegal,
+  Zap: iconAccidents,
+  Caravan: iconCaravan,
 };
 
 interface StepUpsellProps {
   selectedInsurances: string[];
   onToggle: (id: string) => void;
-  onNext: () => void;
-  onBack: () => void;
+  animateTaco?: boolean;
 }
 
-export const StepUpsell = ({ selectedInsurances, onToggle, onNext, onBack }: StepUpsellProps) => {
+export const StepUpsell = ({ selectedInsurances, onToggle, animateTaco }: StepUpsellProps) => {
   const unselected = INSURANCE_TYPES.filter((t) => !selectedInsurances.includes(t.id));
-  const totalExtraSavings = unselected.reduce((s, t) => s + t.savings, 0);
-
-  // Completed tabs for pill nav
-  const selected = INSURANCE_TYPES.filter((t) => selectedInsurances.includes(t.id));
 
   return (
     <div className="animate-fade-in">
-      <button
-        onClick={onBack}
-        className="inline-flex items-center gap-1 text-sm font-medium text-foreground border border-border rounded-full px-4 py-2 mb-6 hover:bg-muted transition-colors"
-      >
-        <ChevronLeft className="w-4 h-4" />
-        Previous
-      </button>
+      <TacoMessage
+        message="You're almost there! Add more products to your bundle and save even more."
+        animate={animateTaco}
+      />
 
-      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-        Specify your preferences
-      </h1>
+      <h2 className="text-2xl font-bold text-foreground mb-6">
+        Would you like to add anything else?
+      </h2>
 
-      {/* Pill tabs showing completed */}
-      <div className="flex flex-wrap gap-2 mb-8">
-        {selected.map((ins) => (
-          <div
-            key={ins.id}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium bg-card border border-border text-foreground"
-          >
-            <Check className="w-4 h-4 text-success" />
-            {ins.label}
-          </div>
-        ))}
-        <div className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center">
-          <Plus className="w-4 h-4" />
-        </div>
-      </div>
-
-      {unselected.length > 0 && (
-        <>
-          <h2 className="text-xl font-semibold text-foreground mb-4">
-            Save an extra €{totalExtraSavings}
-          </h2>
-          <div className="space-y-3 max-w-xl">
-            {unselected.map((ins) => (
-              <button
-                key={ins.id}
-                onClick={() => onToggle(ins.id)}
-                className="w-full flex items-center gap-3 px-5 py-4 rounded-lg border border-border bg-card hover:border-primary/40 transition-all text-left"
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {unselected.map((ins) => {
+          const [tempSelected, setTempSelected] = useState(false);
+          // Check if this was toggled on during this step
+          const isSelected = selectedInsurances.includes(ins.id);
+          return (
+            <button
+              key={ins.id}
+              onClick={() => onToggle(ins.id)}
+              className={`flex items-center gap-3 px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
+                isSelected
+                  ? "border-[#0385FF] bg-[#0385FF]/10 shadow-md"
+                  : "border-border bg-card hover:border-[#0385FF]/40"
+              }`}
+            >
+              <img src={ICON_MAP[ins.icon]} alt={ins.label} className="w-10 h-10" />
+              <span className="font-medium text-foreground flex-1">{ins.label}</span>
+              <div
+                className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                  isSelected ? "border-[#0385FF] bg-[#0385FF]" : "border-border"
+                }`}
               >
-                <span className="text-foreground">{ICON_MAP[ins.icon]}</span>
-                <span className="font-medium text-foreground flex-1">{ins.label}</span>
-                <span className="text-sm font-semibold text-success">Save €{ins.savings}</span>
-                <Plus className="w-5 h-5 text-muted-foreground" />
-              </button>
-            ))}
-          </div>
-        </>
-      )}
-
-      <div className="flex justify-end mt-8">
-        <button
-          onClick={onNext}
-          className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-7 py-3 rounded-full font-semibold text-base hover:opacity-90 transition-opacity"
-        >
-          Next step
-          <ChevronRight className="w-5 h-5" />
-        </button>
+                {isSelected && (
+                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
 };
-

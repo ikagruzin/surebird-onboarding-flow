@@ -58,6 +58,13 @@ export const flowFinal: FlowConfig = {
       hideSavings: true,
     },
     {
+      id: "upsell-products",
+      phase: "preferences",
+      hideSavings: true,
+      buttonLabel: "Next",
+      shouldSkip: (state) => state.upsellShown || (state.selectedInsurances || []).length >= 7,
+    },
+    {
       id: "all-set",
       phase: "preferences",
       hideSavings: true,

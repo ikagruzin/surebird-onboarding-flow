@@ -21,6 +21,7 @@ export type StepId =
   | "car-registration-code"
   | "caravan-location"
   | "legal-additional-questions"
+  | "upsell-products"
   | "final-preview"
   | "success";
 
