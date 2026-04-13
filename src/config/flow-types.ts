@@ -16,6 +16,11 @@ export type StepId =
   | "phone-verification"
   | "idin-verification"
   | "acceptance-questions"
+  | "family-members-info"
+  | "select-regular-driver"
+  | "car-registration-code"
+  | "caravan-location"
+  | "legal-additional-questions"
   | "final-preview"
   | "success";
 
