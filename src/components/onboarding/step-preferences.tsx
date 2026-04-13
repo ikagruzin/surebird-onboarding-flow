@@ -320,6 +320,14 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Auto-select tab from parent (e.g. after upsell)
+  useEffect(() => {
+    if (initialActiveTab && selectedInsurances.includes(initialActiveTab)) {
+      setActiveTab(initialActiveTab);
+      setQuestionStep(0);
+    }
+  }, [initialActiveTab, selectedInsurances]);
+
   const questions = QUESTIONS_BY_TYPE[activeTab] || [];
   const currentPrefs = preferences[activeTab] || {};
   const currentQuestion = questions[questionStep];
