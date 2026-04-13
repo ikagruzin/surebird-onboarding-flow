@@ -100,11 +100,10 @@ export const flowFinal: FlowConfig = {
       buttonLabel: "Next",
       shouldSkip: (state) => {
         const hasPartner = (state.familyStatus === "partner" || state.familyStatus === "partner-children") && state.insurePartner === "yes";
-        const hasChildren = (state.familyStatus === "single-children" || state.familyStatus === "partner-children") && state.childrenCount > 0;
+        const hasChildren = (state.familyStatus === "single-children" || state.familyStatus === "partner-children") && Number(state.childrenCount) > 0;
         // Also check if car assigned to partner/child
-        const ps = state.productStates || {};
-        const carStates = Object.keys(ps).filter((k) => k.startsWith("car-")).map((k) => ps[k]);
-        const carNeedsFamily = carStates.some((c: any) => c.driverRelationship === "My partner" || c.driverRelationship === "My child");
+        const carInstances = (state.productStates?.car?.__carInstances || []) as any[];
+        const carNeedsFamily = carInstances.some((c: any) => c.state?.driverRelationship === "My partner" || c.state?.driverRelationship === "My child");
         return !hasPartner && !hasChildren && !carNeedsFamily;
       },
     },
@@ -114,10 +113,9 @@ export const flowFinal: FlowConfig = {
       hideSavings: true,
       buttonLabel: "Next",
       shouldSkip: (state) => {
-        if ((state.childrenCount || 0) <= 1) return true;
-        const ps = state.productStates || {};
-        const carStates = Object.keys(ps).filter((k) => k.startsWith("car-")).map((k) => ps[k]);
-        return !carStates.some((c: any) => c.driverRelationship === "My child");
+        if (Number(state.childrenCount || 0) <= 1) return true;
+        const carInstances = (state.productStates?.car?.__carInstances || []) as any[];
+        return !carInstances.some((c: any) => c.state?.driverRelationship === "My child");
       },
     },
     {
