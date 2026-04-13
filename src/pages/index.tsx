@@ -931,3 +931,26 @@ export const Index = () => {
   );
 };
 
+function buildFamilyMembers(state: WizardState): FamilyMember[] {
+  const members: FamilyMember[] = [];
+  const hasPartner = (state.familyStatus === "partner" || state.familyStatus === "partner-children") && state.insurePartner === "yes";
+  const hasChildren = (state.familyStatus === "single-children" || state.familyStatus === "partner-children") && state.childrenCount > 0;
+
+  // Also check car states for partner/child assignments
+  const ps = state.productStates || {};
+  const carStates = Object.keys(ps).filter((k) => k.startsWith("car-")).map((k) => ps[k]);
+  const carNeedsPartner = carStates.some((c: any) => c.driverRelationship === "My partner");
+  const carChildCount = carStates.filter((c: any) => c.driverRelationship === "My child").length;
+
+  if (hasPartner || carNeedsPartner) {
+    members.push({ relation: "partner", firstName: "", infix: "", lastName: "", birthdate: "", gender: "" });
+  }
+
+  const childCount = hasChildren ? state.childrenCount : Math.max(0, carChildCount);
+  for (let i = 0; i < childCount; i++) {
+    members.push({ relation: "child", firstName: "", infix: "", lastName: "", birthdate: "", gender: "" });
+  }
+
+  return members;
+}
+
