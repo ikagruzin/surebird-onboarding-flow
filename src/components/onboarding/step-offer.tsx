@@ -1496,12 +1496,11 @@ export const StepOffer = ({
                     })}
                     <button
                       onClick={() => {
-                        const newInst = { id: crypto.randomUUID(), state: {} } as CarInstance;
-                        setLocalProductStates((prev) => ({
-                          ...prev,
-                          car: { ...prev.car, __carInstances: [...carInstances, newInst] },
-                        }));
-                        setActiveCarIdx(carInstances.length);
+                        setAddFlowQueue(["car"]);
+                        setAddFlowProduct("car");
+                        setAddFlowActiveTab("car");
+                        setAddFlowCompletedTabs([]);
+                        setAddFlowPhase("preferences");
                       }}
                       className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium border border-border bg-white text-muted-foreground hover:bg-muted transition-colors"
                     >
@@ -1710,6 +1709,7 @@ export const StepOffer = ({
                     happyClients={insurer.happyClients}
                     actionLabel="Policy conditions"
                     onViewDetails={() => { setCompareModalProduct(null); setPolicyModalOpen(true); }}
+                    selected={true}
                   />
                 </div>
 
@@ -1726,6 +1726,10 @@ export const StepOffer = ({
                         happyClients={comp.happyClients}
                         actionLabel="Policy conditions"
                         onViewDetails={() => {}}
+                        onSelect={() => {
+                          toast.success(`Switched to ${comp.name}`);
+                          setCompareModalProduct(null);
+                        }}
                       />
                     );
                   })}
