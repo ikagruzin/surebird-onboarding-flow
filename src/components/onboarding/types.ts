@@ -55,6 +55,7 @@ export interface WizardState {
   caravanLocationHouseNumber: string;
   caravanLocationAddition: string;
   legalAdditionalAnswers: Record<string, string>;
+  upsellShown: boolean;
 }
 
 export const INSURANCE_TYPES: InsuranceType[] = [

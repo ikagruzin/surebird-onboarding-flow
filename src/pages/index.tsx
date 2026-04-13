@@ -74,6 +74,7 @@ const INITIAL_STATE: WizardState = {
   caravanLocationHouseNumber: "",
   caravanLocationAddition: "",
   legalAdditionalAnswers: {},
+  upsellShown: false,
 };
 
 export const Index = () => {
@@ -86,6 +87,7 @@ export const Index = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [shakeFooter, setShakeFooter] = useState(false);
   const [hasVisitedPreferences, setHasVisitedPreferences] = useState(false);
+  const [upsellSelections, setUpsellSelections] = useState<string[]>([]);
   const prefsRef = useRef<StepPreferencesHandle>(null);
   const seenStepsRef = useRef<Set<string>>(new Set());
 
@@ -405,6 +407,24 @@ export const Index = () => {
       if (handled) return;
     }
 
+    // Upsell step: if user selected new products, add them and go back to preferences
+    if (currentStepId === "upsell-products") {
+      setState((s) => ({ ...s, upsellShown: true }));
+      if (upsellSelections.length > 0) {
+        setState((s) => ({
+          ...s,
+          selectedInsurances: [...s.selectedInsurances, ...upsellSelections],
+        }));
+        setUpsellSelections([]);
+        goToStepId("preferences");
+        return;
+      }
+      // No selections — proceed to all-set
+      setValidationErrors({});
+      goToIndex(getNextIndex());
+      return;
+    }
+
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setValidationErrors(errs);
@@ -603,6 +623,15 @@ export const Index = () => {
         return null; // rendered as always-mounted below
       case "loading":
         return <StepLoading onComplete={() => goToIndex(getNextIndex())} animateTaco={shouldAnimateTaco} />;
+      case "upsell-products":
+        return (
+          <StepUpsell
+            selectedInsurances={state.selectedInsurances}
+            upsellSelections={upsellSelections}
+            onToggle={(id) => setUpsellSelections((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id])}
+            animateTaco={shouldAnimateTaco}
+          />
+        );
       case "all-set":
         return (
           <StepAllSet
