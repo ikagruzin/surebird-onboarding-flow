@@ -74,6 +74,7 @@ const INITIAL_STATE: WizardState = {
   caravanLocationHouseNumber: "",
   caravanLocationAddition: "",
   legalAdditionalAnswers: {},
+  upsellShown: false,
 };
 
 export const Index = () => {
