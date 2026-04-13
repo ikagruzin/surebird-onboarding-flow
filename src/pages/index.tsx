@@ -650,6 +650,7 @@ export const Index = () => {
             lastName={state.lastName}
             phone={state.phone}
             email={state.email}
+            gender={state.gender}
             onUpdateField={(field, value) => setState((s) => ({ ...s, [field]: value }))}
             onNext={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
@@ -665,6 +666,112 @@ export const Index = () => {
             onVerified={() => goToIndex(getNextIndex())}
             onBack={() => goToIndex(getPrevIndex())}
             animateTaco={shouldAnimateTaco}
+          />
+        );
+      case "family-members-info": {
+        // Build family members list from wizard state + car states
+        const members = buildFamilyMembers(state);
+        // Ensure state.familyMembers is populated
+        if (state.familyMembers.length !== members.length) {
+          setState((s) => ({ ...s, familyMembers: members }));
+        }
+        return (
+          <StepFamilyMembersInfo
+            familyMembers={state.familyMembers.length > 0 ? state.familyMembers : members}
+            onUpdateMember={(idx, field, value) => {
+              setState((s) => {
+                const updated = [...s.familyMembers];
+                if (updated[idx]) {
+                  updated[idx] = { ...updated[idx], [field]: value };
+                }
+                return { ...s, familyMembers: updated };
+              });
+            }}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
+          />
+        );
+      }
+      case "select-regular-driver": {
+        const ps = state.productStates || {};
+        const carsNeedingDriver = Object.keys(ps)
+          .filter((k) => k.startsWith("car-") && ps[k]?.driverRelationship === "My child")
+          .map((k) => ({ instanceId: k, licensePlate: ps[k]?.licensePlate || "" }));
+        const childMembers = state.familyMembers.filter((m) => m.relation === "child");
+        return (
+          <StepSelectRegularDriver
+            carsNeedingDriver={carsNeedingDriver}
+            children={childMembers}
+            carRegularDrivers={state.carRegularDrivers}
+            onSelectDriver={(carId, childIdx) => {
+              setState((s) => ({
+                ...s,
+                carRegularDrivers: { ...s.carRegularDrivers, [carId]: childIdx },
+              }));
+            }}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
+          />
+        );
+      }
+      case "car-registration-code": {
+        const ps2 = state.productStates || {};
+        const carInstances = Object.keys(ps2)
+          .filter((k) => k.startsWith("car-") && ps2[k]?.licensePlate)
+          .map((k) => ({ instanceId: k, licensePlate: ps2[k].licensePlate }));
+        return (
+          <StepCarRegistrationCode
+            cars={carInstances}
+            carRegCodes={state.carRegCodes}
+            onUpdateCode={(id, val) => {
+              setState((s) => ({
+                ...s,
+                carRegCodes: { ...s.carRegCodes, [id]: val },
+              }));
+            }}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
+          />
+        );
+      }
+      case "caravan-location":
+        return (
+          <StepCaravanLocation
+            postcode={state.caravanLocationPostcode || state.postcode}
+            houseNumber={state.caravanLocationHouseNumber || state.houseNumber}
+            addition={state.caravanLocationAddition || state.addition}
+            onUpdate={(field, value) => setState((s) => ({ ...s, [field]: value }))}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
+          />
+        );
+      case "legal-additional-questions":
+        return (
+          <StepLegalAdditionalQuestions
+            answers={state.legalAdditionalAnswers}
+            onUpdateAnswer={(field, value) => {
+              setState((s) => ({
+                ...s,
+                legalAdditionalAnswers: { ...s.legalAdditionalAnswers, [field]: value },
+              }));
+            }}
+            onNext={() => goToIndex(getNextIndex())}
+            onBack={() => goToIndex(getPrevIndex())}
+            animateTaco={shouldAnimateTaco}
+            errors={validationErrors}
+            onClearError={clearError}
           />
         );
       case "idin-verification":
