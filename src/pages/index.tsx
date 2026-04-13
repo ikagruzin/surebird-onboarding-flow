@@ -345,7 +345,7 @@ export const Index = () => {
         break;
       }
       case "car-registration-code": {
-        const carInsts3 = (state.productStates?.car?.__carInstances || []) as any[];
+        const carInsts3 = (state.productStates?.car?.__carInstances || (state.productStates?.car?.licensePlate ? [{ id: "car-0", state: state.productStates.car }] : [])) as any[];
         carInsts3.filter((c: any) => c.state?.licensePlate).forEach((c: any) => {
           if (!state.carRegCodes[c.id] || state.carRegCodes[c.id].length < 4) errs[`regCode_${c.id}`] = "Please enter the 4-digit reporting code";
         });
@@ -755,7 +755,7 @@ export const Index = () => {
         );
       }
       case "car-registration-code": {
-        const carInsts2 = (state.productStates?.car?.__carInstances || []) as any[];
+        const carInsts2 = (state.productStates?.car?.__carInstances || (state.productStates?.car?.licensePlate ? [{ id: "car-0", state: state.productStates.car }] : [])) as any[];
         const carInstances = carInsts2
           .filter((c: any) => c.state?.licensePlate)
           .map((c: any) => ({ instanceId: c.id, licensePlate: c.state.licensePlate }));
@@ -870,9 +870,9 @@ export const Index = () => {
           />
         );
       case "success":
-        return <StepSuccess email={state.email} status="success" />;
+        return <StepSuccess email={state.email} />;
       default:
-        return <StepSuccess email={state.email} status="success" />;
+        return <StepSuccess email={state.email} />;
     }
   };
 

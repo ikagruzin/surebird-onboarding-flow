@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CheckCircle, Clock, AlertCircle, Phone, Mail } from "lucide-react";
 
 type SuccessStatus = "success" | "pending" | "review-needed";
@@ -7,15 +8,42 @@ interface StepSuccessProps {
   status?: SuccessStatus;
 }
 
-export const StepSuccess = ({ email, status = "success" }: StepSuccessProps) => {
+const STATUS_OPTIONS: { value: SuccessStatus; label: string }[] = [
+  { value: "success", label: "Congratulations" },
+  { value: "pending", label: "Pending" },
+  { value: "review-needed", label: "Review needed" },
+];
+
+export const StepSuccess = ({ email, status: initialStatus = "success" }: StepSuccessProps) => {
+  const [status, setStatus] = useState<SuccessStatus>(initialStatus);
+
+  const switcher = (
+    <div className="flex items-center gap-1 rounded-xl border border-input bg-muted p-1 mb-8">
+      {STATUS_OPTIONS.map((opt) => (
+        <button
+          key={opt.value}
+          type="button"
+          onClick={() => setStatus(opt.value)}
+          className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            status === opt.value
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+
   if (status === "pending") {
     return (
       <div className="animate-fade-in flex flex-col items-center justify-center text-center py-16 space-y-8">
+        {switcher}
         <div className="relative">
           <div className="w-28 h-28 rounded-full bg-warning/10 flex items-center justify-center animate-[scale-in_0.5s_ease-out]">
             <Clock className="w-16 h-16 text-warning animate-[fade-in_0.3s_ease-out_0.3s_both]" />
           </div>
-          <div className="absolute -top-2 -right-2 text-2xl animate-[bounce_1s_ease-in-out_0.5s_both]">⏳</div>
         </div>
 
         <div className="space-y-3 max-w-md">
@@ -55,11 +83,11 @@ export const StepSuccess = ({ email, status = "success" }: StepSuccessProps) => 
   if (status === "review-needed") {
     return (
       <div className="animate-fade-in flex flex-col items-center justify-center text-center py-16 space-y-8">
+        {switcher}
         <div className="relative">
           <div className="w-28 h-28 rounded-full bg-primary/10 flex items-center justify-center animate-[scale-in_0.5s_ease-out]">
             <AlertCircle className="w-16 h-16 text-primary animate-[fade-in_0.3s_ease-out_0.3s_both]" />
           </div>
-          <div className="absolute -top-2 -right-2 text-2xl animate-[bounce_1s_ease-in-out_0.5s_both]">📋</div>
         </div>
 
         <div className="space-y-3 max-w-md">
@@ -100,17 +128,16 @@ export const StepSuccess = ({ email, status = "success" }: StepSuccessProps) => 
   // Default: success
   return (
     <div className="animate-fade-in flex flex-col items-center justify-center text-center py-16 space-y-8">
+      {switcher}
       <div className="relative">
         <div className="w-28 h-28 rounded-full bg-success/10 flex items-center justify-center animate-[scale-in_0.5s_ease-out]">
           <CheckCircle className="w-16 h-16 text-success animate-[fade-in_0.3s_ease-out_0.3s_both]" />
         </div>
-        <div className="absolute -top-2 -right-2 text-2xl animate-[bounce_1s_ease-in-out_0.5s_both]">🎉</div>
-        <div className="absolute -bottom-1 -left-3 text-xl animate-[bounce_1s_ease-in-out_0.7s_both]">✨</div>
       </div>
 
       <div className="space-y-3 max-w-md">
         <h1 className="text-3xl font-bold text-foreground">Congratulations!</h1>
-        <p className="text-xl font-medium text-foreground">You are now smartly insured. 🎊</p>
+        <p className="text-xl font-medium text-foreground">You are now smartly insured.</p>
         <p className="text-base text-muted-foreground leading-relaxed">
           Your policy documents are being sent to{" "}
           <span className="font-medium text-foreground">{email || "your email"}</span>.

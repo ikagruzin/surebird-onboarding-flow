@@ -218,21 +218,23 @@ export const StepAcceptanceQuestions = ({
       )}
 
       <div className="space-y-2">
-        <label
-          className="flex items-start gap-3 cursor-pointer"
-          onClick={() => {
-            onToggleConfirmed(!confirmed);
-          }}
-        >
-          <Checkbox
-            checked={confirmed}
-            onCheckedChange={(val) => onToggleConfirmed(!!val)}
-            className="mt-0.5"
-          />
-          <span className="text-sm text-foreground leading-snug">
-            I have reviewed all prefilled answers and confirmed that they are complete and accurate to the best of my knowledge
-          </span>
-        </label>
+        <div className="rounded-2xl border-2 border-input bg-card p-5">
+          <label
+            className="flex items-start gap-3 cursor-pointer"
+            onClick={() => {
+              onToggleConfirmed(!confirmed);
+            }}
+          >
+            <Checkbox
+              checked={confirmed}
+              onCheckedChange={(val) => onToggleConfirmed(!!val)}
+              className="mt-0.5"
+            />
+            <span className="text-sm text-foreground leading-snug">
+              I have reviewed all prefilled answers and confirmed that they are complete and accurate to the best of my knowledge
+            </span>
+          </label>
+        </div>
         <ValidationError message={errors?.acceptanceConfirmed} />
       </div>
     </div>
