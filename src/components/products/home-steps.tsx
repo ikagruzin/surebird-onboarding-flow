@@ -486,7 +486,7 @@ export const HomeContentsStep = ({
               }}
             />
           </div>
-          {state.outsideValue !== "€0" && state.outsideValue !== "" && (
+          {state.outsideValue !== "€0" && (
             <div className="mt-3">
               <NativeSelect
                 value={state.outsideValue || ""}
