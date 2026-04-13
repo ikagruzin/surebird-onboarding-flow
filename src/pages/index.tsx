@@ -976,6 +976,7 @@ export const Index = () => {
               onBack={() => goToIndex(getPrevIndex())}
               animateTaco={shouldAnimateTaco}
               skipContactStep={flow.steps.some((s) => s.id === "all-set")}
+              initialActiveTab={initialActiveTab}
             />
           </div>
         )}
