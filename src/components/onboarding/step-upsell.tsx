@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { INSURANCE_TYPES } from "./types";
-import { TacoMessage } from "./taco-message";
+import type { InsuranceType } from "./types";
+import tacoAvatar from "@/assets/taco-avatar.jpg";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
 import iconCar from "@/assets/icon-car.svg";
@@ -22,22 +24,29 @@ interface StepUpsellProps {
   selectedInsurances: string[];
   upsellSelections: string[];
   onToggle: (id: string) => void;
+  onHoveredProduct?: (product: InsuranceType | null) => void;
   animateTaco?: boolean;
 }
 
-export const StepUpsell = ({ selectedInsurances, upsellSelections, onToggle, animateTaco }: StepUpsellProps) => {
+export const StepUpsell = ({ selectedInsurances, upsellSelections, onToggle, onHoveredProduct, animateTaco }: StepUpsellProps) => {
   const unselected = INSURANCE_TYPES.filter((t) => !selectedInsurances.includes(t.id));
+  const potentialSavings = unselected.reduce((sum, t) => sum + t.savings, 0);
 
   return (
     <div className="animate-fade-in">
-      <TacoMessage
-        message="You're almost there! Add more products to your bundle and save even more."
-        animate={animateTaco}
-      />
-
-      <h2 className="text-2xl font-bold text-foreground mb-6">
-        Would you like to add anything else?
-      </h2>
+      {/* Custom Taco message with green-highlighted savings */}
+      <div className="flex items-center gap-3 mb-6">
+        <img
+          src={tacoAvatar}
+          alt="Taco"
+          className="w-10 h-10 rounded-full object-cover shrink-0"
+        />
+        <p className="text-base font-semibold text-foreground">
+          Bundle more, save more! Add products now and unlock up to{" "}
+          <span className="text-success">€{potentialSavings}</span>{" "}
+          in additional savings.
+        </p>
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {unselected.map((ins) => {
@@ -46,6 +55,8 @@ export const StepUpsell = ({ selectedInsurances, upsellSelections, onToggle, ani
             <button
               key={ins.id}
               onClick={() => onToggle(ins.id)}
+              onMouseEnter={() => onHoveredProduct?.(ins)}
+              onMouseLeave={() => onHoveredProduct?.(null)}
               className={`flex items-center gap-3 px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
                 isChecked
                   ? "border-[#0385FF] bg-[#0385FF]/10 shadow-md"

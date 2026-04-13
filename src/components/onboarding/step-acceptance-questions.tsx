@@ -3,7 +3,6 @@ import { TacoMessage } from "./taco-message";
 import { ValidationError } from "./validation-error";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
 import {
   Tooltip,
   TooltipContent,
@@ -99,11 +98,6 @@ export const StepAcceptanceQuestions = ({
   errors,
   onClearError,
 }: StepAcceptanceQuestionsProps) => {
-  const hasYesAnswer = QUESTIONS.some(
-    (q) => q.id !== "healthy" && answers[q.id] === "yes"
-  );
-  const hasHealthyNo = answers["healthy"] === "no";
-
   const shouldShowFields = (q: AcceptanceQuestion): boolean => {
     if (q.id === "healthy") return answers[q.id] === "no";
     return answers[q.id] === "yes";
@@ -182,7 +176,6 @@ export const StepAcceptanceQuestions = ({
                 </div>
               </div>
 
-              {/* Conditional explanation fields — inside the card */}
               {shouldShowFields(q) && q.explanationFields && (
                 <div className="space-y-3">
                   {q.explanationFields.map((field) => (
@@ -201,40 +194,24 @@ export const StepAcceptanceQuestions = ({
         <ValidationError message={errors?.acceptanceQuestions} />
       </TooltipProvider>
 
-      {(hasYesAnswer || hasHealthyNo) && (
-        <div className="flex items-center gap-3 animate-fade-in">
-          <img
-            src={tacoAvatar}
-            alt="Taco"
-            className="w-10 h-10 rounded-full object-cover shrink-0"
-          />
-          <div className="bg-accent/10 border border-accent/30 rounded-2xl rounded-tl-md px-5 py-3">
-            <p className="text-sm text-foreground">
-              No worries — Taco will personally review this with the insurer to
-              find a solution for you. 💪
-            </p>
-          </div>
-        </div>
-      )}
-
       <div className="space-y-2">
-        <div className="rounded-2xl border-2 border-input bg-card p-5">
-          <label
-            className="flex items-start gap-3 cursor-pointer"
-            onClick={() => {
-              onToggleConfirmed(!confirmed);
-            }}
-          >
+        <button
+          type="button"
+          onClick={() => onToggleConfirmed(!confirmed)}
+          className="w-full rounded-2xl border-2 border-input bg-card p-5 text-left cursor-pointer hover:bg-muted/50 transition-colors"
+        >
+          <div className="flex items-start gap-3">
             <Checkbox
               checked={confirmed}
               onCheckedChange={(val) => onToggleConfirmed(!!val)}
               className="mt-0.5"
+              onClick={(e) => e.stopPropagation()}
             />
             <span className="text-sm text-foreground leading-snug">
               I have reviewed all prefilled answers and confirmed that they are complete and accurate to the best of my knowledge
             </span>
-          </label>
-        </div>
+          </div>
+        </button>
         <ValidationError message={errors?.acceptanceConfirmed} />
       </div>
     </div>

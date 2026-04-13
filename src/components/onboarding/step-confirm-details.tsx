@@ -39,7 +39,6 @@ export const StepConfirmDetails = ({
         animate={animateTaco}
       />
 
-      {/* Personal details card */}
       <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-5">
         <h3 className="text-lg font-semibold text-foreground">Confirm your details</h3>
 
@@ -78,25 +77,6 @@ export const StepConfirmDetails = ({
             </div>
           </div>
 
-          {/* Gender */}
-          <div>
-            <p className="text-sm font-medium text-foreground mb-2">Gender</p>
-            <div className="grid grid-cols-3 gap-2">
-              {GENDER_OPTIONS.map((g) => (
-                <SelectionCard
-                  key={g}
-                  label={g}
-                  selected={gender === g}
-                  indicator="radio"
-                  onClick={() => {
-                    onUpdateField("gender", g);
-                    onClearError?.("gender");
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-
           <div>
             <FloatingLabelInput
               label="Phone number"
@@ -122,6 +102,25 @@ export const StepConfirmDetails = ({
               className={errors?.email ? "border-destructive" : ""}
             />
             <ValidationError message={errors?.email} />
+          </div>
+
+          {/* Gender — after email */}
+          <div>
+            <p className="text-sm font-medium text-foreground mb-2">Gender</p>
+            <div className="grid grid-cols-3 gap-2">
+              {GENDER_OPTIONS.map((g) => (
+                <SelectionCard
+                  key={g}
+                  label={g}
+                  selected={gender === g}
+                  indicator="radio"
+                  onClick={() => {
+                    onUpdateField("gender", g);
+                    onClearError?.("gender");
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
