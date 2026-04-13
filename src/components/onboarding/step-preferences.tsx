@@ -311,6 +311,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
   const [contactMethod, setContactMethod] = useState<"phone" | "email">("phone");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionDirection, setTransitionDirection] = useState<"left" | "right">("left");
+  const [removeConfirmId, setRemoveConfirmId] = useState<string | null>(null);
 
   // Product flow refs for products with full configs (e.g. Home)
   const productFlowRefs = useRef<Record<string, ProductFlowTabHandle | null>>({});
