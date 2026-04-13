@@ -87,6 +87,7 @@ export const Index = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [shakeFooter, setShakeFooter] = useState(false);
   const [hasVisitedPreferences, setHasVisitedPreferences] = useState(false);
+  const [upsellSelections, setUpsellSelections] = useState<string[]>([]);
   const prefsRef = useRef<StepPreferencesHandle>(null);
   const seenStepsRef = useRef<Set<string>>(new Set());
 
