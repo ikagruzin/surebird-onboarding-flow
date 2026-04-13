@@ -131,7 +131,7 @@ const TRANSLATIONS = {
     bundles: {
       "home-family": { title: "Home & Family", description: "The essential foundation. Protect your home and your family against unexpected costs." },
       "business-travel": { title: "Explorer plan", description: "For those on the move. Global coverage for your trips and your vehicle in one click." },
-      "popular": { title: "Popular choice", description: "Our bundle of the most popular products." },
+      "popular": { title: "Popular choice", description: "Our bundle of the most popular products: Home, Car and Liability." },
       "maximum": { title: "Maximum protection", description: "For all cases in life. Our maximum discount for total peace of mind." },
     },
   },
