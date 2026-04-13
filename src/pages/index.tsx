@@ -623,6 +623,15 @@ export const Index = () => {
         return null; // rendered as always-mounted below
       case "loading":
         return <StepLoading onComplete={() => goToIndex(getNextIndex())} animateTaco={shouldAnimateTaco} />;
+      case "upsell-products":
+        return (
+          <StepUpsell
+            selectedInsurances={state.selectedInsurances}
+            upsellSelections={upsellSelections}
+            onToggle={(id) => setUpsellSelections((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id])}
+            animateTaco={shouldAnimateTaco}
+          />
+        );
       case "all-set":
         return (
           <StepAllSet
