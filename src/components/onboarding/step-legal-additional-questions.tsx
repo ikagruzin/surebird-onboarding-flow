@@ -45,8 +45,8 @@ export const StepLegalAdditionalQuestions = ({
         </div>
 
         {/* Working */}
-        <div className="space-y-0">
-          <div className="rounded-2xl border-2 border-input bg-card p-5 flex items-start gap-4">
+        <div className="rounded-2xl border-2 border-input bg-card p-5 space-y-3">
+          <div className="flex items-start gap-4">
             <p className="flex-1 text-sm font-medium text-foreground leading-snug pt-1">
               Are you currently employed?
             </p>
@@ -72,19 +72,17 @@ export const StepLegalAdditionalQuestions = ({
             </div>
           </div>
           {answers.working === "yes" && (
-            <div className="pl-5 pr-5 pb-4 pt-3">
-              <FloatingLabelInput
-                label="Which company do you work for?"
-                value={answers.company || ""}
-                onChange={(e) => onUpdateAnswer("company", e.target.value)}
-              />
-            </div>
+            <FloatingLabelInput
+              label="Which company do you work for?"
+              value={answers.company || ""}
+              onChange={(e) => onUpdateAnswer("company", e.target.value)}
+            />
           )}
         </div>
 
         {/* Disability */}
-        <div className="space-y-0">
-          <div className="rounded-2xl border-2 border-input bg-card p-5 flex items-start gap-4">
+        <div className="rounded-2xl border-2 border-input bg-card p-5 space-y-3">
+          <div className="flex items-start gap-4">
             <p className="flex-1 text-sm font-medium text-foreground leading-snug pt-1">
               Do you have a disability benefit?
             </p>
@@ -110,13 +108,11 @@ export const StepLegalAdditionalQuestions = ({
             </div>
           </div>
           {answers.disability === "yes" && (
-            <div className="pl-5 pr-5 pb-4 pt-3">
-              <FloatingLabelInput
-                label="What disability benefit do you have?"
-                value={answers.disabilityDetails || ""}
-                onChange={(e) => onUpdateAnswer("disabilityDetails", e.target.value)}
-              />
-            </div>
+            <FloatingLabelInput
+              label="What disability benefit do you have?"
+              value={answers.disabilityDetails || ""}
+              onChange={(e) => onUpdateAnswer("disabilityDetails", e.target.value)}
+            />
           )}
         </div>
 

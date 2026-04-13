@@ -135,8 +135,8 @@ export const StepAcceptanceQuestions = ({
       <TooltipProvider delayDuration={200}>
         <div className="space-y-3">
           {QUESTIONS.map((q) => (
-            <div key={q.id} className="space-y-0">
-              <div className="rounded-2xl border-2 border-input bg-card p-5 flex items-start gap-4">
+            <div key={q.id} className="rounded-2xl border-2 border-input bg-card p-5 space-y-3">
+              <div className="flex items-start gap-4">
                 <div className="flex-1 flex items-start gap-2">
                   <p className="text-sm font-medium text-foreground leading-snug pt-1">
                     {q.text}
@@ -182,9 +182,9 @@ export const StepAcceptanceQuestions = ({
                 </div>
               </div>
 
-              {/* Conditional explanation fields */}
+              {/* Conditional explanation fields — inside the card */}
               {shouldShowFields(q) && q.explanationFields && (
-                <div className="pl-5 pr-5 pb-4 pt-3 space-y-3">
+                <div className="space-y-3">
                   {q.explanationFields.map((field) => (
                     <FloatingLabelInput
                       key={field.key}
