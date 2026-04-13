@@ -1008,6 +1008,37 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
           </div>
         )}
       {renderAddModal()}
+
+      {/* Remove product confirmation dialog */}
+      <AlertDialog open={!!removeConfirmId} onOpenChange={(open) => { if (!open) setRemoveConfirmId(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove {removeConfirmId ? INSURANCE_TYPES.find(i => i.id === removeConfirmId)?.label : ''} insurance?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove the product from your bundle and any preferences you've set for it will be lost.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (!removeConfirmId) return;
+                const id = removeConfirmId;
+                if (activeTab === id) {
+                  const remaining = selectedInsurances.filter(i => i !== id);
+                  if (remaining.length > 0) setActiveTab(remaining[0]);
+                }
+                setCompletedTabs((prev) => prev.filter(t => t !== id));
+                onRemoveInsurance(id);
+                setRemoveConfirmId(null);
+              }}
+            >
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 });
