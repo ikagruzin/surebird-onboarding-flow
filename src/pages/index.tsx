@@ -870,9 +870,9 @@ export const Index = () => {
           />
         );
       case "success":
-        return <StepSuccess email={state.email} />;
+        return <StepSuccess email={state.email} status="success" />;
       default:
-        return <StepSuccess email={state.email} />;
+        return <StepSuccess email={state.email} status="success" />;
     }
   };
 
