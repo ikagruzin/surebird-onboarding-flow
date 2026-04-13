@@ -326,6 +326,38 @@ export const Index = () => {
         if (!state.email.includes("@")) errs.email = "Please enter a valid email address";
         if (state.phone.replace(/\D/g, "").length < 10) errs.phone = "Please enter your phone number";
         break;
+      case "family-members-info":
+        state.familyMembers.forEach((m, idx) => {
+          const p = `familyMember_${idx}`;
+          if (!m.firstName.trim()) errs[`${p}_firstName`] = "First name is required";
+          if (!m.lastName.trim()) errs[`${p}_lastName`] = "Surname is required";
+          if (m.birthdate.trim().length < 10) errs[`${p}_birthdate`] = "Date of birth is required";
+          if (!m.gender) errs[`${p}_gender`] = "Gender is required";
+        });
+        break;
+      case "select-regular-driver": {
+        const ps = state.productStates || {};
+        Object.keys(ps).filter((k) => k.startsWith("car-") && ps[k]?.driverRelationship === "My child").forEach((k) => {
+          if (!state.carRegularDrivers[k]) errs[`regularDriver_${k}`] = "Please select a driver";
+        });
+        break;
+      }
+      case "car-registration-code": {
+        const ps3 = state.productStates || {};
+        Object.keys(ps3).filter((k) => k.startsWith("car-") && ps3[k]?.licensePlate).forEach((k) => {
+          if (!state.carRegCodes[k] || state.carRegCodes[k].length < 4) errs[`regCode_${k}`] = "Please enter the 4-digit reporting code";
+        });
+        break;
+      }
+      case "caravan-location": {
+        const cp = (state.caravanLocationPostcode || state.postcode).replace(/\s/g, "");
+        if (cp.length < 6) errs.caravanPostcode = "Please enter a valid postcode";
+        if (!(state.caravanLocationHouseNumber || state.houseNumber).trim()) errs.caravanHouseNumber = "Please enter the house number";
+        break;
+      }
+      case "legal-additional-questions":
+        if (!state.legalAdditionalAnswers.profession?.trim()) errs.legalProfession = "Please enter your profession";
+        break;
       case "acceptance-questions": {
         const totalQs = 7;
         const answered = Object.keys(state.acceptanceAnswers).length;
