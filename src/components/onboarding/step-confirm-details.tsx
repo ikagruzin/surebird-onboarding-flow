@@ -8,6 +8,7 @@ interface StepConfirmDetailsProps {
   lastName: string;
   phone: string;
   email: string;
+  gender: string;
   onUpdateField: (field: string, value: string) => void;
   onNext: () => void;
   onBack: () => void;
@@ -16,12 +17,15 @@ interface StepConfirmDetailsProps {
   onClearError?: (field: string) => void;
 }
 
+const GENDER_OPTIONS = ["Man", "Woman", "Different"];
+
 export const StepConfirmDetails = ({
   firstName,
   infix,
   lastName,
   phone,
   email,
+  gender,
   onUpdateField,
   animateTaco,
   errors,
