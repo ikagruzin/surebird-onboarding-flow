@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { INSURANCE_TYPES } from "./types";
 import { TacoMessage } from "./taco-message";
 import iconLiability from "@/assets/icon-liability.svg";
@@ -21,19 +20,13 @@ const ICON_MAP: Record<string, string> = {
 
 interface StepUpsellProps {
   selectedInsurances: string[];
-  onComplete: (newlyAdded: string[]) => void;
+  upsellSelections: string[];
+  onToggle: (id: string) => void;
   animateTaco?: boolean;
 }
 
-export const StepUpsell = ({ selectedInsurances, onComplete, animateTaco }: StepUpsellProps) => {
+export const StepUpsell = ({ selectedInsurances, upsellSelections, onToggle, animateTaco }: StepUpsellProps) => {
   const unselected = INSURANCE_TYPES.filter((t) => !selectedInsurances.includes(t.id));
-  const [newSelections, setNewSelections] = useState<string[]>([]);
-
-  const toggle = (id: string) => {
-    setNewSelections((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
-  };
 
   return (
     <div className="animate-fade-in">
@@ -48,11 +41,11 @@ export const StepUpsell = ({ selectedInsurances, onComplete, animateTaco }: Step
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {unselected.map((ins) => {
-          const isChecked = newSelections.includes(ins.id);
+          const isChecked = upsellSelections.includes(ins.id);
           return (
             <button
               key={ins.id}
-              onClick={() => toggle(ins.id)}
+              onClick={() => onToggle(ins.id)}
               className={`flex items-center gap-3 px-5 py-4 rounded-2xl border-2 transition-all text-left hover:shadow-md ${
                 isChecked
                   ? "border-[#0385FF] bg-[#0385FF]/10 shadow-md"
