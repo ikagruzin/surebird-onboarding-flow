@@ -407,6 +407,24 @@ export const Index = () => {
       if (handled) return;
     }
 
+    // Upsell step: if user selected new products, add them and go back to preferences
+    if (currentStepId === "upsell-products") {
+      setState((s) => ({ ...s, upsellShown: true }));
+      if (upsellSelections.length > 0) {
+        setState((s) => ({
+          ...s,
+          selectedInsurances: [...s.selectedInsurances, ...upsellSelections],
+        }));
+        setUpsellSelections([]);
+        goToStepId("preferences");
+        return;
+      }
+      // No selections — proceed to all-set
+      setValidationErrors({});
+      goToIndex(getNextIndex());
+      return;
+    }
+
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setValidationErrors(errs);
