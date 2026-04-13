@@ -336,16 +336,18 @@ export const Index = () => {
         });
         break;
       case "select-regular-driver": {
-        const ps = state.productStates || {};
-        Object.keys(ps).filter((k) => k.startsWith("car-") && ps[k]?.driverRelationship === "My child").forEach((k) => {
-          if (!state.carRegularDrivers[k]) errs[`regularDriver_${k}`] = "Please select a driver";
-        });
+        const carInsts = (state.productStates?.car?.__carInstances || []) as any[];
+        carInsts
+          .filter((c: any) => c.state?.driverRelationship === "My child")
+          .forEach((c: any) => {
+            if (!state.carRegularDrivers[c.id]) errs[`regularDriver_${c.id}`] = "Please select a driver";
+          });
         break;
       }
       case "car-registration-code": {
-        const ps3 = state.productStates || {};
-        Object.keys(ps3).filter((k) => k.startsWith("car-") && ps3[k]?.licensePlate).forEach((k) => {
-          if (!state.carRegCodes[k] || state.carRegCodes[k].length < 4) errs[`regCode_${k}`] = "Please enter the 4-digit reporting code";
+        const carInsts3 = (state.productStates?.car?.__carInstances || []) as any[];
+        carInsts3.filter((c: any) => c.state?.licensePlate).forEach((c: any) => {
+          if (!state.carRegCodes[c.id] || state.carRegCodes[c.id].length < 4) errs[`regCode_${c.id}`] = "Please enter the 4-digit reporting code";
         });
         break;
       }
@@ -728,10 +730,10 @@ export const Index = () => {
         );
       }
       case "select-regular-driver": {
-        const ps = state.productStates || {};
-        const carsNeedingDriver = Object.keys(ps)
-          .filter((k) => k.startsWith("car-") && ps[k]?.driverRelationship === "My child")
-          .map((k) => ({ instanceId: k, licensePlate: ps[k]?.licensePlate || "" }));
+        const carInsts1 = (state.productStates?.car?.__carInstances || []) as any[];
+        const carsNeedingDriver = carInsts1
+          .filter((c: any) => c.state?.driverRelationship === "My child")
+          .map((c: any) => ({ instanceId: c.id, licensePlate: c.state?.licensePlate || "" }));
         const childMembers = state.familyMembers.filter((m) => m.relation === "child");
         return (
           <StepSelectRegularDriver
@@ -753,10 +755,10 @@ export const Index = () => {
         );
       }
       case "car-registration-code": {
-        const ps2 = state.productStates || {};
-        const carInstances = Object.keys(ps2)
-          .filter((k) => k.startsWith("car-") && ps2[k]?.licensePlate)
-          .map((k) => ({ instanceId: k, licensePlate: ps2[k].licensePlate }));
+        const carInsts2 = (state.productStates?.car?.__carInstances || []) as any[];
+        const carInstances = carInsts2
+          .filter((c: any) => c.state?.licensePlate)
+          .map((c: any) => ({ instanceId: c.id, licensePlate: c.state.licensePlate }));
         return (
           <StepCarRegistrationCode
             cars={carInstances}
@@ -966,19 +968,18 @@ export const Index = () => {
 function buildFamilyMembers(state: WizardState): FamilyMember[] {
   const members: FamilyMember[] = [];
   const hasPartner = (state.familyStatus === "partner" || state.familyStatus === "partner-children") && state.insurePartner === "yes";
-  const hasChildren = (state.familyStatus === "single-children" || state.familyStatus === "partner-children") && state.childrenCount > 0;
+  const hasChildren = (state.familyStatus === "single-children" || state.familyStatus === "partner-children") && Number(state.childrenCount) > 0;
 
-  // Also check car states for partner/child assignments
-  const ps = state.productStates || {};
-  const carStates = Object.keys(ps).filter((k) => k.startsWith("car-")).map((k) => ps[k]);
-  const carNeedsPartner = carStates.some((c: any) => c.driverRelationship === "My partner");
-  const carChildCount = carStates.filter((c: any) => c.driverRelationship === "My child").length;
+  // Check car instances for partner/child assignments
+  const carInstances = (state.productStates?.car?.__carInstances || []) as any[];
+  const carNeedsPartner = carInstances.some((c: any) => c.state?.driverRelationship === "My partner");
+  const carChildCount = carInstances.filter((c: any) => c.state?.driverRelationship === "My child").length;
 
   if (hasPartner || carNeedsPartner) {
     members.push({ relation: "partner", firstName: "", infix: "", lastName: "", birthdate: "", gender: "" });
   }
 
-  const childCount = hasChildren ? state.childrenCount : Math.max(0, carChildCount);
+  const childCount = hasChildren ? Number(state.childrenCount) : Math.max(0, carChildCount);
   for (let i = 0; i < childCount; i++) {
     members.push({ relation: "child", firstName: "", infix: "", lastName: "", birthdate: "", gender: "" });
   }

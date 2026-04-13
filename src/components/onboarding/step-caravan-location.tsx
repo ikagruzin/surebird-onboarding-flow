@@ -66,12 +66,12 @@ export const StepCaravanLocation = ({
   return (
     <div className="animate-fade-in space-y-8 pb-8">
       <TacoMessage
-        message="Where is your mobile home located? 📍"
+        message="Where is your caravan located? 📍"
         animate={animateTaco}
       />
 
       <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-4">
-        <h3 className="text-lg font-semibold text-foreground">Mobile home location</h3>
+        <h3 className="text-lg font-semibold text-foreground">Caravan location</h3>
 
         <div className="grid grid-cols-2 gap-4">
           <div>

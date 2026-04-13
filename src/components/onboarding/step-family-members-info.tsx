@@ -1,5 +1,6 @@
 import { TacoMessage } from "./taco-message";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import { SelectionCard } from "@/components/ui/selection-card";
 import { ValidationError } from "./validation-error";
 import type { FamilyMember } from "./types";
 
@@ -97,23 +98,18 @@ export const StepFamilyMembersInfo = ({
 
                 <div>
                   <p className="text-sm font-medium text-foreground mb-2">Gender</p>
-                  <div className="flex rounded-xl border-2 border-input overflow-hidden">
+                  <div className="space-y-2">
                     {GENDER_OPTIONS.map((g) => (
-                      <button
+                      <SelectionCard
                         key={g}
-                        type="button"
+                        label={g}
+                        selected={member.gender === g}
+                        indicator="radio"
                         onClick={() => {
                           onUpdateMember(idx, "gender", g);
                           onClearError?.(`${prefix}_gender`);
                         }}
-                        className={`flex-1 px-4 py-2.5 text-sm font-medium transition-colors ${
-                          member.gender === g
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-card text-muted-foreground hover:bg-muted"
-                        } ${g !== GENDER_OPTIONS[0] ? "border-l border-input" : ""}`}
-                      >
-                        {g}
-                      </button>
+                      />
                     ))}
                   </div>
                   <ValidationError message={errors?.[`${prefix}_gender`]} />
