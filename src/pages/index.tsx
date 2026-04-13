@@ -18,6 +18,11 @@ import { OfferGate } from "@/components/onboarding/offer-gate";
 import { StepPolicyUpload } from "@/components/onboarding/step-policy-upload";
 import { StepStartDate } from "@/components/onboarding/step-start-date";
 import { StepConfirmDetails } from "@/components/onboarding/step-confirm-details";
+import { StepFamilyMembersInfo } from "@/components/onboarding/step-family-members-info";
+import { StepSelectRegularDriver } from "@/components/onboarding/step-select-regular-driver";
+import { StepCarRegistrationCode } from "@/components/onboarding/step-car-registration-code";
+import { StepCaravanLocation } from "@/components/onboarding/step-caravan-location";
+import { StepLegalAdditionalQuestions } from "@/components/onboarding/step-legal-additional-questions";
 import { StepPhoneVerification } from "@/components/onboarding/step-phone-verification";
 import { StepIdinVerification } from "@/components/onboarding/step-idin-verification";
 import { StepAcceptanceQuestions } from "@/components/onboarding/step-acceptance-questions";
@@ -29,7 +34,7 @@ import { FlowSwitcher } from "@/components/onboarding/flow-switcher";
 import { DevSkipButton } from "@/components/onboarding/dev-skip-button";
 import { Progress } from "@/components/ui/progress";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
-import type { WizardState } from "@/components/onboarding/types";
+import type { WizardState, FamilyMember } from "@/components/onboarding/types";
 import type { StepId, StepConfig, FlowConfig } from "@/config/flow-types";
 import { getFlow, DEFAULT_FLOW_ID } from "@/config/flows";
 
@@ -61,6 +66,14 @@ const INITIAL_STATE: WizardState = {
   productStates: {},
   offerStates: {},
   acceptanceExplanations: {},
+  gender: "",
+  familyMembers: [],
+  carRegCodes: {},
+  carRegularDrivers: {},
+  caravanLocationPostcode: "",
+  caravanLocationHouseNumber: "",
+  caravanLocationAddition: "",
+  legalAdditionalAnswers: {},
 };
 
 export const Index = () => {
