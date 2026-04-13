@@ -476,7 +476,7 @@ export const HomeContentsStep = ({
               <InfoTip text="Items you regularly carry outside your home, like a laptop, phone, bicycle, or sports equipment." />
             </div>
             <Switch
-              checked={state.outsideValue !== "€0" && state.outsideValue !== ""}
+              checked={state.outsideValue !== "€0"}
               onCheckedChange={(checked) => {
                 if (!checked) {
                   onUpdate("outsideValue", "€0");
@@ -486,7 +486,7 @@ export const HomeContentsStep = ({
               }}
             />
           </div>
-          {state.outsideValue !== "€0" && (
+          {state.outsideValue !== "€0" && state.outsideValue !== "" && (
             <div className="mt-3">
               <NativeSelect
                 value={state.outsideValue || ""}
