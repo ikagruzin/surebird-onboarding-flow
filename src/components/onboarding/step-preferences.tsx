@@ -270,6 +270,8 @@ interface StepPreferencesProps {
   animateTaco?: boolean;
   /** If true, skip the phone/email sub-step at the end (Flow D) */
   skipContactStep?: boolean;
+  /** Auto-select this tab when set (e.g. after upsell) */
+  initialActiveTab?: string;
 }
 
 export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferencesProps>(({
@@ -288,6 +290,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
   onBack,
   animateTaco,
   skipContactStep = false,
+  initialActiveTab,
 }, ref) => {
   const [activeTab, setActiveTab] = useState(selectedInsurances[0]);
   const [completedTabs, setCompletedTabs] = useState<string[]>([]);
