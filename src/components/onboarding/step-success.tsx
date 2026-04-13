@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CheckCircle, Clock, AlertCircle, Phone, Mail } from "lucide-react";
+import { CheckCircle, Clock, AlertCircle, Mail } from "lucide-react";
 
 type SuccessStatus = "success" | "pending" | "review-needed";
 
@@ -41,8 +41,8 @@ export const StepSuccess = ({ email, status: initialStatus = "success" }: StepSu
       <div className="animate-fade-in flex flex-col items-center justify-center text-center py-16 space-y-8">
         {switcher}
         <div className="relative">
-          <div className="w-28 h-28 rounded-full bg-warning/10 flex items-center justify-center animate-[scale-in_0.5s_ease-out]">
-            <Clock className="w-16 h-16 text-warning animate-[fade-in_0.3s_ease-out_0.3s_both]" />
+          <div className="w-28 h-28 rounded-full bg-primary/10 flex items-center justify-center animate-[scale-in_0.5s_ease-out]">
+            <Clock className="w-16 h-16 text-primary animate-[fade-in_0.3s_ease-out_0.3s_both]" />
           </div>
         </div>
 
@@ -57,17 +57,6 @@ export const StepSuccess = ({ email, status: initialStatus = "success" }: StepSu
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3">
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="inline-flex items-center gap-2 text-primary-foreground px-8 py-4 rounded-full font-semibold text-base transition-all"
-            style={{
-              background: 'linear-gradient(180deg, hsl(121 66% 48%) 0%, hsl(121 66% 38%) 100%)',
-              boxShadow: '0 4px 12px -2px hsla(121, 66%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
-            }}
-          >
-            Go to my Dashboard
-          </button>
           <button
             type="button"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-foreground border border-border hover:bg-muted transition-colors"
@@ -85,8 +74,8 @@ export const StepSuccess = ({ email, status: initialStatus = "success" }: StepSu
       <div className="animate-fade-in flex flex-col items-center justify-center text-center py-16 space-y-8">
         {switcher}
         <div className="relative">
-          <div className="w-28 h-28 rounded-full bg-primary/10 flex items-center justify-center animate-[scale-in_0.5s_ease-out]">
-            <AlertCircle className="w-16 h-16 text-primary animate-[fade-in_0.3s_ease-out_0.3s_both]" />
+          <div className="w-28 h-28 rounded-full bg-orange-100 flex items-center justify-center animate-[scale-in_0.5s_ease-out]">
+            <AlertCircle className="w-16 h-16 text-orange-500 animate-[fade-in_0.3s_ease-out_0.3s_both]" />
           </div>
         </div>
 
@@ -102,17 +91,6 @@ export const StepSuccess = ({ email, status: initialStatus = "success" }: StepSu
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3">
-          <button
-            type="button"
-            className="inline-flex items-center gap-2 text-primary-foreground px-8 py-4 rounded-full font-semibold text-base transition-all"
-            style={{
-              background: 'linear-gradient(180deg, hsl(121 66% 48%) 0%, hsl(121 66% 38%) 100%)',
-              boxShadow: '0 4px 12px -2px hsla(121, 66%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
-            }}
-          >
-            <Phone className="w-4 h-4" />
-            Request a callback
-          </button>
           <button
             type="button"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-foreground border border-border hover:bg-muted transition-colors"

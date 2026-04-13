@@ -88,6 +88,8 @@ export const Index = () => {
   const [shakeFooter, setShakeFooter] = useState(false);
   const [hasVisitedPreferences, setHasVisitedPreferences] = useState(false);
   const [upsellSelections, setUpsellSelections] = useState<string[]>([]);
+  const [initialActiveTab, setInitialActiveTab] = useState<string | undefined>(undefined);
+  const [hoveredProduct, setHoveredProduct] = useState<import("@/components/onboarding/types").InsuranceType | null>(null);
   const prefsRef = useRef<StepPreferencesHandle>(null);
   const seenStepsRef = useRef<Set<string>>(new Set());
 
@@ -411,11 +413,13 @@ export const Index = () => {
     if (currentStepId === "upsell-products") {
       setState((s) => ({ ...s, upsellShown: true }));
       if (upsellSelections.length > 0) {
+        const newIds = upsellSelections.filter(id => !state.selectedInsurances.includes(id));
         setState((s) => ({
           ...s,
           selectedInsurances: [...s.selectedInsurances, ...upsellSelections],
         }));
         setUpsellSelections([]);
+        if (newIds.length > 0) setInitialActiveTab(newIds[0]);
         goToStepId("preferences");
         return;
       }
@@ -629,6 +633,7 @@ export const Index = () => {
             selectedInsurances={state.selectedInsurances}
             upsellSelections={upsellSelections}
             onToggle={(id) => setUpsellSelections((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id])}
+            onHoveredProduct={setHoveredProduct}
             animateTaco={shouldAnimateTaco}
           />
         );
@@ -935,7 +940,7 @@ export const Index = () => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar currentStep={getSidebarStep()} visible={true} />
+      <Sidebar currentStep={getSidebarStep()} visible={true} hoveredProduct={hoveredProduct} />
       <FlowSwitcher currentFlowId={flowId} onSwitch={switchFlow} />
       <DevSkipButton
         flow={flow}
@@ -971,6 +976,7 @@ export const Index = () => {
               onBack={() => goToIndex(getPrevIndex())}
               animateTaco={shouldAnimateTaco}
               skipContactStep={flow.steps.some((s) => s.id === "all-set")}
+              initialActiveTab={initialActiveTab}
             />
           </div>
         )}
