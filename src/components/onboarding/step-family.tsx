@@ -41,7 +41,7 @@ export const StepFamily = ({ familyStatus, onSelect, animateTaco, errors, onClea
               <img
                 src={option.image}
                 alt={option.label}
-                className="w-12 h-12 object-contain"
+                className="w-[58px] h-[58px] object-contain"
               />
               <span className="text-sm font-semibold text-foreground text-center whitespace-pre-line">
                 {option.label}
