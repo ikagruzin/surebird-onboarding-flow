@@ -20,7 +20,7 @@ export const HOME_OPTIONS = {
     "Wood", "Artificial reeds", "Asphalt/bitumen",
     "Pan roof", "(Largely) reed", "Shingles",
   ],
-  ownRiskOptions: ["€100", "€250", "€500", "No deductible"],
+  ownRiskOptions: ["€100", "€250", "€500", "€0"],
   securityOptions: ["None", "BORG", "Police mark"],
   netIncomeOptions: [
     "up to €1,000", "€1,000 - €2,000", "€2,000 - €3,000",
