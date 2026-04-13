@@ -39,7 +39,7 @@ export const StickyFooter = ({ savings, onNext, onBack, disabled = false, button
             <Gift className="w-5 h-5 text-foreground" />
             <span className="text-sm font-semibold text-foreground">You save:</span>
             <span className={`inline-flex items-center gap-1 bg-success/10 border border-success/20 rounded-full px-3 py-1 ${animateSavings ? 'animate-savings-pop' : ''}`}>
-              <span className="text-lg font-bold text-success">{formattedSavings}</span>
+              <span className="text-lg font-bold text-success">- {formattedSavings}</span>
             </span>
           </div>
         ) : (

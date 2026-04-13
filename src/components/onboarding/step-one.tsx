@@ -48,7 +48,7 @@ const BUNDLE_PRESETS: BundlePreset[] = [
   {
     id: "popular",
     title: "Popular choice",
-    description: "Our bundle of the most popular products.",
+    description: "Our bundle of the most popular products: Home, Car and Liability.",
     insuranceIds: ["home", "liability", "car"],
     annualSavings: 135,
     image: bundlePopular,
