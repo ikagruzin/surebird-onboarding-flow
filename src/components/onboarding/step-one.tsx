@@ -46,6 +46,14 @@ const SMALL_ICON_MAP: Record<string, React.ReactNode> = {
 
 const BUNDLE_PRESETS: BundlePreset[] = [
   {
+    id: "popular",
+    title: "Popular choice",
+    description: "Our bundle of the most popular products.",
+    insuranceIds: ["home", "liability", "car"],
+    annualSavings: 135,
+    image: bundlePopular,
+  },
+  {
     id: "home-family",
     title: "Home & Family",
     description: "The essential foundation. Protect your home and your family against unexpected costs.",
@@ -55,19 +63,11 @@ const BUNDLE_PRESETS: BundlePreset[] = [
   },
   {
     id: "business-travel",
-    title: "Business & Travel",
+    title: "Explorer plan",
     description: "For those on the move. Global coverage for your trips and your vehicle in one click.",
     insuranceIds: ["legal", "travel", "car"],
     annualSavings: 135,
     image: bundleBusinessTravel,
-  },
-  {
-    id: "popular",
-    title: "Popular choice",
-    description: "Our bundle of the most popular products.",
-    insuranceIds: ["home", "liability", "car"],
-    annualSavings: 135,
-    image: bundlePopular,
   },
   {
     id: "maximum",
@@ -130,7 +130,7 @@ const TRANSLATIONS = {
     // Bundle titles & descriptions
     bundles: {
       "home-family": { title: "Home & Family", description: "The essential foundation. Protect your home and your family against unexpected costs." },
-      "business-travel": { title: "Business & Travel", description: "For those on the move. Global coverage for your trips and your vehicle in one click." },
+      "business-travel": { title: "Explorer plan", description: "For those on the move. Global coverage for your trips and your vehicle in one click." },
       "popular": { title: "Popular choice", description: "Our bundle of the most popular products." },
       "maximum": { title: "Maximum protection", description: "For all cases in life. Our maximum discount for total peace of mind." },
     },
