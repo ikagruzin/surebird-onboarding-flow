@@ -61,20 +61,21 @@ export const TravelFoundationsStep = ({
   onUpdate,
   animateTaco,
   onAnimationComplete,
-}: ProductStepProps) => (
+}: ProductStepProps) => {
+  const t = useT();
+  return (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message={(useT())("ui.products.travel.foundations_taco", undefined, "Ready for your next adventure? Let's set up your travel protection.")}
+      message={t("ui.products.travel.foundations_taco", undefined, "Ready for your next adventure? Let's set up your travel protection.")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
 
     <SectionCard>
       <div className="space-y-6">
-        {/* Travel Days */}
         <div className="space-y-2">
           <p className="text-sm font-medium text-foreground">
-            Up to how many days do you travel per year?
+            {t("ui.products.travel.q.travelDays")}
           </p>
           <SegmentedControl
             options={[...TRAVEL_DAY_OPTIONS]}
@@ -83,11 +84,10 @@ export const TravelFoundationsStep = ({
           />
         </div>
 
-        {/* Coverage Area */}
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-medium text-foreground">Coverage Area</p>
-            <InfoTip text="'Europe' includes Morocco, Israel, Egypt, and Tunisia. If you're in doubt, we recommend 'Worldwide' so you can travel anywhere without a second thought!" />
+            <p className="text-sm font-medium text-foreground">{t("ui.products.travel.q.coverageArea")}</p>
+            <InfoTip text={t("ui.products.travel.coverageArea.tip")} />
           </div>
           <SegmentedControl
             options={[...COVERAGE_OPTIONS]}
@@ -98,7 +98,8 @@ export const TravelFoundationsStep = ({
       </div>
     </SectionCard>
   </div>
-);
+  );
+};
 
 /* ─── Step 2: Sport & Equipment ─── */
 
