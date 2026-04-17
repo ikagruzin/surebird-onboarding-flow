@@ -32,6 +32,7 @@ import { StepLoading } from "./step-loading";
 import { getCarInstanceLabel, type CarInstance } from "@/config/products/car";
 import { formatDutchPlate } from "@/components/ui/dutch-plate-input";
 import { cn } from "@/lib/utils";
+import { useT } from "@/i18n/LanguageContext";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import trustpilotReview from "@/assets/trustpilot-review.svg";
 import surebirdIcon from "@/assets/logo-surebird-icon.svg";
@@ -264,6 +265,7 @@ export const StepOffer = ({
   onAddInsurances,
   onRemoveInsurance,
 }: StepOfferProps) => {
+  const t = useT();
   const [activeTab, setActiveTab] = useState("all");
   const [annualDiscount, setAnnualDiscount] = useState(false);
   const [videoModal, setVideoModal] = useState<string | null>(null);
@@ -1258,7 +1260,7 @@ export const StepOffer = ({
         <div className="p-6 pt-4">
           <div className="flex items-center justify-center gap-1.5 text-sm font-semibold text-success">
             <Gift className="w-4 h-4" />
-            Annual savings: €{annualSavings.toFixed(2)}
+            {t("ui.offer.annual_savings", undefined, "Annual savings")}: €{annualSavings.toFixed(2)}
           </div>
 
           <button
@@ -1331,7 +1333,7 @@ export const StepOffer = ({
       <div className="grid gap-8 xl:grid-cols-[minmax(0,680px)_320px] justify-center items-start">
         {/* Main content */}
         <div className="min-w-0">
-          <h1 className="text-3xl font-bold text-foreground mb-6">Your personal offer</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-6">{t("ui.offer.title", undefined, "Your personal offer")}</h1>
 
           {/* Product tabs */}
           <div className="flex flex-wrap items-center gap-2 mb-8">
@@ -1349,7 +1351,7 @@ export const StepOffer = ({
                 <rect x="1" y="10" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
                 <rect x="10" y="10" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
               </svg>
-              All offers
+              {t("ui.offer.tab_all", undefined, "All offers")}
             </button>
             {selectedInsurances.map((id) => {
               const ins = INSURANCE_TYPES.find((t) => t.id === id)!;
@@ -1369,7 +1371,7 @@ export const StepOffer = ({
                     alt={ins.label}
                     className={`w-6 h-6 ${isActive ? "brightness-0 invert" : ""}`}
                   />
-                  {ins.label}
+                  {t(`home.label.${ins.id}`, undefined, ins.label)}
                 </button>
               );
             })}
@@ -1385,7 +1387,7 @@ export const StepOffer = ({
             <>
               <div className="border border-border rounded-3xl p-6 bg-card mb-8">
                 <TacoMessage
-                  message={`${firstName || "Hi"}, I have selected the best insurance policies for you based on your set preferences!`}
+                  message={t("ui.offer.taco", { firstName: firstName || "Hi" }, `${firstName || "Hi"}, I have selected the best insurance policies for you based on your set preferences!`)}
                   animate={animateTaco}
                 />
                 <div className="flex flex-wrap items-center gap-2 mt-4">

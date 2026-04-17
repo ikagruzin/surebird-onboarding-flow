@@ -442,8 +442,7 @@ export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAud
             </div>
           )}
 
-          {/* Language switcher */}
-          <LanguageSwitcher compact />
+          {/* Language switcher is rendered globally in the sidebar next to the logo */}
 
           {/* Login button */}
           <button className="flex items-center gap-2 border border-border rounded-full px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors">

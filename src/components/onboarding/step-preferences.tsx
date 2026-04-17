@@ -10,6 +10,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Check, Plus, Info, X, Mail, Phone, ChevronRight } from "lucide-react";
+import { useT } from "@/i18n/LanguageContext";
 import { INSURANCE_TYPES } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
@@ -302,6 +303,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
   skipContactStep = false,
   initialActiveTab,
 }, ref) => {
+  const t = useT();
   const [activeTab, setActiveTab] = useState(selectedInsurances[0]);
   const [completedTabs, setCompletedTabs] = useState<string[]>([]);
   const [questionStep, setQuestionStep] = useState(0);
@@ -612,7 +614,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
                   className={`w-6 h-6 ${isActive ? "brightness-0 invert" : ""}`}
                 />
               )}
-              {ins.label}
+              {t(`home.label.${ins.id}`, undefined, ins.label)}
             </button>
             {canDelete && (
               <button
@@ -672,7 +674,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
                     }`}
                   >
                     <img src={ICON_MAP[ins.icon]} alt={ins.label} className="w-10 h-10" />
-                    <span className="text-sm font-medium text-foreground flex-1">{ins.label}</span>
+                    <span className="text-sm font-medium text-foreground flex-1">{t(`home.label.${ins.id}`, undefined, ins.label)}</span>
                     <div
                       className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 ${
                         isChecked ? "border-primary bg-primary" : "border-border"
@@ -804,7 +806,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-3xl font-bold text-foreground mb-6">Set your preferences</h1>
+      <h1 className="text-3xl font-bold text-foreground mb-6">{t("ui.preferences.title", undefined, "Set your preferences")}</h1>
 
       {/* Product tabs */}
       {renderProductTabs()}
