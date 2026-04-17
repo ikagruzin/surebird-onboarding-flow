@@ -15,6 +15,7 @@ import { DutchPlateInput } from "@/components/ui/dutch-plate-input";
 import { CARAVAN_OPTIONS } from "@/config/products/caravan";
 import { getSelectionGridClass } from "@/lib/grid-layout";
 import { useT } from "@/i18n/LanguageContext";
+import { translateOptions } from "@/i18n/option-translate";
 import {
   Tooltip,
   TooltipContent,
@@ -41,16 +42,22 @@ const InfoTip = ({ text }: { text: string }) => (
   </TooltipProvider>
 );
 
+const YES_NO = ["Yes", "No"];
+
 /* ─── Step 1: Context & Usage ─── */
 
 const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
+  const t = useT();
   const showMobileHomeQ = state.caravanType === "Touring caravan";
   const showFloodQ = state.caravanType === "Mobile home" || state.usedAsMobileHome === "Yes";
+  const yesNoLabels = translateOptions(t, "caravan", YES_NO);
+  const typeLabels = translateOptions(t, "caravan", CARAVAN_OPTIONS.caravanTypes as unknown as string[]);
+  const usageLabels = translateOptions(t, "caravan", CARAVAN_OPTIONS.usageOptions as unknown as string[]);
 
   return (
     <div className="space-y-6">
       <TacoMessage
-        message={(useT())("ui.products.caravan.context_taco", undefined, "Let's get your caravan covered. To start, tell me a bit how and where you use your caravan.")}
+        message={t("ui.products.caravan.context_taco", undefined, "Let's get your caravan covered. To start, tell me a bit how and where you use your caravan.")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />
@@ -58,21 +65,21 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete,
         <div className="space-y-6">
           {/* Caravan Type */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">What kind of caravan is it?</p>
+            <p className="text-sm font-medium text-foreground">{t("products.caravan.q.caravanType")}</p>
             <div className={getSelectionGridClass(CARAVAN_OPTIONS.caravanTypes as unknown as string[])}>
-              {CARAVAN_OPTIONS.caravanTypes.map((opt) => {
-                const tooltip =
+              {CARAVAN_OPTIONS.caravanTypes.map((opt, idx) => {
+                const tipText =
                   opt === "Touring caravan"
-                    ? "A caravan that is towed behind a car and can be detached at the campsite."
+                    ? t("products.caravan.caravanType.touring.tip")
                     : opt === "Folding trailer"
-                      ? "A lightweight, collapsible trailer that folds out into a tent-like living space."
+                      ? t("products.caravan.caravanType.folding.tip")
                       : undefined;
                 return (
                   <SelectionCard
                     key={opt}
-                    label={opt}
+                    label={typeLabels[idx]}
                     selected={state.caravanType === opt}
-                    rightIcon={tooltip ? <InfoTip text={tooltip} /> : undefined}
+                    rightIcon={tipText ? <InfoTip text={tipText} /> : undefined}
                   onClick={() => {
                     onUpdate("caravanType", opt);
                     onClearError?.("caravanType");
@@ -97,15 +104,15 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete,
 
           {/* Usage */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">How do you use it?</p>
+            <p className="text-sm font-medium text-foreground">{t("products.caravan.q.usage")}</p>
             <NativeSelect
               value={state.usage}
               onChange={(e) => { onUpdate("usage", e.target.value); onClearError?.("usage"); }}
-              placeholder="Select usage"
+              placeholder={t("products.caravan.placeholder.usage", undefined, "Select usage")}
               className={errors?.usage ? "border-destructive" : ""}
             >
-              {CARAVAN_OPTIONS.usageOptions.map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
+              {CARAVAN_OPTIONS.usageOptions.map((opt, idx) => (
+                <option key={opt} value={opt}>{usageLabels[idx]}</option>
               ))}
             </NativeSelect>
             <ValidationError message={errors?.usage} />
@@ -115,11 +122,12 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete,
           {showMobileHomeQ && (
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <p className="text-sm font-medium text-foreground">Used as a mobile home?</p>
-                <InfoTip text="Select Yes if it remains at one location year-round in the NL (winter storage allowed elsewhere in the NL)." />
+                <p className="text-sm font-medium text-foreground">{t("products.caravan.q.usedAsMobileHome")}</p>
+                <InfoTip text={t("products.caravan.usedAsMobileHome.tip")} />
               </div>
               <SegmentedControl
-                options={["Yes", "No"]}
+                options={YES_NO}
+                displayLabels={yesNoLabels}
                 value={state.usedAsMobileHome}
                 onChange={(v) => onUpdate("usedAsMobileHome", v)}
               />
@@ -130,11 +138,12 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete,
           {showFloodQ && (
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <p className="text-sm font-medium text-foreground">Is your caravan campsite located near a 'high-water' area (floodplain)?</p>
-                <InfoTip text="A floodplain (uiterwaard) is the land between the river and the dike. If you cross a dike to reach your campsite, select Yes. These areas are the first to flood and require specific coverage." />
+                <p className="text-sm font-medium text-foreground">{t("products.caravan.q.nearFloodRiver")}</p>
+                <InfoTip text={t("products.caravan.nearFloodRiver.tip")} />
               </div>
               <SegmentedControl
-                options={["Yes", "No"]}
+                options={YES_NO}
+                displayLabels={yesNoLabels}
                 value={state.nearFloodRiver}
                 onChange={(v) => onUpdate("nearFloodRiver", v)}
               />
@@ -149,7 +158,11 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete,
 /* ─── Step 2: Vehicle Specifications ─── */
 
 const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
+  const t = useT();
   const [autoFilled, setAutoFilled] = useState(false);
+  const idLabels = translateOptions(t, "caravan", CARAVAN_OPTIONS.identificationMethods as unknown as string[]);
+  const brandLabels = translateOptions(t, "caravan", CARAVAN_OPTIONS.brandOptions as unknown as string[]);
+  const lengthLabels = translateOptions(t, "caravan", CARAVAN_OPTIONS.lengthOptions as unknown as string[]);
 
   const simulateAutoFill = useCallback((raw?: string) => {
     const plate = raw || state.licensePlate || "";
@@ -172,7 +185,7 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
   return (
     <div className="space-y-6">
       <TacoMessage
-        message={(useT())("ui.products.caravan.specs_taco", undefined, "Perfect. If you have your license plate, I can pull the technical details for you automatically! If not, just verify the details below.")}
+        message={t("ui.products.caravan.specs_taco", undefined, "Perfect. If you have your license plate, I can pull the technical details for you automatically! If not, just verify the details below.")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />
@@ -180,12 +193,12 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
         <div className="space-y-6">
           {/* Identification method */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Identify by</p>
+            <p className="text-sm font-medium text-foreground">{t("products.caravan.q.identificationMethod")}</p>
             <div className={getSelectionGridClass(CARAVAN_OPTIONS.identificationMethods as unknown as string[])}>
-              {CARAVAN_OPTIONS.identificationMethods.map((opt) => (
+              {CARAVAN_OPTIONS.identificationMethods.map((opt, idx) => (
                 <SelectionCard
                   key={opt}
-                  label={opt}
+                  label={idLabels[idx]}
                   selected={state.identificationMethod === opt}
                   onClick={() => onUpdate("identificationMethod", opt)}
                   indicator="radio"
@@ -197,7 +210,7 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
           {/* Input for plate or chassis */}
           {state.identificationMethod === "License plate" && (
             <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">License plate</p>
+              <p className="text-sm font-medium text-foreground">{t("products.caravan.q.licensePlate")}</p>
               <DutchPlateInput
                 value={state.licensePlate}
                 onChange={(raw) => onUpdate("licensePlate", raw)}
@@ -208,11 +221,11 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
 
           {state.identificationMethod === "Chassis number" && (
             <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">Chassis number</p>
+              <p className="text-sm font-medium text-foreground">{t("products.caravan.q.chassisNumber")}</p>
               <Input
                 value={state.chassisNumber}
                 onChange={(e) => onUpdate("chassisNumber", e.target.value)}
-                placeholder="Enter chassis number"
+                placeholder={t("products.caravan.placeholder.chassis", undefined, "Enter chassis number")}
                 className="h-12 rounded-xl"
               />
             </div>
@@ -222,27 +235,27 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
           <div className={`space-y-6 transition-opacity ${state.specsLoading ? "opacity-50 animate-pulse" : ""}`}>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <p className="text-sm font-medium text-foreground">Brand</p>
+                <p className="text-sm font-medium text-foreground">{t("products.caravan.q.brand")}</p>
                 <NativeSelect
                   value={state.brand}
                   onChange={(e) => { onUpdate("brand", e.target.value); onClearError?.("brand"); }}
-                  placeholder="Select brand"
+                  placeholder={t("products.caravan.placeholder.brand", undefined, "Select brand")}
                   className={errors?.brand ? "border-destructive" : ""}
                 >
-                  {CARAVAN_OPTIONS.brandOptions.map((b) => (
-                    <option key={b} value={b}>{b}</option>
+                  {CARAVAN_OPTIONS.brandOptions.map((b, idx) => (
+                    <option key={b} value={b}>{brandLabels[idx]}</option>
                   ))}
                 </NativeSelect>
                 <ValidationError message={errors?.brand} />
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm font-medium text-foreground">Year of construction</p>
+                <p className="text-sm font-medium text-foreground">{t("products.caravan.q.yearOfConstruction")}</p>
                 <Input
                   type="number"
                   value={state.yearOfConstruction}
                   onChange={(e) => { onUpdate("yearOfConstruction", e.target.value); onClearError?.("yearOfConstruction"); }}
-                  placeholder="e.g. 2020"
+                  placeholder={t("products.caravan.placeholder.year", undefined, "e.g. 2020")}
                   className={`h-12 rounded-xl ${errors?.yearOfConstruction ? "border-destructive" : ""}`}
                   min={1970}
                   max={new Date().getFullYear()}
@@ -255,17 +268,17 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
           {/* Length - always independent */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <p className="text-sm font-medium text-foreground">Length</p>
-              <InfoTip text="Measure the body only. Please enter the length of the caravan's living area. Do not include the drawbar (the metal V-shaped part at the front that attaches to your car)." />
+              <p className="text-sm font-medium text-foreground">{t("products.caravan.q.length")}</p>
+              <InfoTip text={t("products.caravan.length.tip")} />
             </div>
             <NativeSelect
               value={state.length}
               onChange={(e) => { onUpdate("length", e.target.value); onClearError?.("length"); }}
-              placeholder="Select length"
+              placeholder={t("products.caravan.placeholder.length", undefined, "Select length")}
               className={errors?.length ? "border-destructive" : ""}
             >
-              {CARAVAN_OPTIONS.lengthOptions.map((l) => (
-                <option key={l} value={l}>{l}</option>
+              {CARAVAN_OPTIONS.lengthOptions.map((l, idx) => (
+                <option key={l} value={l}>{lengthLabels[idx]}</option>
               ))}
             </NativeSelect>
             <ValidationError message={errors?.length} />
@@ -279,8 +292,10 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
 /* ─── Step 3: Financial Valuation ─── */
 
 const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplete, errors, onClearError }: ProductStepProps) => {
+  const t = useT();
   const isUsed = state.condition === "Second hand";
   const catalogueNum = parseFloat(state.catalogueValue?.replace(/[^0-9.]/g, "") || "0");
+  const conditionLabels = translateOptions(t, "caravan", CARAVAN_OPTIONS.conditionOptions as unknown as string[]);
 
   const formatCurrency = (raw: string) => {
     const digits = raw.replace(/[^0-9]/g, "");
@@ -290,8 +305,8 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
 
   const validatePurchase = (value: string) => {
     const num = parseFloat(value.replace(/[^0-9]/g, "") || "0");
-    if (num > 60000) return "Maximum €60,000";
-    if (catalogueNum > 0 && num > catalogueNum) return "Cannot exceed catalogue value";
+    if (num > 60000) return t("products.caravan.error.maxValue", undefined, "Maximum €60,000");
+    if (catalogueNum > 0 && num > catalogueNum) return t("products.caravan.error.exceedsCatalogue", undefined, "Cannot exceed catalogue value");
     return null;
   };
 
@@ -300,7 +315,7 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
   return (
     <div className="space-y-6">
       <TacoMessage
-        message={(useT())("ui.products.caravan.financial_taco", undefined, "Last step! Tell me about the value so I can finalize your offer.")}
+        message={t("ui.products.caravan.financial_taco", undefined, "Last step! Tell me about the value so I can finalize your offer.")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />
@@ -309,11 +324,12 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
           {/* Condition */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <p className="text-sm font-medium text-foreground">Bought it as</p>
-              <InfoTip text='Choose "New" if you are the first owner.' />
+              <p className="text-sm font-medium text-foreground">{t("products.caravan.q.condition")}</p>
+              <InfoTip text={t("products.caravan.condition.tip")} />
             </div>
             <SegmentedControl
               options={[...CARAVAN_OPTIONS.conditionOptions]}
+              displayLabels={conditionLabels}
               value={state.condition}
               onChange={(v) => { onUpdate("condition", v); onClearError?.("condition"); }}
             />
@@ -322,7 +338,7 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
 
           {/* Catalogue value */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Original price when new? (Catalogue Value)</p>
+            <p className="text-sm font-medium text-foreground">{t("products.caravan.q.catalogueValue")}</p>
             <Input
               value={state.catalogueValue}
               onChange={(e) => { onUpdate("catalogueValue", formatCurrency(e.target.value)); onClearError?.("catalogueValue"); }}
@@ -335,7 +351,7 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
           {/* Purchase value (conditional) */}
           {isUsed && (
             <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">What did you pay for it? (Purchase Value)</p>
+              <p className="text-sm font-medium text-foreground">{t("products.caravan.q.purchaseValue")}</p>
               <Input
                 value={state.purchaseValue}
                 onChange={(e) => { onUpdate("purchaseValue", formatCurrency(e.target.value)); onClearError?.("purchaseValue"); }}

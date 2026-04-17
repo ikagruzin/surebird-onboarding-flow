@@ -19,6 +19,7 @@ import {
 import { homeProduct, HOME_OPTIONS } from "@/config/products/home";
 import type { ProductStepProps } from "@/config/products/types";
 import { useT } from "@/i18n/LanguageContext";
+import { translateOptions } from "@/i18n/option-translate";
 import { getSelectionGridClass } from "@/lib/grid-layout";
 import {
   Tooltip,
@@ -147,32 +148,34 @@ export const HomeDetailsStep = ({
   onAnimationComplete,
   errors,
   onClearError,
-}: ProductStepProps) => (
+}: ProductStepProps) => {
+  const t = useT();
+  return (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message={(useT())("ui.products.home.details_taco", undefined, "No problem! You can manually adjust the details of your home below to make sure everything is accurate.")}
+      message={t("ui.products.home.details_taco", undefined, "No problem! You can manually adjust the details of your home below to make sure everything is accurate.")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
 
-    <SectionCard title="Home Details">
+    <SectionCard title={t("products.home.section.details", undefined, "Home Details")}>
       <div className="space-y-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <label className="text-sm font-semibold text-foreground">
-              Building Type
+              {t("products.home.q.buildingType")}
             </label>
-            <InfoTip text="Two-under-a-roof = a semi-detached house sharing one roof with a neighboring property. Canal house = a traditional narrow, multi-story house along a canal, typical of Dutch city centers." />
+            <InfoTip text={t("products.home.buildingType.tip")} />
           </div>
           <NativeSelect
             value={state.buildingType}
             onChange={(e) => { onUpdate("buildingType", e.target.value); onClearError?.("buildingType"); }}
-            placeholder="Select building type"
+            placeholder={t("products.home.placeholder.buildingType", undefined, "Select building type")}
             className={errors?.buildingType ? "border-destructive" : ""}
           >
-            {HOME_OPTIONS.buildingTypes.map((t) => (
-              <option key={t} value={t}>
-                {t}
+            {HOME_OPTIONS.buildingTypes.map((opt, idx) => (
+              <option key={opt} value={opt}>
+                {translateOptions(t, "home", HOME_OPTIONS.buildingTypes)[idx]}
               </option>
             ))}
           </NativeSelect>
@@ -180,10 +183,11 @@ export const HomeDetailsStep = ({
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
-            Usage
+            {t("products.home.q.usage")}
           </label>
           <ChipSelect
             options={[...HOME_OPTIONS.usageOptions]}
+            displayLabels={translateOptions(t, "home", HOME_OPTIONS.usageOptions)}
             selected={state.usage}
             onChange={(v) => { onUpdate("usage", v); onClearError?.("usage"); }}
           />
@@ -191,19 +195,19 @@ export const HomeDetailsStep = ({
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
-            Construction Materials
+            {t("products.home.q.constructionMaterial")}
           </label>
            <div className={getSelectionGridClass(HOME_OPTIONS.constructionMaterials)}>
-            {HOME_OPTIONS.constructionMaterials.map((opt) => {
+            {HOME_OPTIONS.constructionMaterials.map((opt, idx) => {
               const tooltips: Record<string, string> = {
-                "Wooden skeleton": "The main structural frame is made of wood (timber-frame construction).",
-                "(Largely) stone": "The exterior walls are mostly built with brick, stone, or concrete blocks.",
-                "Wooden frame with stone wall": "A timber structural frame with an outer layer of brick or stone cladding.",
+                "Wooden skeleton": t("products.home.constructionMaterial.wooden.tip", undefined, "The main structural frame is made of wood (timber-frame construction)."),
+                "(Largely) stone": t("products.home.constructionMaterial.stone.tip", undefined, "The exterior walls are mostly built with brick, stone, or concrete blocks."),
+                "Wooden frame with stone wall": t("products.home.constructionMaterial.frameStone.tip", undefined, "A timber structural frame with an outer layer of brick or stone cladding."),
               };
               return (
                 <SelectionCard
                   key={opt}
-                  label={opt}
+                  label={translateOptions(t, "home", HOME_OPTIONS.constructionMaterials)[idx]}
                   selected={state.constructionMaterial === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
@@ -216,17 +220,17 @@ export const HomeDetailsStep = ({
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
-            Floor Material
+            {t("products.home.q.floorMaterial")}
           </label>
           <div className={getSelectionGridClass(HOME_OPTIONS.floorMaterials)}>
-            {HOME_OPTIONS.floorMaterials.map((opt) => {
+            {HOME_OPTIONS.floorMaterials.map((opt, idx) => {
               const tooltips: Record<string, string> = {
-                "No floors": "Ground-level only, with no additional story floors above (e.g., concrete slab on grade).",
+                "No floors": t("products.home.floorMaterial.noFloors.tip", undefined, "Ground-level only, with no additional story floors above (e.g., concrete slab on grade)."),
               };
               return (
                 <SelectionCard
                   key={opt}
-                  label={opt}
+                  label={translateOptions(t, "home", HOME_OPTIONS.floorMaterials)[idx]}
                   selected={state.floorMaterial === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
@@ -239,17 +243,17 @@ export const HomeDetailsStep = ({
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
-            Roof Shape
+            {t("products.home.q.roofShape")}
           </label>
           <div className={getSelectionGridClass(HOME_OPTIONS.roofShapes)}>
-            {HOME_OPTIONS.roofShapes.map((opt) => {
+            {HOME_OPTIONS.roofShapes.map((opt, idx) => {
               const tooltips: Record<string, string> = {
-                "Special": "An unconventional roof shape such as a dome, mansard, or multi-angled design.",
+                "Special": t("products.home.roofShape.special.tip", undefined, "An unconventional roof shape such as a dome, mansard, or multi-angled design."),
               };
               return (
                 <SelectionCard
                   key={opt}
-                  label={opt}
+                  label={translateOptions(t, "home", HOME_OPTIONS.roofShapes)[idx]}
                   selected={state.roofShape === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
@@ -263,19 +267,19 @@ export const HomeDetailsStep = ({
         <div>
           <div className="flex items-center gap-2 mb-2">
             <label className="text-sm font-semibold text-foreground">
-              Roof Material
+              {t("products.home.q.roofMaterial")}
             </label>
-            <InfoTip text="Artificial reeds = synthetic thatching material that mimics the look of natural reed. (Largely) reed = the roof is primarily covered with natural reed thatching." />
+            <InfoTip text={t("products.home.roofMaterial.tip")} />
           </div>
           <NativeSelect
             value={state.roofMaterial}
             onChange={(e) => { onUpdate("roofMaterial", e.target.value); onClearError?.("roofMaterial"); }}
-            placeholder="Select roof material"
+            placeholder={t("products.home.placeholder.roofMaterial", undefined, "Select roof material")}
             className={errors?.roofMaterial ? "border-destructive" : ""}
           >
-            {HOME_OPTIONS.roofMaterials.map((m) => (
+            {HOME_OPTIONS.roofMaterials.map((m, idx) => (
               <option key={m} value={m}>
-                {m}
+                {translateOptions(t, "home", HOME_OPTIONS.roofMaterials)[idx]}
               </option>
             ))}
           </NativeSelect>
@@ -284,33 +288,15 @@ export const HomeDetailsStep = ({
       </div>
     </SectionCard>
   </div>
-);
+  );
+};
 
 /* ─── Step: Coverage Path ─── */
 
-const COVERAGE_OPTIONS: {
-  key: string;
-  label: string;
-  tooltip: string;
-}[] = [
-  {
-    key: "household",
-    label: "Household goods",
-    tooltip:
-      "Covers everything inside your home — furniture, electronics, clothing, and personal belongings.",
-  },
-  {
-    key: "building",
-    label: "Building",
-    tooltip:
-      "Covers the physical structure of your home — walls, roof, floors, fitted kitchen, and bathroom installations.",
-  },
-  {
-    key: "both",
-    label: "Household goods + Building",
-    tooltip:
-      "Full protection for both your belongings and the building itself — the most comprehensive option.",
-  },
+const COVERAGE_OPTIONS: { key: string; labelKey: string; tipKey: string }[] = [
+  { key: "household", labelKey: "products.home.coverage.household", tipKey: "products.home.coverage.household.tip" },
+  { key: "building", labelKey: "products.home.coverage.building", tipKey: "products.home.coverage.building.tip" },
+  { key: "both", labelKey: "products.home.coverage.both", tipKey: "products.home.coverage.both.tip" },
 ];
 
 export const HomeCoveragePathStep = ({
@@ -319,22 +305,24 @@ export const HomeCoveragePathStep = ({
   animateTaco,
   onAnimationComplete,
   errors,
-}: ProductStepProps) => (
+}: ProductStepProps) => {
+  const t = useT();
+  return (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message={(useT())("ui.products.home.coverage_taco", undefined, "What would you like to insure?")}
+      message={t("ui.products.home.coverage_taco", undefined, "What would you like to insure?")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
     <Card>
-      <CardContent className={`pt-6 ${getSelectionGridClass(COVERAGE_OPTIONS.map(o => o.label))}`}>
+      <CardContent className={`pt-6 ${getSelectionGridClass(COVERAGE_OPTIONS.map(o => o.key))}`}>
         {COVERAGE_OPTIONS.map((opt) => (
           <SelectionCard
             key={opt.key}
-            label={opt.label}
+            label={t(opt.labelKey)}
             selected={state.coverageChoice === opt.key}
             indicator="radio"
-            rightIcon={<InfoTip text={opt.tooltip} />}
+            rightIcon={<InfoTip text={t(opt.tipKey)} />}
             onClick={() =>
               onAutoAdvance({ coverageChoice: opt.key }, "coverage-path")
             }
@@ -344,49 +332,22 @@ export const HomeCoveragePathStep = ({
       </CardContent>
     </Card>
   </div>
-);
+  );
+};
 
 /* ─── Step: Contents Insurance ─── */
 
 const CONTENTS_ITEMS: {
   field: string;
   amountField: string;
-  label: string;
+  labelKey: string;
   threshold: string;
-  tooltip: string;
+  tipKey: string;
 }[] = [
-  {
-    field: "highValueAV",
-    amountField: "highValueAVAmount",
-    label: "High-value Audiovisual",
-    threshold: "€12,000",
-    tooltip:
-      "Covers high-end audio and video equipment like home cinema systems, premium speakers, and professional-grade TVs.",
-  },
-  {
-    field: "jewelry",
-    amountField: "jewelryAmount",
-    label: "Jewelry",
-    threshold: "€6,000",
-    tooltip:
-      "Covers valuable jewelry items such as watches, rings, necklaces, and other precious accessories.",
-  },
-  {
-    field: "specialAssets",
-    amountField: "specialAssetsAmount",
-    label: "Special assets",
-    threshold: "€15,000",
-    tooltip:
-      "Covers art, antiques, collections, and other high-value possessions that exceed standard coverage limits.",
-  },
-  {
-    field: "ownerInterest",
-    amountField: "ownerInterestAmount",
-    label: "Owner interest",
-    threshold: "€6,000",
-    tooltip:
-      "Covers improvements you've made to a rented property — like a new kitchen or bathroom — that aren't part of the building insurance.",
-  },
+  { field: "highValueAV", amountField: "highValueAVAmount", labelKey: "products.home.contents.item.highValueAV", threshold: "€12,000", tipKey: "products.home.highValueAV.tip" },
+  { field: "jewelry", amountField: "jewelryAmount", labelKey: "products.home.contents.item.jewelry", threshold: "€6,000", tipKey: "products.home.jewelry.tip" },
+  { field: "specialAssets", amountField: "specialAssetsAmount", labelKey: "products.home.contents.item.specialAssets", threshold: "€15,000", tipKey: "products.home.specialAssets.tip" },
+  { field: "ownerInterest", amountField: "ownerInterestAmount", labelKey: "products.home.contents.item.ownerInterest", threshold: "€6,000", tipKey: "products.home.ownerInterest.tip" },
 ];
 
 export const HomeContentsStep = ({
@@ -394,18 +355,20 @@ export const HomeContentsStep = ({
   onUpdate,
   animateTaco,
   onAnimationComplete,
-}: ProductStepProps) => (
+}: ProductStepProps) => {
+  const t = useT();
+  return (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message={(useT())("ui.products.home.contents_taco", undefined, "Let's make sure your belongings are properly covered. Contents insurance protects what's inside your home — from furniture and electronics to clothing and valuables.")}
+      message={t("ui.products.home.contents_taco", undefined, "Let's make sure your belongings are properly covered. Contents insurance protects what's inside your home — from furniture and electronics to clothing and valuables.")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
 
-    <SectionCard title="Contents Insurance">
+    <SectionCard title={t("products.home.contents_section", undefined, "Contents Insurance")}>
       <div className="space-y-5">
         <p className="text-sm text-muted-foreground">
-          Select if your belongings worth more than the stated amount
+          {t("products.home.contents_subtitle", undefined, "Select if your belongings worth more than the stated amount")}
         </p>
 
         {CONTENTS_ITEMS.map((item) => (
@@ -413,12 +376,12 @@ export const HomeContentsStep = ({
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium text-foreground">
-                  {item.label}
+                  {t(item.labelKey)}
                 </span>
                 <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
                   {item.threshold}
                 </span>
-                <InfoTip text={item.tooltip} />
+                <InfoTip text={t(item.tipKey)} />
               </div>
               <button
                 onClick={() => onUpdate(item.field, !state[item.field])}
@@ -436,7 +399,7 @@ export const HomeContentsStep = ({
             {state[item.field] && (
               <input
                 type="text"
-                placeholder="Enter amount (€)"
+                placeholder={t("products.home.label.amount", undefined, "Enter amount (€)")}
                 value={state[item.amountField] || ""}
                 onChange={(e) => onUpdate(item.amountField, e.target.value)}
                 className="w-full rounded-2xl border-2 border-input bg-background h-14 px-4 text-sm text-foreground focus:outline-none focus:border-primary"
@@ -448,12 +411,13 @@ export const HomeContentsStep = ({
         <div className="border-t border-border pt-5">
           <div className="flex items-center gap-2 mb-2">
             <label className="text-sm font-semibold text-foreground">
-              Any house security?
+              {t("products.home.q.security")}
             </label>
-            <InfoTip text="Security measures installed in your home, such as BORG-certified locks or police-marked valuables." />
+            <InfoTip text={t("products.home.security.tip")} />
           </div>
           <SegmentedControl
             options={[...HOME_OPTIONS.securityOptions]}
+            displayLabels={translateOptions(t, "home", HOME_OPTIONS.securityOptions)}
             value={state.security}
             onChange={(v) => onUpdate("security", v)}
           />
@@ -461,12 +425,13 @@ export const HomeContentsStep = ({
         <div>
           <div className="flex items-center gap-2 mb-2">
             <label className="text-sm font-semibold text-foreground">
-              Monthly net income (highest earner in your household)
+              {t("products.home.q.netIncome")}
             </label>
-            <InfoTip text="We use this to estimate the replacement value of your household contents. Choose the monthly net income of the highest earner." />
+            <InfoTip text={t("products.home.netIncome.tip")} />
           </div>
           <SegmentedControl
             options={[...HOME_OPTIONS.netIncomeOptions]}
+            displayLabels={translateOptions(t, "home", HOME_OPTIONS.netIncomeOptions)}
             value={state.netIncome}
             onChange={(v) => onUpdate("netIncome", v)}
           />
@@ -475,9 +440,9 @@ export const HomeContentsStep = ({
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <label className="text-sm font-semibold text-foreground">
-                Insure things you take outside
+                {t("products.home.q.outsideValue")}
               </label>
-              <InfoTip text="Items you regularly carry outside your home, like a laptop, phone, bicycle, or sports equipment." />
+              <InfoTip text={t("products.home.outsideValue.tip")} />
             </div>
             <Switch
               checked={state.outsideValue !== "€0"}
@@ -495,13 +460,13 @@ export const HomeContentsStep = ({
               <NativeSelect
                 value={state.outsideValue || ""}
                 onChange={(e) => onUpdate("outsideValue", e.target.value)}
-                placeholder="Select outside value"
+                placeholder={t("products.home.placeholder.outsideValue", undefined, "Select outside value")}
               >
                 {HOME_OPTIONS.outsideValueOptions
                   .filter((o) => o !== "€0")
-                  .map((o) => (
+                  .map((o, idx) => (
                     <option key={o} value={o}>
-                      {o}
+                      {translateOptions(t, "home", HOME_OPTIONS.outsideValueOptions.filter((x) => x !== "€0"))[idx]}
                     </option>
                   ))}
               </NativeSelect>
@@ -511,7 +476,8 @@ export const HomeContentsStep = ({
       </div>
     </SectionCard>
   </div>
-);
+  );
+};
 
 /* ─── Step: Building Insurance ─── */
 
@@ -520,36 +486,39 @@ export const HomeBuildingStep = ({
   onUpdate,
   animateTaco,
   onAnimationComplete,
-}: ProductStepProps) => (
+}: ProductStepProps) => {
+  const t = useT();
+  return (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="Now for the structure itself. This protects the physical building, including the walls, roof, and even your fitted kitchen or bathroom pipes."
+      message={t("products.home.building_taco", undefined, "Now for the structure itself. This protects the physical building, including the walls, roof, and even your fitted kitchen or bathroom pipes.")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
 
-    <SectionCard title="Building Insurance">
+    <SectionCard title={t("products.home.building_section", undefined, "Building Insurance")}>
       <div className="space-y-5">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-foreground">Monumental status</span>
-            <InfoTip text="A monumental building is officially designated as a cultural heritage site. This affects coverage requirements and premiums." />
+            <span className="text-sm font-medium text-foreground">{t("products.home.building.monumental")}</span>
+            <InfoTip text={t("products.home.building.monumental.tip")} />
           </div>
           <button onClick={() => onUpdate("monumental", !state.monumental)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.monumental ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.monumental ? "translate-x-5" : "translate-x-0"}`} /></button>
         </div>
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-foreground">More than 25m² outbuildings</span>
-            <InfoTip text="Outbuildings larger than 25m² such as sheds, garages, or garden houses that are separate from the main building." />
+            <span className="text-sm font-medium text-foreground">{t("products.home.building.outbuildings")}</span>
+            <InfoTip text={t("products.home.building.outbuildings.tip")} />
           </div>
           <button onClick={() => onUpdate("quoted", !state.quoted)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.quoted ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.quoted ? "translate-x-5" : "translate-x-0"}`} /></button>
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
-            Floor count
+            {t("products.home.q.floorCount")}
           </label>
           <SegmentedControl
             options={[...HOME_OPTIONS.floorCountOptions]}
+            displayLabels={translateOptions(t, "home", HOME_OPTIONS.floorCountOptions)}
             value={state.floorCount}
             onChange={(v) => onUpdate("floorCount", v)}
           />
@@ -557,22 +526,22 @@ export const HomeBuildingStep = ({
         <div className="border-t border-border pt-5 space-y-5">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-foreground">Renovation in the last 10 years</span>
-              <InfoTip text="Any major renovation work done in the last 10 years, such as kitchen or bathroom remodels, extensions, or structural changes." />
+              <span className="text-sm font-medium text-foreground">{t("products.home.building.renovation")}</span>
+              <InfoTip text={t("products.home.building.renovation.tip")} />
             </div>
             <button onClick={() => onUpdate("rainwater", !state.rainwater)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.rainwater ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.rainwater ? "translate-x-5" : "translate-x-0"}`} /></button>
           </div>
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-foreground">Solar Panels</span>
-              <InfoTip text="Solar panels installed on the roof or property. These may affect the insured building value." />
+              <span className="text-sm font-medium text-foreground">{t("products.home.building.solarPanels")}</span>
+              <InfoTip text={t("products.home.building.solarPanels.tip")} />
             </div>
             <button onClick={() => onUpdate("smartSensors", !state.smartSensors)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.smartSensors ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.smartSensors ? "translate-x-5" : "translate-x-0"}`} /></button>
           </div>
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-foreground">Heat pump</span>
-              <InfoTip text="A heat pump system installed for heating or cooling. This increases the building's insured value." />
+              <span className="text-sm font-medium text-foreground">{t("products.home.building.heatPump")}</span>
+              <InfoTip text={t("products.home.building.heatPump.tip")} />
             </div>
             <button onClick={() => onUpdate("heatPump", !state.heatPump)} className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${state.heatPump ? "bg-primary" : "bg-input"}`}><span className={`pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform ${state.heatPump ? "translate-x-5" : "translate-x-0"}`} /></button>
           </div>
@@ -580,7 +549,8 @@ export const HomeBuildingStep = ({
       </div>
     </SectionCard>
   </div>
-);
+  );
+};
 
 /* ─── Component map (used by the renderer / pages) ─── */
 

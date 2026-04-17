@@ -32,18 +32,21 @@ export const ChipSelect = ({
   options,
   selected,
   onChange,
+  displayLabels,
 }: {
   options: string[];
   selected: string[];
   onChange: (v: string[]) => void;
+  /** Optional translated labels parallel to `options`. Values stored remain English. */
+  displayLabels?: string[];
 }) => (
   <div className={getSelectionGridClass(options)}>
-    {options.map((opt) => {
+    {options.map((opt, idx) => {
       const isActive = selected.includes(opt);
       return (
         <SelectionCard
           key={opt}
-          label={opt}
+          label={displayLabels?.[idx] ?? opt}
           selected={isActive}
           onClick={() => onChange(isActive ? [] : [opt])}
           indicator="radio"
@@ -59,16 +62,19 @@ export const SegmentedControl = ({
   options,
   value,
   onChange,
+  displayLabels,
 }: {
   options: string[];
   value: string;
   onChange: (v: string) => void;
+  /** Optional translated labels parallel to `options`. Values stored remain English. */
+  displayLabels?: string[];
 }) => (
   <div className={getSelectionGridClass(options)}>
-    {options.map((opt) => (
+    {options.map((opt, idx) => (
       <SelectionCard
         key={opt}
-        label={opt}
+        label={displayLabels?.[idx] ?? opt}
         selected={value === opt}
         onClick={() => onChange(opt)}
         indicator="radio"
