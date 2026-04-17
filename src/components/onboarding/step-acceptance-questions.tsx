@@ -106,6 +106,7 @@ export const StepAcceptanceQuestions = ({
   return (
     <div className="animate-fade-in space-y-8 pb-8">
       <TacoMessage
+        stepId="acceptance-questions"
         message="Almost there! Just a few final checks 📋 We need to confirm a few standard legal details required by all Dutch insurers. Review and correct where necessary. You are responsible for providing accurate and complete information."
         animate={animateTaco}
       />

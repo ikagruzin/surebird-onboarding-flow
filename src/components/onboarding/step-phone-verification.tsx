@@ -67,6 +67,7 @@ export const StepPhoneVerification = ({ phone, onVerified, onBack, animateTaco }
   return (
     <div className="animate-fade-in space-y-8 pb-8">
       <TacoMessage
+        stepId="phone-verification"
         message="I just sent a verification code to your phone 📱"
         animate={animateTaco}
       />

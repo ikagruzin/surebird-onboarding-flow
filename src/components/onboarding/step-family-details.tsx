@@ -31,7 +31,7 @@ export const StepFamilyDetails = ({
   return (
     <div className="animate-fade-in">
       {showPartner && (
-        <TacoMessage message="Do you want to insure your partner?" animate={animateTaco} />
+        <TacoMessage stepId="family-details" message="Do you want to insure your partner?" animate={animateTaco} />
       )}
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">

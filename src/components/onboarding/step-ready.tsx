@@ -33,6 +33,7 @@ export const StepReady = ({ selectedInsurances, onNext, onBack, animateTaco }: S
   return (
     <div className="animate-fade-in">
       <TacoMessage
+        stepId="ready"
         message="Amazing! 🙌 The first step has been completed successfully. Now it's time to set your preferences about your selected insurances in order to find the best deal for you."
         animate={animateTaco}
       />

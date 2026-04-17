@@ -33,7 +33,7 @@ export const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack, animateTaco
 
   return (
     <div className="animate-fade-in">
-      <TacoMessage message="What is your date of birth? 🎂" animate={animateTaco} />
+      <TacoMessage stepId="birthdate" message="What is your date of birth? 🎂" animate={animateTaco} />
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="max-w-xs">

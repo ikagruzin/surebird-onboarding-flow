@@ -69,6 +69,7 @@ export const StepFinalPreview = ({
   return (
     <div className="animate-fade-in space-y-8 pb-8">
       <TacoMessage
+        stepId="final-preview"
         message="Everything looks good! 🎉 Let's confirm and get you insured."
         animate={animateTaco}
       />
