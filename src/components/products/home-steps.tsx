@@ -19,6 +19,7 @@ import {
 import { homeProduct, HOME_OPTIONS } from "@/config/products/home";
 import type { ProductStepProps } from "@/config/products/types";
 import { useT } from "@/i18n/LanguageContext";
+import { translateOptions } from "@/i18n/option-translate";
 import { getSelectionGridClass } from "@/lib/grid-layout";
 import {
   Tooltip,
