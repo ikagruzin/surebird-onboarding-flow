@@ -248,7 +248,7 @@ const ContentsCard = ({
         </div>
         <SegmentedControl
           options={[...HOME_OPTIONS.netIncomeOptions]}
-          value={state.netIncome || "€2,000 - €3,000"}
+          value={state.netIncome || "€2,000–€3,000"}
           onChange={(v) => onUpdate("netIncome", v)}
         />
       </div>
