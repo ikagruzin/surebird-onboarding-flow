@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { INSURANCE_TYPES } from "./types";
 import type { BundlePreset, InsuranceType } from "./types";
 import { Sidebar } from "./sidebar";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { useLanguage } from "@/i18n/LanguageContext";
 import bundleHomeFamily from "@/assets/bundle-home-family.png";
 import bundleBusinessTravel from "@/assets/bundle-business-travel.png";
 import bundlePopular from "@/assets/bundle-popular.png";
@@ -13,7 +15,7 @@ import iconLegal from "@/assets/icon-legal.svg";
 import iconAccidents from "@/assets/icon-accidents.svg";
 import iconCaravan from "@/assets/icon-caravan.svg";
 import iconTravel from "@/assets/icon-travel.svg";
-import { Globe, User, LayoutGrid, Layers, GalleryHorizontal, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { User, LayoutGrid, Layers, GalleryHorizontal, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const BUNDLE_CLUSTERS: Record<string, string[]> = {
@@ -189,7 +191,7 @@ interface StepOneProps {
 export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAudit, hideVersionSwitcher }: StepOneProps) => {
   const [version, setVersion] = useState<"A" | "B" | "C">("A");
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [language, setLanguage] = useState<"en" | "nl">("en");
+  const { language } = useLanguage();
   const [hoveredProduct, setHoveredProduct] = useState<InsuranceType | null>(null);
 
   const isActiveBundle = (preset: BundlePreset) =>
@@ -441,29 +443,7 @@ export const StepOne = ({ selected, onToggle, onBundleSelect, onNext, onSmartAud
           )}
 
           {/* Language switcher */}
-          <div className="flex items-center gap-1 bg-muted rounded-lg p-0.5">
-            <button
-              onClick={() => setLanguage("en")}
-              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                language === "en"
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Globe className="w-3.5 h-3.5" />
-              EN
-            </button>
-            <button
-              onClick={() => setLanguage("nl")}
-              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                language === "nl"
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              NL
-            </button>
-          </div>
+          <LanguageSwitcher compact />
 
           {/* Login button */}
           <button className="flex items-center gap-2 border border-border rounded-full px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors">
