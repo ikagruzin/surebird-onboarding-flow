@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { useT } from "@/i18n/LanguageContext";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
 import iconCar from "@/assets/icon-car.svg";
@@ -60,6 +61,7 @@ const DatePickerField = ({
   value: string;
   onChange: (date: string) => void;
 }) => {
+  const t = useT();
   const selectedDate = parseStoredDate(value);
 
   return (
@@ -73,7 +75,7 @@ const DatePickerField = ({
           )}
         >
           <CalendarIcon className="mr-3 h-5 w-5 text-muted-foreground" />
-          {selectedDate ? format(selectedDate, "dd-MM-yyyy") : <span>Pick a start date</span>}
+          {selectedDate ? format(selectedDate, "dd-MM-yyyy") : <span>{t("finalise.start_date.startDate", undefined, "Pick a start date")}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
@@ -98,6 +100,7 @@ export const StepStartDate = ({
   errors,
   onClearError,
 }: StepStartDateProps) => {
+  const t = useT();
   const isSingle = selectedInsurances.length === 1;
   const [sameDate, setSameDate] = useState<"yes" | "no" | null>(null);
 
@@ -120,13 +123,17 @@ export const StepStartDate = ({
     return (
       <div className="animate-fade-in space-y-8">
         <TacoMessage
+          stepId="start-date-single"
+          vars={{ product: ins.label }}
           message={`When should your ${ins.label} protection begin?`}
           animate={animateTaco}
         />
         <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-4">
           <div className="flex items-center gap-3">
             {iconSrc && <img src={iconSrc} alt={ins.label} className="w-8 h-8" />}
-            <h3 className="text-lg font-semibold text-foreground">{ins.label} Insurance</h3>
+            <h3 className="text-lg font-semibold text-foreground">
+              {t("ui.start_date.product_insurance", { product: ins.label }, `${ins.label} Insurance`)}
+            </h3>
           </div>
           <DatePickerField
             value={startDates[singleProduct.id] || ""}
@@ -141,7 +148,7 @@ export const StepStartDate = ({
   // Multi product
   return (
     <div className="animate-fade-in space-y-8">
-      <TacoMessage message="Do you want to have the same start date for all your insurances?" animate={animateTaco} />
+      <TacoMessage stepId="start-date" message="Do you want to have the same start date for all your insurances?" animate={animateTaco} />
 
       <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-5">
         <div className="flex gap-3">
@@ -156,7 +163,7 @@ export const StepStartDate = ({
                   : "border-input bg-white text-foreground hover:bg-muted"
               }`}
             >
-              {opt === "yes" ? "Yes" : "No"}
+              {opt === "yes" ? t("ui.yes", undefined, "Yes") : t("ui.no", undefined, "No")}
             </button>
           ))}
         </div>
@@ -179,7 +186,9 @@ export const StepStartDate = ({
               <div key={product.id} className="rounded-3xl border-2 border-input bg-white p-6 space-y-4">
                 <div className="flex items-center gap-3">
                   {iconSrc && <img src={iconSrc} alt={ins.label} className="w-8 h-8" />}
-                  <h3 className="text-lg font-semibold text-foreground">{ins.label} Insurance</h3>
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {t("ui.start_date.product_insurance", { product: ins.label }, `${ins.label} Insurance`)}
+                  </h3>
                 </div>
                 <DatePickerField
                   value={startDates[product.id] || ""}
