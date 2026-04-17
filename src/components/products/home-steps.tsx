@@ -18,6 +18,7 @@ import {
 } from "./shared-ui";
 import { homeProduct, HOME_OPTIONS } from "@/config/products/home";
 import type { ProductStepProps } from "@/config/products/types";
+import { useT } from "@/i18n/LanguageContext";
 import { getSelectionGridClass } from "@/lib/grid-layout";
 import {
   Tooltip,
@@ -49,15 +50,17 @@ export const HomePresetStep = ({
   animateTaco,
   onAnimationComplete,
   errors,
-}: ProductStepProps) => (
+}: ProductStepProps) => {
+  const t = useT();
+  return (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="To save you time, I've pre-filled the standard details for a Dutch home. Can you confirm this?"
+      message={t("ui.products.home.preset_taco", undefined, "To save you time, I've pre-filled the standard details for a Dutch home. Can you confirm this?")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
 
-    <SectionCard title="My house is/has:">
+    <SectionCard title={t("ui.products.home.preset_section", undefined, "My house is/has:")}>
       <ul className="space-y-3 mb-5">
         {homeProduct.presetChecklist!.map((item) => (
           <li key={item} className="flex items-start gap-3">
