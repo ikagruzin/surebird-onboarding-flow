@@ -150,7 +150,7 @@ export const HomeDetailsStep = ({
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="No problem! You can manually adjust the details of your home below to make sure everything is accurate."
+      message={(useT())("ui.products.home.details_taco", undefined, "No problem! You can manually adjust the details of your home below to make sure everything is accurate.")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
@@ -322,7 +322,7 @@ export const HomeCoveragePathStep = ({
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="What would you like to insure?"
+      message={(useT())("ui.products.home.coverage_taco", undefined, "What would you like to insure?")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
@@ -397,7 +397,7 @@ export const HomeContentsStep = ({
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="Let's make sure your belongings are properly covered. Contents insurance protects what's inside your home — from furniture and electronics to clothing and valuables."
+      message={(useT())("ui.products.home.contents_taco", undefined, "Let's make sure your belongings are properly covered. Contents insurance protects what's inside your home — from furniture and electronics to clothing and valuables.")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />

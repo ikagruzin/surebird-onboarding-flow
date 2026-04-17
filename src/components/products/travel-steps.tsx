@@ -28,6 +28,7 @@ import {
   Check,
 } from "lucide-react";
 import type { ProductStepProps } from "@/config/products/types";
+import { useT } from "@/i18n/LanguageContext";
 
 /* ─── Shared InfoTip ─── */
 
@@ -63,7 +64,7 @@ export const TravelFoundationsStep = ({
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="Ready for your next adventure? Let's set up your travel protection."
+      message={(useT())("ui.products.travel.foundations_taco", undefined, "Ready for your next adventure? Let's set up your travel protection.")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
@@ -118,7 +119,7 @@ export const TravelSportStep = ({
   return (
     <div className="animate-fade-in space-y-6">
       <TacoMessage
-        message="Do you play sport on vacation?"
+        message={(useT())("ui.products.travel.sport_taco", undefined, "Do you play sport on vacation?")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />
@@ -362,7 +363,7 @@ export const TravelSupplementsStep = ({
   return (
     <div className="animate-fade-in space-y-6">
       <TacoMessage
-        message="I've pre-selected the essentials. Just tick any extras that fit your travel style!"
+        message={(useT())("ui.products.travel.supplements_taco", undefined, "I've pre-selected the essentials. Just tick any extras that fit your travel style!")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />
