@@ -293,29 +293,10 @@ export const HomeDetailsStep = ({
 
 /* ─── Step: Coverage Path ─── */
 
-const COVERAGE_OPTIONS: {
-  key: string;
-  label: string;
-  tooltip: string;
-}[] = [
-  {
-    key: "household",
-    label: "Household goods",
-    tooltip:
-      "Covers everything inside your home — furniture, electronics, clothing, and personal belongings.",
-  },
-  {
-    key: "building",
-    label: "Building",
-    tooltip:
-      "Covers the physical structure of your home — walls, roof, floors, fitted kitchen, and bathroom installations.",
-  },
-  {
-    key: "both",
-    label: "Household goods + Building",
-    tooltip:
-      "Full protection for both your belongings and the building itself — the most comprehensive option.",
-  },
+const COVERAGE_OPTIONS: { key: string; labelKey: string; tipKey: string }[] = [
+  { key: "household", labelKey: "products.home.coverage.household", tipKey: "products.home.coverage.household.tip" },
+  { key: "building", labelKey: "products.home.coverage.building", tipKey: "products.home.coverage.building.tip" },
+  { key: "both", labelKey: "products.home.coverage.both", tipKey: "products.home.coverage.both.tip" },
 ];
 
 export const HomeCoveragePathStep = ({
@@ -324,22 +305,24 @@ export const HomeCoveragePathStep = ({
   animateTaco,
   onAnimationComplete,
   errors,
-}: ProductStepProps) => (
+}: ProductStepProps) => {
+  const t = useT();
+  return (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message={(useT())("ui.products.home.coverage_taco", undefined, "What would you like to insure?")}
+      message={t("ui.products.home.coverage_taco", undefined, "What would you like to insure?")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
     <Card>
-      <CardContent className={`pt-6 ${getSelectionGridClass(COVERAGE_OPTIONS.map(o => o.label))}`}>
+      <CardContent className={`pt-6 ${getSelectionGridClass(COVERAGE_OPTIONS.map(o => o.key))}`}>
         {COVERAGE_OPTIONS.map((opt) => (
           <SelectionCard
             key={opt.key}
-            label={opt.label}
+            label={t(opt.labelKey)}
             selected={state.coverageChoice === opt.key}
             indicator="radio"
-            rightIcon={<InfoTip text={opt.tooltip} />}
+            rightIcon={<InfoTip text={t(opt.tipKey)} />}
             onClick={() =>
               onAutoAdvance({ coverageChoice: opt.key }, "coverage-path")
             }
@@ -349,7 +332,8 @@ export const HomeCoveragePathStep = ({
       </CardContent>
     </Card>
   </div>
-);
+  );
+};
 
 /* ─── Step: Contents Insurance ─── */
 
