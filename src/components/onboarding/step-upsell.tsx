@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { INSURANCE_TYPES } from "./types";
 import type { InsuranceType } from "./types";
+import { useT } from "@/i18n/LanguageContext";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import iconLiability from "@/assets/icon-liability.svg";
 import iconHome from "@/assets/icon-home.svg";
@@ -29,8 +30,11 @@ interface StepUpsellProps {
 }
 
 export const StepUpsell = ({ selectedInsurances, upsellSelections, onToggle, onHoveredProduct, animateTaco }: StepUpsellProps) => {
+  const t = useT();
   const unselected = INSURANCE_TYPES.filter((t) => !selectedInsurances.includes(t.id));
   const potentialSavings = unselected.reduce((sum, t) => sum + t.savings, 0);
+  const tacoText = t("ui.upsell.taco", { amount: potentialSavings }, `Bundle more, save more! Add products now and unlock up to €${potentialSavings} in additional savings.`);
+  const parts = tacoText.split(`€${potentialSavings}`);
 
   return (
     <div className="animate-fade-in">
@@ -42,9 +46,9 @@ export const StepUpsell = ({ selectedInsurances, upsellSelections, onToggle, onH
           className="w-10 h-10 rounded-full object-cover shrink-0"
         />
         <p className="text-base font-semibold text-foreground">
-          Bundle more, save more! Add products now and unlock up to{" "}
-          <span className="text-success">€{potentialSavings}</span>{" "}
-          in additional savings.
+          {parts[0]}
+          <span className="text-success">€{potentialSavings}</span>
+          {parts[1] ?? ""}
         </p>
       </div>
 
@@ -64,7 +68,7 @@ export const StepUpsell = ({ selectedInsurances, upsellSelections, onToggle, onH
               }`}
             >
               <img src={ICON_MAP[ins.icon]} alt={ins.label} className="w-10 h-10" />
-              <span className="font-medium text-foreground flex-1">{ins.label}</span>
+              <span className="font-medium text-foreground flex-1">{t(`home.label.${ins.id}`, undefined, ins.label)}</span>
               <div
                 className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                   isChecked ? "border-[#0385FF] bg-[#0385FF]" : "border-border"
