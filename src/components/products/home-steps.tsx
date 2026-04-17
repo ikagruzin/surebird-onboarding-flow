@@ -96,7 +96,8 @@ export const HomePresetStep = ({
       <ValidationError message={errors?.presetAnswer} />
     </SectionCard>
   </div>
-);
+  );
+};
 
 /* ─── Step: Role Selection ─── */
 
@@ -109,7 +110,7 @@ export const HomeRoleStep = ({
 }: ProductStepProps) => (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message="Great. Are you tenant or homeowner of this house?"
+      message={(useT())("ui.products.home.role_taco", undefined, "Great. Are you tenant or homeowner of this house?")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
