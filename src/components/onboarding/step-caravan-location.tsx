@@ -3,6 +3,7 @@ import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { TacoMessage } from "./taco-message";
 import { ValidationError } from "./validation-error";
 import { CheckCircle2, Loader2 } from "lucide-react";
+import { useT } from "@/i18n/LanguageContext";
 
 interface StepCaravanLocationProps {
   postcode: string;
@@ -35,6 +36,7 @@ export const StepCaravanLocation = ({
   errors,
   onClearError,
 }: StepCaravanLocationProps) => {
+  const t = useT();
   const [addressResult, setAddressResult] = useState<{ street: string; city: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [looked, setLooked] = useState(false);
@@ -66,17 +68,17 @@ export const StepCaravanLocation = ({
   return (
     <div className="animate-fade-in space-y-8 pb-8">
       <TacoMessage
-        message="Where is your caravan located? 📍"
+        message={t("ui.caravan.location_taco", undefined, "Where is your caravan located? 📍")}
         animate={animateTaco}
       />
 
       <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-4">
-        <h3 className="text-lg font-semibold text-foreground">Caravan location</h3>
+        <h3 className="text-lg font-semibold text-foreground">{t("ui.caravan.location_header", undefined, "Caravan location")}</h3>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
             <FloatingLabelInput
-              label="Postcode"
+              label={t("ui.aboutYou.postcode_label", undefined, "Postcode")}
               value={postcode}
               onChange={(e) => {
                 onUpdate("caravanLocationPostcode", e.target.value.toUpperCase());
@@ -89,7 +91,7 @@ export const StepCaravanLocation = ({
           </div>
           <div>
             <FloatingLabelInput
-              label="House number"
+              label={t("ui.aboutYou.houseNumber_label", undefined, "House number")}
               value={houseNumber}
               onChange={(e) => {
                 onUpdate("caravanLocationHouseNumber", e.target.value);
@@ -103,7 +105,7 @@ export const StepCaravanLocation = ({
         </div>
 
         <FloatingLabelInput
-          label="Addition (optional)"
+          label={t("ui.aboutYou.addition_optional_label", undefined, "Addition (optional)")}
           value={addition}
           onChange={(e) => onUpdate("caravanLocationAddition", e.target.value)}
         />
@@ -111,7 +113,7 @@ export const StepCaravanLocation = ({
         {loading && (
           <div className="flex items-center gap-2 text-muted-foreground text-sm py-2">
             <Loader2 className="w-4 h-4 animate-spin" />
-            Looking up address…
+            {t("ui.aboutYou.address_lookup_loading", undefined, "Looking up address…")}
           </div>
         )}
 
@@ -124,7 +126,7 @@ export const StepCaravanLocation = ({
 
         {!loading && looked && !addressResult && (
           <p className="text-sm text-destructive">
-            Address not found. Please check your postcode and house number.
+            {t("ui.aboutYou.address_not_found", undefined, "Address not found. Please check your postcode and house number.")}
           </p>
         )}
       </div>

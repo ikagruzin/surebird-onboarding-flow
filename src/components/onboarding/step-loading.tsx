@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Check, Loader2, SkipForward } from "lucide-react";
 import { TacoMessage } from "./taco-message";
+import { useT } from "@/i18n/LanguageContext";
 import trustpilotReview from "@/assets/trustpilot-review.svg";
 
 const USP_INTERVAL = 4500; // ~4.5s per card
@@ -10,31 +11,6 @@ interface StepLoadingProps {
   onComplete: () => void;
   animateTaco?: boolean;
 }
-
-const USP_CARDS = [
-  {
-    title: "Always well insured",
-    text: "Insurance boring? Not with Surebird! Our platform manages your insurance and offers customized personal coverage.",
-  },
-  {
-    title: "Never compare yourself again",
-    text: "Our smart systems find the best deals and stop premium increases. Always top insurance for the best price.",
-  },
-  {
-    title: "All in 1 overview",
-    text: "No more separate policies. All your insurance policies in one place, clear and efficient.",
-  },
-  {
-    title: "One point of contact for advice and damage",
-    text: "If something happens, you only have one point of contact for service and support in case of damage.",
-  },
-];
-
-const CHECKMARK_STEPS = [
-  "Analysing all your data",
-  "Checking all insurance policies",
-  "Preparing your offer",
-];
 
 const INITIAL_DELAY = 4000; // 4s before first card
 

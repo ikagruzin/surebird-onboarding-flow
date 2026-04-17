@@ -2,6 +2,7 @@ import { TacoMessage } from "./taco-message";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { ValidationError } from "./validation-error";
+import { useT } from "@/i18n/LanguageContext";
 import type { FamilyMember } from "./types";
 
 interface StepFamilyMembersInfoProps {
@@ -14,8 +15,6 @@ interface StepFamilyMembersInfoProps {
   onClearError?: (field: string) => void;
 }
 
-const GENDER_OPTIONS = ["Man", "Woman", "Different"];
-
 export const StepFamilyMembersInfo = ({
   familyMembers,
   onUpdateMember,
@@ -23,17 +22,26 @@ export const StepFamilyMembersInfo = ({
   errors,
   onClearError,
 }: StepFamilyMembersInfoProps) => {
+  const t = useT();
+  const GENDER_OPTIONS = [
+    { value: "Man", label: t("ui.confirm_details.gender_man", undefined, "Man") },
+    { value: "Woman", label: t("ui.confirm_details.gender_woman", undefined, "Woman") },
+    { value: "Different", label: t("ui.confirm_details.gender_different", undefined, "Different") },
+  ];
   return (
     <div className="animate-fade-in space-y-8 pb-8">
       <TacoMessage
-        message="Tell us about your family members 👨‍👩‍👧‍👦"
+        message={t("ui.aboutYou.taco_family_members", undefined, "Tell us about your family members 👨‍👩‍👧‍👦")}
         animate={animateTaco}
       />
 
       <div className="space-y-6">
         {familyMembers.map((member, idx) => {
           const prefix = `familyMember_${idx}`;
-          const label = member.relation === "partner" ? "Partner" : `Child ${familyMembers.filter((m, i) => m.relation === "child" && i <= idx).length}`;
+          const childIndex = familyMembers.filter((m, i) => m.relation === "child" && i <= idx).length;
+          const label = member.relation === "partner"
+            ? t("ui.aboutYou.family_partner", undefined, "Partner")
+            : `${t("ui.aboutYou.family_child", undefined, "Child")} ${childIndex}`;
           return (
             <div key={idx} className="rounded-3xl border-2 border-input bg-white p-6 space-y-5">
               <h3 className="text-lg font-semibold text-foreground">{label}</h3>
@@ -42,7 +50,7 @@ export const StepFamilyMembersInfo = ({
                 <div className="flex gap-3">
                   <div className="flex-1">
                     <FloatingLabelInput
-                      label="First name"
+                      label={t("ui.aboutYou.firstName_label", undefined, "First name")}
                       value={member.firstName}
                       onChange={(e) => {
                         onUpdateMember(idx, "firstName", e.target.value);
@@ -54,14 +62,14 @@ export const StepFamilyMembersInfo = ({
                   </div>
                   <div className="w-24">
                     <FloatingLabelInput
-                      label="Infix"
+                      label={t("ui.aboutYou.infix_label", undefined, "Infix")}
                       value={member.infix}
                       onChange={(e) => onUpdateMember(idx, "infix", e.target.value)}
                     />
                   </div>
                   <div className="flex-1">
                     <FloatingLabelInput
-                      label="Surname"
+                      label={t("ui.aboutYou.lastName_label", undefined, "Surname")}
                       value={member.lastName}
                       onChange={(e) => {
                         onUpdateMember(idx, "lastName", e.target.value);
@@ -75,7 +83,7 @@ export const StepFamilyMembersInfo = ({
 
                 <div>
                   <FloatingLabelInput
-                    label="Date of birth (dd-mm-yyyy)"
+                    label={t("ui.aboutYou.dob_placeholder", undefined, "Date of birth (dd-mm-yyyy)")}
                     value={member.birthdate}
                     onChange={(e) => {
                       let val = e.target.value.replace(/[^0-9-]/g, "");
@@ -97,16 +105,16 @@ export const StepFamilyMembersInfo = ({
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium text-foreground mb-2">Gender</p>
+                  <p className="text-sm font-medium text-foreground mb-2">{t("ui.confirm_details.gender", undefined, "Gender")}</p>
                   <div className="grid grid-cols-3 gap-2">
                     {GENDER_OPTIONS.map((g) => (
                       <SelectionCard
-                        key={g}
-                        label={g}
-                        selected={member.gender === g}
+                        key={g.value}
+                        label={g.label}
+                        selected={member.gender === g.value}
                         indicator="radio"
                         onClick={() => {
-                          onUpdateMember(idx, "gender", g);
+                          onUpdateMember(idx, "gender", g.value);
                           onClearError?.(`${prefix}_gender`);
                         }}
                       />
