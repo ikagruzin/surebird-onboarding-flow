@@ -3,7 +3,7 @@ import { Phone, Mail, ChevronRight, Lock } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { TacoMessage } from "./taco-message";
-import tacoAvatar from "@/assets/taco-avatar.jpg";
+import { useT } from "@/i18n/LanguageContext";
 
 interface OfferGateProps {
   firstName: string;
@@ -22,6 +22,7 @@ export const OfferGate = ({
   onUpdateEmail,
   onUnlock,
 }: OfferGateProps) => {
+  const t = useT();
   const [contactMethod, setContactMethod] = useState<"phone" | "email" | "none">("phone");
 
   return (
@@ -29,28 +30,28 @@ export const OfferGate = ({
       <div className="relative z-10 w-full max-w-lg mx-4">
         <div className="bg-card border border-border rounded-3xl p-8 shadow-2xl animate-scale-in">
           <TacoMessage
-            message="Great news! Your personal offer is ready. Where do you want me to send it?"
+            message={t("ui.offerGate.taco", undefined, "Great news! Your personal offer is ready. Where do you want me to send it?")}
             animate={true}
           />
 
           {/* Contact method selection */}
           <div className="grid grid-cols-3 gap-2 mb-5">
             <SelectionCard
-              label="Phone"
+              label={t("ui.offerGate.contact_phone", undefined, "Phone")}
               icon={<Phone className="w-4 h-4" />}
               selected={contactMethod === "phone"}
               onClick={() => setContactMethod("phone")}
               indicator="radio"
             />
             <SelectionCard
-              label="Email"
+              label={t("ui.offerGate.contact_email", undefined, "Email")}
               icon={<Mail className="w-4 h-4" />}
               selected={contactMethod === "email"}
               onClick={() => setContactMethod("email")}
               indicator="radio"
             />
             <SelectionCard
-              label="None"
+              label={t("ui.offerGate.contact_none", undefined, "None")}
               selected={contactMethod === "none"}
               onClick={() => setContactMethod("none")}
               indicator="radio"
@@ -61,7 +62,7 @@ export const OfferGate = ({
             <div className="space-y-3 mb-6">
               {contactMethod === "phone" && (
                 <FloatingLabelInput
-                  label="Phone number (+31)"
+                  label={t("ui.offerGate.phone_label", undefined, "Phone number (+31)")}
                   value={phone}
                   onChange={(e) => onUpdatePhone(e.target.value)}
                   maxLength={15}
@@ -70,7 +71,7 @@ export const OfferGate = ({
               )}
               {contactMethod === "email" && (
                 <FloatingLabelInput
-                  label="Email address"
+                  label={t("ui.offerGate.email_label", undefined, "Email address")}
                   value={email}
                   onChange={(e) => onUpdateEmail(e.target.value)}
                   type="email"
@@ -91,14 +92,14 @@ export const OfferGate = ({
               boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
             }}
           >
-            View my offer
+            {t("ui.offerGate.cta", undefined, "View my offer")}
             <ChevronRight className="w-5 h-5" />
           </button>
 
           <div className="flex items-start gap-2 mt-5 text-xs text-muted-foreground">
             <Lock className="w-3.5 h-3.5 shrink-0 mt-0.5" />
             <p>
-              Enter your details to save your personal offer. No spam, no obligations: just store your overview safely!
+              {t("ui.offerGate.privacy", undefined, "Enter your details to save your personal offer. No spam, no obligations: just store your overview safely!")}
             </p>
           </div>
         </div>
@@ -106,4 +107,3 @@ export const OfferGate = ({
     </div>
   );
 };
-
