@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Check, Loader2, SkipForward } from "lucide-react";
 import { TacoMessage } from "./taco-message";
+import { useT } from "@/i18n/LanguageContext";
 import trustpilotReview from "@/assets/trustpilot-review.svg";
 
 const USP_INTERVAL = 4500; // ~4.5s per card
@@ -11,36 +12,23 @@ interface StepLoadingProps {
   animateTaco?: boolean;
 }
 
-const USP_CARDS = [
-  {
-    title: "Always well insured",
-    text: "Insurance boring? Not with Surebird! Our platform manages your insurance and offers customized personal coverage.",
-  },
-  {
-    title: "Never compare yourself again",
-    text: "Our smart systems find the best deals and stop premium increases. Always top insurance for the best price.",
-  },
-  {
-    title: "All in 1 overview",
-    text: "No more separate policies. All your insurance policies in one place, clear and efficient.",
-  },
-  {
-    title: "One point of contact for advice and damage",
-    text: "If something happens, you only have one point of contact for service and support in case of damage.",
-  },
-];
-
-const CHECKMARK_STEPS = [
-  "Analysing all your data",
-  "Checking all insurance policies",
-  "Preparing your offer",
-];
-
 const INITIAL_DELAY = 4000; // 4s before first card
 
 export const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
+  const t = useT();
   const [visibleCards, setVisibleCards] = useState(0);
   const [completedChecks, setCompletedChecks] = useState<number[]>([]);
+  const CHECKMARK_STEPS = [
+    t("ui.loading.step_1", undefined, "Analysing all your data"),
+    t("ui.loading.step_2", undefined, "Checking all insurance policies"),
+    t("ui.loading.step_3", undefined, "Preparing your offer"),
+  ];
+  const USP_CARDS = [
+    { title: t("ui.loading.usp1_title", undefined, "Always well insured"), text: t("ui.loading.usp1_text", undefined, "Insurance boring? Not with Surebird! Our platform manages your insurance and offers customized personal coverage.") },
+    { title: t("ui.loading.usp2_title", undefined, "Never compare yourself again"), text: t("ui.loading.usp2_text", undefined, "Our smart systems find the best deals and stop premium increases. Always top insurance for the best price.") },
+    { title: t("ui.loading.usp3_title", undefined, "All in 1 overview"), text: t("ui.loading.usp3_text", undefined, "No more separate policies. All your insurance policies in one place, clear and efficient.") },
+    { title: t("ui.loading.usp4_title", undefined, "One point of contact for advice and damage"), text: t("ui.loading.usp4_text", undefined, "If something happens, you only have one point of contact for service and support in case of damage.") },
+  ];
 
   const stableOnComplete = useCallback(onComplete, []);
 
@@ -79,7 +67,7 @@ export const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
   return (
     <div className="animate-fade-in">
       <TacoMessage
-        message="I am looking for the best offer for you..."
+        message={t("ui.loading.taco", undefined, "I am looking for the best offer for you...")}
         animate={animateTaco}
       />
 
@@ -165,7 +153,7 @@ export const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
         title="Skip loading (dev only)"
       >
         <SkipForward className="w-3.5 h-3.5" />
-        Skip
+        {t("ui.loading.skip", undefined, "Skip")}
       </button>
 
       <style>{`

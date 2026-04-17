@@ -1,6 +1,7 @@
 import { Minus, Plus } from "lucide-react";
 import { TacoMessage } from "./taco-message";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import { useT } from "@/i18n/LanguageContext";
 
 interface StepFamilyDetailsProps {
   familyStatus: string;
@@ -25,13 +26,14 @@ export const StepFamilyDetails = ({
   onUpdateChildAge,
   animateTaco,
 }: StepFamilyDetailsProps) => {
+  const t = useT();
   const showPartner = familyStatus === "partner" || familyStatus === "partner-children";
   const showChildren = familyStatus === "single-children" || familyStatus === "partner-children";
 
   return (
     <div className="animate-fade-in">
       {showPartner && (
-        <TacoMessage stepId="family-details" message="Do you want to insure your partner?" animate={animateTaco} />
+        <TacoMessage stepId="family-details" message={t("ui.aboutYou.taco_partner", undefined, "Do you want to insure your partner?")} animate={animateTaco} />
       )}
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
@@ -57,7 +59,7 @@ export const StepFamilyDetails = ({
                       <div className="w-2.5 h-2.5 rounded-full bg-primary" />
                     )}
                   </div>
-                  <span className="text-sm font-semibold text-foreground capitalize">{val === "yes" ? "Yes" : "No"}</span>
+                  <span className="text-sm font-semibold text-foreground capitalize">{val === "yes" ? t("ui.yes", undefined, "Yes") : t("ui.no", undefined, "No")}</span>
                 </button>
               ))}
             </div>
@@ -67,7 +69,7 @@ export const StepFamilyDetails = ({
         {showChildren && (
           <div>
             <p className="text-sm font-semibold text-foreground mb-4">
-              How many children do you want to insure?
+              {t("ui.aboutYou.children_count_q", undefined, "How many children do you want to insure?")}
             </p>
             <div className="flex items-center gap-0 mb-4">
               <button
@@ -90,13 +92,13 @@ export const StepFamilyDetails = ({
             {childrenCount > 0 && (
               <div className="space-y-3 mt-4">
                 <p className="text-sm font-semibold text-foreground">
-                  What are the ages of your children?
+                  {t("ui.aboutYou.children_ages_q", undefined, "What are the ages of your children?")}
                 </p>
                 <div className="grid grid-cols-2 gap-3">
                   {Array.from({ length: childrenCount }).map((_, i) => (
                     <FloatingLabelInput
                       key={i}
-                      label={`Age child ${i + 1}`}
+                      label={t("ui.aboutYou.age_child", { n: i + 1 }, `Age child ${i + 1}`)}
                       value={childrenAges[i] !== undefined && childrenAges[i] > 0 ? String(childrenAges[i]) : ""}
                       onChange={(e) => {
                         const val = parseInt(e.target.value) || 0;

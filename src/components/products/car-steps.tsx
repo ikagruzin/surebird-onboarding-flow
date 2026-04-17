@@ -15,6 +15,7 @@ import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { DutchPlateInput } from "@/components/ui/dutch-plate-input";
 import { CAR_OPTIONS, lookupPlate } from "@/config/products/car";
 import { getSelectionGridClass } from "@/lib/grid-layout";
+import { useT } from "@/i18n/LanguageContext";
 import { Car, Check, Info } from "lucide-react";
 import {
   Tooltip,
@@ -75,7 +76,7 @@ const StepCarIdentity = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimat
   return (
     <div className="space-y-6">
       <TacoMessage
-        message="Let's see what you're driving! Pop in your license plate and I'll pull the car details for you automatically."
+        message={(useT())("ui.products.car.identity_taco", undefined, "Let's see what you're driving! Pop in your license plate and I'll pull the car details for you automatically.")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />
@@ -125,7 +126,7 @@ const StepCarDriver = ({ state, onUpdate, onAutoAdvance, animateTaco, onAnimatio
   return (
     <div className="space-y-6">
       <TacoMessage
-        message="Are you the main driver and legal owner?"
+        message={(useT())("ui.products.car.driver_taco", undefined, "Are you the main driver and legal owner?")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />
@@ -221,7 +222,7 @@ const StepCarUsage = ({ state, onUpdate, animateTaco, onAnimationComplete, error
   return (
     <div className="space-y-6">
       <TacoMessage
-        message="Perfect. Now, just a few quick details about your driving habits to calculate your personal discount."
+        message={(useT())("ui.products.car.usage_taco", undefined, "Perfect. Now, just a few quick details about your driving habits to calculate your personal discount.")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />

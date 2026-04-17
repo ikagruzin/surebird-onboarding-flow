@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { DutchPlateInput } from "@/components/ui/dutch-plate-input";
 import { CARAVAN_OPTIONS } from "@/config/products/caravan";
 import { getSelectionGridClass } from "@/lib/grid-layout";
+import { useT } from "@/i18n/LanguageContext";
 import {
   Tooltip,
   TooltipContent,
@@ -49,7 +50,7 @@ const StepCaravanContext = ({ state, onUpdate, animateTaco, onAnimationComplete,
   return (
     <div className="space-y-6">
       <TacoMessage
-        message="Let's get your caravan covered. To start, tell me a bit how and where you use your caravan."
+        message={(useT())("ui.products.caravan.context_taco", undefined, "Let's get your caravan covered. To start, tell me a bit how and where you use your caravan.")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />
@@ -171,7 +172,7 @@ const StepCaravanSpecs = ({ state, onUpdate, animateTaco, onAnimationComplete, e
   return (
     <div className="space-y-6">
       <TacoMessage
-        message="Perfect. If you have your license plate, I can pull the technical details for you automatically! If not, just verify the details below."
+        message={(useT())("ui.products.caravan.specs_taco", undefined, "Perfect. If you have your license plate, I can pull the technical details for you automatically! If not, just verify the details below.")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />
@@ -299,7 +300,7 @@ const StepCaravanFinancial = ({ state, onUpdate, animateTaco, onAnimationComplet
   return (
     <div className="space-y-6">
       <TacoMessage
-        message="Last step! Tell me about the value so I can finalize your offer."
+        message={(useT())("ui.products.caravan.financial_taco", undefined, "Last step! Tell me about the value so I can finalize your offer.")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />

@@ -1,5 +1,6 @@
 import { TacoMessage } from "./taco-message";
 import { ValidationError } from "./validation-error";
+import { useT } from "@/i18n/LanguageContext";
 import familySingle from "@/assets/family-single.png";
 import familyPartner from "@/assets/family-partner.png";
 import familySingleChildren from "@/assets/family-single-children.png";
@@ -14,17 +15,17 @@ interface StepFamilyProps {
   onClearError?: (field: string) => void;
 }
 
-const OPTIONS = [
-  { id: "single", label: "Single", image: familySingle },
-  { id: "partner", label: "Partner", image: familyPartner },
-  { id: "partner-children", label: "Partner &\nChildren", image: familyPartnerChildren },
-  { id: "single-children", label: "Single &\nChildren", image: familySingleChildren },
-];
-
 export const StepFamily = ({ familyStatus, onSelect, animateTaco, errors, onClearError }: StepFamilyProps) => {
+  const t = useT();
+  const OPTIONS = [
+    { id: "single", label: t("ui.aboutYou.family_single", undefined, "Single"), image: familySingle },
+    { id: "partner", label: t("ui.aboutYou.family_partner", undefined, "Partner"), image: familyPartner },
+    { id: "partner-children", label: t("ui.aboutYou.family_partner_children", undefined, "Partner &\nChildren"), image: familyPartnerChildren },
+    { id: "single-children", label: t("ui.aboutYou.family_single_children", undefined, "Single &\nChildren"), image: familySingleChildren },
+  ];
   return (
     <div className="animate-fade-in">
-      <TacoMessage stepId="family" message="What is your family status?" animate={animateTaco} />
+      <TacoMessage stepId="family" message={t("ui.aboutYou.taco_family", undefined, "What is your family status?")} animate={animateTaco} />
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="grid grid-cols-4 gap-3">
@@ -54,4 +55,3 @@ export const StepFamily = ({ familyStatus, onSelect, animateTaco, errors, onClea
     </div>
   );
 };
-

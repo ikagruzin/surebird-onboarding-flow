@@ -3,6 +3,7 @@ import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { TacoMessage } from "./taco-message";
 import { ValidationError } from "./validation-error";
 import { Info } from "lucide-react";
+import { useT } from "@/i18n/LanguageContext";
 import {
   Select,
   SelectContent,
@@ -72,6 +73,7 @@ export const StepAddress = ({
   errors,
   onClearError,
 }: StepAddressProps) => {
+  const t = useT();
   const [addressResult, setAddressResult] = useState<AddressResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [looked, setLooked] = useState(false);
@@ -113,7 +115,7 @@ export const StepAddress = ({
       <TacoMessage
         stepId="address"
         vars={{ firstName }}
-        message={`Hey ${firstName} 👋 Nice to meet you! I have some questions to you to find the best deal for you. What is your address?`}
+        message={t("ui.aboutYou.taco_address", { firstName }, `Hey ${firstName} 👋 Nice to meet you! I have some questions to you to find the best deal for you. What is your address?`)}
         animate={animateTaco}
       />
 
@@ -122,7 +124,7 @@ export const StepAddress = ({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <FloatingLabelInput
-                label="Postcode"
+                label={t("ui.aboutYou.postcode_label", undefined, "Postcode")}
                 value={postcode}
                 onChange={(e) => {
                   onUpdate("postcode", e.target.value.toUpperCase());
@@ -136,7 +138,7 @@ export const StepAddress = ({
             </div>
             <div>
               <FloatingLabelInput
-                label="House number"
+                label={t("ui.aboutYou.houseNumber_label", undefined, "House number")}
                 value={houseNumber}
                 onChange={(e) => {
                   onUpdate("houseNumber", e.target.value);
@@ -152,7 +154,7 @@ export const StepAddress = ({
           {hasAdditions && (
             <Select value={addition} onValueChange={(v) => onUpdate("addition", v)}>
               <SelectTrigger className="h-12 rounded-lg">
-                <SelectValue placeholder="Select addition" />
+                <SelectValue placeholder={t("ui.aboutYou.addition_placeholder", undefined, "Select addition")} />
               </SelectTrigger>
               <SelectContent>
                 {addressResult!.additions
@@ -169,7 +171,7 @@ export const StepAddress = ({
           {loading && (
             <div className="flex items-center gap-2 text-muted-foreground text-sm py-2">
               <Loader2 className="w-4 h-4 animate-spin" />
-              Looking up address…
+              {t("ui.aboutYou.address_lookup_loading", undefined, "Looking up address…")}
             </div>
           )}
 
@@ -182,7 +184,7 @@ export const StepAddress = ({
 
           {!loading && looked && !addressResult && (
             <p className="text-sm text-destructive">
-              Address not found. Please check your postcode and house number.
+              {t("ui.aboutYou.address_not_found", undefined, "Address not found. Please check your postcode and house number.")}
             </p>
           )}
         </div>
@@ -190,7 +192,7 @@ export const StepAddress = ({
         <div className="flex items-start gap-2 mt-8 text-muted-foreground">
           <Info className="w-4 h-4 shrink-0 mt-0.5" />
           <p className="text-sm">
-            We need this information because your address is used by insurers when calculating the amount of your premium.
+            {t("ui.aboutYou.address_info_text", undefined, "We need this information because your address is used by insurers when calculating the amount of your premium.")}
           </p>
         </div>
       </div>
