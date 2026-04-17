@@ -3,6 +3,7 @@ import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { TacoMessage } from "./taco-message";
 import { ValidationError } from "./validation-error";
 import { ChangeEvent } from "react";
+import { useT } from "@/i18n/LanguageContext";
 
 interface StepBirthdateProps {
   birthdate: string;
@@ -25,6 +26,7 @@ function formatDateInput(raw: string, prevValue: string): string {
 }
 
 export const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack, animateTaco, errors, onClearError }: StepBirthdateProps) => {
+  const t = useT();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const formatted = formatDateInput(e.target.value, birthdate);
     onUpdate(formatted);
@@ -33,12 +35,12 @@ export const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack, animateTaco
 
   return (
     <div className="animate-fade-in">
-      <TacoMessage stepId="birthdate" message="What is your date of birth? 🎂" animate={animateTaco} />
+      <TacoMessage stepId="birthdate" message={t("ui.aboutYou.taco_birthdate", undefined, "What is your date of birth? 🎂")} animate={animateTaco} />
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="max-w-xs">
           <FloatingLabelInput
-            label="dd-mm-yyyy"
+            label={t("ui.aboutYou.birthdate_placeholder", undefined, "dd-mm-yyyy")}
             value={birthdate}
             onChange={handleChange}
             maxLength={10}
@@ -52,11 +54,10 @@ export const StepBirthdate = ({ birthdate, onUpdate, onNext, onBack, animateTaco
         <div className="flex items-start gap-2 mt-8 text-muted-foreground">
           <Info className="w-4 h-4 shrink-0 mt-0.5" />
           <p className="text-sm">
-            We need this information because your age is used by insurers when calculating the amount of your premium.
+            {t("ui.aboutYou.birthdate_info_text", undefined, "We need this information because your age is used by insurers when calculating the amount of your premium.")}
           </p>
         </div>
       </div>
     </div>
   );
 };
-
