@@ -1,18 +1,22 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
+import { useT } from "@/i18n/LanguageContext";
 
 interface TacoMessageProps {
   /** The message — supports JSX for rich content */
   message: string;
   /** Whether to animate word-by-word (false = render instantly) */
   animate?: boolean;
-  /** Delay in ms between each word (default 50) */
-  /** Delay in ms between each word (default 25) */
+  /** Delay in ms between each word (default 35) */
   wordDelay?: number;
   /** Visual variant: "plain" (semibold text) */
   variant?: "plain";
   /** Called when animation completes */
   onAnimationComplete?: () => void;
+  /** Optional: step id used to look up a translated message under the `taco.<stepId>` key. */
+  stepId?: string;
+  /** Variables for `{var}` interpolation inside the translated string. */
+  vars?: Record<string, string | number>;
 }
 
 export const TacoMessage = ({
@@ -21,10 +25,19 @@ export const TacoMessage = ({
   wordDelay = 35,
   variant = "plain",
   onAnimationComplete,
+  stepId,
+  vars,
 }: TacoMessageProps) => {
+  const t = useT();
+
+  const resolvedMessage = useMemo(() => {
+    if (!stepId) return message;
+    return t(`taco.${stepId}`, vars, message);
+  }, [t, stepId, vars, message]);
+
   const words = useMemo(() => {
-    return message.split(/(\s+)/).filter(Boolean);
-  }, [message]);
+    return resolvedMessage.split(/(\s+)/).filter(Boolean);
+  }, [resolvedMessage]);
 
   const [visibleCount, setVisibleCount] = useState(animate ? 0 : words.length);
   const onCompleteRef = useRef(onAnimationComplete);
@@ -79,4 +92,3 @@ export const TacoMessage = ({
     </div>
   );
 };
-
