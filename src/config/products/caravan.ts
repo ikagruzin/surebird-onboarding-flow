@@ -11,7 +11,7 @@ export const CARAVAN_OPTIONS = {
     "Business, rental to third parties",
   ],
   identificationMethods: ["License plate", "Chassis number", "Pass On Later"],
-  lengthOptions: ["Up to 5m", "5-7m", "7-10m", "10-15m", "More than 15m"],
+  lengthOptions: ["Up to 5m", "5–7m", "7–10m", "10–15m", "More than 15m"],
   brandOptions: [
     "Hobby", "Fendt", "Knaus", "Dethleffs", "Adria",
     "Bürstner", "Hymer", "Caravelair", "Eriba", "Other",
