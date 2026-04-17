@@ -153,7 +153,7 @@ export const StepLoading = ({ onComplete, animateTaco }: StepLoadingProps) => {
         title="Skip loading (dev only)"
       >
         <SkipForward className="w-3.5 h-3.5" />
-        Skip
+        {t("ui.loading.skip", undefined, "Skip")}
       </button>
 
       <style>{`
