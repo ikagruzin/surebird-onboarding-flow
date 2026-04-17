@@ -75,7 +75,7 @@ export const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, 
                         : "text-muted-foreground"
                     }`}
                   >
-                    {label}
+                    {t(`home.progress.step_${stepNum}`, undefined, label)}
                   </span>
                 </div>
               );
@@ -90,9 +90,9 @@ export const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, 
           <div className="animate-fade-in mb-8 p-4 rounded-xl bg-card border border-border">
             <div className="flex items-center gap-2 mb-2">
               <img src={SIDEBAR_ICON_MAP[hoveredProduct.icon]} alt={hoveredProduct.label} className="w-7 h-7" />
-              <span className="text-sm font-bold text-foreground">{hoveredProduct.label}</span>
+              <span className="text-sm font-bold text-foreground">{t(`home.label.${hoveredProduct.id}`, undefined, hoveredProduct.label)}</span>
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">{hoveredProduct.tooltip}</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">{t(`home.tooltip.${hoveredProduct.id}`, undefined, hoveredProduct.tooltip)}</p>
           </div>
         )}
         {showAvatar && (
