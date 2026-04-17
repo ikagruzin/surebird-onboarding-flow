@@ -3,6 +3,7 @@ import { ShieldCheck, X, QrCode, RefreshCw, Trash2 } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { TacoMessage } from "./taco-message";
 import { ValidationError } from "./validation-error";
+import { useT } from "@/i18n/LanguageContext";
 import idinLogo from "@/assets/idin-logo.svg";
 
 interface StepIdinVerificationProps {
@@ -24,6 +25,7 @@ export const StepIdinVerification = ({
   errors,
   onClearError,
 }: StepIdinVerificationProps) => {
+  const t = useT();
   const [verifyState, setVerifyState] = useState<VerifyState>("idle");
   const [showQrModal, setShowQrModal] = useState(false);
   const [verifiedBankName, setVerifiedBankName] = useState("");
@@ -66,6 +68,7 @@ export const StepIdinVerification = ({
   return (
     <div className="animate-fade-in space-y-8 pb-8">
       <TacoMessage
+        stepId="idin-verification"
         message="Let's verify your identity securely 🔒"
         animate={animateTaco}
       />
@@ -75,13 +78,16 @@ export const StepIdinVerification = ({
         <div className="flex items-center gap-3">
           <img src={idinLogo} alt="iDIN" className="w-10 h-10" />
           <div>
-            <h3 className="text-lg font-semibold text-foreground">Secure Identity Verification</h3>
-            <p className="text-sm text-muted-foreground">Powered by iDIN</p>
+            <h3 className="text-lg font-semibold text-foreground">
+              {t("finalise.idin_verification.secure_identity_verification", undefined, "Secure Identity Verification")}
+            </h3>
+            <p className="text-sm text-muted-foreground">{t("ui.idin.powered_by", undefined, "Powered by iDIN")}</p>
           </div>
         </div>
 
         <p className="text-sm text-muted-foreground leading-relaxed">
-          No need to type your IBAN or name. Simply verify with your bank app to ensure 100% security and accuracy.
+          {t("finalise.idin_verification.no_need_to_type_your_iban_or_n", undefined,
+            "No need to type your IBAN or name. Simply verify with your bank app to ensure 100% security and accuracy.")}
         </p>
 
         {/* Idle state */}
@@ -94,14 +100,14 @@ export const StepIdinVerification = ({
                 className="w-full h-14 rounded-xl border-2 border-primary bg-primary/5 text-primary text-base font-semibold hover:bg-primary/10 transition-colors flex items-center justify-center gap-2"
               >
                 <ShieldCheck className="w-5 h-5" />
-                Verify with my Bank
+                {t("finalise.idin_verification.verify_with_my_bank", undefined, "Verify with my Bank")}
               </button>
               <button
                 type="button"
                 onClick={handleManualEntry}
                 className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
               >
-                Or enter IBAN manually
+                {t("finalise.idin_verification.or_enter_iban_manually", undefined, "Or enter IBAN manually")}
               </button>
             </div>
             <ValidationError message={errors?.iban} />
@@ -116,7 +122,7 @@ export const StepIdinVerification = ({
             className="w-full h-14 rounded-xl border-2 border-amber-400 bg-amber-50 text-amber-700 text-base font-semibold flex items-center justify-center gap-2"
           >
             <QrCode className="w-5 h-5" />
-            Waiting for verification…
+            {t("ui.idin.waiting", undefined, "Waiting for verification…")}
           </button>
         )}
 
@@ -126,7 +132,8 @@ export const StepIdinVerification = ({
             <div className="rounded-xl border-2 border-destructive/30 bg-destructive/5 p-4 flex items-center gap-2">
               <X className="w-5 h-5 text-destructive shrink-0" />
               <span className="text-sm text-destructive font-medium">
-                Verification failed. Please try again or enter your IBAN manually.
+                {t("finalise.idin_verification.verification_failed_please_try", undefined,
+                  "Verification failed. Please try again or enter your IBAN manually.")}
               </span>
             </div>
             <button
@@ -135,14 +142,14 @@ export const StepIdinVerification = ({
               className="w-full h-14 rounded-xl border-2 border-primary bg-primary/5 text-primary text-base font-semibold hover:bg-primary/10 transition-colors flex items-center justify-center gap-2"
             >
               <RefreshCw className="w-5 h-5" />
-              Try again
+              {t("ui.idin.try_again", undefined, "Try again")}
             </button>
             <button
               type="button"
               onClick={handleManualEntry}
               className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
             >
-              Enter IBAN manually
+              {t("ui.idin.enter_iban_manually", undefined, "Enter IBAN manually")}
             </button>
           </div>
         )}
@@ -153,15 +160,17 @@ export const StepIdinVerification = ({
             <div className="rounded-xl border-2 border-success/30 bg-success/5 p-4 space-y-3">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-success" />
-                <span className="text-sm font-semibold text-success">Bank Verified</span>
+                <span className="text-sm font-semibold text-success">
+                  {t("finalise.idin_verification.bank_verified", undefined, "Bank Verified")}
+                </span>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Bank</span>
+                  <span className="text-sm text-muted-foreground">{t("ui.idin.bank", undefined, "Bank")}</span>
                   <span className="text-sm font-medium text-foreground">{verifiedBankName}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">IBAN</span>
+                  <span className="text-sm text-muted-foreground">{t("ui.idin.iban_label", undefined, "IBAN")}</span>
                   <span className="text-sm font-mono font-medium text-foreground">NL•• •••• •••• {verifiedIbanLast4}</span>
                 </div>
               </div>
@@ -173,7 +182,7 @@ export const StepIdinVerification = ({
                 className="flex-1 h-10 rounded-xl border border-input text-sm font-medium text-foreground hover:bg-muted transition-colors flex items-center justify-center gap-2"
               >
                 <RefreshCw className="w-4 h-4" />
-                Scan again
+                {t("finalise.idin_verification.scan_again", undefined, "Scan again")}
               </button>
               <button
                 type="button"
@@ -181,7 +190,7 @@ export const StepIdinVerification = ({
                 className="flex-1 h-10 rounded-xl border border-input text-sm font-medium text-destructive hover:bg-destructive/5 transition-colors flex items-center justify-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
-                Remove
+                {t("finalise.idin_verification.remove", undefined, "Remove")}
               </button>
             </div>
           </div>
@@ -191,7 +200,7 @@ export const StepIdinVerification = ({
         {verifyState === "manual" && (
           <div className="space-y-3">
             <FloatingLabelInput
-              label="IBAN"
+              label={t("finalise.idin_verification.iban", undefined, "IBAN")}
               value={iban}
               onChange={(e) => onUpdateIban(e.target.value.toUpperCase())}
               placeholder=" "
@@ -201,7 +210,7 @@ export const StepIdinVerification = ({
               onClick={handleVerify}
               className="w-full text-center text-sm text-primary hover:text-primary/80 transition-colors underline underline-offset-2"
             >
-              Or verify with iDIN instead
+              {t("ui.idin.or_verify_with_idin", undefined, "Or verify with iDIN instead")}
             </button>
           </div>
         )}
@@ -227,9 +236,11 @@ export const StepIdinVerification = ({
 
             <div className="text-center space-y-2">
               <img src={idinLogo} alt="iDIN" className="w-12 h-12 mx-auto" />
-              <h3 className="text-lg font-semibold text-foreground">Verify with your Bank</h3>
+              <h3 className="text-lg font-semibold text-foreground">
+                {t("ui.idin.modal_title", undefined, "Verify with your Bank")}
+              </h3>
               <p className="text-sm text-muted-foreground">
-                Scan with your banking app to safely share your IBAN and verified name.
+                {t("ui.idin.scan_with_app", undefined, "Scan with your banking app to safely share your IBAN and verified name.")}
               </p>
             </div>
 
@@ -238,7 +249,7 @@ export const StepIdinVerification = ({
             </div>
 
             <p className="text-center text-xs text-muted-foreground">
-              Waiting for verification…
+              {t("ui.idin.waiting", undefined, "Waiting for verification…")}
             </p>
 
             {/* Demo buttons */}
@@ -248,14 +259,14 @@ export const StepIdinVerification = ({
                 onClick={simulateSuccess}
                 className="w-full h-12 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
               >
-                Simulate Verification ✓
+                {t("ui.idin.simulate_success", undefined, "Simulate Verification ✓")}
               </button>
               <button
                 type="button"
                 onClick={simulateFailure}
                 className="w-full h-12 rounded-xl border border-destructive text-destructive text-sm font-semibold hover:bg-destructive/5 transition-colors"
               >
-                Simulate Failure ✗
+                {t("ui.idin.simulate_failure", undefined, "Simulate Failure ✗")}
               </button>
             </div>
           </div>
@@ -264,4 +275,3 @@ export const StepIdinVerification = ({
     </div>
   );
 };
-

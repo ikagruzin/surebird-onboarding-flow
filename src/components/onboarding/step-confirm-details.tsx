@@ -2,6 +2,7 @@ import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { SelectionCard } from "@/components/ui/selection-card";
 import { TacoMessage } from "./taco-message";
 import { ValidationError } from "./validation-error";
+import { useT } from "@/i18n/LanguageContext";
 
 interface StepConfirmDetailsProps {
   firstName: string;
@@ -18,8 +19,6 @@ interface StepConfirmDetailsProps {
   onClearError?: (field: string) => void;
 }
 
-const GENDER_OPTIONS = ["Man", "Woman", "Different"];
-
 export const StepConfirmDetails = ({
   firstName,
   infix,
@@ -32,6 +31,15 @@ export const StepConfirmDetails = ({
   errors,
   onClearError,
 }: StepConfirmDetailsProps) => {
+  const t = useT();
+
+  // Gender uses canonical English IDs; labels are translated for display.
+  const GENDER_OPTIONS: { id: string; label: string }[] = [
+    { id: "Man", label: t("ui.confirm_details.gender_man", undefined, "Man") },
+    { id: "Woman", label: t("ui.confirm_details.gender_woman", undefined, "Woman") },
+    { id: "Different", label: t("ui.confirm_details.gender_different", undefined, "Different") },
+  ];
+
   return (
     <div className="animate-fade-in space-y-8 pb-8">
       <TacoMessage
@@ -41,13 +49,15 @@ export const StepConfirmDetails = ({
       />
 
       <div className="rounded-3xl border-2 border-input bg-white p-6 space-y-5">
-        <h3 className="text-lg font-semibold text-foreground">Confirm your details</h3>
+        <h3 className="text-lg font-semibold text-foreground">
+          {t("ui.confirm_details.header", undefined, "Confirm your details")}
+        </h3>
 
         <div className="space-y-4">
           <div className="flex gap-3">
             <div className="flex-1">
               <FloatingLabelInput
-                label="First name"
+                label={t("finalise.confirm_details.firstName", undefined, "First name")}
                 value={firstName}
                 onChange={(e) => {
                   onUpdateField("firstName", e.target.value);
@@ -59,14 +69,14 @@ export const StepConfirmDetails = ({
             </div>
             <div className="w-24">
               <FloatingLabelInput
-                label="Infix"
+                label={t("finalise.confirm_details.infix", undefined, "Infix")}
                 value={infix}
                 onChange={(e) => onUpdateField("infix", e.target.value)}
               />
             </div>
             <div className="flex-1">
               <FloatingLabelInput
-                label="Surname"
+                label={t("finalise.confirm_details.lastName", undefined, "Surname")}
                 value={lastName}
                 onChange={(e) => {
                   onUpdateField("lastName", e.target.value);
@@ -80,7 +90,7 @@ export const StepConfirmDetails = ({
 
           <div>
             <FloatingLabelInput
-              label="Phone number"
+              label={t("finalise.confirm_details.phone", undefined, "Phone number")}
               value={phone}
               onChange={(e) => {
                 onUpdateField("phone", e.target.value);
@@ -93,7 +103,7 @@ export const StepConfirmDetails = ({
 
           <div>
             <FloatingLabelInput
-              label="Email address"
+              label={t("finalise.confirm_details.email", undefined, "Email address")}
               value={email}
               onChange={(e) => {
                 onUpdateField("email", e.target.value);
@@ -107,16 +117,18 @@ export const StepConfirmDetails = ({
 
           {/* Gender — after email */}
           <div>
-            <p className="text-sm font-medium text-foreground mb-2">Gender</p>
+            <p className="text-sm font-medium text-foreground mb-2">
+              {t("ui.confirm_details.gender", undefined, "Gender")}
+            </p>
             <div className="grid grid-cols-3 gap-2">
               {GENDER_OPTIONS.map((g) => (
                 <SelectionCard
-                  key={g}
-                  label={g}
-                  selected={gender === g}
+                  key={g.id}
+                  label={g.label}
+                  selected={gender === g.id}
                   indicator="radio"
                   onClick={() => {
-                    onUpdateField("gender", g);
+                    onUpdateField("gender", g.id);
                     onClearError?.("gender");
                   }}
                 />

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Shield } from "lucide-react";
 import { TacoMessage } from "./taco-message";
+import { useT } from "@/i18n/LanguageContext";
 
 interface StepPhoneVerificationProps {
   phone: string;
@@ -10,6 +11,7 @@ interface StepPhoneVerificationProps {
 }
 
 export const StepPhoneVerification = ({ phone, onVerified, onBack, animateTaco }: StepPhoneVerificationProps) => {
+  const t = useT();
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState("");
@@ -78,9 +80,11 @@ export const StepPhoneVerification = ({ phone, onVerified, onBack, animateTaco }
             <Shield className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-foreground">Verify your phone number</h3>
+            <h3 className="text-lg font-semibold text-foreground">
+              {t("finalise.phone_verification.verify_your_phone_number", undefined, "Verify your phone number")}
+            </h3>
             <p className="text-sm text-muted-foreground">
-              Enter the 6-digit code sent to {maskedPhone}
+              {t("finalise.phone_verification.verificationCode", { maskedPhone }, `Enter the 6-digit code sent to ${maskedPhone}`)}
             </p>
           </div>
         </div>
@@ -109,7 +113,7 @@ export const StepPhoneVerification = ({ phone, onVerified, onBack, animateTaco }
         {isVerifying && (
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-            Verifying...
+            {t("ui.phone_verification.verifying", undefined, "Verifying...")}
           </div>
         )}
 
@@ -120,14 +124,14 @@ export const StepPhoneVerification = ({ phone, onVerified, onBack, animateTaco }
         <div className="text-center">
           {resendTimer > 0 ? (
             <p className="text-sm text-muted-foreground">
-              Resend code in <span className="font-semibold text-foreground">{resendTimer}s</span>
+              {t("finalise.phone_verification.resend_code_in_timer_s", { timer: resendTimer }, `Resend code in ${resendTimer}s`)}
             </p>
           ) : (
             <button
               onClick={handleResend}
               className="text-sm font-medium text-primary hover:underline"
             >
-              Resend verification code
+              {t("finalise.phone_verification.resend_verification_code", undefined, "Resend verification code")}
             </button>
           )}
         </div>
@@ -135,4 +139,3 @@ export const StepPhoneVerification = ({ phone, onVerified, onBack, animateTaco }
     </div>
   );
 };
-
