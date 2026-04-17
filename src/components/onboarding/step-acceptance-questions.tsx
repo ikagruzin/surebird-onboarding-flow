@@ -3,6 +3,7 @@ import { TacoMessage } from "./taco-message";
 import { ValidationError } from "./validation-error";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import { useT } from "@/i18n/LanguageContext";
 import {
   Tooltip,
   TooltipContent,
@@ -98,6 +99,7 @@ export const StepAcceptanceQuestions = ({
   errors,
   onClearError,
 }: StepAcceptanceQuestionsProps) => {
+  const t = useT();
   const shouldShowFields = (q: AcceptanceQuestion): boolean => {
     if (q.id === "healthy") return answers[q.id] === "no";
     return answers[q.id] === "yes";
@@ -116,12 +118,11 @@ export const StepAcceptanceQuestions = ({
           <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-semibold text-foreground mb-1">
-              Why do we ask this?
+              {t("finalise.acceptance_questions.why_do_we_ask_this", undefined, "Why do we ask this?")}
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              These questions are a mandatory part of Dutch insurance law. They
-              ensure your policy is 100% valid so that if you ever need to make
-              a claim, there are no administrative surprises.
+              {t("finalise.acceptance_questions.these_questions_are_a_mandator", undefined,
+                "These questions are a mandatory part of Dutch insurance law. They ensure your policy is 100% valid so that if you ever need to make a claim, there are no administrative surprises.")}
             </p>
           </div>
         </div>
@@ -134,7 +135,7 @@ export const StepAcceptanceQuestions = ({
               <div className="flex items-start gap-4">
                 <div className="flex-1 flex items-start gap-2">
                   <p className="text-sm font-medium text-foreground leading-snug pt-1">
-                    {q.text}
+                    {t(`finalise.acceptance_questions.${q.id}`, undefined, q.text)}
                   </p>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -161,7 +162,7 @@ export const StepAcceptanceQuestions = ({
                         : "bg-card text-muted-foreground hover:bg-muted"
                     }`}
                   >
-                    Yes
+                    {t("ui.yes", undefined, "Yes")}
                   </button>
                   <button
                     type="button"
@@ -172,7 +173,7 @@ export const StepAcceptanceQuestions = ({
                         : "bg-card text-muted-foreground hover:bg-muted"
                     }`}
                   >
-                    No
+                    {t("ui.no", undefined, "No")}
                   </button>
                 </div>
               </div>
@@ -182,7 +183,7 @@ export const StepAcceptanceQuestions = ({
                   {q.explanationFields.map((field) => (
                     <FloatingLabelInput
                       key={field.key}
-                      label={field.label}
+                      label={t(`finalise.acceptance_questions.${field.key}`, undefined, field.label)}
                       value={explanations[field.key] || ""}
                       onChange={(e) => onUpdateExplanation(field.key, e.target.value)}
                     />
@@ -209,7 +210,8 @@ export const StepAcceptanceQuestions = ({
               onClick={(e) => e.stopPropagation()}
             />
             <span className="text-sm text-foreground leading-snug">
-              I have reviewed all prefilled answers and confirmed that they are complete and accurate to the best of my knowledge
+              {t("finalise.acceptance_questions.acceptanceConfirmed", undefined,
+                "I have reviewed all prefilled answers and confirmed that they are complete and accurate to the best of my knowledge")}
             </span>
           </div>
         </button>
