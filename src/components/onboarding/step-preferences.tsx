@@ -694,7 +694,7 @@ export const StepPreferences = forwardRef<StepPreferencesHandle, StepPreferences
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-foreground">Estimated savings:</span>
+              <span className="text-sm font-medium text-foreground">{t("home.sticky_footer.estimated_savings", undefined, "Estimated savings:")}</span>
               <span className="inline-flex items-center gap-1 bg-success/10 border border-success/20 rounded-full px-3 py-1">
                 <span className="text-base font-bold text-success">{formattedSavings}</span>
               </span>

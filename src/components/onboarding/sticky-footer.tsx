@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight, Gift } from "lucide-react";
+import { useT } from "@/i18n/LanguageContext";
 
 interface StickyFooterProps {
   savings: number;
@@ -13,7 +14,9 @@ interface StickyFooterProps {
   shake?: boolean;
 }
 
-export const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel = "Next", hasSidebar = false, showSavings = true, showNextButton = true, shake = false }: StickyFooterProps) => {
+export const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel, hasSidebar = false, showSavings = true, showNextButton = true, shake = false }: StickyFooterProps) => {
+  const t = useT();
+  const resolvedButtonLabel = buttonLabel ?? t("home.sticky_footer.next", undefined, "Next");
   const formattedSavings = savings.toLocaleString("nl-NL", {
     style: "currency",
     currency: "EUR",
@@ -37,7 +40,7 @@ export const StickyFooter = ({ savings, onNext, onBack, disabled = false, button
         {showSavings ? (
           <div className="flex items-center gap-2">
             <Gift className="w-5 h-5 text-foreground" />
-            <span className="text-sm font-semibold text-foreground">You save:</span>
+            <span className="text-sm font-semibold text-foreground">{t("home.sticky_footer.estimated_savings", undefined, "You save:")}</span>
             <span className={`inline-flex items-center gap-1 bg-success/10 border border-success/20 rounded-full px-3 py-1 ${animateSavings ? 'animate-savings-pop' : ''}`}>
               <span className="text-lg font-bold text-success">- {formattedSavings}</span>
             </span>
@@ -48,7 +51,7 @@ export const StickyFooter = ({ savings, onNext, onBack, disabled = false, button
             className="inline-flex items-center gap-2 text-foreground px-4 py-3 rounded-full font-medium text-base hover:bg-muted transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
-            Back
+            {t("ui.back", undefined, "Back")}
           </button>
         )}
         {showNextButton && (
@@ -60,7 +63,7 @@ export const StickyFooter = ({ savings, onNext, onBack, disabled = false, button
               boxShadow: '0 4px 12px -2px hsla(121, 72%, 42%, 0.4), inset 0 1px 1px hsla(0, 0%, 100%, 0.25)',
             }}
           >
-            {buttonLabel}
+            {resolvedButtonLabel}
             <ChevronRight className="w-5 h-5" />
           </button>
         )}
