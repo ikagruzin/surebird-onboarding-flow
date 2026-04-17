@@ -114,13 +114,19 @@ export const TravelSportStep = ({
   errors,
   onClearError,
 }: ProductStepProps) => {
+  const t = useT();
   const showSportDetails = state.playsSport === "Yes";
   const showEquipmentDetails = showSportDetails && state.bringsEquipment === "Yes";
+  const yesNoLabels = (() => {
+    // Translate "Yes | No" via existing key
+    const k = t("products.travel.opt.Yes | No", undefined, "Yes | No");
+    return k.split(" | ");
+  })();
 
   return (
     <div className="animate-fade-in space-y-6">
       <TacoMessage
-        message={(useT())("ui.products.travel.sport_taco", undefined, "Do you play sport on vacation?")}
+        message={t("ui.products.travel.sport_taco", undefined, "Do you play sport on vacation?")}
         animate={animateTaco}
         onAnimationComplete={onAnimationComplete}
       />
@@ -131,6 +137,7 @@ export const TravelSportStep = ({
           <div className="space-y-2">
             <SegmentedControl
               options={[...YES_NO]}
+              displayLabels={yesNoLabels}
               value={state.playsSport}
               onChange={(v) => {
                 onUpdate("playsSport", v);
@@ -158,12 +165,13 @@ export const TravelSportStep = ({
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-medium text-foreground">
-                    Do you practice adventure sports?
+                    {t("products.travel.q.adventureSports")}
                   </p>
-                  <InfoTip text="Includes abseiling, rafting, climbing, diving, and parasailing." />
+                  <InfoTip text={t("products.travel.supp.adventureSports.tip", undefined, "Includes abseiling, rafting, climbing, diving, and parasailing.")} />
                 </div>
                 <SegmentedControl
                   options={[...YES_NO]}
+                  displayLabels={yesNoLabels}
                   value={state.adventureSports}
                   onChange={(v) => onUpdate("adventureSports", v)}
                 />
@@ -172,10 +180,11 @@ export const TravelSportStep = ({
               {/* Brings equipment */}
               <div className="space-y-2">
                 <p className="text-sm font-medium text-foreground">
-                  Do you bring any other sports equipment?
+                  {t("products.travel.q.bringsEquipment")}
                 </p>
                 <SegmentedControl
                   options={[...YES_NO]}
+                  displayLabels={yesNoLabels}
                   value={state.bringsEquipment}
                   onChange={(v) => {
                     onUpdate("bringsEquipment", v);
@@ -192,10 +201,11 @@ export const TravelSportStep = ({
                   {/* Golf */}
                   <div className="space-y-2">
                     <p className="text-sm font-medium text-foreground">
-                      Do you bring Golf equipment?
+                      {t("products.travel.q.golfEquipment")}
                     </p>
                     <SegmentedControl
                       options={[...YES_NO]}
+                      displayLabels={yesNoLabels}
                       value={state.golfEquipment}
                       onChange={(v) => onUpdate("golfEquipment", v)}
                     />
@@ -204,10 +214,11 @@ export const TravelSportStep = ({
                   {/* Diving */}
                   <div className="space-y-2">
                     <p className="text-sm font-medium text-foreground">
-                      Do you bring Diving equipment?
+                      {t("products.travel.q.divingEquipment")}
                     </p>
                     <SegmentedControl
                       options={[...YES_NO]}
+                      displayLabels={yesNoLabels}
                       value={state.divingEquipment}
                       onChange={(v) => onUpdate("divingEquipment", v)}
                     />

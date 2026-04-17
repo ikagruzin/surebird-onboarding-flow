@@ -16,7 +16,15 @@ interface StickyFooterProps {
 
 export const StickyFooter = ({ savings, onNext, onBack, disabled = false, buttonLabel, hasSidebar = false, showSavings = true, showNextButton = true, shake = false }: StickyFooterProps) => {
   const t = useT();
-  const resolvedButtonLabel = buttonLabel ?? t("home.sticky_footer.next", undefined, "Next");
+  // Map common English buttonLabel overrides to translation keys
+  const labelMap: Record<string, string> = {
+    "Next": "ui.next",
+    "Continue to Offer": "ui.continueToOffer",
+    "Complete": "ui.complete",
+  };
+  const resolvedButtonLabel = buttonLabel
+    ? (labelMap[buttonLabel] ? t(labelMap[buttonLabel], undefined, buttonLabel) : buttonLabel)
+    : t("home.sticky_footer.next", undefined, "Next");
   const formattedSavings = savings.toLocaleString("nl-NL", {
     style: "currency",
     currency: "EUR",
