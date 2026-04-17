@@ -111,6 +111,8 @@ export const StepAddress = ({
   return (
     <div className="animate-fade-in">
       <TacoMessage
+        stepId="address"
+        vars={{ firstName }}
         message={`Hey ${firstName} 👋 Nice to meet you! I have some questions to you to find the best deal for you. What is your address?`}
         animate={animateTaco}
       />

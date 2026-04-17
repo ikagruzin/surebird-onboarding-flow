@@ -1,6 +1,8 @@
 import { MessageCircle } from "lucide-react";
 import { STEP_LABELS } from "./types";
 import type { InsuranceType } from "./types";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { useT } from "@/i18n/LanguageContext";
 import logoSurebird from "@/assets/logo-surebird.svg";
 import tacoAvatar from "@/assets/taco-avatar.jpg";
 import iconLiability from "@/assets/icon-liability.svg";
@@ -30,13 +32,15 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, showAvatar = false, hoveredProduct }: SidebarProps) => {
+  const t = useT();
   if (!visible) return null;
 
   return (
     <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 p-6 pb-6 justify-between shrink-0">
       <div>
-        <div className="flex items-center gap-2 mb-10">
+        <div className="flex items-center justify-between gap-2 mb-10">
           <img src={logoSurebird} alt="Surebird" className="h-8" />
+          <LanguageSwitcher compact />
         </div>
 
         {showProgress && (
@@ -99,17 +103,17 @@ export const Sidebar = ({ currentStep = 1, showProgress = true, visible = true, 
               className="w-10 h-10 rounded-full object-cover"
             />
             <div>
-              <p className="text-sm font-semibold text-foreground">Ask Taco</p>
-              <p className="text-xs text-muted-foreground">I'm ready to assist you</p>
+              <p className="text-sm font-semibold text-foreground">{t("home.sidebar.ask_taco", undefined, "Ask Taco")}</p>
+              <p className="text-xs text-muted-foreground">{t("home.sidebar.taco_subtitle", undefined, "I'm ready to assist you")}</p>
             </div>
           </div>
         )}
         {!showAvatar && (
-          <p className="text-sm font-semibold text-foreground mb-3">Ask Taco</p>
+          <p className="text-sm font-semibold text-foreground mb-3">{t("home.sidebar.ask_taco", undefined, "Ask Taco")}</p>
         )}
         <button className="w-full flex items-center justify-center gap-2 border border-border rounded-full py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors">
           <MessageCircle className="w-4 h-4 text-success" />
-          Chat via WhatsApp
+          {t("home.sidebar.whatsapp", undefined, "Chat via WhatsApp")}
         </button>
       </div>
     </aside>

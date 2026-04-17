@@ -24,7 +24,7 @@ const OPTIONS = [
 export const StepFamily = ({ familyStatus, onSelect, animateTaco, errors, onClearError }: StepFamilyProps) => {
   return (
     <div className="animate-fade-in">
-      <TacoMessage message="What is your family status?" animate={animateTaco} />
+      <TacoMessage stepId="family" message="What is your family status?" animate={animateTaco} />
 
       <div className="bg-card rounded-3xl border border-border p-6 shadow-sm">
         <div className="grid grid-cols-4 gap-3">

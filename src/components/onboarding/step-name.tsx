@@ -16,6 +16,7 @@ export const StepName = ({ firstName, onUpdate, onNext, onBack, animateTaco, err
   return (
     <div className="animate-fade-in">
       <TacoMessage
+        stepId="name"
         message="Welcome to Surebird✌️ I'm Taco - your personal assistance. I'm here to help you to find the best insurance deal based on your needs. How should I address you?"
         animate={animateTaco}
       />
