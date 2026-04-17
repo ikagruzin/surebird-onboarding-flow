@@ -148,32 +148,34 @@ export const HomeDetailsStep = ({
   onAnimationComplete,
   errors,
   onClearError,
-}: ProductStepProps) => (
+}: ProductStepProps) => {
+  const t = useT();
+  return (
   <div className="animate-fade-in space-y-6">
     <TacoMessage
-      message={(useT())("ui.products.home.details_taco", undefined, "No problem! You can manually adjust the details of your home below to make sure everything is accurate.")}
+      message={t("ui.products.home.details_taco", undefined, "No problem! You can manually adjust the details of your home below to make sure everything is accurate.")}
       animate={animateTaco}
       onAnimationComplete={onAnimationComplete}
     />
 
-    <SectionCard title="Home Details">
+    <SectionCard title={t("products.home.section.details", undefined, "Home Details")}>
       <div className="space-y-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <label className="text-sm font-semibold text-foreground">
-              Building Type
+              {t("products.home.q.buildingType")}
             </label>
-            <InfoTip text="Two-under-a-roof = a semi-detached house sharing one roof with a neighboring property. Canal house = a traditional narrow, multi-story house along a canal, typical of Dutch city centers." />
+            <InfoTip text={t("products.home.buildingType.tip")} />
           </div>
           <NativeSelect
             value={state.buildingType}
             onChange={(e) => { onUpdate("buildingType", e.target.value); onClearError?.("buildingType"); }}
-            placeholder="Select building type"
+            placeholder={t("products.home.placeholder.buildingType", undefined, "Select building type")}
             className={errors?.buildingType ? "border-destructive" : ""}
           >
-            {HOME_OPTIONS.buildingTypes.map((t) => (
-              <option key={t} value={t}>
-                {t}
+            {HOME_OPTIONS.buildingTypes.map((opt, idx) => (
+              <option key={opt} value={opt}>
+                {translateOptions(t, "home", HOME_OPTIONS.buildingTypes)[idx]}
               </option>
             ))}
           </NativeSelect>
@@ -181,10 +183,11 @@ export const HomeDetailsStep = ({
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
-            Usage
+            {t("products.home.q.usage")}
           </label>
           <ChipSelect
             options={[...HOME_OPTIONS.usageOptions]}
+            displayLabels={translateOptions(t, "home", HOME_OPTIONS.usageOptions)}
             selected={state.usage}
             onChange={(v) => { onUpdate("usage", v); onClearError?.("usage"); }}
           />
@@ -192,19 +195,19 @@ export const HomeDetailsStep = ({
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
-            Construction Materials
+            {t("products.home.q.constructionMaterial")}
           </label>
            <div className={getSelectionGridClass(HOME_OPTIONS.constructionMaterials)}>
-            {HOME_OPTIONS.constructionMaterials.map((opt) => {
+            {HOME_OPTIONS.constructionMaterials.map((opt, idx) => {
               const tooltips: Record<string, string> = {
-                "Wooden skeleton": "The main structural frame is made of wood (timber-frame construction).",
-                "(Largely) stone": "The exterior walls are mostly built with brick, stone, or concrete blocks.",
-                "Wooden frame with stone wall": "A timber structural frame with an outer layer of brick or stone cladding.",
+                "Wooden skeleton": t("products.home.constructionMaterial.wooden.tip", undefined, "The main structural frame is made of wood (timber-frame construction)."),
+                "(Largely) stone": t("products.home.constructionMaterial.stone.tip", undefined, "The exterior walls are mostly built with brick, stone, or concrete blocks."),
+                "Wooden frame with stone wall": t("products.home.constructionMaterial.frameStone.tip", undefined, "A timber structural frame with an outer layer of brick or stone cladding."),
               };
               return (
                 <SelectionCard
                   key={opt}
-                  label={opt}
+                  label={translateOptions(t, "home", HOME_OPTIONS.constructionMaterials)[idx]}
                   selected={state.constructionMaterial === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
@@ -217,17 +220,17 @@ export const HomeDetailsStep = ({
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
-            Floor Material
+            {t("products.home.q.floorMaterial")}
           </label>
           <div className={getSelectionGridClass(HOME_OPTIONS.floorMaterials)}>
-            {HOME_OPTIONS.floorMaterials.map((opt) => {
+            {HOME_OPTIONS.floorMaterials.map((opt, idx) => {
               const tooltips: Record<string, string> = {
-                "No floors": "Ground-level only, with no additional story floors above (e.g., concrete slab on grade).",
+                "No floors": t("products.home.floorMaterial.noFloors.tip", undefined, "Ground-level only, with no additional story floors above (e.g., concrete slab on grade)."),
               };
               return (
                 <SelectionCard
                   key={opt}
-                  label={opt}
+                  label={translateOptions(t, "home", HOME_OPTIONS.floorMaterials)[idx]}
                   selected={state.floorMaterial === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
@@ -240,17 +243,17 @@ export const HomeDetailsStep = ({
         </div>
         <div>
           <label className="text-sm font-semibold text-foreground mb-2 block">
-            Roof Shape
+            {t("products.home.q.roofShape")}
           </label>
           <div className={getSelectionGridClass(HOME_OPTIONS.roofShapes)}>
-            {HOME_OPTIONS.roofShapes.map((opt) => {
+            {HOME_OPTIONS.roofShapes.map((opt, idx) => {
               const tooltips: Record<string, string> = {
-                "Special": "An unconventional roof shape such as a dome, mansard, or multi-angled design.",
+                "Special": t("products.home.roofShape.special.tip", undefined, "An unconventional roof shape such as a dome, mansard, or multi-angled design."),
               };
               return (
                 <SelectionCard
                   key={opt}
-                  label={opt}
+                  label={translateOptions(t, "home", HOME_OPTIONS.roofShapes)[idx]}
                   selected={state.roofShape === opt}
                   indicator="radio"
                   rightIcon={tooltips[opt] ? <InfoTip text={tooltips[opt]} /> : undefined}
@@ -264,19 +267,19 @@ export const HomeDetailsStep = ({
         <div>
           <div className="flex items-center gap-2 mb-2">
             <label className="text-sm font-semibold text-foreground">
-              Roof Material
+              {t("products.home.q.roofMaterial")}
             </label>
-            <InfoTip text="Artificial reeds = synthetic thatching material that mimics the look of natural reed. (Largely) reed = the roof is primarily covered with natural reed thatching." />
+            <InfoTip text={t("products.home.roofMaterial.tip")} />
           </div>
           <NativeSelect
             value={state.roofMaterial}
             onChange={(e) => { onUpdate("roofMaterial", e.target.value); onClearError?.("roofMaterial"); }}
-            placeholder="Select roof material"
+            placeholder={t("products.home.placeholder.roofMaterial", undefined, "Select roof material")}
             className={errors?.roofMaterial ? "border-destructive" : ""}
           >
-            {HOME_OPTIONS.roofMaterials.map((m) => (
+            {HOME_OPTIONS.roofMaterials.map((m, idx) => (
               <option key={m} value={m}>
-                {m}
+                {translateOptions(t, "home", HOME_OPTIONS.roofMaterials)[idx]}
               </option>
             ))}
           </NativeSelect>
@@ -285,7 +288,8 @@ export const HomeDetailsStep = ({
       </div>
     </SectionCard>
   </div>
-);
+  );
+};
 
 /* ─── Step: Coverage Path ─── */
 
