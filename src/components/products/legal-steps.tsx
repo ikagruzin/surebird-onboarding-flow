@@ -9,21 +9,26 @@ import { LegalCoverageSelector } from "@/components/onboarding/legal-coverage-se
 
 /* ─── Single consolidated step ─── */
 
-const StepLegalAll = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => (
-  <div className="space-y-6">
-    <TacoMessage
-      message="Legal expenses insurance gives you access to legal help when you need it most. Consumer coverage is always included—select any additional areas that matter to you."
-      animate={animateTaco}
-      onAnimationComplete={onAnimationComplete}
-    />
-    <SectionCard>
-      <LegalCoverageSelector
-        selected={state.coverageModules || ["consumer"]}
-        onChange={(selected) => onUpdate("coverageModules", selected)}
+import { useT } from "@/i18n/LanguageContext";
+
+const StepLegalAll = ({ state, onUpdate, animateTaco, onAnimationComplete }: ProductStepProps) => {
+  const t = useT();
+  return (
+    <div className="space-y-6">
+      <TacoMessage
+        message={t("ui.products.legal.taco", undefined, "Legal expenses insurance gives you access to legal help when you need it most. Consumer coverage is always included—select any additional areas that matter to you.")}
+        animate={animateTaco}
+        onAnimationComplete={onAnimationComplete}
       />
-    </SectionCard>
-  </div>
-);
+      <SectionCard>
+        <LegalCoverageSelector
+          selected={state.coverageModules || ["consumer"]}
+          onChange={(selected) => onUpdate("coverageModules", selected)}
+        />
+      </SectionCard>
+    </div>
+  );
+};
 
 /* ─── Component map ─── */
 

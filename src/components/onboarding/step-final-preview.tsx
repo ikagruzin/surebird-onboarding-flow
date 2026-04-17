@@ -5,6 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { INSURANCE_TYPES } from "@/components/onboarding/types";
 import { TacoMessage } from "./taco-message";
 import { ValidationError } from "./validation-error";
+import { useT } from "@/i18n/LanguageContext";
 
 const INSURER_PRICES: Record<string, number> = {
   home: 5.11,
@@ -51,6 +52,7 @@ export const StepFinalPreview = ({
   errors,
   onClearError,
 }: StepFinalPreviewProps) => {
+  const t = useT();
   const [annualDiscount, setAnnualDiscount] = useState(false);
 
   const products = INSURANCE_TYPES.filter((t) => selectedInsurances.includes(t.id));
@@ -75,17 +77,19 @@ export const StepFinalPreview = ({
       />
 
       <div className="rounded-3xl border-2 border-input bg-card p-6 space-y-5">
-        <h3 className="text-lg font-semibold text-foreground">Your Insurance Summary</h3>
+        <h3 className="text-lg font-semibold text-foreground">
+          {t("finalise.final_preview.your_insurance_summary", undefined, "Your Insurance Summary")}
+        </h3>
 
         {/* Badges */}
         <div className="flex flex-wrap gap-3">
           <span className="inline-flex items-center gap-2 text-sm font-semibold text-success bg-success/10 border border-success/20 rounded-full px-4 py-3">
             <Gift className="w-5 h-5" />
-            You save with Surebird: €{annualSavings.toFixed(2)}/yr
+            {t("finalise.final_preview.you_save_with_surebird_amount", { amount: annualSavings.toFixed(2) }, `You save with Surebird: €${annualSavings.toFixed(2)}/yr`)}
           </span>
           <span className="inline-flex items-center gap-2 text-sm font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-4 py-3">
             <Award className="w-5 h-5" />
-            Best and cheapest choices
+            {t("finalise.final_preview.best_and_cheapest_choices", undefined, "Best and cheapest choices")}
           </span>
         </div>
 
@@ -113,12 +117,12 @@ export const StepFinalPreview = ({
         {/* Discount lines */}
         <div className="space-y-1 pt-1">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-success">Discount — 10%</span>
+            <span className="text-sm font-medium text-success">{t("finalise.final_preview.discount_10", undefined, "Discount — 10%")}</span>
             <span className="text-sm font-semibold text-success">-€{bundleDiscount.toFixed(2)}</span>
           </div>
           {annualDiscount && (
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-success">Annual payment discount — 5%</span>
+              <span className="text-sm font-medium text-success">{t("finalise.final_preview.annual_payment_discount_5", undefined, "Annual payment discount — 5%")}</span>
               <span className="text-sm font-semibold text-success">-€{annualExtra.toFixed(2)}</span>
             </div>
           )}
@@ -127,15 +131,15 @@ export const StepFinalPreview = ({
         {/* Annual discount toggle */}
         <div className="flex items-center justify-between py-3 border-t border-b border-border">
           <div>
-            <span className="text-sm font-medium text-foreground">Annual payment discount</span>
-            <span className="text-xs text-muted-foreground ml-1">— save 5% extra</span>
+            <span className="text-sm font-medium text-foreground">{t("ui.final_preview.annual_payment_toggle", undefined, "Annual payment discount")}</span>
+            <span className="text-xs text-muted-foreground ml-1">{t("ui.final_preview.annual_payment_extra", undefined, "— save 5% extra")}</span>
           </div>
           <Switch checked={annualDiscount} onCheckedChange={setAnnualDiscount} />
         </div>
 
         {/* Totals */}
         <div className="flex items-center justify-between pt-2">
-          <span className="text-base font-semibold text-foreground">Total Monthly</span>
+          <span className="text-base font-semibold text-foreground">{t("finalise.final_preview.total_monthly", undefined, "Total Monthly")}</span>
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground line-through">€{totalBefore.toFixed(2)}</span>
             <span className="text-base font-bold text-primary">€{finalMonthly.toFixed(2)}/mo</span>
@@ -144,18 +148,22 @@ export const StepFinalPreview = ({
 
         {annualDiscount && (
           <div className="flex items-center justify-between">
-            <span className="text-base font-semibold text-foreground">Annual Total</span>
+            <span className="text-base font-semibold text-foreground">{t("finalise.final_preview.annual_total", undefined, "Annual Total")}</span>
             <span className="text-base font-bold text-primary">€{annualTotal.toFixed(2)}/yr</span>
           </div>
         )}
 
         <div className="space-y-1">
-          <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Start Date</p>
+          <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+            {t("ui.final_preview.start_date", undefined, "Start Date")}
+          </p>
           <p className="text-sm font-medium text-foreground">{firstDate}</p>
         </div>
 
         <div className="space-y-1">
-          <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Verified Details</p>
+          <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+            {t("ui.final_preview.verified_details", undefined, "Verified Details")}
+          </p>
           <p className="text-sm font-medium text-foreground">{fullName}</p>
           <p className="text-sm text-muted-foreground">{iban || "—"}</p>
         </div>
