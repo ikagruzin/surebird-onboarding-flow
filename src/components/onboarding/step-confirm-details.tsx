@@ -35,6 +35,7 @@ export const StepConfirmDetails = ({
   return (
     <div className="animate-fade-in space-y-8 pb-8">
       <TacoMessage
+        stepId="confirm-details"
         message="Almost there! Double check your details below ✅"
         animate={animateTaco}
       />
